@@ -32,6 +32,12 @@ const serverConfig = webpackMerge({}, commonConfig, {
   ]
 });
 
+const serverConfig2 = webpackMerge({}, serverConfig, {
+  output: {
+    filename: 'server2.js'
+  }
+});
+
 const clientConfig = webpackMerge({}, commonConfig, {
   entry:  './src/main.browser.ts',
   output: {
@@ -45,4 +51,4 @@ const clientConfig = webpackMerge({}, commonConfig, {
   ]
 });
 
-module.exports = [serverConfig, clientConfig];
+module.exports = [serverConfig, serverConfig2];
