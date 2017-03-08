@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { TransferHttp } from '../../modules/transfer-http/transfer-http';
 import { Observable } from 'rxjs/Observable';
 
@@ -8,6 +8,11 @@ import { Observable } from 'rxjs/Observable';
 })
 export class HomeView implements OnInit {
   public subs: Observable<string>;
+
+  @HostListener('window:scroll')
+  track() {
+    console.log('scroll');
+  }
 
   constructor(private http: TransferHttp) {}
 
