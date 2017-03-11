@@ -37,12 +37,8 @@
     "@angular/compiler-cli": "^4.0.0-rc.3",
     "@ngtools/webpack": "^1.2.12",
     "@types/express": "^4.0.35",
-<<<<<<< HEAD
-    "@types/node": "^7.0.5",
-    "html-webpack-plugin": "^2.28.0",
-=======
     "@types/node": "^7.0.8",
->>>>>>> master
+    "html-webpack-plugin": "^2.28.0",
     "nodemon": "^1.11.0",
     "rimraf": "^2.6.1",
     "typescript": "^2.2.1",
