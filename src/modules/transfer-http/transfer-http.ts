@@ -6,6 +6,7 @@ import { TransferState } from '../transfer-state/transfer-state';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/observable/fromPromise';
 
 @Injectable()
 export class TransferHttp {
