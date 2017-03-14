@@ -1,6 +1,5 @@
+import 'dependencies.ts';
 import 'zone.js/dist/zone-node';
-import 'reflect-metadata';
-import 'rxjs/Rx';
 import * as express from 'express';
 import { platformServer, renderModuleFactory } from '@angular/platform-server';
 import { ServerAppModule } from './app/server-app.module';
