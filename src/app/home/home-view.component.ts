@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TransferHttp } from '../../modules/transfer-http/transfer-http';
 import { Observable } from 'rxjs/Observable';
+import { Http } from "@angular/http";
 
 @Component({
 	selector: 'home-view',
@@ -9,10 +9,10 @@ import { Observable } from 'rxjs/Observable';
 export class HomeView implements OnInit {
   public subs: Observable<string>;
 
-  constructor(private http: TransferHttp) {}
+  constructor(private http: Http) {}
 
   ngOnInit() {
-    this.subs = this.http.get('http://localhost:8000/data').map(data => {
+    this.subs = this.http.get('http://localhost:8888/data').map(itm => itm.json()).map(data => {
       return `${data.greeting} ${data.name}`;
     });
   }

@@ -5,14 +5,15 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { HomeView } from './home/home-view.component';
-import { TransferHttpModule } from '../modules/transfer-http/transfer-http.module';
 
 
 @NgModule({
 	imports: [
+    BrowserModule.withServerTransition({
+      appId: 'my-app-id'
+    }),
     CommonModule,
     HttpModule,
-    TransferHttpModule,
     RouterModule.forRoot([
       { path: '', component: HomeView, pathMatch: 'full'},
       { path: 'lazy', loadChildren: './+lazy/lazy.module#LazyModule'}

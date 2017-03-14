@@ -1,44 +1,33 @@
 import 'dependencies.ts';
 import 'zone.js/dist/zone-node';
-import * as express from 'express';
-import { platformServer, renderModuleFactory } from '@angular/platform-server';
+import { platformServer, renderModule } from '@angular/platform-server';
 import { ServerAppModule } from './app/server-app.module';
-import { ngExpressEngine } from './modules/ng-express-engine/express-engine';
-import { ROUTES } from './routes';
-import { App } from './api/app';
 import { enableProdMode } from '@angular/core';
+const fs = require('fs');
+const path = require('path');
 enableProdMode();
-const app = express();
-const api = new App();
-const port = 8000;
-const baseUrl = `http://localhost:${port}`;
 
-app.engine('html', ngExpressEngine({
-  bootstrap: ServerAppModule
-}));
+const templateCache  = {};
 
-app.set('view engine', 'html');
-app.set('views', 'src');
+module.exports = function (filePath, url, callback)
+{
+    if(!templateCache[filePath])
+    {
+        let file = fs.readFileSync(filePath);
+        templateCache[filePath] = file.toString();
+    }
 
-app.use('/', express.static('dist', {index: false}));
-
-ROUTES.forEach(route => {
-  app.get(route, (req, res) => {
-    console.time(`GET: ${req.originalUrl}`);
-    res.render('../dist/index', {
-      req: req,
-      res: res
+    renderModule(ServerAppModule, 
+    {
+        document: templateCache[filePath],
+        url: url
+    })
+    .then(string => 
+    {
+        callback(null, string);
+    })
+    .catch(error =>
+    {
+        callback(error);
     });
-    console.timeEnd(`GET: ${req.originalUrl}`);
-  });
-});
-
-app.get('/data', (req, res) => {
-  console.time(`GET: ${req.originalUrl}`);
-  res.json(api.getData());
-  console.timeEnd(`GET: ${req.originalUrl}`);
-});
-
-app.listen(8000,() => {
-	console.log(`Listening at ${baseUrl}`);
-});
+}
