@@ -1,9 +1,7 @@
 var webpack = require('webpack'),
     path = require('path'),
-    HtmlWebpackPlugin = require('html-webpack-plugin');
-    
-const ngtools = require('@ngtools/webpack');
-const { AotPlugin } = require('@ngtools/webpack');
+    HtmlWebpackPlugin = require('html-webpack-plugin'),
+    AotPlugin =  require('@ngtools/webpack').AotPlugin;
 
 function getEntryName(aot, ssr)
 {
