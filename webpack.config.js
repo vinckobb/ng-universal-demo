@@ -1,55 +1,179 @@
+var webpack = require('webpack'),
+    path = require('path'),
+    HtmlWebpackPlugin = require('html-webpack-plugin');
+    
 const ngtools = require('@ngtools/webpack');
-const webpackMerge = require('webpack-merge');
-const commonPartial = require('./webpack/webpack.common');
-const clientPartial = require('./webpack/webpack.client');
-const serverPartial = require('./webpack/webpack.server');
-const prodPartial = require('./webpack/webpack.prod');
-const {getAotPlugin} = require('./webpack/webpack.aot');
+const { AotPlugin } = require('@ngtools/webpack');
 
-module.exports = function(options, webpackOptions)
+function getEntryName(aot, ssr)
 {
+    if(ssr)
+    {
+        return aot ? [path.join(__dirname, "src/main.server.aot.ts")] : [path.join(__dirname, "src/main.server.ts")];
+    }
+    else
+    {
+        return [path.join(__dirname, "src/main.browser.ts")];
+    }
+}
+
+const tsconfigs = 
+{
+    client: path.join(__dirname, 'src/tsconfig.browser.json'),
+    server: path.join(__dirname, 'src/tsconfig.server.json')
+};
+
+/**
+ * Generates a AotPlugin for @ngtools/webpack
+ *
+ * @param {string} platform Should either be client or server
+ * @param {boolean} aot Enables/Disables AoT Compilation
+ * @returns
+ */
+function getAotPlugin(platform, aot) 
+{
+    return new AotPlugin(
+    {
+        tsConfigPath: tsconfigs[platform],
+        skipCodeGeneration: !aot
+    });
+}
+
+module.exports = function(options)
+{
+    var prod = !!options && !!options.prod;
+    var hmr = !!options && !!options.hmr;
+    var aot = !!options && !!options.aot;
+    var ssr = !!options && !!options.ssr;
+    var distPath = "dist";
     options = options || {};
 
-    if (options.aot)
+    console.log(`Running build with following configuration Production: ${prod} Hot Module Replacement: ${hmr} Ahead Of Time Compilation: ${aot} Server Side Rendering: ${ssr}`)
+
+    var config =
     {
-        console.log(`Running build for ${options.client ? 'client' : 'server'} with AoT Compilation`)
+        entry:
+        {
+            //"style": [path.join(__dirname, "content/site.scss")],
+            //"app": [path.join(__dirname, "app/app.ts")]
+        },
+        output:
+        {
+            path: path.join(__dirname, distPath),
+            filename: '[name].js',
+            //publicPath: '/dist/',
+            chunkFilename: `[name].${ssr ? 'server' : 'client'}.chunk.js`
+        },
+        devtool: 'source-map',
+        target: ssr ? 'node' : 'web',
+        resolve:
+        {
+            extensions: ['.ts', '.js'],
+            alias:
+            {
+                // "numeral-languages": path.join(__dirname, "node_modules/numeral/locales.js"),
+                // "handlebars": path.join(__dirname, "node_modules/handlebars/dist/handlebars.js"),
+                // "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
+                // "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
+                // "./locale": path.join(__dirname, "node_modules/moment/locale"),
+                // "config/global": path.join(__dirname, "config/global.json"),
+                "app": path.join(__dirname, "app")
+            }
+        },
+        module:
+        {
+            rules:
+            [
+                //vendor globals
+                // { 
+                //     test: require.resolve("jquery"),
+                //     loader: "expose-loader?$!expose-loader?jQuery" 
+                // },
+                // {
+                //     test: require.resolve("numeral"),
+                //     loader: 'expose-loader?numeral'
+                // },
+                //file processing
+                {
+                    test: /\.ts$/,
+                    loader: '@ngtools/webpack' 
+                },
+                {
+                    test: /\.html$/,
+                    loader: 'raw-loader'
+                },
+                // {
+                //     test: /\.json$/,
+                //     loader: 'json-loader'
+                // },
+                { 
+                    test: /\.css$/, 
+                    loader: 'raw-loader' 
+                },
+                // {
+                //     test: /\.scss$/,
+                //     loaders: ['style-loader', 'css-loader', 'sass-loader']
+                // },
+                // {
+                //     test: /\.(ttf|eot|svg)$/,
+                //     loader: "file-loader"
+                // },
+                // {
+                //     test: /\.hbs$/,
+                //     loader: "handlebars-loader",
+                //     query: 
+                //     { 
+                //         helperDirs: [path.join(__dirname, '/node_modules/webpack-handlebars-replace')],
+                //     }
+                // }
+            ]
+        },
+        plugins: [getAotPlugin(ssr ? 'server' : 'client', !!options.aot)]
+    };
+
+    config.entry[ssr ? "server" : "client"] = getEntryName(aot, ssr);
+
+    //server specific settings
+    if(ssr)
+    {
+
+    }
+    //client specific settings
+    else
+    {
+        config.plugins.push(new HtmlWebpackPlugin(
+        {
+            template: path.join(__dirname, "src/index.html"),
+            output: path.join(__dirname, "dist"),
+            inject: 'head'
+        }));
     }
 
-    const serverConfig = webpackMerge({}, commonPartial, serverPartial,
-    {
-        entry: options.aot ? './src/main.server.aot.ts' : serverPartial.entry, // Temporary
-        plugins: [
-            getAotPlugin('server', !!options.aot)
-        ]
-    });
+    // if(hmr)
+    // {
+    //     config.entry.app.unshift('webpack-hot-middleware/client');
+    //     config.entry.style.unshift('webpack-hot-middleware/client');
+    // }
 
-    let clientConfig = webpackMerge({}, commonPartial, clientPartial,
-    {
-        plugins: [
-            getAotPlugin('client', !!options.aot)
-        ]
-    });
+    // if(prod)
+    // {
+    //     config.output.filename = "[name].[hash].js";
+    //     config.output.chunkFilename = "[name].chunk.[chunkhash].js";
 
-    if (webpackOptions.p)
-    {
-        clientConfig = webpackMerge({}, clientConfig, prodPartial);
-    }
+    //     config.plugins.unshift(new AotPlugin(
+    //     {
+    //         tsConfigPath: './tsconfig.json',
+    //         entryModule: './app/app.module#AppModule',
+    //         mainPath: './app/app.aot'
+    //     }));
 
-    const configs = [];
-    if (!options.aot)
-    {
-        configs.push(clientConfig, serverConfig);
+    //     config.plugins.unshift(new HtmlWebpackPlugin(
+    //     {
+    //         filename: "../index.html",
+    //         template: path.join(__dirname, 'index.html.hbs'),
+    //         inject: false
+    //     }));
+    // }
 
-    }
-    else if (options.client)
-    {
-        configs.push(clientConfig);
-
-    }
-    else if (options.server)
-    {
-        configs.push(serverConfig);
-    }
-
-    return configs;
+    return config;
 }

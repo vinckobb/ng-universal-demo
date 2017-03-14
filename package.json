@@ -5,15 +5,14 @@
     "scripts":
     {
         "start": "npm run build && npm run server",
-        "build": "webpack",
-        "build:aot": "gulp create-aot-src && webpack --env.aot --env.client & webpack --env.aot --env.server",
-        "build:prod": "webpack --env.aot --env.client -p & webpack --env.aot --env.server",
+        "build": "webpack && webpack --env.ssr",
+        "build:aot": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr --env.prod",
+        "build:prod": "webpack --env.aot --env.prod -p && webpack --env.aot --env.ssr --env.prod",
         "prebuild": "npm run clean",
         "prebuild:aot": "npm run clean",
         "prebuild:prod": "npm run clean",
         "clean": "rimraf dist src.aot",
-        "server": "nodemon dist/server.js",
-        "watch": "webpack --watch"
+        "server": "nodemon dist/server.js"
     },
     "engines":
     {

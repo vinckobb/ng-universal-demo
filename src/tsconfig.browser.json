@@ -3,6 +3,7 @@
     "angularCompilerOptions":
     {
         "excludes": [],
+        "genDir": "ngfactory",
         "entryModule": "./app/browser-app.module#BrowserAppModule"
     }
 }
