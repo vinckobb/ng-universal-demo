@@ -3,7 +3,12 @@ var webpack = require('webpack'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     AotPlugin =  require('@ngtools/webpack').AotPlugin;
 
-//gets webpack entries
+
+/**
+ * Gets entries for webpack
+ * @param {boolean} aot Indicates that it should be AOT entries
+ * @param {boolean} ssr Indicates that it should be entries for server side rendering
+ */
 function getEntries(aot, ssr)
 {
     if(ssr)
@@ -20,6 +25,7 @@ function getEntries(aot, ssr)
     }
 }
 
+//array of paths for server and browser tsconfigs
 const tsconfigs = 
 {
     client: path.join(__dirname, 'tsconfig.browser.json'),
@@ -30,16 +36,33 @@ const tsconfigs =
  * Generates a AotPlugin for @ngtools/webpack
  *
  * @param {string} platform Should either be client or server
- * @param {boolean} aot Enables/Disables AoT Compilation
  * @returns
  */
-function getAotPlugin(platform, aot) 
+function getAotPlugin(platform) 
 {
     return new AotPlugin(
     {
         tsConfigPath: tsconfigs[platform],
-        skipCodeGeneration: !aot
+        skipCodeGeneration: false
     });
+}
+
+/**
+ * Gets array of webpack loaders for typescript files
+ * @param {boolean} prod Indication that currently is running production build
+ * @param {boolean} aot Indication that currently is running build using AOT
+ * @param {boolean} hmr Indication that currently is running build using HMR
+ */
+function getTypescriptLoaders(prod, aot, hmr)
+{
+    if(aot)
+    {
+        return ['@ngtools/webpack'];
+    }
+    else
+    {
+        return ['awesome-typescript-loader' + (prod ? '' : '?sourceMap=true'), 'angular2-template-loader'].concat(hmr ? ['webpack-hmr-module-loader'] : []);
+    }
 }
 
 module.exports = function(options)
@@ -99,7 +122,7 @@ module.exports = function(options)
                 //file processing
                 {
                     test: /\.ts$/,
-                    loader: '@ngtools/webpack' 
+                    loaders: getTypescriptLoaders(prod, aot, hmr) 
                 },
                 {
                     test: /\.html$/,
@@ -131,7 +154,7 @@ module.exports = function(options)
                 // }
             ]
         },
-        plugins: [getAotPlugin(ssr ? 'server' : 'client', !!options.aot)]
+        plugins: []
     };
 
     //server specific settings
@@ -150,12 +173,19 @@ module.exports = function(options)
         }));
     }
 
+    //aot specific settings
+    if(aot)
+    {
+        config.plugins.unshift(getAotPlugin(ssr ? 'server' : 'client'));
+    }
+
     // if(hmr)
     // {
     //     config.entry.app.unshift('webpack-hot-middleware/client');
     //     config.entry.style.unshift('webpack-hot-middleware/client');
     // }
 
+    //production specific settings
     if(prod)
     {
         config.output.filename = "[name].[hash].js";
