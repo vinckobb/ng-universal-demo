@@ -2,8 +2,8 @@
 /dist/
 /lib/
 /wwwroot/
-/src/ngfactory/
-/src.aot/
+/app/ngfactory/
+/app.aot/
 *.log
 *.bak
 *~

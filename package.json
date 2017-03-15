@@ -7,11 +7,11 @@
         "start": "npm run build && npm run server",
         "build": "webpack && webpack --env.ssr",
         "build:aot": "webpack --env.aot && webpack --env.aot --env.ssr",
-        "build:prod": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr --env.prod",
+        "build:prod": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr",
         "prebuild": "npm run clean",
         "prebuild:aot": "npm run clean",
         "prebuild:prod": "npm run clean",
-        "clean": "rimraf wwwroot src.aot",
+        "clean": "rimraf wwwroot app.aot",
         "server": "node server.js"
     },
     "engines":

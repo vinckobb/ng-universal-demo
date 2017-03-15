@@ -7,11 +7,11 @@ function getEntryName(aot, ssr)
 {
     if(ssr)
     {
-        return aot ? [path.join(__dirname, "src/main.server.aot.ts")] : [path.join(__dirname, "src/main.server.ts")];
+        return aot ? [path.join(__dirname, "app/main.server.aot.ts")] : [path.join(__dirname, "app/main.server.ts")];
     }
     else
     {
-        return [path.join(__dirname, "src/main.browser.ts")];
+        return [path.join(__dirname, "app/main.browser.ts")];
     }
 }
 
@@ -153,25 +153,41 @@ module.exports = function(options)
     //     config.entry.style.unshift('webpack-hot-middleware/client');
     // }
 
-    // if(prod)
-    // {
-    //     config.output.filename = "[name].[hash].js";
-    //     config.output.chunkFilename = "[name].chunk.[chunkhash].js";
+    if(prod)
+    {
+        config.output.filename = "[name].[hash].js";
+        config.output.chunkFilename = `[name].${ssr ? 'server' : 'client'}.chunk.[chunkhash].js`;
 
-    //     config.plugins.unshift(new AotPlugin(
-    //     {
-    //         tsConfigPath: './tsconfig.json',
-    //         entryModule: './app/app.module#AppModule',
-    //         mainPath: './app/app.aot'
-    //     }));
+        config.plugins.unshift(new webpack.optimize.UglifyJsPlugin({
+                                                                       beautify: false,
+                                                                       mangle: 
+                                                                       {
+                                                                           screw_ie8: true,
+                                                                           keep_fnames: true
+                                                                       },
+                                                                       compress: 
+                                                                       {
+                                                                           warnings: false,
+                                                                           screw_ie8: true
+                                                                       },
+                                                                       comments: false,
+                                                                       sourceMap: false
+                                                                   }));
 
-    //     config.plugins.unshift(new HtmlWebpackPlugin(
-    //     {
-    //         filename: "../index.html",
-    //         template: path.join(__dirname, 'index.html.hbs'),
-    //         inject: false
-    //     }));
-    // }
+        // config.plugins.unshift(new AotPlugin(
+        // {
+        //     tsConfigPath: './tsconfig.json',
+        //     entryModule: './app/app.module#AppModule',
+        //     mainPath: './app/app.aot'
+        // }));
+
+        // config.plugins.unshift(new HtmlWebpackPlugin(
+        // {
+        //     filename: "../index.html",
+        //     template: path.join(__dirname, 'index.html.hbs'),
+        //     inject: false
+        // }));
+    }
 
     return config;
 }

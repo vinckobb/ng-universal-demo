@@ -13,10 +13,10 @@ function logCopied()
     });
 }
 
-gulp.task("create-aot-src", function()
+gulp.task("create-aot-app", function()
 {
-    return gulp.src("src/**/*")
+    return gulp.src("app/**/*")
         .pipe(logCopied())
         .pipe(ngAotCompliant())
-        .pipe(gulp.dest("src.aot"));
+        .pipe(gulp.dest("app.aot"));
 });

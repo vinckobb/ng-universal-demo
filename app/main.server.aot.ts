@@ -1,7 +1,7 @@
 import './dependencies';
 import 'zone.js/dist/zone-node';
 import { platformServer, renderModuleFactory } from '@angular/platform-server';
-import { ServerAppModuleNgFactory } from './ngfactory/src/app/server-app.module.ngfactory';
+import { ServerAppModuleNgFactory } from './ngfactory/app/app/server-app.module.ngfactory';
 import { enableProdMode } from '@angular/core';
 
 enableProdMode();
