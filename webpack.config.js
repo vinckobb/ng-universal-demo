@@ -3,15 +3,20 @@ var webpack = require('webpack'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     AotPlugin =  require('@ngtools/webpack').AotPlugin;
 
-function getEntryName(aot, ssr)
+//gets webpack entries
+function getEntries(aot, ssr)
 {
     if(ssr)
     {
-        return aot ? [path.join(__dirname, "app/main.server.aot.ts")] : [path.join(__dirname, "app/main.server.ts")];
+        return {
+            server: aot ? [path.join(__dirname, "app.aot/main.server.aot.ts")] : [path.join(__dirname, "app/main.server.ts")]
+        }
     }
     else
     {
-        return [path.join(__dirname, "app/main.browser.ts")];
+        return {
+            client: aot ? [path.join(__dirname, "app.aot/main.browser.ts")] : [path.join(__dirname, "app/main.browser.ts")]
+        }
     }
 }
 
@@ -50,11 +55,11 @@ module.exports = function(options)
 
     var config =
     {
-        entry:
-        {
+        entry: getEntries(aot, ssr),
+        //{
             //"style": [path.join(__dirname, "content/site.scss")],
             //"app": [path.join(__dirname, "app/app.ts")]
-        },
+        //},
         output:
         {
             path: path.join(__dirname, distPath),
@@ -128,8 +133,6 @@ module.exports = function(options)
         },
         plugins: [getAotPlugin(ssr ? 'server' : 'client', !!options.aot)]
     };
-
-    config.entry[ssr ? "server" : "client"] = getEntryName(aot, ssr);
 
     //server specific settings
     if(ssr)

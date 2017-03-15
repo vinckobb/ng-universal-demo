@@ -3,7 +3,7 @@
     "angularCompilerOptions":
     {
         "excludes": [],
-        "genDir": "./app/ngfactory",
-        "entryModule": "./app/app/server-app.module#ServerAppModule"
+        "genDir": "./app.aot/ngfactory",
+        "entryModule": "./app.aot/app/server-app.module#ServerAppModule"
     }
 }

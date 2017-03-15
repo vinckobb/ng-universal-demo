@@ -9,8 +9,9 @@
         "build:aot": "webpack --env.aot && webpack --env.aot --env.ssr",
         "build:prod": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr",
         "prebuild": "npm run clean",
-        "prebuild:aot": "npm run clean",
-        "prebuild:prod": "npm run clean",
+        "prebuild:aot": "npm run clean && npm run prepare:aot",
+        "prebuild:prod": "npm run clean && npm run prepare:aot",
+        "prepare:aot": "gulp create-aot-app",
         "clean": "rimraf wwwroot app.aot",
         "server": "node server.js"
     },
