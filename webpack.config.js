@@ -20,7 +20,7 @@ function getEntries(aot, ssr)
     else
     {
         return {
-            client: aot ? [path.join(__dirname, "app.aot/main.browser.ts")] : [path.join(__dirname, "app/main.browser.ts")]
+            client: aot ? [path.join(__dirname, "app.aot/main.browser.aot.ts")] : [path.join(__dirname, "app/main.browser.ts")]
         }
     }
 }
@@ -143,14 +143,6 @@ module.exports = function(options)
                 // {
                 //     test: /\.(ttf|eot|svg)$/,
                 //     loader: "file-loader"
-                // },
-                // {
-                //     test: /\.hbs$/,
-                //     loader: "handlebars-loader",
-                //     query: 
-                //     { 
-                //         helperDirs: [path.join(__dirname, '/node_modules/webpack-handlebars-replace')],
-                //     }
                 // }
             ]
         },
@@ -179,11 +171,15 @@ module.exports = function(options)
         config.plugins.unshift(getAotPlugin(ssr ? 'server' : 'client'));
     }
 
-    // if(hmr)
-    // {
-    //     config.entry.app.unshift('webpack-hot-middleware/client');
-    //     config.entry.style.unshift('webpack-hot-middleware/client');
-    // }
+    if(hmr)
+    {
+        config.plugins.unshift(new webpack.HotModuleReplacementPlugin());
+
+        Object.keys(config.entry).forEach(entry =>
+        {
+            config.entry[entry].unshift('webpack-hot-middleware/client');
+        });
+    }
 
     //production specific settings
     if(prod)
@@ -206,20 +202,6 @@ module.exports = function(options)
                                                                        comments: false,
                                                                        sourceMap: false
                                                                    }));
-
-        // config.plugins.unshift(new AotPlugin(
-        // {
-        //     tsConfigPath: './tsconfig.json',
-        //     entryModule: './app/app.module#AppModule',
-        //     mainPath: './app/app.aot'
-        // }));
-
-        // config.plugins.unshift(new HtmlWebpackPlugin(
-        // {
-        //     filename: "../index.html",
-        //     template: path.join(__dirname, 'index.html.hbs'),
-        //     inject: false
-        // }));
     }
 
     return config;

@@ -3,7 +3,6 @@ var connect = require('connect'),
     history = require('connect-history-api-fallback'),
     proxy = require('http-proxy-middleware'),
     argv = require('yargs').argv,
-    serverRender = require('./wwwroot/dist/server.js').render,
     fs = require('fs'),
     path = require('path');
 
@@ -13,7 +12,7 @@ var app = connect();
 if(!!argv.webpack)
 {
     var webpack = require('webpack'),
-        webpackConfig = require('./webpack.config.index.js')({hmr: true}),
+        webpackConfig = require('./webpack.config.js')({hmr: true}),
         webpackDev = require('webpack-dev-middleware'),
         hmr = require("webpack-hot-middleware");
 
@@ -35,7 +34,7 @@ app.use(function (req, res, next)
     {
         var content = fs.readFileSync(__dirname + '/wwwroot/index.html');
 
-        serverRender(content.toString(), req.url, function(err, succ)
+        require('./wwwroot/dist/server.js').render(content.toString(), req.url, function(err, succ)
         {
             res.setHeader('Content-Type', 'text/html');
 
