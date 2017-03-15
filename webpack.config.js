@@ -43,7 +43,7 @@ module.exports = function(options)
     var hmr = !!options && !!options.hmr;
     var aot = !!options && !!options.aot;
     var ssr = !!options && !!options.ssr;
-    var distPath = "dist";
+    var distPath = "wwwroot/dist";
     options = options || {};
 
     console.log(`Running build with following configuration Production: ${prod} Hot Module Replacement: ${hmr} Ahead Of Time Compilation: ${aot} Server Side Rendering: ${ssr}`)
@@ -59,10 +59,10 @@ module.exports = function(options)
         {
             path: path.join(__dirname, distPath),
             filename: '[name].js',
-            //publicPath: '/dist/',
+            publicPath: prod ? 'dist/' : '/dist/',
             chunkFilename: `[name].${ssr ? 'server' : 'client'}.chunk.js`
         },
-        devtool: 'source-map',
+        devtool: prod ? false : 'source-map',
         target: ssr ? 'node' : 'web',
         resolve:
         {
@@ -141,9 +141,9 @@ module.exports = function(options)
     {
         config.plugins.push(new HtmlWebpackPlugin(
         {
-            template: path.join(__dirname, "src/index.html"),
-            output: path.join(__dirname, "dist"),
-            inject: 'head'
+            filename: "../index.html",
+            template: path.join(__dirname, "index.html"),
+            inject: 'body'
         }));
     }
 

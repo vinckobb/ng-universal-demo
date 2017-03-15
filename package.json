@@ -6,13 +6,13 @@
     {
         "start": "npm run build && npm run server",
         "build": "webpack && webpack --env.ssr",
-        "build:aot": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr --env.prod",
-        "build:prod": "webpack --env.aot --env.prod -p && webpack --env.aot --env.ssr --env.prod",
+        "build:aot": "webpack --env.aot && webpack --env.aot --env.ssr",
+        "build:prod": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr --env.prod",
         "prebuild": "npm run clean",
         "prebuild:aot": "npm run clean",
         "prebuild:prod": "npm run clean",
-        "clean": "rimraf dist src.aot",
-        "server": "nodemon dist/server.js"
+        "clean": "rimraf wwwroot src.aot",
+        "server": "node server.js"
     },
     "engines":
     {
@@ -73,15 +73,12 @@
         "css-loader": "~0.27.3",
         "file-loader": "~0.10.1",
         "style-loader": "~0.13.2",
-        "handlebars-loader": "~1.4.0",
-        "webpack-handlebars-replace": "1.0.0",
         "webpack-hmr-module-loader": "1.0.5",
         "html-webpack-plugin": "~2.28.0",
         "gulp": "~3.9.1",
         "gulp-sass": "~3.1.0",
         "gulp-watch": "~4.3.11",
         "gulp-rename": "~1.2.2",
-        "gulp-compile-handlebars": "~0.6.1",
         "gulp-aot-compliant": "1.0.0",
         "yargs": "~6.6.0",
         "through2": "~2.0.3",
@@ -95,7 +92,6 @@
         "rimraf": "^2.6.1",
         "webpack": "^2.2.1",
         "typescript": "^2.2.1",
-        "nodemon": "^1.11.0",
         "npm-regexp-semver": "1.1.1"
     }
 }

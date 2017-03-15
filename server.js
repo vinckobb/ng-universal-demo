@@ -3,7 +3,7 @@ var connect = require('connect'),
     history = require('connect-history-api-fallback'),
     proxy = require('http-proxy-middleware'),
     argv = require('yargs').argv,
-    serverRender = require('./dist/server.js').render,
+    serverRender = require('./wwwroot/dist/server.js').render,
     fs = require('fs'),
     path = require('path');
 
@@ -33,7 +33,7 @@ app.use(function (req, res, next)
 {
     if(req.url == '/' || req.url == '/lazy')
     {
-        var content = fs.readFileSync(__dirname + '/dist/index.html');
+        var content = fs.readFileSync(__dirname + '/wwwroot/index.html');
 
         serverRender(content.toString(), req.url, function(err, succ)
         {
@@ -62,7 +62,7 @@ app.use(proxy(['/api'], {target: 'http://localhost:8080', ws: true}));
 app.use(history());
 
 //return static files
-app.use(serveStatic('dist'));
+app.use(serveStatic('wwwroot'));
 
 //create node.js http server and listen on port
 app.listen(8888);

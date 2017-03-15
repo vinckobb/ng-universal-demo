@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 
 @Component({
-	selector: 'demo-app',
+	selector: 'app',
 	template: `
 	  <h1>Universal Demo</h1>
 	  <a routerLink="/">Home</a>

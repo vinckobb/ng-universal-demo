@@ -1,6 +1,7 @@
 /node_modules/
 /dist/
 /lib/
+/wwwroot/
 /src/ngfactory/
 /src.aot/
 *.log
