@@ -60,6 +60,7 @@
     "devDependencies":
     {
         "@types/node": "~7.0.8",
+        "@types/systemjs": "~0.20.2",
         "@types/webpack": "~2.2.11",
         "@types/connect": "~3.4.30",
         "@types/jquery": "~2.0.41",
@@ -75,6 +76,7 @@
         "file-loader": "~0.10.1",
         "style-loader": "~0.13.2",
         "webpack-hmr-module-loader": "1.0.5",
+        "webpack-lazy-module-loader": "1.0.1",
         "html-webpack-plugin": "~2.28.0",
         "gulp": "~3.9.1",
         "gulp-sass": "~3.1.0",

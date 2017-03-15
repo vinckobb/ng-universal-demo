@@ -61,7 +61,7 @@ function getTypescriptLoaders(prod, aot, hmr)
     }
     else
     {
-        return ['awesome-typescript-loader' + (prod ? '' : '?sourceMap=true'), 'angular2-template-loader'].concat(hmr ? ['webpack-hmr-module-loader'] : []);
+        return ['awesome-typescript-loader' + (prod ? '' : '?sourceMap=true'), 'angular2-template-loader', 'webpack-lazy-module-loader'].concat(hmr ? ['webpack-hmr-module-loader'] : []);
     }
 }
 
