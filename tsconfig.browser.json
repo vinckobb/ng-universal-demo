@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig.json",
+    "angularCompilerOptions":
+    {
+        "excludes": [],
+        "genDir": "./src/ngfactory",
+        "entryModule": "./src/app/browser-app.module#BrowserAppModule"
+    }
+}

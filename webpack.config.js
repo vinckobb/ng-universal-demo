@@ -17,8 +17,8 @@ function getEntryName(aot, ssr)
 
 const tsconfigs = 
 {
-    client: path.join(__dirname, 'src/tsconfig.browser.json'),
-    server: path.join(__dirname, 'src/tsconfig.server.json')
+    client: path.join(__dirname, 'tsconfig.browser.json'),
+    server: path.join(__dirname, 'tsconfig.server.json')
 };
 
 /**

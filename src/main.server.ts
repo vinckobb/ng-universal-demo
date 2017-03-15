@@ -1,4 +1,4 @@
-import 'dependencies.ts';
+import './dependencies';
 import 'zone.js/dist/zone-node';
 import { platformServer, renderModule } from '@angular/platform-server';
 import { ServerAppModule } from './app/server-app.module';
