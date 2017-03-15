@@ -1,0 +1,205 @@
+@import "variables.scss";
+
+// ---------------------- MISCELANEOUS ----------------------
+.pointer-cursor
+{
+    cursor: pointer;
+}
+
+.block
+{
+    display: block;
+}
+
+.inline-block
+{
+    display: inline-block;
+}
+
+.relative
+{
+    position: relative;
+}
+
+.absolute
+{
+    position: absolute;
+}
+
+.margin-xs-vertical
+{
+    margin-top: $xsWidth;
+    margin-bottom: $xsWidth;
+}
+
+.margin-sm-top
+{
+    margin-top: $smWidth;
+}
+
+.margin-sm-left
+{
+    margin-left: $smWidth;
+}
+
+.margin-sm-vertical
+{
+    margin-top: $smWidth;
+    margin-bottom: $smWidth;
+}
+
+.margin-sm-right
+{
+    margin-right: $smWidth;
+}
+
+.margin-md-top
+{
+    margin-top: $mdWidth;
+}
+
+.margin-md-right
+{
+    margin-right: $mdWidth;
+}
+
+.margin-md-left
+{
+    margin-left: $mdWidth;
+}
+
+.margin-lg-top
+{
+    margin-top: $lgWidth;
+}
+
+.margin-lg-bottom
+{
+    margin-bottom: $lgWidth;
+}
+
+.margin-lg-left
+{
+    margin-left: $lgWidth;
+}
+
+.margin-xl-right
+{
+    margin-right: $xlWidth;
+}
+
+.margin-xl-left
+{
+    margin-left: $xlWidth;
+}
+
+.margin-xl-bottom
+{
+    margin-bottom: $xlWidth;
+}
+
+.margin-none-vertical
+{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.margin-none-horizontal
+{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.margin-none-top
+{
+    margin-top: 0;
+}
+
+.margin-none-bottom
+{
+    margin-bottom: 0;
+}
+
+.padding-sm-left
+{
+    padding-left: $smWidth;
+}
+
+.padding-sm-right
+{
+    padding-right: $smWidth;
+}
+
+.padding-sm-top
+{
+    padding-top: $smWidth;
+}
+
+.padding-sm-bottom
+{
+    padding-bottom: $smWidth;
+}
+
+.padding-none-left
+{
+    padding-left: 0;
+}
+
+.content-nowrap
+{
+    white-space: nowrap;
+}
+
+.half-width
+{
+    width: 50%;
+}
+
+.full-width
+{
+    width: 100%;
+}
+
+.quarter-width
+{
+    width: 25%;
+}
+
+.third-width
+{
+    width: 33.33%;
+}
+
+.separator
+{
+    background-color: lighten($primaryColor, 38%);
+    box-shadow: 0 0 3px $primaryColor;
+    height: 1px;
+}
+
+.bold 
+{
+    font-weight: bold;    
+}
+
+.italic 
+{
+    font-style: italic;    
+}
+
+.text-ellipsis
+{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.font-bigger-sm
+{
+    font-size: 1.1em;
+}
+
+.font-bigger-md
+{
+    font-size: 1.2em;
+}

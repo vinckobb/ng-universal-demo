@@ -20,7 +20,8 @@ function getEntries(aot, ssr)
     else
     {
         return {
-            client: aot ? [path.join(__dirname, "app.aot/main.browser.aot.ts")] : [path.join(__dirname, "app/main.browser.ts")]
+            client: aot ? [path.join(__dirname, "app.aot/main.browser.aot.ts")] : [path.join(__dirname, "app/main.browser.ts")],
+            style: [path.join(__dirname, "content/site.scss")],
         }
     }
 }
@@ -79,10 +80,6 @@ module.exports = function(options)
     var config =
     {
         entry: getEntries(aot, ssr),
-        //{
-            //"style": [path.join(__dirname, "content/site.scss")],
-            //"app": [path.join(__dirname, "app/app.ts")]
-        //},
         output:
         {
             path: path.join(__dirname, distPath),
@@ -136,14 +133,14 @@ module.exports = function(options)
                     test: /\.css$/, 
                     loader: 'raw-loader' 
                 },
-                // {
-                //     test: /\.scss$/,
-                //     loaders: ['style-loader', 'css-loader', 'sass-loader']
-                // },
-                // {
-                //     test: /\.(ttf|eot|svg)$/,
-                //     loader: "file-loader"
-                // }
+                {
+                    test: /\.scss$/,
+                    loaders: ['style-loader', 'css-loader', 'sass-loader']
+                },
+                {
+                    test: /\.(ttf|eot|svg)$/,
+                    loader: "file-loader"
+                }
             ]
         },
         plugins: []
