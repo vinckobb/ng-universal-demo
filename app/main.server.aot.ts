@@ -6,7 +6,7 @@ import { enableProdMode } from '@angular/core';
 
 enableProdMode();
 
-function render(index, url, callback)
+function serverRender(index, url, callback)
 {
     renderModuleFactory(ServerAppModuleNgFactory, 
     {
@@ -23,4 +23,4 @@ function render(index, url, callback)
     });
 }
 
-exports.render = render;
+exports.serverRender = serverRender;

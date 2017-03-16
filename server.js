@@ -8,6 +8,22 @@ var connect = require('connect'),
 
 var app = connect();
 
+const wwwroot = "wwwroot";
+var serverRenderFunc;
+
+/**
+ * Gets function used for server side rendering
+ */
+function getServerRenderFunc()
+{
+    if(!serverRenderFunc || !!argv.webpack)
+    {
+        serverRenderFunc = require(path.join(__dirname, wwwroot, 'dist/server.js')).serverRender;
+    }
+
+    return serverRenderFunc;
+}
+
 //enable webpack only if run with --webpack param
 if(!!argv.webpack)
 {
@@ -28,25 +44,6 @@ if(!!argv.webpack)
     app.use(hmr(compiler));
 }
 
-app.use(function (req, res, next) 
-{
-    if(req.url == '/' || req.url == '/lazy')
-    {
-        var content = fs.readFileSync(__dirname + '/wwwroot/index.html');
-
-        require('./wwwroot/dist/server.js').render(content.toString(), req.url, function(err, succ)
-        {
-            res.setHeader('Content-Type', 'text/html');
-
-            res.end(err || succ);
-        });
-
-        return;
-    }
-
-    next();
-});
-
 app.use('/data', function (req, res, next) 
 {
     res.setHeader('Content-Type', 'application/json');
@@ -60,8 +57,28 @@ app.use(proxy(['/api'], {target: 'http://localhost:8080', ws: true}));
 //enable html5 routing
 app.use(history());
 
+//angular server side rendering
+app.use(function (req, res, next) 
+{
+    if(req.url == '/index.html')
+    {
+        var content = fs.readFileSync(path.join(__dirname, wwwroot, 'index.html'));
+
+        getServerRenderFunc()(content.toString(), req.originalUrl, function(err, succ)
+        {
+            res.setHeader('Content-Type', 'text/html');
+
+            res.end(err || succ);
+        });
+
+        return;
+    }
+
+    next();
+});
+
 //return static files
-app.use(serveStatic('wwwroot'));
+app.use(serveStatic(wwwroot));
 
 //create node.js http server and listen on port
 app.listen(8888);
