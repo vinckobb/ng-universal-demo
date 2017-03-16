@@ -1,4 +1,5 @@
-import {renderModule, renderModuleFactory} from "@angular/platform-server";
+import {Provider, NgModuleRef, ApplicationRef} from "@angular/core";
+import {renderModule, renderModuleFactory, INITIAL_CONFIG, platformServer, platformDynamicServer, PlatformState} from "@angular/platform-server";
 import * as fs from 'fs';
 
 /**
@@ -18,30 +19,71 @@ function getDocument(filePath: string): string
  * Returns function used for rendering app on server
  * @param aot Indication that it is aot build
  * @param mainModule Main module to be bootstrapped
+ * @param extraProviders Extra providers used within mainModule
  */
-export function serverRenderFactory<T>(aot: boolean, mainModule: any): (index: string, url: string, callback: (error: string, result?: string) => void) => void
+export function serverRenderFactory<T>(aot: boolean, mainModule: any, extraProviders?: Provider[]): (index: string, url: string, callback: (error: string, result?: string) => void) => void
 {
+    extraProviders = extraProviders || [];
+
     /**
      * Renders application
      */
     return function serverRender(indexPath: string, url: string, callback: (error: string, result?: string) => void)
     {
-        let options =
+        try 
         {
-            document: getDocument(indexPath),
-            url: url
-        };
+            extraProviders = extraProviders.concat(
+            [
+                {
+                    provide: INITIAL_CONFIG,
+                    useValue: 
+                    {
+                        document: getDocument(indexPath),
+                        url: url
+                    }
+                }
+            ]);
 
-        let renderPromise: Promise<string> = aot ? renderModuleFactory(mainModule, options) : renderModule(mainModule, options);
+            const moduleRefPromise = aot ? platformServer(extraProviders).bootstrapModuleFactory(mainModule) : platformDynamicServer(extraProviders).bootstrapModule(mainModule);
 
-        renderPromise
-            .then(string =>
+            moduleRefPromise.then((moduleRef: NgModuleRef<{}>) => 
             {
-                callback(null, string);
-            })
-            .catch(error =>
-            {
-                callback(error);
+                const appRef = moduleRef.injector.get(ApplicationRef);
+
+                appRef.isStable
+                    .filter((isStable: boolean) => isStable)
+                    .first()
+                    .subscribe((stable) => 
+                    {
+                        const bootstrap = moduleRef.instance['ngOnBootstrap'];
+                        bootstrap && bootstrap();
+
+                        callback(null, moduleRef.injector.get(PlatformState).renderToString());
+                        moduleRef.destroy();
+                    });
             });
+        } 
+        catch (e) 
+        {
+            callback(e);
+        }
+
+        // let options =
+        // {
+        //     document: getDocument(indexPath),
+        //     url: url
+        // };
+
+        // let renderPromise: Promise<string> = aot ? renderModuleFactory(mainModule, options) : renderModule(mainModule, options);
+
+        // renderPromise
+        //     .then(string =>
+        //     {
+        //         callback(null, string);
+        //     })
+        //     .catch(error =>
+        //     {
+        //         callback(error);
+        //     });
     }
 }
