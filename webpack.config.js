@@ -1,8 +1,16 @@
 var webpack = require('webpack'),
     path = require('path'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
+    ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin'),
+    ExtractTextPlugin = require("extract-text-webpack-plugin"),
     AotPlugin =  require('@ngtools/webpack').AotPlugin;
 
+//array of paths for server and browser tsconfigs
+const tsconfigs = 
+{
+    client: path.join(__dirname, 'tsconfig.browser.json'),
+    server: path.join(__dirname, 'tsconfig.server.json')
+};
 
 /**
  * Gets entries for webpack
@@ -20,18 +28,11 @@ function getEntries(aot, ssr)
     else
     {
         return {
-            client: aot ? [path.join(__dirname, "app.aot/main.browser.aot.ts")] : [path.join(__dirname, "app/main.browser.ts")],
             style: [path.join(__dirname, "content/site.scss")],
+            client: aot ? [path.join(__dirname, "app.aot/main.browser.aot.ts")] : [path.join(__dirname, "app/main.browser.ts")],
         }
     }
 }
-
-//array of paths for server and browser tsconfigs
-const tsconfigs = 
-{
-    client: path.join(__dirname, 'tsconfig.browser.json'),
-    server: path.join(__dirname, 'tsconfig.server.json')
-};
 
 /**
  * Generates a AotPlugin for @ngtools/webpack
@@ -64,6 +65,15 @@ function getTypescriptLoaders(prod, aot, hmr)
     {
         return ['awesome-typescript-loader' + (prod ? '' : '?sourceMap=true'), 'angular2-template-loader', 'webpack-lazy-module-loader'].concat(hmr ? ['webpack-hmr-module-loader'] : []);
     }
+}
+
+/**
+ * Gets array of webpack loaders for style files
+ * @param {boolean} prod Indication that currently is running production build
+ */
+function getStyleLoaders(prod)
+{
+    return prod ? ExtractTextPlugin.extract({fallback: "style-loader", use: ['css-loader', 'sass-loader'], publicPath: ""}) : ['style-loader', 'css-loader', 'sass-loader'];
 }
 
 module.exports = function(options)
@@ -110,7 +120,7 @@ module.exports = function(options)
                 //vendor globals
                 // { 
                 //     test: require.resolve("jquery"),
-                //     loader: "expose-loader?$!expose-loader?jQuery" 
+                //     use: ["expose-loader?$", "expose-loader?jQuery"] 
                 // },
                 // {
                 //     test: require.resolve("numeral"),
@@ -119,23 +129,19 @@ module.exports = function(options)
                 //file processing
                 {
                     test: /\.ts$/,
-                    loaders: getTypescriptLoaders(prod, aot, hmr) 
+                    use: getTypescriptLoaders(prod, aot, hmr) 
                 },
                 {
                     test: /\.html$/,
                     loader: 'raw-loader'
                 },
-                // {
-                //     test: /\.json$/,
-                //     loader: 'json-loader'
-                // },
                 { 
                     test: /\.css$/, 
                     loader: 'raw-loader' 
                 },
                 {
                     test: /\.scss$/,
-                    loaders: ['style-loader', 'css-loader', 'sass-loader']
+                    use: getStyleLoaders(prod)
                 },
                 {
                     test: /\.(ttf|eot|svg)$/,
@@ -158,7 +164,13 @@ module.exports = function(options)
         {
             filename: "../index.html",
             template: path.join(__dirname, "index.html"),
-            inject: 'body'
+            inject: 'head',
+            chunksSortMode: 'none'
+        }));
+
+        config.plugins.push(new ScriptExtHtmlWebpackPlugin(
+        {
+            defaultAttribute: 'defer'
         }));
     }
 
@@ -178,7 +190,7 @@ module.exports = function(options)
         });
     }
 
-    //production specific settings
+    //production specific settings - prod is used only for client part
     if(prod)
     {
         config.output.filename = "[name].[hash].js";
@@ -199,6 +211,8 @@ module.exports = function(options)
                                                                        comments: false,
                                                                        sourceMap: false
                                                                    }));
+
+        config.plugins.push(new ExtractTextPlugin("style.[contenthash].css"));
     }
 
     return config;
