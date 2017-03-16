@@ -1,3 +1,4 @@
+//import * as preboot from 'preboot';
 import 'web-animations-js';
 import './dependencies';
 import 'zone.js/dist/zone';
@@ -12,4 +13,5 @@ var platform = platformBrowserDynamic();
 platform.bootstrapModule(BrowserAppModule).then(() =>
 {
     hmrFinishedNotification();
+    // (<any>preboot).complete();
 });

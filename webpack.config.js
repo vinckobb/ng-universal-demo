@@ -3,6 +3,8 @@ var webpack = require('webpack'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
+    VirtualModulePlugin = require('virtual-module-webpack-plugin'),
+    preboot = require('preboot'),
     AotPlugin =  require('@ngtools/webpack').AotPlugin;
 
 //array of paths for server and browser tsconfigs
@@ -16,21 +18,30 @@ const tsconfigs =
  * Gets entries for webpack
  * @param {boolean} aot Indicates that it should be AOT entries
  * @param {boolean} ssr Indicates that it should be entries for server side rendering
+ * @param {boolean} prod Indication that currently is running production build
  */
-function getEntries(aot, ssr)
+function getEntries(aot, ssr, prod)
 {
     if(ssr)
     {
         return {
             server: aot ? [path.join(__dirname, "app.aot/main.server.aot.ts")] : [path.join(__dirname, "app/main.server.ts")]
-        }
+        };
     }
     else
     {
-        return {
+        var entries = 
+        {
             style: [path.join(__dirname, "content/site.scss")],
             client: aot ? [path.join(__dirname, "app.aot/main.browser.aot.ts")] : [path.join(__dirname, "app/main.browser.ts")],
+        };
+
+        if(prod)
+        {
+            //entries['inline-preboot'] = ["./inline-preboot"];
         }
+
+        return entries;
     }
 }
 
@@ -89,7 +100,7 @@ module.exports = function(options)
 
     var config =
     {
-        entry: getEntries(aot, ssr),
+        entry: getEntries(aot, ssr, prod),
         output:
         {
             path: path.join(__dirname, distPath),
@@ -110,6 +121,7 @@ module.exports = function(options)
                 // "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
                 // "./locale": path.join(__dirname, "node_modules/moment/locale"),
                 // "config/global": path.join(__dirname, "config/global.json"),
+                "preboot": path.join(__dirname, "node_modules/preboot/__dist/preboot_browser.js"),
                 "app": path.join(__dirname, "app")
             }
         },
@@ -117,6 +129,17 @@ module.exports = function(options)
         {
             rules:
             [
+                //preboot
+                { 
+                    test: path.join(__dirname, "node_modules/preboot/__dist/preboot_browser.js"),
+                    use: 
+                    [
+                        {
+                            loader: 'exports-loader',
+                            options: 'preboot'
+                        }
+                    ]
+                },
                 //vendor globals
                 // { 
                 //     test: require.resolve("jquery"),
@@ -165,12 +188,26 @@ module.exports = function(options)
             filename: "../index.html",
             template: path.join(__dirname, "index.html"),
             inject: 'head',
-            chunksSortMode: 'none'
+            chunksSortMode: function orderEntryLast(a, b) 
+            {
+                if(a.names[0] == 'inline-preboot')
+                {
+                    return -1;
+                }
+
+                if(b.names[0] == 'inline-preboot')
+                {
+                    return 1;
+                }
+
+                return 0;
+            }
         }));
 
         config.plugins.push(new ScriptExtHtmlWebpackPlugin(
         {
-            defaultAttribute: 'defer'
+            defaultAttribute: 'defer',
+            inline: 'inline-preboot'
         }));
     }
 
@@ -196,23 +233,31 @@ module.exports = function(options)
         config.output.filename = "[name].[hash].js";
         config.output.chunkFilename = `[name].${ssr ? 'server' : 'client'}.chunk.[chunkhash].js`;
 
-        config.plugins.unshift(new webpack.optimize.UglifyJsPlugin({
-                                                                       beautify: false,
-                                                                       mangle: 
-                                                                       {
-                                                                           screw_ie8: true,
-                                                                           keep_fnames: true
-                                                                       },
-                                                                       compress: 
-                                                                       {
-                                                                           warnings: false,
-                                                                           screw_ie8: true
-                                                                       },
-                                                                       comments: false,
-                                                                       sourceMap: false
-                                                                   }));
+        // config.plugins.unshift(new webpack.optimize.UglifyJsPlugin({
+        //                                                                beautify: false,
+        //                                                                mangle: 
+        //                                                                {
+        //                                                                    screw_ie8: true,
+        //                                                                    keep_fnames: true
+        //                                                                },
+        //                                                                compress: 
+        //                                                                {
+        //                                                                    warnings: false,
+        //                                                                    screw_ie8: true
+        //                                                                },
+        //                                                                comments: false,
+        //                                                                sourceMap: false
+        //                                                            }));
 
         config.plugins.push(new ExtractTextPlugin("style.[contenthash].css"));
+
+        var prebootOptions = {appRoot: "app", buffer: false};  // see options section below
+
+        config.plugins.push(new VirtualModulePlugin(
+        {
+            moduleName: 'inline-preboot',
+            contents: preboot.getInlineCode(prebootOptions)
+        }));
     }
 
     return config;
