@@ -17,6 +17,10 @@
         [
             "node",
             "systemjs"
+        ],
+        "typeRoots": 
+        [
+            "node_modules/@types"
         ]
     },
     "exclude": 

@@ -62,9 +62,7 @@ app.use(function (req, res, next)
 {
     if(req.url == '/index.html')
     {
-        var content = fs.readFileSync(path.join(__dirname, wwwroot, 'index.html'));
-
-        getServerRenderFunc()(content.toString(), req.originalUrl, function(err, succ)
+        getServerRenderFunc()(path.join(__dirname, wwwroot, 'index.html'), req.originalUrl, function(err, succ)
         {
             res.setHeader('Content-Type', 'text/html');
 
