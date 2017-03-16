@@ -5,7 +5,7 @@ import * as fs from 'fs';
 /**
  * This holds a cached version of each index used.
  */
-const templateCache: { [key: string]: string } = {};
+const templateCache: {[key: string]: string} = {};
 
 /**
  * Get the document at the file path
@@ -67,23 +67,5 @@ export function serverRenderFactory<T>(aot: boolean, mainModule: any, extraProvi
         {
             callback(e);
         }
-
-        // let options =
-        // {
-        //     document: getDocument(indexPath),
-        //     url: url
-        // };
-
-        // let renderPromise: Promise<string> = aot ? renderModuleFactory(mainModule, options) : renderModule(mainModule, options);
-
-        // renderPromise
-        //     .then(string =>
-        //     {
-        //         callback(null, string);
-        //     })
-        //     .catch(error =>
-        //     {
-        //         callback(error);
-        //     });
     }
 }

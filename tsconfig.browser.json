@@ -4,6 +4,6 @@
     {
         "excludes": [],
         "genDir": "./app.aot/ngfactory",
-        "entryModule": "./app.aot/app/browser-app.module#BrowserAppModule"
+        "entryModule": "./app.aot/boot/browser-app.module#BrowserAppModule"
     }
 }
