@@ -3,7 +3,6 @@ import {RouterModule} from '@angular/router'
 import {SamplesComponent} from "./samples.component";
 import {sampleComponentRoutes, sampleComponents} from './samples.component.routes';
 
-
 @NgModule(
 {
     declarations: [SamplesComponent, ...sampleComponents],
