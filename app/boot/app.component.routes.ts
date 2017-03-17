@@ -8,8 +8,8 @@ var componentRoutes = Utils.routerHelper.extractRoutes([HomeView]);
 var routes = 
 [
     { 
-        path: 'lazy', 
-        loadChildren: '../pages/+lazy/lazy.module#LazyModule'
+        path: 'samples', 
+        loadChildren: '../pages/+samples/samples.module#SamplesModule'
     },
     ...componentRoutes
 ];
