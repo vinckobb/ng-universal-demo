@@ -233,21 +233,21 @@ module.exports = function(options)
         config.output.filename = "[name].[hash].js";
         config.output.chunkFilename = `[name].${ssr ? 'server' : 'client'}.chunk.[chunkhash].js`;
 
-        // config.plugins.unshift(new webpack.optimize.UglifyJsPlugin({
-        //                                                                beautify: false,
-        //                                                                mangle: 
-        //                                                                {
-        //                                                                    screw_ie8: true,
-        //                                                                    keep_fnames: true
-        //                                                                },
-        //                                                                compress: 
-        //                                                                {
-        //                                                                    warnings: false,
-        //                                                                    screw_ie8: true
-        //                                                                },
-        //                                                                comments: false,
-        //                                                                sourceMap: false
-        //                                                            }));
+        config.plugins.unshift(new webpack.optimize.UglifyJsPlugin({
+                                                                       beautify: false,
+                                                                       mangle: 
+                                                                       {
+                                                                           screw_ie8: true,
+                                                                           keep_fnames: true
+                                                                       },
+                                                                       compress: 
+                                                                       {
+                                                                           warnings: false,
+                                                                           screw_ie8: true
+                                                                       },
+                                                                       comments: false,
+                                                                       sourceMap: false
+                                                                   }));
 
         config.plugins.push(new ExtractTextPlugin("style.[contenthash].css"));
 
