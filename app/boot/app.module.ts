@@ -12,7 +12,7 @@ import {providers} from './app.config';
 @NgModule(
 {
     imports: [BrowserModule.withServerTransition({appId: 'my-app-id'}), HttpModule, CommonSharedModule, appRoutesModule],
-    providers: [providers],
+    providers: providers,
     declarations: [AppComponent, ...appComponents],
     exports: [AppComponent]
 })
