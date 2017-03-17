@@ -1,0 +1,25 @@
+{
+    "debug": true,
+    "serverLogging": false,
+    "version": "1.0.0",
+    "apiBaseUrl": "api/",
+    "defaultApiHeaders": 
+    {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    },
+    "defaultLanguage": "en",
+    "defaultItemsPerPage": 10,
+    "defaultPage": 1,
+    "availaleLanguages": 
+    [
+        {
+            "lang": "en",
+            "title": "English"
+        },
+        {
+            "lang": "sk",
+            "title": "Slovenčina"
+        }
+    ]
+}

@@ -4,16 +4,23 @@
     "description": "appDescription",
     "scripts":
     {
-        "start": "npm run build && npm run server",
         "build": "webpack && webpack --env.ssr",
-        "build:aot": "webpack --env.aot && webpack --env.aot --env.ssr",
-        "build:prod": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr",
-        "prebuild": "npm run clean",
-        "prebuild:aot": "npm run clean && npm run prepare:aot",
-        "prebuild:prod": "npm run clean && npm run prepare:aot",
-        "prepare:aot": "gulp create-aot-app",
-        "clean": "rimraf wwwroot app.aot",
-        "server": "node server.js"
+        "build:min": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr",
+        "build:gulp": "gulp build",
+        "build:gulp:aot": "gulp build:aot",
+        "prebuild": "npm run clean && npm run build:gulp",
+        "prebuild:min": "npm run clean && npm run build:gulp",
+        "postbuild:min": "npm run clean:tmp",
+        "clean": "rimraf wwwroot && npm run clean:tmp",
+        "clean:tmp": "rimraf app.aot",
+        "clean:deps": "rimraf node_modules",
+        "clean:all": "npm run clean && npm run clean:deps",
+        "app-config:w": "gulp watch-config",
+        "scss": "gulp compile-scss",
+        "tsc": "tsc",
+        "update-versions": "nrs versionDeployment.config.json",
+        "server": "node server.js",
+        "start": "npm run build:gulp && concurrent \"npm run app-config:w\" \"npm run server -- --webpack\""
     },
     "engines":
     {
@@ -91,7 +98,6 @@
         "gulp": "~3.9.1",
         "gulp-sass": "~3.1.0",
         "gulp-watch": "~4.3.11",
-        "gulp-rename": "~1.2.2",
         "gulp-aot-compliant": "1.0.0",
         "yargs": "~7.0.2",
         "through2": "~2.0.3",
