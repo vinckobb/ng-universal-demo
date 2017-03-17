@@ -98,7 +98,7 @@
         "gulp": "~3.9.1",
         "gulp-sass": "~3.1.0",
         "gulp-watch": "~4.3.11",
-        "gulp-aot-compliant": "1.0.0",
+        "gulp-aot-compliant": "1.0.1",
         "yargs": "~7.0.2",
         "through2": "~2.0.3",
         "concurrently": "~3.4.0",
