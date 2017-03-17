@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ComponentRoute} from '@ng/common';
+import {ComponentRoute, ProgressIndicatorService} from '@ng/common';
 
 @Component(
 {
@@ -11,4 +11,20 @@ export class CommonSamplesComponent
 {
     //######################### public properties #########################
     public sampleNumber = 5235342.3231;
+
+    //######################### constructors #########################
+    constructor(private progressSvc: ProgressIndicatorService)
+    {
+    }
+
+    //######################### public methods #########################
+    public showProgress()
+    {
+        this.progressSvc.showProgress();
+
+        setTimeout(() =>
+        {
+            this.progressSvc.hideProgress();
+        }, 5000);
+    }
 }
