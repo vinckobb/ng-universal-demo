@@ -78,6 +78,7 @@
         "@types/webpack": "~2.2.11",
         "@types/connect": "~3.4.30",
         "@types/jquery": "~2.0.41",
+        "@types/moment": "~2.13.0",
         "@angular/compiler-cli": "^4.0.0-rc.4",
         "@ngtools/webpack": "^1.2.13",
         "awesome-typescript-loader": "~3.1.2",
