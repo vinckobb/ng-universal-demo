@@ -12,5 +12,5 @@ var platform = platformBrowserDynamic();
 platform.bootstrapModule(BrowserAppModule).then(() =>
 {
     hmrFinishedNotification();
-    // (<any>preboot).complete();
+    preboot.complete();
 });

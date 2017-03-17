@@ -7,6 +7,43 @@ var webpack = require('webpack'),
     preboot = require('preboot'),
     AotPlugin =  require('@ngtools/webpack').AotPlugin;
 
+//Preboot options
+const prebootOptions = 
+{
+    appRoot: "app", 
+    buffer: false,
+    eventSelectors:
+    [
+        {
+            selector: "input,textarea",
+            events: ["keypress","keyup","keydown","input","change"]
+        },
+        {
+            selector: "select,option",
+            events: ["change"]
+        },
+        {
+            selector: "input",
+            events: ["keyup"],
+            preventDefault: true,
+            keyCodes: [13],
+            freeze: true
+        },
+        {
+            selector: "input,textarea",
+            events: ["focusin","focusout","mousedown","mouseup"],
+            noReplay: true
+        },
+        {
+            selector: "input[type=\"submit\"],button",
+            events: ["click"],
+            preventDefault: true,
+            freeze: true
+        }
+    ]
+};  
+
+
 //array of paths for server and browser tsconfigs
 const tsconfigs = 
 {
@@ -34,12 +71,8 @@ function getEntries(aot, ssr, prod)
         {
             style: [path.join(__dirname, "content/site.scss")],
             client: aot ? [path.join(__dirname, "app.aot/main.browser.aot.ts")] : [path.join(__dirname, "app/main.browser.ts")],
+            "inline-preboot": ["./inline-preboot"]
         };
-
-        if(prod)
-        {
-            //entries['inline-preboot'] = ["./inline-preboot"];
-        }
 
         return entries;
     }
@@ -135,6 +168,10 @@ module.exports = function(options)
                     use: 
                     [
                         {
+                            loader: 'expose-loader',
+                            options: 'preboot'
+                        },
+                        {
                             loader: 'exports-loader',
                             options: 'preboot'
                         }
@@ -143,11 +180,27 @@ module.exports = function(options)
                 //vendor globals
                 { 
                     test: require.resolve("jquery"),
-                    use: ["expose-loader?$", "expose-loader?jQuery"] 
+                    use: 
+                    [
+                        {
+                            loader: 'expose-loader',
+                            options: '$'
+                        },
+                        {
+                            loader: 'expose-loader',
+                            options: 'jQuery'
+                        }
+                    ] 
                 },
                 {
                     test: require.resolve("numeral"),
-                    loader: 'expose-loader?numeral'
+                    use: 
+                    [
+                        {
+                            loader: 'expose-loader',
+                            options: 'numeral'
+                        }
+                    ]
                 },
                 //file processing
                 {
@@ -172,7 +225,14 @@ module.exports = function(options)
                 }
             ]
         },
-        plugins: []
+        plugins: 
+        [
+            new VirtualModulePlugin(
+            {
+                moduleName: 'inline-preboot',
+                contents: preboot.getInlineCode(prebootOptions)
+            })
+        ]
     };
 
     //server specific settings
@@ -249,14 +309,6 @@ module.exports = function(options)
                                                                    }));
 
         config.plugins.push(new ExtractTextPlugin("style.[contenthash].css"));
-
-        var prebootOptions = {appRoot: "app", buffer: false};  // see options section below
-
-        config.plugins.push(new VirtualModulePlugin(
-        {
-            moduleName: 'inline-preboot',
-            contents: preboot.getInlineCode(prebootOptions)
-        }));
     }
 
     return config;

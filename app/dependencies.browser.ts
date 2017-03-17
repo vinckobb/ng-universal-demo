@@ -1,4 +1,4 @@
-//import * as preboot from 'preboot';
+import 'preboot';
 import 'web-animations-js';
 import 'jquery';
 //import 'jqueryui';

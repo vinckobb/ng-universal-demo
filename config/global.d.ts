@@ -50,3 +50,5 @@ declare module "config/global"
 
     export = _tmp;
 }
+
+declare var preboot;
