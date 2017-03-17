@@ -115,12 +115,12 @@ module.exports = function(options)
             extensions: ['.ts', '.js'],
             alias:
             {
-                // "numeral-languages": path.join(__dirname, "node_modules/numeral/locales.js"),
-                // "handlebars": path.join(__dirname, "node_modules/handlebars/dist/handlebars.js"),
-                // "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
-                // "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
-                // "./locale": path.join(__dirname, "node_modules/moment/locale"),
-                // "config/global": path.join(__dirname, "config/global.json"),
+                "numeral-languages": path.join(__dirname, "node_modules/numeral/locales.js"),
+                "handlebars": path.join(__dirname, "node_modules/handlebars/dist/handlebars.js"),
+                "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
+                "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
+                "./locale": path.join(__dirname, "node_modules/moment/locale"),
+                "config/global": path.join(__dirname, "config/global.json"),
                 "preboot": path.join(__dirname, "node_modules/preboot/__dist/preboot_browser.js"),
                 "app": path.join(__dirname, "app")
             }
@@ -141,14 +141,14 @@ module.exports = function(options)
                     ]
                 },
                 //vendor globals
-                // { 
-                //     test: require.resolve("jquery"),
-                //     use: ["expose-loader?$", "expose-loader?jQuery"] 
-                // },
-                // {
-                //     test: require.resolve("numeral"),
-                //     loader: 'expose-loader?numeral'
-                // },
+                { 
+                    test: require.resolve("jquery"),
+                    use: ["expose-loader?$", "expose-loader?jQuery"] 
+                },
+                {
+                    test: require.resolve("numeral"),
+                    loader: 'expose-loader?numeral'
+                },
                 //file processing
                 {
                     test: /\.ts$/,
@@ -178,7 +178,6 @@ module.exports = function(options)
     //server specific settings
     if(ssr)
     {
-
     }
     //client specific settings
     else

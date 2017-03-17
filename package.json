@@ -9,7 +9,7 @@
         "build:gulp": "gulp build",
         "build:gulp:aot": "gulp build:aot",
         "prebuild": "npm run clean && npm run build:gulp",
-        "prebuild:min": "npm run clean && npm run build:gulp",
+        "prebuild:min": "npm run clean && npm run build:gulp:aot",
         "postbuild:min": "npm run clean:tmp",
         "clean": "rimraf wwwroot && npm run clean:tmp",
         "clean:tmp": "rimraf app.aot",
