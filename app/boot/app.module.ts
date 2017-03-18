@@ -4,6 +4,7 @@ import {CommonModule} from '@angular/common';
 import {HttpModule} from '@angular/http';
 import {InterceptableHttpModule} from '@ng/http-extensions';
 import {ExternalTranslationLoader} from '@ng/external-translation-loader';
+import {NotificationsModule} from '@ng/notifications';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 
 import {AppComponent} from './app.component';
@@ -25,6 +26,7 @@ import {providers} from './app.config';
         {
             loader: <ClassProvider>{provide: TranslateLoader, useClass: ExternalTranslationLoader}
         }),
+        NotificationsModule.forRoot(),
         CommonSharedModule,
         appRoutesModule
     ],
