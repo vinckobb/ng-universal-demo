@@ -43,7 +43,7 @@
         "@ng/animations": "^3.0.0-beta.3",
         "@ng/authentication": "^3.0.0-beta.2",
         "@ng/bootstrap": "^3.0.0-beta.2",
-        "@ng/common": "^3.0.0-beta.4",
+        "@ng/common": "^3.0.0-beta.5",
         "@ng/error-handling": "^3.0.0-beta.2",
         "@ng/external-translation-loader": "^3.0.0-beta.3",
         "@ng/grid": "^3.0.0-beta.3",

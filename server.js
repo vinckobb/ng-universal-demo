@@ -62,7 +62,7 @@ app.use(function (req, res, next)
 {
     if(req.url == '/index.html')
     {
-        getServerRenderFunc()(path.join(__dirname, wwwroot, 'index.html'), req.originalUrl, function(err, succ)
+        getServerRenderFunc()(path.join(__dirname, wwwroot, 'index.html'), req.originalUrl, "http://localhost:8888/", function(err, succ)
         {
             res.setHeader('Content-Type', 'text/html');
 
