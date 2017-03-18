@@ -48,12 +48,12 @@ export function serverRenderFactory<T>(aot: boolean, mainModule: any, extraProvi
 
             moduleRefPromise.then((moduleRef: NgModuleRef<{}>) => 
             {
-                const appRef = moduleRef.injector.get(ApplicationRef);
+                const appRef: ApplicationRef = moduleRef.injector.get(ApplicationRef);
 
                 appRef.isStable
                     .filter((isStable: boolean) => isStable)
                     .first()
-                    .subscribe((stable) => 
+                    .subscribe(() => 
                     {
                         const bootstrap = moduleRef.instance['ngOnBootstrap'];
                         bootstrap && bootstrap();

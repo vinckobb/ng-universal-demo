@@ -1,3 +1,4 @@
+import './hacks';
 import './dependencies';
 import 'zone.js/dist/zone-node';
 import {enableProdMode} from '@angular/core';

@@ -1,3 +1,4 @@
+import './hacks';
 import './dependencies.browser';
 import './dependencies';
 import 'zone.js/dist/zone';
