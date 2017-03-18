@@ -1,1 +1,8 @@
 <h3>Grid Sample</h3>
+
+<ng-grid id="gridSample" [data]="data" [options]="gridOptions" [totalCount]="totalCount">
+    <ng-column name="name" title="First name"></ng-column>
+    <ng-column name="surname" title="Surname"></ng-column>
+    <ng-column name="email" title="E-Mail"></ng-column>
+    <ng-column name="address" title="Address"></ng-column>
+</ng-grid>
