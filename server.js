@@ -9,6 +9,7 @@ var connect = require('connect'),
 var app = connect();
 
 const wwwroot = "wwwroot";
+const serverPath = path.join(__dirname, wwwroot, 'dist/server.js');
 var serverRenderFunc;
 
 /**
@@ -18,10 +19,24 @@ function getServerRenderFunc()
 {
     if(!serverRenderFunc || !!argv.webpack)
     {
-        serverRenderFunc = require(path.join(__dirname, wwwroot, 'dist/server.js')).serverRender;
+        serverRenderFunc = require(serverPath).serverRender;
     }
 
     return serverRenderFunc;
+}
+
+function isServerRenderAvailable()
+{
+    try
+    {
+        require.resolve(serverPath);
+    }
+    catch(e)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 //enable webpack only if run with --webpack param
@@ -62,6 +77,13 @@ app.use(function (req, res, next)
 {
     if(req.url == '/index.html')
     {
+        if(!isServerRenderAvailable())
+        {
+            next();
+            
+            return;
+        }
+
         getServerRenderFunc()(path.join(__dirname, wwwroot, 'index.html'), req.originalUrl, "http://localhost:8888/", function(err, succ)
         {
             res.setHeader('Content-Type', 'text/html');
