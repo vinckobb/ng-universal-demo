@@ -9,10 +9,14 @@ import { Observable } from 'rxjs/Observable';
 export class HomeView implements OnInit {
   public subs: Observable<string>;
 
-  constructor(private http: TransferHttp) {}
+  constructor(private http: TransferHttp) 
+  {
+    console.log("HTTP Used", http);
+  }
 
   ngOnInit() {
     this.subs = this.http.get('http://localhost:8000/data').map(data => {
+      console.log(data);
       return `${data.greeting} ${data.name}`;
     });
   }
