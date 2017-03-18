@@ -1,17 +1,19 @@
 import {Component} from '@angular/core';
 import {ComponentRoute} from '@ng/common';
-import {GlobalNotificationsService} from '@ng/notifications';
+import {GlobalNotificationsService, LocalNotificationsService} from '@ng/notifications';
 
 @Component(
 {
     selector: 'notifications-sample',
-    templateUrl: 'notificationsSample.component.html'
+    templateUrl: 'notificationsSample.component.html',
+    providers: [LocalNotificationsService]
 })
 @ComponentRoute({path: 'notifications'})
 export class NotificationsSampleComponent
 {
     //######################### constructor #########################
-    constructor(private _notifications: GlobalNotificationsService)
+    constructor(private _notifications: GlobalNotificationsService,
+                private _localNotifications: LocalNotificationsService)
     {
     }
 
@@ -38,6 +40,31 @@ export class NotificationsSampleComponent
 
     public cleanAll()
     {
-        this._notifications.clearMessages();
+        this._localNotifications.clearMessages();
+    }
+
+    public showLocalInfo()
+    {
+        this._localNotifications.info("This is info");
+    }
+
+    public showLocalError()
+    {
+        this._localNotifications.error("This is error");
+    }
+
+    public showLocalWarning()
+    {
+        this._localNotifications.warning("This is warning");
+    }
+
+    public showLocalSuccess()
+    {
+        this._localNotifications.success("This is success");
+    }
+
+    public cleanLocalAll()
+    {
+        this._localNotifications.clearMessages();
     }
 }
