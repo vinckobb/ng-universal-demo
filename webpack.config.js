@@ -71,7 +71,7 @@ function getEntries(aot, ssr, prod, hmr)
         var entries = 
         {
             style: [path.join(__dirname, "content/site.scss")],
-            client: hmr ? [path.join(__dirname, "app/main.browser.hmr.ts")] : [path.join(__dirname, "app.aot/main.browser.ts")],
+            client: hmr ? [path.join(__dirname, "app/main.browser.hmr.ts")] : (aot ? [path.join(__dirname, "app.aot/main.browser.ts")] : [path.join(__dirname, "app/main.browser.ts")]),
             "inline-preboot": ["./inline-preboot"]
         };
 
