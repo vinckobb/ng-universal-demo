@@ -61,9 +61,11 @@ if(!!argv.webpack)
 
 app.use('/data', function (req, res, next) 
 {
+    console.time("GET /data");
     res.setHeader('Content-Type', 'application/json');
 
     res.end(JSON.stringify({greeting: 'Hello', name: 'World'}));
+    console.timeEnd("GET /data");
 })
 
 //proxy special requests to other location

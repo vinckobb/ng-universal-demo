@@ -22,7 +22,7 @@ import {providers} from './app.config';
             appId: 'my-app-id'
         }),
         HttpModule,
-        InterceptableHttpModule.forRoot(),
+        //InterceptableHttpModule.forRoot(),
         TranslateModule.forRoot(
         {
             loader: <ClassProvider>{provide: TranslateLoader, useClass: ExternalTranslationLoader}

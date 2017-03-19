@@ -2,11 +2,10 @@
     "debug": true,
     "serverLogging": false,
     "version": "1.0.0",
-    "apiBaseUrl": "api/",
+    "apiBaseUrl": "http://localhost:8888/",
     "defaultApiHeaders": 
     {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Accept": "application/json"
     },
     "defaultLanguage": "en",
     "defaultItemsPerPage": 10,

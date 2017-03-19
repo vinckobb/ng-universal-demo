@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Http} from "@angular/http";
 import {ComponentRoute} from "@ng/common";
+import {DataService} from "../../services/api/data/data.service";
 
 @Component(
 {
@@ -9,7 +10,8 @@ import {ComponentRoute} from "@ng/common";
     template: `
     <h3>{{subs | async}}</h3>
     <div><button (click)="inc()">click</button></div>
-    <div>{{counter}}</div>`
+    <div>{{counter}}</div>`,
+    providers: [DataService]
 })
 @ComponentRoute({path: ''})
 export class HomeView implements OnInit 
@@ -17,13 +19,13 @@ export class HomeView implements OnInit
     public subs: Observable<string>;
     public counter = 0;
 
-    constructor(private http: Http) 
+    constructor(private dataSvc: DataService) 
     {
     }
 
     ngOnInit() 
     {
-        this.subs = this.http.get('http://localhost:8888/data').map(itm => itm.json()).map(data => 
+        this.subs = this.dataSvc.getData().map(data => 
         {
             return `${data.greeting} ${data.name}`;
         });
