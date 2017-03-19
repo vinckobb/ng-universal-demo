@@ -4,10 +4,10 @@ import { Observable } from 'rxjs/Observable';
 
 @Component({
 	selector: 'home-view',
-	template: `<div><h3>{{subs | async}}</h3></div>`
+	template: `<div><h3>{{subs}}</h3></div>`
 })
 export class HomeView implements OnInit {
-  public subs: Observable<string>;
+  public subs: string;
 
   constructor(private http: TransferHttp) 
   {
@@ -15,9 +15,13 @@ export class HomeView implements OnInit {
   }
 
   ngOnInit() {
-    this.subs = this.http.get('http://localhost:8000/data').map(data => {
+    this.http.get('http://localhost:8000/data').map(data => {
       console.log(data);
       return `${data.greeting} ${data.name}`;
+    }).subscribe(data =>
+    {
+      console.log("async ok", data);
+      this.subs = data;
     });
   }
 }

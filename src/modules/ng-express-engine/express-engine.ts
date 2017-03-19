@@ -94,6 +94,7 @@ function handleModuleRef(moduleRef: NgModuleRef<{}>, callback: Send) {
     .subscribe((stable) => {
       const bootstrap = moduleRef.instance['ngOnBootstrap'];
       bootstrap && bootstrap();
+      console.log("isStable");
 
       callback(null, state.renderToString());
       moduleRef.destroy();
