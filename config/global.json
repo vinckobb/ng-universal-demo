@@ -2,7 +2,7 @@
     "debug": true,
     "serverLogging": false,
     "version": "1.0.0",
-    "apiBaseUrl": "http://localhost:8888/",
+    "apiBaseUrl": "",
     "defaultApiHeaders": 
     {
         "Accept": "application/json"
