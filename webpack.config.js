@@ -56,8 +56,9 @@ const tsconfigs =
  * @param {boolean} aot Indicates that it should be AOT entries
  * @param {boolean} ssr Indicates that it should be entries for server side rendering
  * @param {boolean} prod Indication that currently is running production build
+ * @param {boolean} hmr Indication that currently is running hmr build
  */
-function getEntries(aot, ssr, prod)
+function getEntries(aot, ssr, prod, hmr)
 {
     if(ssr)
     {
@@ -70,7 +71,7 @@ function getEntries(aot, ssr, prod)
         var entries = 
         {
             style: [path.join(__dirname, "content/site.scss")],
-            client: aot ? [path.join(__dirname, "app.aot/main.browser.aot.ts")] : [path.join(__dirname, "app/main.browser.ts")],
+            client: hmr ? [path.join(__dirname, "app/main.browser.hmr.ts")] : [path.join(__dirname, "app.aot/main.browser.ts")],
             "inline-preboot": ["./inline-preboot"]
         };
 
@@ -133,7 +134,7 @@ module.exports = function(options)
 
     var config =
     {
-        entry: getEntries(aot, ssr, prod),
+        entry: getEntries(aot, ssr, prod, hmr),
         output:
         {
             path: path.join(__dirname, distPath),
