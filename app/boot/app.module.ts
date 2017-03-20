@@ -12,6 +12,7 @@ import {AppComponent} from './app.component';
 import {AccountService} from "../services/api/account/account.service";
 import {appComponents, appRoutesModule} from './app.component.routes';
 import {CommonSharedModule} from './commonShared.module';
+import {APP_TRANSFER_ID} from '../misc/constants';
 import {providers} from './app.config';
 
 @NgModule(
@@ -20,7 +21,7 @@ import {providers} from './app.config';
     [
         BrowserModule.withServerTransition(
         {
-            appId: 'my-app-id'
+            appId: APP_TRANSFER_ID
         }),
         HttpModule,
         TranslateModule.forRoot(

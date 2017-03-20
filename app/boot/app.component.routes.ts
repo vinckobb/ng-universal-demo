@@ -1,9 +1,13 @@
 import {RouterModule} from '@angular/router';
 import {Utils} from '@ng/common';
 
-import {HomeView} from '../pages/home/home-view.component';
+import {HomeComponent} from '../pages/home/home.component';
+import {AccessDeniedComponent} from "../pages/accessDenied/accessDenied.component";
+import {ForbiddenComponent} from "../pages/forbidden/forbidden.component";
 
-var componentRoutes = Utils.routerHelper.extractRoutes([HomeView]);
+var componentRoutes = Utils.routerHelper.extractRoutes([HomeComponent,
+                                                        AccessDeniedComponent,
+                                                        ForbiddenComponent]);
 
 var routes = 
 [
@@ -15,4 +19,6 @@ var routes =
 ];
 
 export var appRoutesModule = RouterModule.forRoot(routes, {enableTracing: false});
-export var appComponents = [HomeView];
+export var appComponents = [HomeComponent,
+                            AccessDeniedComponent,
+                            ForbiddenComponent];

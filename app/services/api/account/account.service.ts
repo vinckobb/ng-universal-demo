@@ -67,7 +67,7 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
                 firstName: "testo",
                 surname: "steron",
                 userName: "xxx",
-                permissions: [],
+                permissions: ['showWithThis'],
                 isAuthenticated: true,
                 additionalInfo: {}
             });

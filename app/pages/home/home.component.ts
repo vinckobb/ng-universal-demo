@@ -14,7 +14,7 @@ import {DataService} from "../../services/api/data/data.service";
     providers: [DataService]
 })
 @ComponentRoute({path: ''})
-export class HomeView implements OnInit 
+export class HomeComponent implements OnInit 
 {
     public subs: Observable<string>;
     public counter = 0;
