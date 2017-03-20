@@ -7,19 +7,19 @@ import * as global from 'config/global';
 import * as moment from 'moment';
 
 /**
- * Service used to access financial records api  
+ * Service used to access financial records api
  **/
-@Injectable() 
-@BaseUrl(global.apiBaseUrl) 
-@DefaultHeaders(global.defaultApiHeaders) 
+@Injectable()
+@BaseUrl(global.apiBaseUrl)
+@DefaultHeaders(global.defaultApiHeaders)
 export class DataService extends RESTClient
-{ 
-    //######################### constructor #########################     
+{
+    //######################### constructor #########################
     public constructor(http: Http,
                        @Optional() @Inject(SERVER_BASE_URL) baseUrl: string,
-                       transferStateService: TransferStateService)     
-    {         
-        super(http, baseUrl, transferStateService);     
+                       transferStateService: TransferStateService)
+    {
+        super(http, baseUrl, transferStateService);
     }
 
     @Produces(ResponseType.Json)

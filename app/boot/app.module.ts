@@ -2,7 +2,6 @@ import {NgModule, ClassProvider} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
 import {HttpModule} from '@angular/http';
-import {InterceptableHttpModule} from '@ng/http-extensions';
 import {ExternalTranslationLoader} from '@ng/external-translation-loader';
 import {NotificationsModule} from '@ng/notifications';
 import {CommonModule as NgCommonModule} from '@ng/common';
@@ -22,7 +21,6 @@ import {providers} from './app.config';
             appId: 'my-app-id'
         }),
         HttpModule,
-        //InterceptableHttpModule.forRoot(),
         TranslateModule.forRoot(
         {
             loader: <ClassProvider>{provide: TranslateLoader, useClass: ExternalTranslationLoader}
