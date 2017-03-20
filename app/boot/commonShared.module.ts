@@ -8,7 +8,7 @@ import {CommonModule as NgCommonModule} from '@ng/common';
 import {NotificationsModule} from '@ng/notifications';
 // import {InterceptableHttpModule} from '@ng/http-extensions';
 // import {ErrorHandlingModule} from '@ng/error-handling';
-// import {AuthorizationModule} from '@ng/authentication';
+import {AuthorizationModule} from '@ng/authentication';
 import {TranslateModule} from '@ngx-translate/core';
 
 // import {NavigationComponent} from './components/navigation/navigation.component';
@@ -21,7 +21,7 @@ import {TranslateModule} from '@ngx-translate/core';
 // AuthorizationModule, BootstrapModule, NotificationsModule, GridModule, ErrorHandlingModule, InterceptableHttpModule
 
     // declarations: [NavigationComponent],
-    exports: [CommonModule, FormsModule, RouterModule, NgCommonModule, TranslateModule, NotificationsModule, GridModule]
+    exports: [CommonModule, FormsModule, RouterModule, NgCommonModule, TranslateModule, NotificationsModule, GridModule, AuthorizationModule]
 })
 export class CommonSharedModule
 {

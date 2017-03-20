@@ -5,9 +5,11 @@ import {HttpModule} from '@angular/http';
 import {ExternalTranslationLoader} from '@ng/external-translation-loader';
 import {NotificationsModule} from '@ng/notifications';
 import {CommonModule as NgCommonModule} from '@ng/common';
+import {AuthorizationModule} from '@ng/authentication';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 
 import {AppComponent} from './app.component';
+import {AccountService} from "../services/api/account/account.service";
 import {appComponents, appRoutesModule} from './app.component.routes';
 import {CommonSharedModule} from './commonShared.module';
 import {providers} from './app.config';
@@ -27,6 +29,7 @@ import {providers} from './app.config';
         }),
         NotificationsModule.forRoot(),
         NgCommonModule.forRoot(),
+        AuthorizationModule.forRoot(AccountService),
         CommonSharedModule,
         appRoutesModule
     ],
