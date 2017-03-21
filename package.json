@@ -18,6 +18,7 @@
         "app-config:w": "gulp watch-config",
         "scss": "gulp compile-scss",
         "tsc": "tsc",
+        "postinstall": "npm run build",
         "update-versions": "nrs versionDeployment.config.json",
         "server": "node server.js",
         "start": "npm run build:gulp && concurrent \"npm run app-config:w\" \"npm run server -- --webpack\""
@@ -42,7 +43,7 @@
         "@angular/router": "^4.0.0-rc.5",
         "@ng/animations": "^3.0.0-beta.3",
         "@ng/authentication": "^3.0.0-beta.3",
-        "@ng/bootstrap": "^3.0.0-beta.2",
+        "@ng/bootstrap": "^3.0.0-beta.3",
         "@ng/common": "^3.0.0-beta.6",
         "@ng/error-handling": "^3.0.0-beta.7",
         "@ng/external-translation-loader": "^3.0.0-beta.3",
