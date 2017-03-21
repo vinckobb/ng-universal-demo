@@ -4,6 +4,17 @@ import {Utils, SERVER_BASE_URL} from '@ng/common';
 import * as fs from 'fs';
 
 /**
+ * Additional data passed for with request to render server
+ */
+interface AdditionalData
+{
+    /**
+     * Base url of running server
+     */
+    baseUrl: string;
+}
+
+/**
  * This holds a cached version of each index used.
  */
 const templateCache: {[key: string]: string} = {};
@@ -22,14 +33,14 @@ function getDocument(filePath: string): string
  * @param mainModule Main module to be bootstrapped
  * @param extraProviders Extra providers used within mainModule
  */
-export function serverRenderFactory<T>(aot: boolean, mainModule: any, extraProviders?: Provider[]): (index: string, url: string, baseUrl: string, callback: (error: string, result?: string) => void) => void
+export function serverRenderFactory<T>(aot: boolean, mainModule: any, extraProviders?: Provider[]): (index: string, url: string, additionalData: AdditionalData, callback: (error: string, result?: string) => void) => void
 {
     extraProviders = extraProviders || [];
 
     /**
      * Renders application
      */
-    return function serverRender(indexPath: string, url: string, baseUrl: string, callback: (error: string, result?: string) => void)
+    return function serverRender(indexPath: string, url: string, additionalData: AdditionalData, callback: (error: string, result?: string) => void)
     {
         try 
         {
@@ -47,7 +58,7 @@ export function serverRenderFactory<T>(aot: boolean, mainModule: any, extraProvi
                 <ValueProvider>
                 {
                     provide: SERVER_BASE_URL,
-                    useValue: baseUrl
+                    useValue: additionalData.baseUrl
                 }
             ]);
 

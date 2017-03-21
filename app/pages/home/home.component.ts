@@ -23,12 +23,15 @@ export class HomeComponent implements OnInit
     {
     }
 
-    public async ngOnInit()
+    public ngOnInit()
     {
-        this.subs = await this.dataSvc.getData().map(data =>
+        this.dataSvc.getData().map(data =>
         {
             return `${data.greeting} ${data.name}`;
-        }).toPromise();
+        }).subscribe(data =>
+        {
+            this.subs = data;
+        });
     }
 
     public inc()
