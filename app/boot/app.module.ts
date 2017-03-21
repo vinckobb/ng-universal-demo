@@ -6,6 +6,7 @@ import {ExternalTranslationLoader} from '@ng/external-translation-loader';
 import {NotificationsModule} from '@ng/notifications';
 import {CommonModule as NgCommonModule} from '@ng/common';
 import {AuthorizationModule} from '@ng/authentication';
+import {ServerValidationsModule, HttpErrorInterceptorModule, HttpErrorInterceptorOptions, InternalServerErrorModule} from '@ng/error-handling';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 
 import {AppComponent} from './app.component';
@@ -14,6 +15,15 @@ import {appComponents, appRoutesModule} from './app.component.routes';
 import {CommonSharedModule} from './commonShared.module';
 import {APP_TRANSFER_ID} from '../misc/constants';
 import {providers} from './app.config';
+import * as config from 'config/global';
+
+/**
+ * Factory for HttpErrorInterceptorOptions
+ */
+export function HttpErrorInterceptorModuleFactory()
+{
+    return new HttpErrorInterceptorOptions(config.debug);
+}
 
 @NgModule(
 {
@@ -31,6 +41,9 @@ import {providers} from './app.config';
         NotificationsModule.forRoot(),
         NgCommonModule.forRoot(),
         AuthorizationModule.forRoot(AccountService),
+        ServerValidationsModule.forRoot(),
+        InternalServerErrorModule.forRoot(),
+        HttpErrorInterceptorModule.forRootWithOptions(HttpErrorInterceptorModuleFactory),
         CommonSharedModule,
         appRoutesModule
     ],

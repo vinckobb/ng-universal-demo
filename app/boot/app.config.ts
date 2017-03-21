@@ -2,7 +2,6 @@ import {ClassProvider, FactoryProvider} from '@angular/core';
 import {GlobalizationService, ProgressIndicatorService} from '@ng/common';
 import {PROGRESS_INTERCEPTOR_PROVIDER} from "@ng/http-extensions/dist";
 import {ExternalTranslationLoaderOptions} from '@ng/external-translation-loader';
-import {HttpErrorInterceptorOptions} from "@ng/error-handling/dist";
 
 import {GlobalizationService as GlobalizationServiceImpl} from '../services/globalization/globalization.service';
 import * as global from 'config/global';
@@ -18,14 +17,6 @@ export function externalTranslationLoaderOptionsFactory()
                                                  "pages/home",
                                                  "pages/samplePages"],
                                                 ".json")
-}
-
-/**
- * Factory method that gets options for http error interceptor
- */
-export function httpErrorInterceptorOptionsFactory()
-{
-    return new HttpErrorInterceptorOptions(global.debug, true);
 }
 
 /**
@@ -52,11 +43,4 @@ export var providers =
         provide: GlobalizationService,
         useClass: GlobalizationServiceImpl
     },
-
-    //######################### ERROR HANDLING PROVIDERS #########################
-    <FactoryProvider>
-    {
-        provide: HttpErrorInterceptorOptions,
-        useFactory: httpErrorInterceptorOptionsFactory
-    }
 ];
