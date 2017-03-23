@@ -10,3 +10,20 @@
 
     <button class="btn btn-primary" (click)="sampleConfDialog.showConfirmation('these are data')">Show confirmation</button>
 </div>
+
+<div>
+    <h4>Date time picker</h4>
+
+    <div class="form-group relative">
+        <label class="control-label">Picker</label>
+
+        <input type="text"
+               class="form-control datetimepicker"
+               [(ngModel)]="date">
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Picker value</label>
+        <p class="form-control-static">{{date?.format("L")}}</p>
+    </div>
+</div>

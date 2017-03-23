@@ -12,9 +12,10 @@ import {ComponentRoute} from '@ng/common';
 @ComponentRoute({path: 'bootstrap'})
 export class BootstrapSamplesComponent
 {
-    //######################### public methods #########################
+    //######################### public properties #########################
+    public date: moment.Moment = null;
 
-    //public x :moment.Moment;
+    //######################### public methods #########################
 
     public confirm(data)
     {
