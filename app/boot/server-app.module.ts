@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {ServerModule} from '@angular/platform-server';
-//import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TransferStateService} from '@ng/rest';
 import {ServerTransferStateRestModule, ServerInterceptableHttpModule} from '@ng/server-stuff';
 import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';

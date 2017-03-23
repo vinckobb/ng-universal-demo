@@ -77,7 +77,7 @@ export class AppComponent implements OnInit
      */
     public ngOnInit()
     {
-        //this._notifications.info("App loaded ok.");
+        this._notifications.info("App loaded ok.");
     }
 
     //######################### public methods - implementation of OnDestroy #########################
