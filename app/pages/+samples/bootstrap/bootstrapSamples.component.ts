@@ -14,6 +14,8 @@ export class BootstrapSamplesComponent
 {
     //######################### public properties #########################
     public date: moment.Moment = null;
+    public select: string;
+    public selectValues = [{key: 1, value: "prva"}, {key: 2, value: "druha"}, {key: 3, value: "tretia"}];
 
     //######################### public methods #########################
 
