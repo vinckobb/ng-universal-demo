@@ -4,7 +4,7 @@
     <h4>Confirmation dialog</h4>
 
     <confirmation-dialog #sampleConfDialog="confirmationDialog"
-                         [confirmationText]="Are you sure?"
+                         confirmationText="Are you sure?"
                          (confirmed)="confirm($event)"
                          (canceled)="cancel($event)"></confirmation-dialog>
 
