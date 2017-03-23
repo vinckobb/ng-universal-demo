@@ -1,1 +1,12 @@
 <h3>Bootstrap components</h3>
+
+<div>
+    <h4>Confirmation dialog</h4>
+
+    <confirmation-dialog #sampleConfDialog="confirmationDialog"
+                         [confirmationText]="Are you sure?"
+                         (confirmed)="confirm($event)"
+                         (canceled)="cancel($event)"></confirmation-dialog>
+
+    <button class="btn btn-primary" (click)="sampleConfDialog.showConfirmation('these are data')">Show confirmation</button>
+</div>

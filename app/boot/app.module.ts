@@ -25,6 +25,9 @@ export function HttpErrorInterceptorModuleFactory()
     return new HttpErrorInterceptorOptions(config.debug);
 }
 
+/**
+ * Main module shared for both server and browser side
+ */
 @NgModule(
 {
     imports:

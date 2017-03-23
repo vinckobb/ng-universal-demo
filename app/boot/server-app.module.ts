@@ -3,6 +3,7 @@ import {ServerModule} from '@angular/platform-server';
 import {TransferStateService} from '@ng/rest';
 import {ServerTransferStateRestModule, ServerInterceptableHttpModule} from '@ng/server-stuff';
 import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';
+
 import {AppComponent} from './app.component';
 import {AppModule} from './app.module';
 import * as config from 'config/global';
@@ -15,6 +16,9 @@ export function reportingExceptionHandlerOptionsFactory()
 	return new ReportingExceptionHandlerOptions(config.debug, false, false, false, false, false);
 }
 
+/**
+ * Entry module for server side
+ */
 @NgModule(
 {
     bootstrap: [AppComponent],
@@ -29,12 +33,18 @@ export function reportingExceptionHandlerOptionsFactory()
 })
 export class ServerAppModule 
 {
-    constructor(private transferState: TransferStateService) 
-    {
-    }
-// Gotcha
-    ngOnBootstrap = () => 
+    //######################### public properties #########################
+    
+    /**
+     * Method called when application is stable 
+     */
+    public ngOnBootstrap = () => 
     {
         this.transferState.inject();
+    }
+
+    //######################### constructor #########################
+    constructor(private transferState: TransferStateService) 
+    {
     }
 }

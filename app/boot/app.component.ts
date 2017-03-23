@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core'
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router, NavigationStart, NavigationEnd, NavigationError, NavigationCancel} from '@angular/router';
 import {Utils, GlobalizationService, ProgressIndicatorService, CookieService} from '@ng/common';
 import {GlobalNotificationsService} from '@ng/notifications';
