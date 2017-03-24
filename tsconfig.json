@@ -1,13 +1,14 @@
 {
     "compilerOptions":
     {
-        "moduleResolution": "node",
-        "module": "es2015",
         "target": "es5",
-        "noImplicitAny": false,
+        "module": "es2015",
         "sourceMap": false,
-        "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "moduleResolution": "node",
         "lib": 
         [
             "es2016",
@@ -15,9 +16,9 @@
         ],
         "types": 
         [
+            "moment",
             "node",
-            "systemjs",
-            "moment"
+            "systemjs"
         ],
         "typeRoots": 
         [

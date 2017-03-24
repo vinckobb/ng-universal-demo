@@ -6,9 +6,9 @@
     "configurations": 
     [
         {
+            "name": "Launch Chrome",
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome",
             "url": "http://localhost:8888",
             "sourceMaps": true,
             "webRoot": "${workspaceRoot}/wwwroot",
