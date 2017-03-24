@@ -10,6 +10,7 @@ import {ServerValidationsModule, HttpErrorInterceptorModule, HttpErrorIntercepto
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 
 import {AppComponent} from './app.component';
+import {NavigationComponent} from '../components/navigation/navigation.component';
 import {AccountService} from "../services/api/account/account.service";
 import {appComponents, appRoutesModule} from './app.component.routes';
 import {CommonSharedModule} from './commonShared.module';
@@ -51,7 +52,7 @@ export function HttpErrorInterceptorModuleFactory()
         appRoutesModule
     ],
     providers: providers,
-    declarations: [AppComponent, ...appComponents],
+    declarations: [AppComponent, NavigationComponent, ...appComponents],
     exports: [AppComponent]
 })
 export class AppModule
