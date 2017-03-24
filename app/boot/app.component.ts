@@ -1,7 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router, NavigationStart, NavigationEnd, NavigationError, NavigationCancel} from '@angular/router';
 import {Utils, GlobalizationService, ProgressIndicatorService, CookieService} from '@ng/common';
-import {GlobalNotificationsService} from '@ng/notifications';
 import {AuthenticationService} from '@ng/authentication';
 import {TranslateService} from "@ngx-translate/core";
 import {LANG_COOKIE} from '../misc/constants';
@@ -32,8 +31,7 @@ export class AppComponent implements OnInit
                 globalization: GlobalizationService,
                 router: Router,
                 progressIndicatorService: ProgressIndicatorService,
-                cookieService: CookieService,
-                private _notifications: GlobalNotificationsService) 
+                cookieService: CookieService) 
     {
         this._routeChangeSubscription = router.events.subscribe((next) =>
         {
@@ -77,7 +75,6 @@ export class AppComponent implements OnInit
      */
     public ngOnInit()
     {
-        this._notifications.info("App loaded ok.");
     }
 
     //######################### public methods - implementation of OnDestroy #########################

@@ -51,7 +51,7 @@
         "@ng/http-extensions": "^3.0.0-beta.4",
         "@ng/notifications": "^3.0.0-beta.3",
         "@ng/rest": "^3.0.0-beta.7",
-        "@ng/server-stuff": "^3.0.0-beta.2",
+        "@ng/server-stuff": "^3.0.0-beta.4",
         "@ngx-translate/core": "^6.0.0",
         "web-animations-js": "^2.2.2",
         "core-js": "^2.4.1",
