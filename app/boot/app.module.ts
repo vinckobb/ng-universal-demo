@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {HttpModule} from '@angular/http';
 import {ExternalTranslationLoader} from '@ng/external-translation-loader';
 import {NotificationsModule} from '@ng/notifications';
-import {CommonModule as NgCommonModule} from '@ng/common';
+import {CommonModule as NgCommonModule, ProgressIndicatorModule} from '@ng/common';
 import {AuthorizationModule} from '@ng/authentication';
 import {ServerValidationsModule, HttpErrorInterceptorModule, HttpErrorInterceptorOptions, InternalServerErrorModule} from '@ng/error-handling';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
@@ -15,6 +15,7 @@ import {AccountService} from "../services/api/account/account.service";
 import {appComponents, appRoutesModule} from './app.component.routes';
 import {CommonSharedModule} from './commonShared.module';
 import {APP_TRANSFER_ID} from '../misc/constants';
+import {GlobalizationService as GlobalizationServiceImpl} from '../services/globalization/globalization.service';
 import {providers} from './app.config';
 import * as config from 'config/global';
 
@@ -43,10 +44,11 @@ export function HttpErrorInterceptorModuleFactory()
             loader: <ClassProvider>{provide: TranslateLoader, useClass: ExternalTranslationLoader}
         }),
         NotificationsModule.forRoot(),
-        NgCommonModule.forRoot(),
+        NgCommonModule.forRootWithGlobalization(GlobalizationServiceImpl),
         AuthorizationModule.forRoot(AccountService),
         ServerValidationsModule.forRoot(),
         InternalServerErrorModule.forRoot(),
+        ProgressIndicatorModule.forRoot(),
         HttpErrorInterceptorModule.forRootWithOptions(HttpErrorInterceptorModuleFactory),
         CommonSharedModule,
         appRoutesModule
