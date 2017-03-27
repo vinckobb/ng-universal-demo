@@ -40,7 +40,7 @@ export class NotificationsSampleComponent
 
     public cleanAll()
     {
-        this._localNotifications.clearMessages();
+        this._notifications.clearMessages();
     }
 
     public showLocalInfo()
