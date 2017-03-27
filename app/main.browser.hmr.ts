@@ -6,6 +6,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {NgModuleRef} from '@angular/core';
 import {hmrAccept, hmrFinishedNotification, Utils} from '@ng/common';
 import {BrowserAppModule} from './boot/browser-app.module';
+import * as config from 'config/global';
 
 // Enable Hot Module Reloading if available
 hmrAccept(platform);
@@ -22,4 +23,4 @@ Utils.common.runWhenModuleStable(platform.bootstrapModule(BrowserAppModule), (mo
     {
         preboot.complete();
     }, 100);
-});
+}, config.debug);

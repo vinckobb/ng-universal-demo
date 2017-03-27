@@ -6,6 +6,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {NgModuleRef} from '@angular/core';
 import {Utils} from '@ng/common';
 import {BrowserAppModule} from './boot/browser-app.module';
+import * as config from 'config/global';
 
 Utils.common.runWhenModuleStable(platformBrowserDynamic().bootstrapModule(BrowserAppModule), (moduleRef: NgModuleRef<{}>) => 
 {
@@ -16,5 +17,5 @@ Utils.common.runWhenModuleStable(platformBrowserDynamic().bootstrapModule(Browse
     {
         preboot.complete();
     }, 100);
-});
+}, config.debug);
 

@@ -2,7 +2,7 @@ import {NgModule, ClassProvider} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
 import {HttpModule} from '@angular/http';
-import {ExternalTranslationLoader} from '@ng/external-translation-loader';
+import {ExternalTranslationLoader, ExternalTranslationLoaderOptions, ExternalTranslationLoaderModule} from '@ng/external-translation-loader';
 import {NotificationsModule} from '@ng/notifications';
 import {CommonModule as NgCommonModule, ProgressIndicatorModule} from '@ng/common';
 import {AuthorizationModule} from '@ng/authentication';
@@ -22,9 +22,22 @@ import * as config from 'config/global';
 /**
  * Factory for HttpErrorInterceptorOptions
  */
-export function HttpErrorInterceptorModuleFactory()
+export function httpErrorInterceptorModuleFactory()
 {
     return new HttpErrorInterceptorOptions(config.debug);
+}
+
+/**
+ * Factory method that is used for creating InterceptableHttp
+ */
+export function externalTranslationLoaderOptionsFactory()
+{
+    return new ExternalTranslationLoaderOptions("config/i18n",
+                                                ["global", 
+                                                 "navigation", 
+                                                 "pages/home",
+                                                 "pages/samplePages"],
+                                                ".json")
 }
 
 /**
@@ -45,11 +58,12 @@ export function HttpErrorInterceptorModuleFactory()
         }),
         NotificationsModule.forRoot(),
         NgCommonModule.forRootWithGlobalization(GlobalizationServiceImpl),
+        ExternalTranslationLoaderModule.forRootWithOptions(externalTranslationLoaderOptionsFactory),
         AuthorizationModule.forRoot(AccountService),
         ServerValidationsModule.forRoot(),
         InternalServerErrorModule.forRoot(),
         ProgressIndicatorModule.forRoot(),
-        HttpErrorInterceptorModule.forRootWithOptions(HttpErrorInterceptorModuleFactory),
+        HttpErrorInterceptorModule.forRootWithOptions(httpErrorInterceptorModuleFactory),
         CommonSharedModule,
         appRoutesModule
     ],
