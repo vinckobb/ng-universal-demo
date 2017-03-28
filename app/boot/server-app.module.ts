@@ -40,11 +40,11 @@ export class ServerAppModule
      */
     public ngOnBootstrap = () => 
     {
-        this.transferState.inject();
+        this._transferState.inject();
     }
 
     //######################### constructor #########################
-    constructor(private transferState: TransferStateService) 
+    constructor(private _transferState: TransferStateService) 
     {
     }
 }

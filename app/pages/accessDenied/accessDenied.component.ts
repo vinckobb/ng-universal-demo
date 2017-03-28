@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, HostBinding} from '@angular/core';
 import {ComponentRoute} from '@ng/common';
 import {FlyInOutAnimation} from '@ng/animations';
 import {BaseAnimatedComponent} from "app/misc/baseAnimatedComponent";
@@ -14,4 +14,11 @@ import {BaseAnimatedComponent} from "app/misc/baseAnimatedComponent";
 @ComponentRoute({path:'accessDenied'})
 export class AccessDeniedComponent extends BaseAnimatedComponent
 {
+    //######################### public properties - bindings #########################
+
+    /**
+     * Attach animation directly to component (enter, exit)
+     */
+    @HostBinding('@flyInOut') 
+    public animatedComponent = true;
 }

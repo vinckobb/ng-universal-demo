@@ -1,5 +1,4 @@
-import {Component, OnInit, HostBinding, HostListener} from '@angular/core';
-import {AnimationEvent} from '@angular/animations';
+import {Component, OnInit, HostBinding} from '@angular/core';
 import {ComponentRoute} from "@ng/common";
 import {FlyInOutAnimation} from '@ng/animations';
 import {DataService} from "../../services/api/data/data.service";
@@ -21,6 +20,14 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     //######################### public properties #########################
     public subs: string;
     public counter = 0;
+
+    //######################### public properties - bindings #########################
+
+    /**
+     * Attach animation directly to component (enter, exit)
+     */
+    @HostBinding('@flyInOut') 
+    public animatedComponent = true;
 
     //######################### constructor #########################
     constructor(private dataSvc: DataService)
