@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Http} from "@angular/http";
 import {ComponentRoute} from "@ng/common";
 import {DataService} from "../../services/api/data/data.service";
 

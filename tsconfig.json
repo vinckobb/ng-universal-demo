@@ -25,7 +25,8 @@
         [
             "node_modules/@types",
             "node_modules/@ng/types"
-        ]
+        ],
+        "baseUrl": "."
     },
     "exclude": 
     [
