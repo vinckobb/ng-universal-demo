@@ -1,7 +1,6 @@
-import {Injectable, Inject, Optional} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {RESTClient, GET, ResponseType, Produces, BaseUrl, DefaultHeaders, TransferStateService} from '@ng/rest';
-import {SERVER_BASE_URL} from '@ng/common';
+import {RESTClient, GET, ResponseType, Produces, BaseUrl, DefaultHeaders} from '@ng/rest';
 
 import {Data} from "./data.interface";
 import {Observable} from 'rxjs/Observable';
@@ -15,14 +14,6 @@ import * as global from 'config/global';
 @DefaultHeaders(global.defaultApiHeaders)
 export class DataService extends RESTClient
 {
-    //######################### constructor #########################
-    public constructor(http: Http,
-                       @Optional() @Inject(SERVER_BASE_URL) baseUrl: string,
-                       transferStateService: TransferStateService)
-    {
-        super(http, baseUrl, transferStateService);
-    }
-
     //######################### public methods #########################
     /**
      * Gets data
