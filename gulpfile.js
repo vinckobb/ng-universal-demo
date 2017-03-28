@@ -148,7 +148,7 @@ gulp.task("build:aot",
            "create-aot-app"],
           function(cb)
 {
-    console.log("Gulp build has finished");
+    console.log("Gulp build aot has finished");
     
     cb();
 });

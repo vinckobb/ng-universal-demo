@@ -5,6 +5,7 @@
     "scripts":
     {
         "build": "webpack && webpack --env.ssr",
+        "build:watch": "webpack -w && webpack --env.ssr",
         "build:min": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr",
         "build:gulp": "gulp build",
         "build:gulp:aot": "gulp build:aot",

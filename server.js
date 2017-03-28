@@ -3,7 +3,6 @@ var connect = require('connect'),
     history = require('connect-history-api-fallback'),
     proxy = require('http-proxy-middleware'),
     argv = require('yargs').argv,
-    fs = require('fs'),
     path = require('path');
 
 var app = connect();
