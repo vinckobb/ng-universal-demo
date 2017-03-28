@@ -1,3 +1,8 @@
+import * as xhr2 from 'xhr2';
+
+//HACK - enables setting cookie header
+xhr2.prototype._restrictedHeaders.cookie = false;
+
 import './hacks';
 import './dependencies';
 import 'zone.js/dist/zone-node';
