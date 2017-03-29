@@ -6,6 +6,16 @@
     "configurations": 
     [
         {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Webpack Aot",
+            "program": "${workspaceRoot}/node_modules/webpack/bin/webpack.js",
+            "args": [
+                "--env.aot"
+            ],
+            "outFiles": []
+        },
+        {
             "name": "Launch Chrome",
             "type": "chrome",
             "request": "launch",
