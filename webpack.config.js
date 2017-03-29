@@ -243,6 +243,10 @@ module.exports = function(options)
             {
                 moduleName: 'inline-preboot',
                 contents: preboot.getInlineCode(prebootOptions)
+            }),
+            new webpack.DefinePlugin(
+            {
+                isProduction: prod
             })
         ]
     };
@@ -321,11 +325,6 @@ module.exports = function(options)
                                                                    }));
 
         config.plugins.push(new ExtractTextPlugin("style.[contenthash].css"));
-
-        config.plugins.push(new webpack.DefinePlugin(
-        {
-            isProduction: true
-        }));
     }
 
     return config;
