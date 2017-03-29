@@ -45,7 +45,7 @@
         "@ng/animations": "^3.0.1",
         "@ng/authentication": "^3.0.0",
         "@ng/bootstrap": "^3.0.0",
-        "@ng/common": "^3.0.0",
+        "@ng/common": "^3.0.1",
         "@ng/error-handling": "^3.0.0",
         "@ng/external-translation-loader": "^3.0.1",
         "@ng/grid": "^3.0.0",
