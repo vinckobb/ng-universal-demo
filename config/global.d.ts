@@ -25,7 +25,7 @@ declare module "config/global"
         /**
          * Object hodling default headers that are send with rest requests
          */
-        defaultApiHeaders: { [key: string]: any };
+        defaultApiHeaders: { [key: string]: string };
         
         /**
          * Default application language
@@ -52,3 +52,4 @@ declare module "config/global"
 }
 
 declare var preboot;
+declare var isProduction: boolean;

@@ -26,6 +26,11 @@
     position: absolute;
 }
 
+.va-middle
+{
+    vertical-align: middle;
+}
+
 .margin-xs-vertical
 {
     margin-top: $xsWidth;
@@ -140,9 +145,19 @@
     padding-bottom: $smWidth;
 }
 
+.padding-md-top
+{
+    padding-top: $mdWidth;
+}
+
 .padding-none-left
 {
     padding-left: 0;
+}
+
+.space-after
+{
+    margin-bottom: 200px;
 }
 
 .content-nowrap

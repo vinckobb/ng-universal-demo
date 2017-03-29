@@ -178,6 +178,17 @@ module.exports = function(options)
                         }
                     ]
                 },
+                //server globals
+                { 
+                    test: require.resolve("form-data"),
+                    use: 
+                    [
+                        {
+                            loader: 'expose-loader',
+                            options: 'FormData'
+                        }
+                    ]
+                },
                 //vendor globals
                 { 
                     test: require.resolve("jquery"),
@@ -310,6 +321,11 @@ module.exports = function(options)
                                                                    }));
 
         config.plugins.push(new ExtractTextPlugin("style.[contenthash].css"));
+
+        config.plugins.push(new webpack.DefinePlugin(
+        {
+            isProduction: true
+        }));
     }
 
     return config;

@@ -5,6 +5,7 @@ xhr2.prototype._restrictedHeaders.cookie = false;
 
 import './hacks';
 import './dependencies';
+import 'form-data';
 import 'zone.js/dist/zone-node';
 import {enableProdMode} from '@angular/core';
 import {platformServer, renderModuleFactory} from '@angular/platform-server';
