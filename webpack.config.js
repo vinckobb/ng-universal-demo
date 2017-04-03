@@ -2,15 +2,16 @@ var webpack = require('webpack'),
     path = require('path'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin'),
+    HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
     VirtualModulePlugin = require('virtual-module-webpack-plugin'),
     preboot = require('preboot'),
     AotPlugin =  require('@ngtools/webpack').AotPlugin;
 
 //Preboot options
-const prebootOptions = 
+const prebootOptions =
 {
-    appRoot: "app", 
+    appRoot: "app",
     buffer: false,
     eventSelectors:
     [
@@ -41,11 +42,15 @@ const prebootOptions =
             freeze: true
         }
     ]
-};  
+};
 
+const inlineCode = `
+import 'app/dependencies.browser';
+import 'app/dependencies';
+import 'zone.js/dist/zone';`;
 
 //array of paths for server and browser tsconfigs
-const tsconfigs = 
+const tsconfigs =
 {
     client: path.join(__dirname, 'tsconfig.browser.json'),
     server: path.join(__dirname, 'tsconfig.server.json')
@@ -58,22 +63,27 @@ const tsconfigs =
  * @param {boolean} prod Indication that currently is running production build
  * @param {boolean} hmr Indication that currently is running hmr build
  */
-function getEntries(aot, ssr, prod, hmr)
+function getEntries(aot, ssr, prod, hmr, dll)
 {
     if(ssr)
     {
         return {
-            server: aot ? [path.join(__dirname, "app.aot/main.server.aot.ts")] : [path.join(__dirname, "app/main.server.ts")]
+            server: aot ? path.join(__dirname, "app.aot/main.server.aot.ts") : path.join(__dirname, "app/main.server.ts")
         };
     }
     else
     {
-        var entries = 
+        var entries =
         {
             style: [path.join(__dirname, "content/site.scss")],
             client: hmr ? [path.join(__dirname, "app/main.browser.hmr.ts")] : (aot ? [path.join(__dirname, "app.aot/main.browser.ts")] : [path.join(__dirname, "app/main.browser.ts")]),
-            "inline-preboot": ["./inline-preboot"]
+            "inline-preboot": "./inline-preboot"
         };
+
+        if(dll)
+        {
+            entries['import-dependencies'] = './import-dependencies';
+        }
 
         return entries;
     }
@@ -85,7 +95,7 @@ function getEntries(aot, ssr, prod, hmr)
  * @param {string} platform Should either be client or server
  * @returns
  */
-function getAotPlugin(platform) 
+function getAotPlugin(platform)
 {
     return new AotPlugin(
     {
@@ -127,6 +137,7 @@ module.exports = function(options)
     var hmr = !!options && !!options.hmr;
     var aot = !!options && !!options.aot;
     var ssr = !!options && !!options.ssr;
+    var dll = !!options && !!options.dll;
     var distPath = "wwwroot/dist";
     options = options || {};
 
@@ -134,7 +145,7 @@ module.exports = function(options)
 
     var config =
     {
-        entry: getEntries(aot, ssr, prod, hmr),
+        entry: getEntries(aot, ssr, prod, hmr, dll),
         output:
         {
             path: path.join(__dirname, distPath),
@@ -164,9 +175,9 @@ module.exports = function(options)
             rules:
             [
                 //preboot
-                { 
+                {
                     test: path.join(__dirname, "node_modules/preboot/__dist/preboot_browser.js"),
-                    use: 
+                    use:
                     [
                         {
                             loader: 'expose-loader',
@@ -179,9 +190,9 @@ module.exports = function(options)
                     ]
                 },
                 //server globals
-                { 
+                {
                     test: require.resolve("form-data"),
-                    use: 
+                    use:
                     [
                         {
                             loader: 'expose-loader',
@@ -190,9 +201,9 @@ module.exports = function(options)
                     ]
                 },
                 //vendor globals
-                { 
+                {
                     test: require.resolve("jquery"),
-                    use: 
+                    use:
                     [
                         {
                             loader: 'expose-loader',
@@ -202,11 +213,11 @@ module.exports = function(options)
                             loader: 'expose-loader',
                             options: 'jQuery'
                         }
-                    ] 
+                    ]
                 },
                 {
                     test: require.resolve("numeral"),
-                    use: 
+                    use:
                     [
                         {
                             loader: 'expose-loader',
@@ -217,15 +228,15 @@ module.exports = function(options)
                 //file processing
                 {
                     test: /\.ts$/,
-                    use: getTypescriptLoaders(prod, aot, hmr) 
+                    use: getTypescriptLoaders(prod, aot, hmr)
                 },
                 {
                     test: /\.html$/,
                     loader: 'raw-loader'
                 },
-                { 
-                    test: /\.css$/, 
-                    loader: 'raw-loader' 
+                {
+                    test: /\.css$/,
+                    loader: 'raw-loader'
                 },
                 {
                     test: /\.scss$/,
@@ -237,7 +248,7 @@ module.exports = function(options)
                 }
             ]
         },
-        plugins: 
+        plugins:
         [
             new VirtualModulePlugin(
             {
@@ -263,7 +274,7 @@ module.exports = function(options)
             filename: "../index.html",
             template: path.join(__dirname, "index.html"),
             inject: 'head',
-            chunksSortMode: function orderEntryLast(a, b) 
+            chunksSortMode: function orderEntryLast(a, b)
             {
                 if(a.names[0] == 'inline-preboot')
                 {
@@ -271,6 +282,16 @@ module.exports = function(options)
                 }
 
                 if(b.names[0] == 'inline-preboot')
+                {
+                    return 1;
+                }
+
+                if(a.names[0] == 'import-dependencies')
+                {
+                    return -1;
+                }
+
+                if(b.names[0] == 'import-dependencies')
                 {
                     return 1;
                 }
@@ -298,8 +319,32 @@ module.exports = function(options)
 
         Object.keys(config.entry).forEach(entry =>
         {
-            config.entry[entry].unshift('webpack-hot-middleware/client');
+            if(config.entry[entry].constructor === Array)
+            {
+                config.entry[entry].unshift('webpack-hot-middleware/client');
+            }
         });
+    }
+
+    if(dll)
+    {
+        config.plugins.unshift(new VirtualModulePlugin(
+        {
+            moduleName: 'import-dependencies',
+            contents: inlineCode
+        }));
+
+        config.plugins.unshift(new webpack.DllReferencePlugin(
+        {
+            context: __dirname,
+            manifest: require(path.join(__dirname, distPath + '/dependencies-manifest.json'))
+        }));
+
+        config.plugins.unshift(new HtmlWebpackIncludeAssetsPlugin(
+        {
+            assets: ['dependencies.js'],
+            append: false
+        }));
     }
 
     //production specific settings - prod is used only for client part
@@ -310,12 +355,12 @@ module.exports = function(options)
 
         config.plugins.unshift(new webpack.optimize.UglifyJsPlugin({
                                                                        beautify: false,
-                                                                       mangle: 
+                                                                       mangle:
                                                                        {
                                                                            screw_ie8: true,
                                                                            keep_fnames: true
                                                                        },
-                                                                       compress: 
+                                                                       compress:
                                                                        {
                                                                            warnings: false,
                                                                            screw_ie8: true

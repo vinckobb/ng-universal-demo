@@ -42,7 +42,7 @@ function isServerRenderAvailable()
 if(!!argv.webpack)
 {
     var webpack = require('webpack'),
-        webpackConfig = require('./webpack.config.js')({hmr: true}),
+        webpackConfig = require('./webpack.config.js')({hmr: true, dll: true}),
         webpackDev = require('webpack-dev-middleware'),
         hmr = require("webpack-hot-middleware");
 

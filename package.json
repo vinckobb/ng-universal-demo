@@ -4,14 +4,16 @@
     "description": "appDescription",
     "scripts":
     {
-        "build": "webpack && webpack --env.ssr",
-        "build:watch": "webpack -w && webpack --env.ssr",
+        "build": "webpack --env.dll && webpack --env.ssr",
+        "build:watch": "webpack --env.ssr && webpack -w --env.dll",
         "build:min": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr",
         "build:gulp": "gulp build",
         "build:gulp:aot": "gulp build:aot",
-        "prebuild": "npm run clean && npm run build:gulp",
+        "prebuild": "npm run clean && npm run build:gulp && npm run build:prepare:dev",
+        "prebuild:watch": "npm run prebuild",
         "prebuild:min": "npm run clean && npm run build:gulp:aot",
         "postbuild:min": "npm run clean:tmp",
+        "build:prepare:dev": "webpack --config webpack.config.dev.js",
         "clean": "rimraf wwwroot && npm run clean:tmp",
         "clean:tmp": "rimraf app.aot",
         "clean:deps": "rimraf node_modules",
@@ -19,10 +21,9 @@
         "app-config:w": "gulp watch-config",
         "scss": "gulp compile-scss",
         "tsc": "tsc",
-        "postinstall": "npm run build",
         "update-versions": "nrs versionDeployment.config.json",
         "server": "node server.js",
-        "start": "npm run build:gulp && concurrent \"npm run app-config:w\" \"npm run server -- --webpack\""
+        "start": "npm run build:gulp && npm run build:prepare:dev && concurrent \"npm run app-config:w\" \"npm run server -- --webpack\""
     },
     "engines":
     {
@@ -98,6 +99,7 @@
         "webpack-hmr-module-loader": "1.0.5",
         "webpack-lazy-module-loader": "1.0.1",
         "html-webpack-plugin": "~2.28.0",
+        "html-webpack-include-assets-plugin": "~0.0.4",
         "extract-text-webpack-plugin": "~2.1.0",
         "script-ext-html-webpack-plugin": "~1.7.1",
         "virtual-module-webpack-plugin": "~0.1.3",

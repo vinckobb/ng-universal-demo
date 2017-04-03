@@ -1,4 +1,5 @@
 import './hacks';
+import 'preboot';
 import './dependencies.browser';
 import './dependencies';
 import 'zone.js/dist/zone';
