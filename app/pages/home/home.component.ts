@@ -29,6 +29,12 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     @HostBinding('@flyInOut') 
     public animatedComponent = true;
 
+    /**
+     * Class that is assigned for animated component
+     */
+    @HostBinding('class.fly-in-out')
+    public animatedComponentClass = true;
+
     //######################### constructor #########################
     constructor(private dataSvc: DataService)
     {
