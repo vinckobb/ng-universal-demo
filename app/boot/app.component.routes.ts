@@ -10,10 +10,6 @@ var componentRoutes = [...HomeComponent.ngRoutes,...AccessDeniedComponent.ngRout
 
 var routes = 
 [
-    { 
-        path: 'samples', 
-        loadChildren: '../pages/+samples/samples.module#SamplesModule'
-    },
     ...componentRoutes
 ];
 
