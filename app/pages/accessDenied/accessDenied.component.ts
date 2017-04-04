@@ -1,6 +1,6 @@
 import {Component, HostBinding} from '@angular/core';
-import {FlyInOutAnimation} from '@ng/animations';
-import {BaseAnimatedComponent} from "app/misc/baseAnimatedComponent";
+import { BaseAnimatedComponent } from "app/misc/baseAnimatedComponent";
+import { FlyInOutAnimation } from "app/misc/animations";
 
 /**
  * Component used for displaying access denied page

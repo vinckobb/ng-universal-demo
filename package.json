@@ -4,7 +4,8 @@
     "description": "appDescription",
     "scripts":
     {
-        "build": "webpack --env.aot",
+        "build": "webpack",
+        "build:aot": "webpack --env.aot",
         "build:min": "webpack --env.aot --env.prod",
         "build:gulp": "gulp build:aot",
         "build:gulp:aot": "gulp build:aot",
