@@ -89,7 +89,12 @@ app.use(function (req, res, next)
         {
             res.setHeader('Content-Type', 'text/html');
 
-            res.end(err || succ);
+            if(succ.statusCode)
+            {
+                res.statusCode = succ.statusCode;
+            }
+
+            res.end(err || succ.html);
         });
 
         return;
