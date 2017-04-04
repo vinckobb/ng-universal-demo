@@ -1,9 +1,10 @@
-import {HostBinding, HostListener} from '@angular/core';
+import { HostBinding, HostListener, Injectable } from '@angular/core';
 import {AnimationEvent} from '@angular/animations';
 
 /**
  * Base class that enables fly in out animation
  */
+@Injectable()
 export class BaseAnimatedComponent
 {
     //######################### public properties - bindings #########################
