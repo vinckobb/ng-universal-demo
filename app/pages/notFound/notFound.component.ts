@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {ComponentRoute, StatusCodeService} from '@ng/common';
 
 /**
  * Page displayed when url was not found

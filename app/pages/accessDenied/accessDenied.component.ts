@@ -1,5 +1,4 @@
 import {Component, HostBinding} from '@angular/core';
-import {ComponentRoute} from '@ng/common';
 import {FlyInOutAnimation} from '@ng/animations';
 import {BaseAnimatedComponent} from "app/misc/baseAnimatedComponent";
 
@@ -11,7 +10,6 @@ import {BaseAnimatedComponent} from "app/misc/baseAnimatedComponent";
     templateUrl: "accessDenied.component.html",
     animations: [FlyInOutAnimation]
 })
-@ComponentRoute({path:'accessDenied'})
 export class AccessDeniedComponent extends BaseAnimatedComponent
 {
 public static ngRoutes = [{path:'accessDenied', component: AccessDeniedComponent}];

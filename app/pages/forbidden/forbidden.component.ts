@@ -1,6 +1,4 @@
 import {Component} from '@angular/core';
-import {ComponentRoute} from '@ng/common';
-import {AuthGuard, Authorize} from '@ng/authentication';
 
 /**
  * Home page component
@@ -9,9 +7,7 @@ import {AuthGuard, Authorize} from '@ng/authentication';
 {
     templateUrl: "forbidden.component.html"
 })
-@ComponentRoute({path:'forbidden', canActivate: [AuthGuard]})
-@Authorize('forbiddenPage')
 export class ForbiddenComponent
 {
-public static ngRoutes = [{path:'forbidden', canActivate: [AuthGuard], component: ForbiddenComponent}];
+public static ngRoutes = [{path:'forbidden', component: ForbiddenComponent}];
 }

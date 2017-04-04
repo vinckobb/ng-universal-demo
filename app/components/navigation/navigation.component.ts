@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {CookieService} from '@ng/common';
 import {TranslateService} from '@ngx-translate/core';
 
 import {LANG_COOKIE} from '../../misc/constants';
@@ -28,8 +27,7 @@ export class NavigationComponent
     public activeLang: string = "";
 
     //######################### constructor #########################
-    constructor(private translate: TranslateService,
-                private _cookies: CookieService)
+    constructor(private translate: TranslateService)
     {
     }
 
@@ -56,6 +54,5 @@ export class NavigationComponent
     {
         this.translate.use(lang);
         //this.appService.setLanguage(lang).subscribe();
-        this._cookies.setCookie(LANG_COOKIE, lang, 365);
     }
 }

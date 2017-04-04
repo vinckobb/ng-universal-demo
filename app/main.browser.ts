@@ -1,4 +1,3 @@
-import './hacks';
 import 'preboot';
 import './dependencies.browser';
 import './dependencies';

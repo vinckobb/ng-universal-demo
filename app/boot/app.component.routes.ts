@@ -1,5 +1,4 @@
 import {RouterModule} from '@angular/router';
-import {Utils} from '@ng/common';
 
 import {HomeComponent} from '../pages/home/home.component';
 import {AccessDeniedComponent} from "../pages/accessDenied/accessDenied.component";
