@@ -44,11 +44,6 @@ const prebootOptions =
     ]
 };
 
-const inlineCode = `
-import 'app/dependencies.browser';
-import 'app/dependencies';
-import 'zone.js/dist/zone';`;
-
 //array of paths for server and browser tsconfigs
 const tsconfigs =
 {
@@ -82,7 +77,7 @@ function getEntries(aot, ssr, prod, hmr, dll)
 
         if(dll)
         {
-            entries['import-dependencies'] = './import-dependencies';
+            entries['import-dependencies'] = './webpack.config.dev.imports';
         }
 
         return entries;
@@ -326,14 +321,9 @@ module.exports = function(options)
         });
     }
 
+    //only if dll package is required, use only for development
     if(dll)
     {
-        config.plugins.unshift(new VirtualModulePlugin(
-        {
-            moduleName: 'import-dependencies',
-            contents: inlineCode
-        }));
-
         config.plugins.unshift(new webpack.DllReferencePlugin(
         {
             context: __dirname,

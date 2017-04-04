@@ -66,9 +66,69 @@ export class GridSampleComponent
                 surname: "Testov",
                 email: "testovic@testov.sk",
                 address: "Pondelok"
+            },
+            {
+                name: "Sergej",
+                surname: "Testovov",
+                email: "sergej@testovov.sk",
+                address: "Sušany"
+            },
+            {
+                name: "Ibrahim",
+                surname: "Netest",
+                email: "ibrahim@netest.sk",
+                address: "Málinec"
+            },
+            {
+                name: "Alexander",
+                surname: "Pretest",
+                email: "alexander@pretest.sk",
+                address: "Ožďany"
+            },
+            {
+                name: "Vachar",
+                surname: "Zojtech",
+                email: "vachar@zojtech.sk",
+                address: "Poltár"
+            },
+            {
+                name: "Testo",
+                surname: "Steron",
+                email: "testo@steron.sk",
+                address: "Veľká Suchá"
+            },
+            {
+                name: "Testovič",
+                surname: "Testov",
+                email: "testovic@testov.sk",
+                address: "Pondelok"
+            },
+            {
+                name: "Sergej",
+                surname: "Testovov",
+                email: "sergej@testovov.sk",
+                address: "Sušany"
+            },
+            {
+                name: "Ibrahim",
+                surname: "Netest",
+                email: "ibrahim@netest.sk",
+                address: "Málinec"
+            },
+            {
+                name: "Alexander",
+                surname: "Pretest",
+                email: "alexander@pretest.sk",
+                address: "Ožďany"
+            },
+            {
+                name: "Vachar",
+                surname: "Zojtech",
+                email: "vachar@zojtech.sk",
+                address: "Poltár"
             }
         ];
 
-        this.totalCount = 2;
+        this.totalCount = 12;
     }
 }

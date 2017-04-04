@@ -1,11 +1,5 @@
 var webpack = require('webpack'),
-    path = require('path'),
-    VirtualModulePlugin = require('virtual-module-webpack-plugin');
-
-const inlineCode = `
-import 'app/dependencies.browser';
-import 'app/dependencies';
-import 'zone.js/dist/zone';`;
+    path = require('path');
 
 module.exports = function()
 {
@@ -15,9 +9,9 @@ module.exports = function()
     {
         entry:
         {
-            "dependencies": 
+            "dependencies":
             [
-                "./inline-dependencies"
+                "./webpack.config.dev.imports"
             ]
         },
         output:
@@ -43,9 +37,9 @@ module.exports = function()
         {
             rules:
             [
-                { 
+                {
                     test: require.resolve("jquery"),
-                    use: 
+                    use:
                     [
                         {
                             loader: 'expose-loader',
@@ -55,11 +49,11 @@ module.exports = function()
                             loader: 'expose-loader',
                             options: 'jQuery'
                         }
-                    ] 
+                    ]
                 },
                 {
                     test: require.resolve("numeral"),
-                    use: 
+                    use:
                     [
                         {
                             loader: 'expose-loader',
@@ -71,11 +65,6 @@ module.exports = function()
         },
         plugins:
         [
-            new VirtualModulePlugin(
-            {
-                moduleName: 'inline-dependencies',
-                contents: inlineCode
-            }),
             new webpack.DllPlugin(
             {
                 path: path.join(__dirname, distPath + '/[name]-manifest.json'),
