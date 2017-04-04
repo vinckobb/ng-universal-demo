@@ -1,7 +1,5 @@
 import {Component, OnInit, HostBinding} from '@angular/core';
-import {ComponentRoute} from "@ng/common";
 import {FlyInOutAnimation} from '@ng/animations';
-import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "app/misc/baseAnimatedComponent";
 
 /**
@@ -11,10 +9,8 @@ import {BaseAnimatedComponent} from "app/misc/baseAnimatedComponent";
 {
     selector: 'home-view',
     templateUrl: 'home.component.html',
-    providers: [DataService],
     animations: [FlyInOutAnimation]
 })
-@ComponentRoute({path: ''})
 export class HomeComponent extends BaseAnimatedComponent implements OnInit
 {
     public static ngRoutes = [{path: '', component: HomeComponent}];
@@ -37,7 +33,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     public animatedComponentClass = true;
 
     //######################### constructor #########################
-    constructor(private dataSvc: DataService)
+    constructor()
     {
         super();
     }
@@ -45,13 +41,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     //######################### public methods #########################
     public ngOnInit()
     {
-        this.dataSvc.getData().map(data =>
-        {
-            return `${data.greeting} ${data.name}`;
-        }).subscribe(data =>
-        {
-            this.subs = data;
-        });
+        this.subs = 'data';
     }
 
     public inc()
