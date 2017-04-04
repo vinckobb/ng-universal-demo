@@ -14,6 +14,7 @@ import {BaseAnimatedComponent} from "app/misc/baseAnimatedComponent";
 @ComponentRoute({path:'accessDenied'})
 export class AccessDeniedComponent extends BaseAnimatedComponent
 {
+public static ngRoutes = [{path:'accessDenied', component: AccessDeniedComponent}];
     //######################### public properties - bindings #########################
 
     /**

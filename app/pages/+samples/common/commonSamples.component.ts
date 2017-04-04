@@ -9,6 +9,7 @@ import {ComponentRoute, ProgressIndicatorService, Utils} from '@ng/common';
 @ComponentRoute({path: 'common'})
 export class CommonSamplesComponent
 {
+public static ngRoutes = [{path: 'common', component: CommonSamplesComponent}];
     //######################### public properties #########################
     public sampleNumber = 5235342.3231;
 

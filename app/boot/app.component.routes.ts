@@ -6,10 +6,7 @@ import {AccessDeniedComponent} from "../pages/accessDenied/accessDenied.componen
 import {ForbiddenComponent} from "../pages/forbidden/forbidden.component";
 import {NotFoundComponent} from "app/pages/notFound/notFound.component";
 
-var componentRoutes = Utils.routerHelper.extractRoutes([HomeComponent,
-                                                        AccessDeniedComponent,
-                                                        ForbiddenComponent,
-                                                        NotFoundComponent]);
+var componentRoutes = [...HomeComponent.ngRoutes,...AccessDeniedComponent.ngRoutes,...ForbiddenComponent.ngRoutes,...NotFoundComponent.ngRoutes];
 
 var routes = 
 [

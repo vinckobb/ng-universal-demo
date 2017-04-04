@@ -11,6 +11,7 @@ import {GlobalNotificationsService, LocalNotificationsService} from '@ng/notific
 @ComponentRoute({path: 'notifications'})
 export class NotificationsSampleComponent
 {
+public static ngRoutes = [{path: 'notifications', component: NotificationsSampleComponent}];
     //######################### constructor #########################
     constructor(private _notifications: GlobalNotificationsService,
                 private _localNotifications: LocalNotificationsService)

@@ -17,6 +17,7 @@ import {BaseAnimatedComponent} from "app/misc/baseAnimatedComponent";
 @ComponentRoute({path: ''})
 export class HomeComponent extends BaseAnimatedComponent implements OnInit
 {
+    public static ngRoutes = [{path: '', component: HomeComponent}];
     //######################### public properties #########################
     public subs: string;
     public counter = 0;

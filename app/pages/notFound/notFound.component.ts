@@ -9,12 +9,7 @@ import {ComponentRoute, StatusCodeService} from '@ng/common';
     selector: 'not-found-view',
     templateUrl: 'notFound.component.html'
 })
-@ComponentRoute({path: '**'})
 export class NotFoundComponent
 {
-    //######################### constructor #########################
-    constructor(statusCodeService: StatusCodeService)
-    {
-        statusCodeService.setStatusCode(404);
-    }
+    public static ngRoutes = [{path: '**', component: NotFoundComponent}];
 }

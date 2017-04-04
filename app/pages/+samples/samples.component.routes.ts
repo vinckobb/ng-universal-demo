@@ -5,11 +5,7 @@ import {NotificationsSampleComponent} from './notifications/notificationsSample.
 import {AuthorizationSampleComponent} from "./authorization/authorizationSample.component";
 import {Utils} from '@ng/common';
 
-export var sampleComponentRoutes = Utils.routerHelper.extractRoutes([GridSampleComponent,
-                                                                     BootstrapSamplesComponent,
-                                                                     CommonSamplesComponent,
-                                                                     NotificationsSampleComponent,
-                                                                     AuthorizationSampleComponent]);
+export var sampleComponentRoutes = [...GridSampleComponent.ngRoutes,...BootstrapSamplesComponent.ngRoutes,...CommonSamplesComponent.ngRoutes,...NotificationsSampleComponent.ngRoutes,...AuthorizationSampleComponent.ngRoutes];
 
 export var sampleComponents = [GridSampleComponent,
                                BootstrapSamplesComponent,

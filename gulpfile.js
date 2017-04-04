@@ -1,8 +1,7 @@
 const gulp = require('gulp'),
       sass = require('gulp-sass'),
       watch = require('gulp-watch'),
-      through2 = require('through2'),
-      ngAotCompliant = require('gulp-aot-compliant');
+      through2 = require('through2');
 
 function logCopied()
 {
@@ -19,7 +18,6 @@ gulp.task("create-aot-app", function()
 {
     return gulp.src("app/**/*")
         .pipe(logCopied())
-        .pipe(ngAotCompliant())
         .pipe(gulp.dest("app.aot"));
 });
 

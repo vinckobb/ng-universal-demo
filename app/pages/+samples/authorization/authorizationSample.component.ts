@@ -9,4 +9,5 @@ import {ComponentRoute} from '@ng/common';
 @ComponentRoute({path: 'authorization'})
 export class AuthorizationSampleComponent
 {
+public static ngRoutes = [{path: 'authorization', component: AuthorizationSampleComponent}];
 }

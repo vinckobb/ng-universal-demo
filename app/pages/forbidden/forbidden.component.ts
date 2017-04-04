@@ -13,4 +13,5 @@ import {AuthGuard, Authorize} from '@ng/authentication';
 @Authorize('forbiddenPage')
 export class ForbiddenComponent
 {
+public static ngRoutes = [{path:'forbidden', canActivate: [AuthGuard], component: ForbiddenComponent}];
 }

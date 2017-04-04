@@ -11,6 +11,7 @@ import {GridOptions} from '@ng/grid';
 @ComponentRoute({path: 'grid'})
 export class GridSampleComponent
 {
+public static ngRoutes = [{"path":"","redirectTo":"grid"}, {path: 'grid', component: GridSampleComponent}];
     //######################### public properties #########################
 
     /**

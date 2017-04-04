@@ -12,6 +12,7 @@ import {ComponentRoute} from '@ng/common';
 @ComponentRoute({path: 'bootstrap'})
 export class BootstrapSamplesComponent
 {
+public static ngRoutes = [{path: 'bootstrap', component: BootstrapSamplesComponent}];
     //######################### public properties #########################
     public date: moment.Moment = null;
     public select: string;
