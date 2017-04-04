@@ -8,9 +8,9 @@ export class BaseAnimatedComponent
 {
     //######################### public properties - bindings #########################
 
-    /**
-     * Attach animation directly to component (enter, exit)
-     */
-    @HostBinding('@flyInOut') 
-    public animatedComponent = true;
+    // /**
+    //  * Attach animation directly to component (enter, exit)
+    //  */
+    // @HostBinding('@flyInOut') 
+    // public animatedComponent = true;
 }
