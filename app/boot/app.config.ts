@@ -1,4 +1,4 @@
-import {PROGRESS_INTERCEPTOR_PROVIDER} from "@ng/http-extensions/dist";
+import {PROGRESS_INTERCEPTOR_PROVIDER} from "@ng/http-extensions";
 
 /**
  * Array of providers that are used in app module
