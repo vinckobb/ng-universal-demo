@@ -5,12 +5,10 @@
     "scripts":
     {
         "build": "webpack --env.dll && webpack --env.ssr",
-        "build:watch": "webpack --env.ssr && webpack -w --env.dll",
         "build:min": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr",
         "build:gulp": "gulp build",
         "build:gulp:aot": "gulp build:aot",
-        "prebuild": "npm run clean && npm run build:gulp && npm run build:prepare:dev",
-        "prebuild:watch": "npm run prebuild",
+        "prebuild": "npm run build:gulp",
         "prebuild:min": "npm run clean && npm run build:gulp:aot",
         "postbuild:min": "npm run clean:tmp",
         "build:prepare:dev": "webpack --config webpack.config.dev.js",
@@ -22,8 +20,9 @@
         "scss": "gulp compile-scss",
         "tsc": "tsc",
         "update-versions": "nrs versionDeployment.config.json",
+        "postinstall": "npm run build:prepare:dev && npm run build",
         "server": "node server.js",
-        "start": "npm run build:gulp && npm run build:prepare:dev && concurrent \"npm run app-config:w\" \"npm run server -- --webpack\""
+        "start": "npm run build:gulp && concurrent \"npm run app-config:w\" \"npm run server -- --webpack\""
     },
     "engines":
     {
