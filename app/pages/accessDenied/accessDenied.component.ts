@@ -8,6 +8,7 @@ import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
  */
 @Component(
 {
+    selector: 'access-denied-view',
     templateUrl: "accessDenied.component.html",
     animations: [FlyInOutAnimation]
 })
