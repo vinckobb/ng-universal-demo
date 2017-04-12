@@ -9,6 +9,7 @@
     {
         "excludes": [],
         "genDir": "./app.aot/ngfactory",
-        "entryModule": "./app.aot/boot/server-app.module#ServerAppModule"
+        "entryModule": "./app.aot/boot/server-app.module#ServerAppModule",
+        "skipMetadataEmit" : true
     }
 }

@@ -5,11 +5,14 @@
     "scripts":
     {
         "build": "webpack --env.dll && webpack --env.ssr",
+        "build:aot": "npm run ngc -- -p tsconfig.browser.json",
         "build:min": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr",
         "build:gulp": "gulp build",
         "build:gulp:aot": "gulp build:aot",
         "prebuild": "npm run build:gulp",
+        "prebuild:aot": "npm run prebuild:min",
         "prebuild:min": "npm run clean && npm run build:gulp:aot",
+        "postbuild:aot": "npm run postbuild:min",
         "postbuild:min": "npm run clean:tmp",
         "build:prepare:dev": "webpack --config webpack.config.dev.js",
         "clean": "rimraf wwwroot && npm run clean:tmp",
@@ -19,6 +22,7 @@
         "app-config:w": "gulp watch-config",
         "scss": "gulp compile-scss",
         "tsc": "tsc",
+        "ngc": "ngc",
         "update-versions": "nrs versionDeployment.config.json",
         "postinstall": "npm run build:prepare:dev && npm run build",
         "server": "node server.js",
