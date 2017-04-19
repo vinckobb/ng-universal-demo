@@ -10,7 +10,7 @@
         "noImplicitAny": false,
         "strictNullChecks": false,
         "moduleResolution": "node",
-        "outDir": "wwwroot",
+        "outDir": "wwwroot/app",
         "lib": 
         [
             "es2016",
