@@ -36,7 +36,7 @@ export class GridSampleComponent
             initialItemsPerPage: 10,
             initialPage: 1,
             dataCallback: this._getData.bind(this),
-            itemsPerPageValues: [10, 20],
+            pagingOptions: {itemsPerPageValues: [10, 20]},
             columnsSelection: true
         };
     }

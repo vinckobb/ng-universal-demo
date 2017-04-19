@@ -1,5 +1,6 @@
-import {Component, OnInit, HostBinding} from '@angular/core';
-import {ComponentRoute} from "@ng/common";
+import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
+import {ComponentRoute, NgComponentOutletEx} from "@ng/common";
+import {BasicPagingComponent, PagingAbstractComponent} from '@ng/grid';
 import {FlyInOutAnimation} from '@ng/animations';
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
@@ -15,11 +16,15 @@ import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
     animations: [FlyInOutAnimation]
 })
 @ComponentRoute({path: ''})
-export class HomeComponent extends BaseAnimatedComponent implements OnInit
+export class HomeComponent extends BaseAnimatedComponent implements OnInit, AfterViewInit
 {
     //######################### public properties #########################
     public subs: string;
     public counter = 0;
+    public paging = BasicPagingComponent;
+
+    @ViewChild('pagingComponent')
+    public dynamicPaging: NgComponentOutletEx<PagingAbstractComponent>;
 
     //######################### constructor #########################
     constructor(private dataSvc: DataService)
@@ -39,8 +44,31 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
         });
     }
 
+    //######################### public methods - implementation of AfterViewInit #########################
+    
+    /**
+     * Called when view was initialized
+     */
+    public ngAfterViewInit()
+    {
+        console.log(this.dynamicPaging.component);
+
+        var paging = this.dynamicPaging.component;
+
+        paging.pagingOptions = {itemsPerPageValues: [10, 20]};
+        paging.page = 1;
+        paging.itemsPerPage = 10;
+        paging.totalCount = 16;
+        paging.invalidateVisuals();
+
+        paging.pageChange.subscribe(page => console.log('PAGE:', page));
+        paging.itemsPerPageChange.subscribe(itemsPerPage => console.log('ITEMS PER PAGE:', itemsPerPage));
+    }
+
     public inc()
     {
         this.counter++;
+        this.dynamicPaging.component.page = 2;
+        this.dynamicPaging.component.invalidateVisuals();
     }
 }
