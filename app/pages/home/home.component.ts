@@ -20,6 +20,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
 {
     //######################### public properties #########################
     public subs: string;
+    public pagingVisible: boolean = false;
     public counter = 0;
     public paging = BasicPagingComponent;
 
@@ -51,7 +52,10 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
      */
     public ngAfterViewInit()
     {
-        console.log(this.dynamicPaging.component);
+        if(!this.dynamicPaging)
+        {
+            return;
+        }
 
         var paging = this.dynamicPaging.component;
 
@@ -68,7 +72,5 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     public inc()
     {
         this.counter++;
-        this.dynamicPaging.component.page = 2;
-        this.dynamicPaging.component.invalidateVisuals();
     }
 }

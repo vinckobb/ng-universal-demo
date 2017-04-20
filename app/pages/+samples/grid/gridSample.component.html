@@ -1,8 +1,14 @@
 <h3>Grid Sample</h3>
 
 <ng-grid id="gridSample" [data]="data" [options]="gridOptions" [totalCount]="totalCount">
+    <ng-column name="id" title="ID"></ng-column>
+    <ng-column name="index" title="Index"></ng-column>
+    <ng-column name="isActive" title="Active"></ng-column>
+    <ng-column name="balance" title="Balance"></ng-column>
+    <ng-column name="age" title="Age"></ng-column>
     <ng-column name="name" title="First name"></ng-column>
     <ng-column name="surname" title="Surname"></ng-column>
     <ng-column name="email" title="E-Mail"></ng-column>
     <ng-column name="address" title="Address"></ng-column>
+    <ng-column name="phone" title="Phone"></ng-column>
 </ng-grid>

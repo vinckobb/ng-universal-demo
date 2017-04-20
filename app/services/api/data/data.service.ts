@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
 import {RESTClient, GET, ResponseType, Produces, BaseUrl, DefaultHeaders} from '@ng/rest';
 
 import {Data} from "./data.interface";
@@ -7,7 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import * as global from 'config/global';
 
 /**
- * Service used to access financial records api
+ * Service used to access sample data
  **/
 @Injectable()
 @BaseUrl(global.apiBaseUrl)
