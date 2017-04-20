@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} from '@ng/common';
 import {GridOptions} from '@ng/grid';
 import {GridDataService} from "../../../services/api/gridData/gridData.service";
+import {LoadMorePagingComponent} from "./loadMorePaging.component";
 
 /**
  * Grid samples component
@@ -45,10 +46,10 @@ export class GridSampleComponent
     {
         this.gridOptions =
         {
-            initialItemsPerPage: 10,
+            initialItemsPerPage: 20,
             initialPage: 1,
             dataCallback: this._getData.bind(this),
-            pagingOptions: {itemsPerPageValues: [10, 20]},
+            pagingType: LoadMorePagingComponent,
             columnsSelection: true
         };
     }
@@ -77,7 +78,7 @@ export class GridSampleComponent
             })
             .subscribe(data =>
             {
-                this.data = data.data;
+                this.data = [...this.data.concat(data.data)];
                 this.totalCount = data.totalCount;
             });
     }
