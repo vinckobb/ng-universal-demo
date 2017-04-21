@@ -83,6 +83,17 @@ export class GridSampleComponent
         };
     }
 
+    //######################### public methods #########################
+    
+    /**
+     * Sets page for first grid sample
+     * @param {number} page Page to be set
+     */
+    public setPage(page: number)
+    {
+        this._sampleGrid.page = page;
+    }
+
     //######################### private methods #########################
 
     /**
@@ -137,14 +148,5 @@ export class GridSampleComponent
                 this.dataLoadMore = [...this.dataLoadMore.concat(data.data)];
                 this.totalCountLoadMore = data.totalCount;
             });
-    }
-
-    /**
-     * Sets page for first grid sample
-     * @param {number} page Page to be set
-     */
-    private _setPage(page: number)
-    {
-        this._sampleGrid.page = page;
     }
 }
