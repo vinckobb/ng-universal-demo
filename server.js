@@ -78,7 +78,28 @@ app.use('/grid-data', function (req, res, next)
         totalCount: data.length}
     ));
     console.timeEnd("GET /grid-data");
-})
+});
+
+app.use('/grid-data-next', function (req, res, next) 
+{
+    var data = require('./server.data');
+
+    console.time("GET /grid-data");
+    res.setHeader('Content-Type', 'application/json');
+
+    var url_parts = url.parse(req.url, true);
+    var query = url_parts.query
+    var from = parseInt(query.from);
+    var items = parseInt(query.items);
+    var selectedData = data.slice(from, from + items);
+
+    res.end(JSON.stringify(
+    {
+        data: selectedData,
+        totalCount: (from + items >= data.length ? data.length : from + items + 1)
+    }));
+    console.timeEnd("GET /grid-data");
+});
 
 app.use('/data', function (req, res, next)
 {
@@ -87,7 +108,7 @@ app.use('/data', function (req, res, next)
 
     res.end(JSON.stringify({greeting: 'Hello', name: 'World'}));
     console.timeEnd("GET /data");
-})
+});
 
 //proxy special requests to other location
 app.use(proxy(['/api'], {target: 'http://localhost:8080', ws: true}));

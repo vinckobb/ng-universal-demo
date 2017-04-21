@@ -24,4 +24,14 @@ export class GridDataService extends RESTClient
     {
         return null;
     }
+
+    /**
+     * Gets grid data next
+     */
+    @Produces(ResponseType.Json)
+    @GET("grid-data-next")
+    public getGridDataNext(@QueryObject paging: {from: number, items: number}): Observable<PagedData<GridItem>>
+    {
+        return null;
+    }
 }
