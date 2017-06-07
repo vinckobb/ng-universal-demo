@@ -607,7 +607,7 @@ module.exports = function(app)
         console.timeEnd(`GET ${req.originalUrl}`);
     });
 
-    app.use('/api/user/logout', function (req, res, next)
+    app.use('/api/logout', function (req, res, next)
     {
         console.time(`GET ${req.originalUrl}`);
 

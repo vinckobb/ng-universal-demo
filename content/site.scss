@@ -53,3 +53,28 @@ body
         transform: rotate(360deg);
     }
 }
+
+// ---------------------- NAVIGATION ----------------------
+.navbar-version 
+{
+    line-height: 11px;
+    font-size: 10px;
+    color: #969696
+}
+
+// ---------------------- CONTAINER ----------------------
+@media screen and (min-width: 1140px)
+{
+    .container.main
+    {
+        width: 98%;
+    }
+}
+
+@media screen and (min-width: 1440px)
+{
+    .container.main
+    {
+        width: 90%;
+    }
+}

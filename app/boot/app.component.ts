@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {Router, NavigationStart, NavigationEnd, NavigationError, NavigationCancel} from '@angular/router';
 import {Utils, GlobalizationService, ProgressIndicatorService, CookieService} from '@ng/common';
 import {AuthenticationService} from '@ng/authentication';
@@ -16,7 +16,7 @@ import * as moment from 'moment';
     selector: 'app',
     templateUrl: "app.component.html"
 })
-export class AppComponent implements OnInit
+export class AppComponent implements OnDestroy
 {
     //######################### private fields #########################
     
@@ -65,16 +65,12 @@ export class AppComponent implements OnInit
                 {
                     console.error("User identity was not returned!");
                 }
-            });
-    }
 
-    //######################### public methods - implementation of OnInit #########################
-    
-    /**
-     * Initialize component
-     */
-    public ngOnInit()
-    {
+                if(!identity.isAuthenticated && !authetication.isAuthPage())
+                {
+                    authetication.showAuthPage();
+                }
+            });
     }
 
     //######################### public methods - implementation of OnDestroy #########################

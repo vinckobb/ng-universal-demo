@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container main">
     <!--Responsive menu button-->
     <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation-panel-id">
@@ -9,13 +9,18 @@
 
         <a class="navbar-brand" routerLink="/">
             <span class="glyphicon glyphicon-home"></span>
+
+            <div class="inline-block">
+                <div class="navbar-version">{{config?.title}}: {{config?.release}}</div>
+                <div class="navbar-version">{{guiVersion}}</div>
+            </div>
         </a>
 
         <a class="navbar-brand pointer-cursor">{{'global.appName' | translate}}</a>
     </div>
 
     <div class="collapse navbar-collapse" id="navigation-panel-id">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav navbar-right nav-pills">
             <li>
                 <a routerLink="/">{{'navigation.home' | translate}}</a>
             </li>

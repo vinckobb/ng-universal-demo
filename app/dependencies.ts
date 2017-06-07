@@ -6,5 +6,6 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/observable/throw';
 import 'numeral';
 import 'numeral-languages';
