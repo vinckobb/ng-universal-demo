@@ -1,5 +1,5 @@
 import {Component, HostBinding} from '@angular/core';
-import {ComponentRoute} from '@ng/common';
+import {ComponentRoute, StatusCodeService} from '@ng/common';
 import {FlyInOutAnimation} from '@ng/animations';
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 
@@ -15,4 +15,11 @@ import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 @ComponentRoute({path:'accessDenied'})
 export class AccessDeniedComponent extends BaseAnimatedComponent
 {
+    //######################### constructor #########################
+    constructor(statusCodeService: StatusCodeService)
+    {
+        super();
+
+        statusCodeService.setStatusCode(403);
+    }
 }

@@ -3,12 +3,12 @@ import {Utils} from '@ng/common';
 
 import {HomeComponent} from '../pages/home/home.component';
 import {AccessDeniedComponent} from "../pages/accessDenied/accessDenied.component";
-import {ForbiddenComponent} from "../pages/forbidden/forbidden.component";
+import {LoginComponent} from "../pages/login/login.component";
 import {NotFoundComponent} from "../pages/notFound/notFound.component";
 
 var componentRoutes = Utils.routerHelper.extractRoutes([HomeComponent,
                                                         AccessDeniedComponent,
-                                                        ForbiddenComponent,
+                                                        LoginComponent,
                                                         NotFoundComponent]);
 
 var routes = 
@@ -23,5 +23,5 @@ var routes =
 export var appRoutesModule = RouterModule.forRoot(routes, {enableTracing: false});
 export var appComponents = [HomeComponent,
                             AccessDeniedComponent,
-                            ForbiddenComponent,
+                            LoginComponent,
                             NotFoundComponent];
