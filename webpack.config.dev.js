@@ -28,8 +28,7 @@ module.exports = function()
                 "numeral-languages": path.join(__dirname, "node_modules/numeral/locales.js"),
                 "handlebars": path.join(__dirname, "node_modules/handlebars/dist/handlebars.js"),
                 "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
-                "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
-                "./locale": path.join(__dirname, "node_modules/moment/locale")
+                "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js")
             }
         },
         module:

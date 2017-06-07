@@ -59,56 +59,8 @@ if(!!argv.webpack)
     app.use(hmr(compiler));
 }
 
-app.use('/grid-data', function (req, res, next) 
-{
-    var data = require('./server.data');
-
-    console.time("GET /grid-data");
-    res.setHeader('Content-Type', 'application/json');
-
-    var url_parts = url.parse(req.url, true);
-    var query = url_parts.query
-    var from = parseInt(query.from);
-    var items = parseInt(query.items);
-    var selectedData = data.slice(from, from + items);
-
-    res.end(JSON.stringify(
-    {
-        data: selectedData,
-        totalCount: data.length}
-    ));
-    console.timeEnd("GET /grid-data");
-});
-
-app.use('/grid-data-next', function (req, res, next) 
-{
-    var data = require('./server.data');
-
-    console.time("GET /grid-data");
-    res.setHeader('Content-Type', 'application/json');
-
-    var url_parts = url.parse(req.url, true);
-    var query = url_parts.query
-    var from = parseInt(query.from);
-    var items = parseInt(query.items);
-    var selectedData = data.slice(from, from + items);
-
-    res.end(JSON.stringify(
-    {
-        data: selectedData,
-        totalCount: (from + items >= data.length ? data.length : from + items + 1)
-    }));
-    console.timeEnd("GET /grid-data");
-});
-
-app.use('/data', function (req, res, next)
-{
-    console.time("GET /data");
-    res.setHeader('Content-Type', 'application/json');
-
-    res.end(JSON.stringify({greeting: 'Hello', name: 'World'}));
-    console.timeEnd("GET /data");
-});
+//mock rest api
+require('./server.mock')(app);
 
 //proxy special requests to other location
 app.use(proxy(['/api'], {target: 'http://localhost:8080', ws: true}));
@@ -149,5 +101,6 @@ app.use(function (req, res, next)
 //return static files
 app.use(serveStatic(wwwroot));
 
+console.log("Listening on port 8888 => http://localhost:8888");
 //create node.js http server and listen on port
 app.listen(8888);

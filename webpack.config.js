@@ -159,7 +159,6 @@ module.exports = function(options)
                 "handlebars": path.join(__dirname, "node_modules/handlebars/dist/handlebars.js"),
                 "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
                 "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
-                "./locale": path.join(__dirname, "node_modules/moment/locale"),
                 "config/global": path.join(__dirname, prod ? "config/global.json" : "config/global.development.json"),
                 "preboot": path.join(__dirname, "node_modules/preboot/__dist/preboot_browser.js"),
                 "app": path.join(__dirname, "app")

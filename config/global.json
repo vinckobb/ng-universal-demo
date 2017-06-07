@@ -2,7 +2,7 @@
     "debug": false,
     "serverLogging": false,
     "version": "1.0.0",
-    "apiBaseUrl": "",
+    "apiBaseUrl": "api/",
     "defaultApiHeaders": 
     {
         "Accept": "application/json"
