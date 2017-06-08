@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = function(config)
 {
     config.set(
@@ -12,8 +14,7 @@ module.exports = function(config)
         // list of files / patterns to load in the browser
         files: 
         [
-            'testmethod.js',
-            'testmethod.spec.js'
+            '*.spec.ts'
         ],
 
         // list of files to exclude
@@ -22,7 +23,9 @@ module.exports = function(config)
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors:
-        {},
+        {
+            '**/*.ts': 'webpack'
+        },
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
@@ -40,6 +43,83 @@ module.exports = function(config)
             classNameFormatter: undefined, // function (browser, result) to customize the classname attribute in xml testcase element
             properties: {}, // key value pair of properties to add to the <properties> section of the report
             xmlVersion: null // use '1' if reporting to be per SonarQube 6.2 XML format
+        },
+
+        webpack: 
+        {
+            resolve:
+            {
+                extensions: ['.ts', '.js'],
+                alias:
+                {
+                    "numeral-languages": path.join(__dirname, "node_modules/numeral/locales.js"),
+                    "handlebars": path.join(__dirname, "node_modules/handlebars/dist/handlebars.js"),
+                    "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
+                    "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
+                    "config/global": path.join(__dirname, "config/global.development.json"),
+                    "preboot": path.join(__dirname, "node_modules/preboot/__dist/preboot_browser.js"),
+                    "app": path.join(__dirname, "app")
+                }
+            },
+            module:
+            {
+                rules:
+                [
+                    //vendor globals
+                    {
+                        test: require.resolve("jquery"),
+                        use:
+                        [
+                            {
+                                loader: 'expose-loader',
+                                options: '$'
+                            },
+                            {
+                                loader: 'expose-loader',
+                                options: 'jQuery'
+                            }
+                        ]
+                    },
+                    {
+                        test: require.resolve("numeral"),
+                        use:
+                        [
+                            {
+                                loader: 'expose-loader',
+                                options: 'numeral'
+                            }
+                        ]
+                    },
+                    //file processing
+                    {
+                        test: /\.ts$/,
+                        use: ['awesome-typescript-loader' + (true ? '' : '?sourceMap=true'), 'angular2-template-loader', 'webpack-lazy-module-loader']
+                    },
+                    {
+                        test: /\.html$/,
+                        loader: 'raw-loader'
+                    },
+                    {
+                        test: /\.css$/,
+                        loader: 'raw-loader'
+                    },
+                    {
+                        test: /\.scss$/,
+                        use: ['style-loader', 'css-loader', 'sass-loader']
+                    },
+                    {
+                        test: /\.(ttf|eot|svg)$/,
+                        loader: "file-loader"
+                    }
+                ]
+            }
+        },
+
+        webpackMiddleware: 
+        {
+            // webpack-dev-middleware configuration
+            stats: 'errors-only',
+            publicPath: '/dist/'
         },
 
         // web server port

@@ -20,7 +20,8 @@
         [
             "moment",
             "node",
-            "systemjs"
+            "systemjs",
+            "jasmine"
         ],
         "typeRoots": 
         [
