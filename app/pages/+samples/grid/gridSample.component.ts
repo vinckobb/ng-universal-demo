@@ -22,13 +22,6 @@ import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
 @Authorize("gridSample-page")
 export class GridSampleComponent extends BaseAnimatedComponent
 {
-    //######################### private fields #########################
-
-    /**
-     * Paginator used for getting page numbers
-     */
-    protected _paginator: Paginator = new Paginator();
-
     //######################### public properties #########################
 
     /**
@@ -114,20 +107,16 @@ export class GridSampleComponent extends BaseAnimatedComponent
      */
     private _getData(page: number, itemsPerPage: number, orderBy: string, orderByDirection: OrderByDirection): void
     {
-        this._paginator.setPage(page)
-            .setItemsPerPage(itemsPerPage)
-            .setItemCount(this.totalCount);
-
         this._dataSvc
             .getGridData(
             {
-                from: this._paginator.getOffset(),
-                items: itemsPerPage
+                page: (page - 1),
+                size: itemsPerPage
             })
             .subscribe(data =>
             {
-                this.data = data.data;
-                this.totalCount = data.totalCount;
+                this.data = data.content;
+                this.totalCount = data.totalElements;
             });
     }
 
@@ -141,20 +130,16 @@ export class GridSampleComponent extends BaseAnimatedComponent
      */
     private _getLoadMoreData(page: number, itemsPerPage: number, orderBy: string, orderByDirection: OrderByDirection): void
     {
-        this._paginator.setPage(page)
-            .setItemsPerPage(itemsPerPage)
-            .setItemCount(this.totalCount);
-
         this._dataSvc
-            .getGridDataNext(
+            .getGridData(
             {
-                from: this._paginator.getOffset(),
-                items: itemsPerPage
+                page: (page - 1),
+                size: itemsPerPage
             })
             .subscribe(data =>
             {
-                this.dataLoadMore = [...this.dataLoadMore.concat(data.data)];
-                this.totalCountLoadMore = data.totalCount;
+                this.dataLoadMore = [...this.dataLoadMore.concat(data.content)];
+                this.totalCountLoadMore = data.last ? this.dataLoadMore.length : (this.dataLoadMore.length + 1);
             });
     }
 }

@@ -675,7 +675,7 @@ module.exports = function(app)
     {
         console.time(`GET ${req.originalUrl}`);
 
-        var data = [].join(sampleData);
+        var data = sampleData;
         var query = url.parse(req.url, true).query;
 
         let items = data.length;

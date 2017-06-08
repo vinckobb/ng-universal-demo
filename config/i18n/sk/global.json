@@ -1,7 +1,7 @@
 {
     "global":
     {
-        "appName": "Angular2 app",
+        "appName": "Angular app",
         "languages": "Languages",
         "selectValue": "Please select value",
         "close": "Close",

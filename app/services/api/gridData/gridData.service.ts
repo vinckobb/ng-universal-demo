@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {RESTClient, GET, ResponseType, Produces, BaseUrl, DefaultHeaders, QueryObject} from '@ng/rest';
 
-import {GridItem, PagedData} from "./gridData.interface";
+import {GridItem} from "./gridData.interface";
+import {PagedData, Pageable} from "../../../misc/types";
 import {Observable} from 'rxjs/Observable';
 import * as global from 'config/global';
 
@@ -20,17 +21,7 @@ export class GridDataService extends RESTClient
      */
     @Produces(ResponseType.Json)
     @GET("grid-data")
-    public getGridData(@QueryObject paging: {from: number, items: number}): Observable<PagedData<GridItem>>
-    {
-        return null;
-    }
-
-    /**
-     * Gets grid data next
-     */
-    @Produces(ResponseType.Json)
-    @GET("grid-data-next")
-    public getGridDataNext(@QueryObject paging: {from: number, items: number}): Observable<PagedData<GridItem>>
+    public getGridData(@QueryObject paging: Pageable): Observable<PagedData<GridItem>>
     {
         return null;
     }

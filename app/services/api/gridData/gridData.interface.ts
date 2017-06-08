@@ -1,9 +1,3 @@
-export interface PagedData<TItem>
-{
-    data: TItem[];
-    totalCount: number;
-}
-
 export interface GridItem
 {
     id: string;
