@@ -1,13 +1,17 @@
 import {Component} from '@angular/core';
 import {ComponentRoute, ProgressIndicatorService, Utils} from '@ng/common';
+import {Authorize, AuthGuard} from '@ng/authentication';
+import {FlyInOutAnimation} from '@ng/animations';
 
 @Component(
 {
     selector: "common-samples",
-    templateUrl: "commonSamples.component.html"
+    templateUrl: "commonSamples.component.html",
+    animations: [FlyInOutAnimation]
 })
-@ComponentRoute({path: 'common'})
-export class CommonSamplesComponent
+@ComponentRoute({path: 'common', canActivate: [AuthGuard]})
+@Authorize("commonSample-page")
+export class CommonSamplesComponent extends BaseAnimatedComponent
 {
     //######################### public properties #########################
     public sampleNumber = 5235342.3231;
@@ -25,6 +29,7 @@ export class CommonSamplesComponent
     //######################### constructors #########################
     constructor(private progressSvc: ProgressIndicatorService)
     {
+        super();
     }
 
     //######################### public methods #########################

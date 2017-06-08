@@ -632,12 +632,13 @@ module.exports = function(app)
             [
                 'userGroup-menu',
                 'logoutAction-menu',
-                'apiDocs-page',
-                'poistenecDebug-page',
-                'poistenecDetail-page',
-                'poistenecGroup-menu',
-                'helpGroup-menu',
-                'shutdownAction-menu'
+                'samplesGroup-menu',
+                'gridSample-page',
+                'bootstrapSample-page',
+                'commonSample-page',
+                'notificationsSample-page',
+                'authorizationSample-page',
+                'home-page'
             ]
         };
 

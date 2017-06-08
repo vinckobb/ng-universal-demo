@@ -1,6 +1,8 @@
 import {Component, ViewChild} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} from '@ng/common';
 import {GridOptions, GridComponent, LoadMorePagingComponent} from '@ng/grid';
+import {Authorize, AuthGuard} from '@ng/authentication';
+import {FlyInOutAnimation} from '@ng/animations';
 import {GridDataService} from "../../../services/api/gridData/gridData.service";
 
 /**
@@ -10,11 +12,13 @@ import {GridDataService} from "../../../services/api/gridData/gridData.service";
 {
     selector: "grid-sample",
     templateUrl: "gridSample.component.html",
-    providers: [GridDataService]
+    providers: [GridDataService],
+    animations: [FlyInOutAnimation]
 })
 @ComponentRedirectRoute('')
-@ComponentRoute({path: 'grid'})
-export class GridSampleComponent
+@ComponentRoute({path: 'grid', canActivate: [AuthGuard]})
+@Authorize("gridSample-page")
+export class GridSampleComponent extends BaseAnimatedComponent
 {
     //######################### private fields #########################
 
@@ -64,6 +68,8 @@ export class GridSampleComponent
     //######################### constructor #########################
     constructor(private _dataSvc: GridDataService)
     {
+        super();
+        
         this.gridOptions =
         {
             initialItemsPerPage: 10,

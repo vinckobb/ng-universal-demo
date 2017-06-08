@@ -146,4 +146,17 @@ export class NavigationComponent implements OnInit, OnDestroy
         //this.appService.setLanguage(lang).subscribe();
         this._cookies.setCookie(LANG_COOKIE, lang, 365);
     }
+
+    /**
+     * Performs logout from system
+     */
+    public logout()
+    {
+        this._authService
+            .logout()
+            .subscribe(data =>
+            {
+                this._router.navigate(['/login']);
+            });
+    }
 }

@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {ComponentRoute, NgComponentOutletEx} from "@ng/common";
 import {BasicPagingComponent, PagingAbstractComponent} from '@ng/grid';
 import {FlyInOutAnimation} from '@ng/animations';
+import {Authorize, AuthGuard} from '@ng/authentication';
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 
@@ -15,7 +16,8 @@ import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
     providers: [DataService],
     animations: [FlyInOutAnimation]
 })
-@ComponentRoute({path: ''})
+@ComponentRoute({path: '', canActivate: [AuthGuard]})
+@Authorize("home-page")
 export class HomeComponent extends BaseAnimatedComponent implements OnInit, AfterViewInit
 {
     //######################### public properties #########################
