@@ -14,7 +14,7 @@ module.exports = function(config)
         // list of files / patterns to load in the browser
         files: 
         [
-            '*.spec.ts'
+            '**/*.spec.ts'
         ],
 
         // list of files to exclude
@@ -25,6 +25,11 @@ module.exports = function(config)
         preprocessors:
         {
             '**/*.ts': 'webpack'
+        },
+
+        mime: 
+        {
+            'text/x-typescript': ['ts','tsx']
         },
 
         // test results reporter to use
