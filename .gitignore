@@ -4,6 +4,7 @@
 /wwwroot/
 /app/ngfactory/
 /app.aot/
+/testResults/
 *.log
 *.bak
 *~
