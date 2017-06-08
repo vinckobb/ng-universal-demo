@@ -3,7 +3,9 @@ import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} fro
 import {GridOptions, GridComponent, LoadMorePagingComponent} from '@ng/grid';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {FlyInOutAnimation} from '@ng/animations';
+
 import {GridDataService} from "../../../services/api/gridData/gridData.service";
+import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
 
 /**
  * Grid samples component

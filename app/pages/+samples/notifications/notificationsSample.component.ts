@@ -4,6 +4,8 @@ import {Authorize, AuthGuard} from '@ng/authentication';
 import {FlyInOutAnimation} from '@ng/animations';
 import {GlobalNotificationsService, LocalNotificationsService} from '@ng/notifications';
 
+import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
+
 @Component(
 {
     selector: 'notifications-sample',

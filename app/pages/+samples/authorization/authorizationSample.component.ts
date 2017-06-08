@@ -3,6 +3,8 @@ import {ComponentRoute} from '@ng/common';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {FlyInOutAnimation} from '@ng/animations';
 
+import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
+
 @Component(
 {
     selector: "authorization-sample",
