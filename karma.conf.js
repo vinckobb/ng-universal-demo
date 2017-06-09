@@ -1,7 +1,10 @@
-var path = require('path');
+var path = require('path'),
+    webpack = require('webpack');
 
 module.exports = function(config)
 {
+    var distPath = "wwwroot/dist";
+
     config.set(
     {
         // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -14,6 +17,8 @@ module.exports = function(config)
         // list of files / patterns to load in the browser
         files: 
         [
+            path.join(__dirname, distPath + '/dependencies.js'),
+            'karma-test-shim.ts',
             '**/*.spec.ts'
         ],
 
@@ -52,6 +57,11 @@ module.exports = function(config)
 
         webpack: 
         {
+            output:
+            {
+                publicPath: '/dist/'
+            },
+            devtool: 'source-map',
             resolve:
             {
                 extensions: ['.ts', '.js'],
@@ -98,7 +108,7 @@ module.exports = function(config)
                     //file processing
                     {
                         test: /\.ts$/,
-                        use: ['awesome-typescript-loader' + (true ? '' : '?sourceMap=true'), 'angular2-template-loader', 'webpack-lazy-module-loader']
+                        use: ['awesome-typescript-loader?sourceMap=true', 'angular2-template-loader', 'webpack-lazy-module-loader']
                     },
                     {
                         test: /\.html$/,
@@ -117,7 +127,15 @@ module.exports = function(config)
                         loader: "file-loader"
                     }
                 ]
-            }
+            },
+            plugins:
+            [
+                new webpack.DllReferencePlugin(
+                {
+                    context: __dirname,
+                    manifest: require(path.join(__dirname, distPath + '/dependencies-manifest.json'))
+                })
+            ]
         },
 
         webpackMiddleware: 

@@ -27,9 +27,10 @@ describe('BannerComponent (inline template)', () =>
         el = de.nativeElement;
     });
 
-    it('should display original title', () =>
+    it('should display a different test title', () => 
     {
+        comp.title = 'Test Title';
         fixture.detectChanges();
-        expect(el.textContent).toContain(comp.title);
+        expect(el.textContent).toContain('Test Title');
     });
 });
