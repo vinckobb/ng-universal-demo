@@ -19,8 +19,6 @@ import {GlobalizationService as GlobalizationServiceImpl} from '../services/glob
 import {providers} from './app.config';
 import * as config from 'config/global';
 
-import {FakeHomeComponent} from "../pages/home/fakehome.component";
-
 /**
  * Factory for HttpErrorInterceptorOptions
  */
@@ -70,7 +68,7 @@ export function externalTranslationLoaderOptionsFactory()
         appRoutesModule
     ],
     providers: providers,
-    declarations: [AppComponent, NavigationComponent, FakeHomeComponent, ...appComponents],
+    declarations: [AppComponent, NavigationComponent, ...appComponents],
     exports: [AppComponent]
 })
 export class AppModule

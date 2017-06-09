@@ -58,7 +58,7 @@ export class NavigationComponent implements OnInit, OnDestroy
     /**
      * Displayed gui version
      */
-    public guiVersion: string = `Trachops: ${global.version}`;
+    public guiVersion: string = `Universal: ${global.version}`;
 
     //######################### constructor #########################
     constructor(private _configReleaseService: ConfigReleaseService,
@@ -95,7 +95,7 @@ export class NavigationComponent implements OnInit, OnDestroy
                     this._changeDetector.detectChanges();
                 }
             });
-            
+
         this._authSubscription = this._authService
             .authenticationChanged
             .subscribe(userIdentity =>
