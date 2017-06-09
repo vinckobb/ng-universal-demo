@@ -1,4 +1,4 @@
-import {Input, Directive, TemplateRef, ViewContainerRef, OnInit} from '@angular/core';
+import {Input, Directive, TemplateRef, ViewContainerRef} from '@angular/core';
 
 /**
  * Fake authorize directive for tests
@@ -7,7 +7,7 @@ import {Input, Directive, TemplateRef, ViewContainerRef, OnInit} from '@angular/
 {
     selector: "[authorize]"
 })
-export class FakeAuthorizeDirective implements OnInit
+export class FakeAuthorizeDirective
 {
     //######################### public properties - inputs #########################
 
@@ -32,16 +32,6 @@ export class FakeAuthorizeDirective implements OnInit
     //######################### constructor #########################
     constructor(private _template: TemplateRef<any>,
                 private _viewContainer: ViewContainerRef)
-    {
-        this._viewContainer.createEmbeddedView(this._template);
-    }
-
-    //######################### public methods - implementation of OnInit #########################
-
-    /**
-     * Initialize component
-     */
-    public ngOnInit()
     {
         this._viewContainer.createEmbeddedView(this._template);
     }

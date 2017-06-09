@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, fakeAsync, tick} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ValueProvider, DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
@@ -16,8 +16,9 @@ describe('NavigationComponent - fullName property (OnPush)', () =>
 {
     let comp: NavigationComponent;
     let fixture: ComponentFixture<NavigationComponent>;
-    let compElement: DebugElement;
-    let el: HTMLElement;
+    let fullNameDElement: DebugElement;
+    let fullNameElement: HTMLElement;
+    let resolveIdentity;
 
     beforeEach(() =>
     {
@@ -35,8 +36,8 @@ describe('NavigationComponent - fullName property (OnPush)', () =>
                     provide: AuthenticationService,
                     useValue:
                     {
-                        getUserIdentity: () => new Promise(() => {}),
-                        authenticationChanged: new Subject<UserIdentity<any>>()
+                        getUserIdentity: () => new Promise((resolve) => resolveIdentity = resolve),
+                        authenticationChanged: new Subject<any>()
                     }
                 },
                 <ValueProvider>
@@ -69,14 +70,102 @@ describe('NavigationComponent - fullName property (OnPush)', () =>
         comp = fixture.componentInstance;
 
         //compElement = fixture.debugElement.query(By.css(".glyphicon-user"));
-        compElement = fixture.debugElement.query(By.css("div"));
-        console.log(compElement);
-        el = compElement.nativeElement;
+        fullNameDElement = fixture.debugElement.query(By.css(".glyphicon-user")).parent;
+        fullNameElement = fullNameDElement.nativeElement;
     });
 
-    it('should be empty for quest ', () =>
+    it('should be empty for quest', fakeAsync(() =>
     {
         fixture.detectChanges();
-        expect(el.textContent.trim()).toContain(comp.fullName);
-    });
+
+        resolveIdentity(
+        {
+            isAuthenticated: false
+        });
+
+        tick();
+
+        expect(fullNameElement.textContent.trim()).toBe("");
+    }));
+
+    it('should be "tester" for logged user', fakeAsync(() =>
+    {
+        fixture.detectChanges();
+        
+        let newIdentity = "tester";
+
+        resolveIdentity(
+        {
+            isAuthenticated: true,
+            firstName: newIdentity,
+            surname: ""
+        });
+
+        tick(); 
+        
+        expect(fullNameElement.textContent.trim()).toBe(newIdentity);
+        expect(comp.fullName).toBe(`${newIdentity} `);
+    }));
+
+    it('should be empty after logging out', fakeAsync(() =>
+    {
+        fixture.detectChanges();
+        
+        let newIdentity = "tester";
+
+        resolveIdentity(
+        {
+            isAuthenticated: true,
+            firstName: newIdentity,
+            surname: ""
+        });
+
+        tick(); 
+        
+        expect(fullNameElement.textContent.trim()).toBe(newIdentity);
+        expect(comp.fullName).toBe(`${newIdentity} `);
+
+        let authService: {authenticationChanged: Subject<any>} = fixture.debugElement.injector.get(AuthenticationService) as any;
+
+        authService.authenticationChanged.next(
+        {
+            isAuthenticated: false
+        });
+
+        tick();
+
+        expect(fullNameElement.textContent.trim()).toBe('');
+        expect(comp.fullName).toBe('');
+    }));
+
+    it('should be "tester" after logging in', fakeAsync(() =>
+    {
+        fixture.detectChanges();
+        
+        let newIdentity = "tester";
+
+        resolveIdentity(
+        {
+            isAuthenticated: false
+        });
+
+        tick(); 
+        
+        expect(fullNameElement.textContent.trim()).toBe('');
+        expect(comp.fullName).toBe('');
+        
+        let authService: {authenticationChanged: Subject<any>} = fixture.debugElement.injector.get(AuthenticationService) as any;
+
+        authService.authenticationChanged.next(
+        {
+            isAuthenticated: true,
+            firstName: newIdentity,
+            surname: ""
+        });
+
+        tick();
+
+        expect(fullNameElement.textContent.trim()).toBe(newIdentity);
+        expect(comp.fullName).toBe(`${newIdentity} `);
+    }));
 });

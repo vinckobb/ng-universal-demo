@@ -105,6 +105,11 @@ export class NavigationComponent implements OnInit, OnDestroy
                     this.fullName = `${userIdentity.firstName} ${userIdentity.surname}`;
                     this._changeDetector.detectChanges();
                 }
+                else
+                {
+                    this.fullName = '';
+                    this._changeDetector.detectChanges();
+                }
             });
         
         this._configReleaseService.get().subscribe(data =>
