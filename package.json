@@ -33,7 +33,7 @@
     {
         "node": ">=6.0.0"
     },
-    "author": "Marek Bukovsk�<marek.bukovsky@asseco-ce.com>",
+    "author": "Marek Bukovský<marek.bukovsky@asseco-ce.com>",
     "license": "MIT",
     "dependencies":
     {
