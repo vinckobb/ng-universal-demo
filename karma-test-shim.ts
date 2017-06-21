@@ -1,5 +1,5 @@
-import './app/dependencies.browser';
 import './app/dependencies';
+import './app/dependencies.browser';
 import './app/hacks';
 
 import 'zone.js/dist/zone';

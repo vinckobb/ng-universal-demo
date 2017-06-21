@@ -1,5 +1,5 @@
-import './app/dependencies.browser';
 import './app/dependencies';
+import './app/dependencies.browser';
 
 import 'moment';
 import 'handlebars';

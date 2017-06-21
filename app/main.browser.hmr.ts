@@ -1,7 +1,7 @@
+import './dependencies';
+import './dependencies.browser';
 import './hacks';
 import 'preboot';
-import './dependencies.browser';
-import './dependencies';
 import 'zone.js/dist/zone';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {NgModuleRef} from '@angular/core';
