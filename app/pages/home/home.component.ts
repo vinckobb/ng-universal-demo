@@ -5,6 +5,7 @@ import {FlyInOutAnimation} from '@ng/animations';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
+import {trigger, animate, style, query, transition, group, state} from '@angular/animations';
 
 /**
  * Home component
@@ -14,7 +15,30 @@ import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
     selector: 'home-view',
     templateUrl: 'home.component.html',
     providers: [DataService],
-    animations: [FlyInOutAnimation]
+    animations: 
+    [
+        FlyInOutAnimation,
+        trigger("test",
+        [
+            transition("* => *",
+            [
+                group(
+                [
+                    query(":enter", 
+                    [
+                        style({'font-weight': 'bold', 'font-size': '0'}),
+                        animate(400, style({'background-color': "#FF00FF", 'font-size': '*'}))
+                    ], {optional: true}),
+                    query(":leave", 
+                    [
+                        style({'background-color': "#FF00FF"}),
+                        animate(400, style({'background-color': "*", 'font-size': '0'}))
+                    ], {optional: true}),
+                    animate(500, style({'background-color': "#00FFFF"}))
+                ])
+            ])
+        ])
+    ]
 })
 @ComponentRoute({path: '', canActivate: [AuthGuard]})
 @Authorize("home-page")
@@ -25,6 +49,8 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     public pagingVisible: boolean = false;
     public counter = 0;
     public paging = BasicPagingComponent;
+
+    public trigger = "in";
 
     @ViewChild('pagingComponent')
     public dynamicPaging: NgComponentOutletEx<PagingAbstractComponent>;
@@ -73,6 +99,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
 
     public inc()
     {
+        this.trigger = this.trigger == 'in' ? 'out' : 'in';
         this.counter++;
     }
 }

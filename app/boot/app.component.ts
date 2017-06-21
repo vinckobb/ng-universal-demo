@@ -86,4 +86,16 @@ export class AppComponent implements OnDestroy
             this._routeChangeSubscription = null;
         }
     }
+
+    //######################### public methods #########################
+
+    public routeChanged(event)
+    {
+        console.log('active', event);
+    }
+
+    public routeChanged2(event)
+    {
+        console.log('deactive', event);
+    }
 }
