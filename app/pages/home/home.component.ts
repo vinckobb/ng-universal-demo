@@ -47,7 +47,7 @@ import {trigger, animate, style, query, transition, group, state, animateChild} 
         ]),
     ]
 })
-@ComponentRoute({path: '', canActivate: [AuthGuard]})
+@ComponentRoute({path: '', canActivate: [AuthGuard], data: {test: 'ahoj'}})
 @Authorize("home-page")
 export class HomeComponent extends BaseAnimatedComponent implements OnInit, AfterViewInit
 {

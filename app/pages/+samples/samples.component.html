@@ -1,1 +1,3 @@
-<router-outlet></router-outlet>
+<router-outlet #r="outlet"></router-outlet>
+
+{{r.activatedRouteData | json}}

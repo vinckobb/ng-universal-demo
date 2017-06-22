@@ -11,7 +11,7 @@ import {CommonSharedModule} from "../../boot/commonShared.module";
     imports: 
     [
         CommonSharedModule,
-        RouterModule.forChild([{path: '', component: SamplesComponent, children: sampleComponentRoutes}])
+        RouterModule.forChild([{path: '', component: SamplesComponent, children: sampleComponentRoutes, data: {testxxx: 'ahoj kuko'}}])
     ]
 })
 export class SamplesModule 

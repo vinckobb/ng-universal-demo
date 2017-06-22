@@ -5,5 +5,7 @@
 <nav class="navbar navbar-default"></nav>
 
 <div class="container main">
-    <router-outlet></router-outlet>
+    <router-outlet #r="outlet"></router-outlet>
+
+    {{r.activatedRouteData | json}}
 </div>

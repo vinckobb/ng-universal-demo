@@ -11,7 +11,7 @@ import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
     templateUrl: "commonSamples.component.html",
     animations: [FlyInOutAnimation]
 })
-@ComponentRoute({path: 'common', canActivate: [AuthGuard]})
+@ComponentRoute({path: 'common', canActivate: [AuthGuard], data: {xxx: 'kukaj'}})
 @Authorize("commonSample-page")
 export class CommonSamplesComponent extends BaseAnimatedComponent
 {
