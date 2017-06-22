@@ -5,7 +5,16 @@
         <button (click)="inc()">click</button>
     </div>
 
-    <div [@test]="trigger">{{counter}} <div *ngIf="trigger == 'out'">xxxxxxxxxxxxxx</div></div>
+    <div [@test]="trigger">
+        <span>{{counter}}</span>
+        <div>
+            <span>xxxxxxxxxxxxxx</span>
+            <div [@test2]="trigger">inside</div>
+        </div>
+        <div>
+            YYYYYYYYYYY
+        </div>
 
-    <ng-template #pagingComponent="ngComponentOutletEx" [ngComponentOutletEx]="paging"></ng-template>
+        <ng-template #pagingComponent="ngComponentOutletEx" [ngComponentOutletEx]="paging"></ng-template>
+    </div>
 </div>

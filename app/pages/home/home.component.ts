@@ -5,7 +5,7 @@ import {FlyInOutAnimation} from '@ng/animations';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
-import {trigger, animate, style, query, transition, group, state} from '@angular/animations';
+import {trigger, animate, style, query, transition, group, state, animateChild} from '@angular/animations';
 
 /**
  * Home component
@@ -24,20 +24,27 @@ import {trigger, animate, style, query, transition, group, state} from '@angular
             [
                 group(
                 [
-                    query(":enter", 
+                    query("@test>div",
                     [
                         style({'font-weight': 'bold', 'font-size': '0'}),
-                        animate(400, style({'background-color': "#FF00FF", 'font-size': '*'}))
-                    ], {optional: true}),
-                    query(":leave", 
-                    [
-                        style({'background-color': "#FF00FF"}),
-                        animate(400, style({'background-color': "*", 'font-size': '0'}))
+                        animate(700, style({'background-color': "#FF00FF", 'font-size': '*'}))
                     ], {optional: true}),
                     animate(500, style({'background-color': "#00FFFF"}))
-                ])
+                ]),
+                query('@test2', 
+                [
+                    animateChild(),
+                ]),
+                animate(500, style({'background-color': "#F0F0FF"}))
             ])
-        ])
+        ]),
+        trigger("test2",
+        [
+            transition("* => *",
+            [
+                animate(1500, style({'background-color': "#FFFF00"}))
+            ])
+        ]),
     ]
 })
 @ComponentRoute({path: '', canActivate: [AuthGuard]})
