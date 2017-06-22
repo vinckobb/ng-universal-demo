@@ -8,6 +8,14 @@ import 'extend';
 import 'jquery-param';
 import 'crypto-js';
 
+import 'zone.js/dist/zone';
+import 'zone.js/dist/long-stack-trace-zone';
+import 'zone.js/dist/proxy';
+import 'zone.js/dist/sync-test';
+//import 'zone.js/dist/jasmine-patch';
+import 'zone.js/dist/async-test';
+import 'zone.js/dist/fake-async-test';
+
 import "@angular/core";
 import "@angular/core/testing";
 import "@angular/compiler";
@@ -33,11 +41,3 @@ import "@ng/http-extensions";
 import "@ng/notifications";
 import "@ng/rest";
 import "@ngx-translate/core";
-
-import 'zone.js/dist/zone';
-import 'zone.js/dist/long-stack-trace-zone';
-import 'zone.js/dist/proxy';
-import 'zone.js/dist/sync-test';
-import 'zone.js/dist/jasmine-patch';
-import 'zone.js/dist/async-test';
-import 'zone.js/dist/fake-async-test';

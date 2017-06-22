@@ -1,8 +1,8 @@
 import './dependencies';
 import './dependencies.browser';
-import './hacks';
 import 'preboot';
 import 'zone.js/dist/zone';
+import './hacks';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {NgModuleRef} from '@angular/core';
 import {hmrAccept, hmrFinishedNotification, Utils} from '@ng/common';
