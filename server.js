@@ -69,34 +69,34 @@ app.use(proxy(['/api'], {target: 'http://localhost:8080', ws: true}));
 app.use(history());
 
 //angular server side rendering
-app.use(function (req, res, next)
-{
-    if(req.url == '/index.html')
-    {
-        if(!isServerRenderAvailable())
-        {
-            next();
+// app.use(function (req, res, next)
+// {
+//     if(req.url == '/index.html')
+//     {
+//         if(!isServerRenderAvailable())
+//         {
+//             next();
 
-            return;
-        }
+//             return;
+//         }
 
-        getServerRenderFunc()(path.join(__dirname, wwwroot, 'index.html'), req.originalUrl, {baseUrl: "http://localhost:8888/", requestCookies: req.headers['cookie']}, function(err, succ)
-        {
-            res.setHeader('Content-Type', 'text/html');
+//         getServerRenderFunc()(path.join(__dirname, wwwroot, 'index.html'), req.originalUrl, {baseUrl: "http://localhost:8888/", requestCookies: req.headers['cookie']}, function(err, succ)
+//         {
+//             res.setHeader('Content-Type', 'text/html');
 
-            if(succ.statusCode)
-            {
-                res.statusCode = succ.statusCode;
-            }
+//             if(succ.statusCode)
+//             {
+//                 res.statusCode = succ.statusCode;
+//             }
 
-            res.end(err || succ.html);
-        });
+//             res.end(err || succ.html);
+//         });
 
-        return;
-    }
+//         return;
+//     }
 
-    next();
-});
+//     next();
+// });
 
 //return static files
 app.use(serveStatic(wwwroot));

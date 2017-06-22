@@ -11,7 +11,6 @@
             <span class="glyphicon glyphicon-home"></span>
 
             <div class="inline-block">
-                <div class="navbar-version">{{config?.title}}: {{config?.release}}</div>
                 <div class="navbar-version">{{guiVersion}}</div>
             </div>
         </a>
@@ -33,51 +32,8 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right nav-pills">
-            <li *authorize="'home-page'">
+            <li>
                 <a routerLink="/">{{'navigation.home' | translate}}</a>
-            </li>
-
-            <li class="dropdown" *authorize="'samplesGroup-menu'">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Samples <span class="caret"></span></a>
-
-                <ul class="dropdown-menu">
-                    <li *authorize="'gridSample-page'">
-                        <a routerLink="/samples/grid">Grid</a>
-                    </li>
-
-                    <li *authorize="'bootstrapSample-page'">
-                        <a routerLink="/samples/bootstrap">Bootstrap</a>
-                    </li>
-
-                    <li *authorize="'commonSample-page'">
-                        <a routerLink="/samples/common">Common</a>
-                    </li>
-
-                    <li *authorize="'notificationsSample-page'">
-                        <a routerLink="/samples/notifications">Notifications</a>
-                    </li>
-
-                    <li *authorize="'authorizationSample-page'">
-                        <a routerLink="/samples/authorization">Authorization</a>
-                    </li>
-                </ul>
-            </li>
-
-            <li *authorize="'userGroup-menu'">
-                <a class="dropdown-toggle pointer-cursor" data-toggle="dropdown">
-                    <span>
-                        <span class="glyphicon glyphicon-user"></span>{{fullName}} <span class="caret"></span>
-                    </span>
-                </a>
-
-                <ul class="dropdown-menu">
-                    <li *authorize="'logoutAction-menu'" (click)="logout()">
-                        <a>
-                            <span class="glyphicon glyphicon-log-out"></span>
-                            <span>Odhlásiť</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
         </ul>
     </div>

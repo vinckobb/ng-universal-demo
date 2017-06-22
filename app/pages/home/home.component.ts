@@ -1,6 +1,4 @@
 import {Component} from '@angular/core';
-import {ComponentRoute, NgComponentOutletEx} from "@ng/common";
-import {Authorize, AuthGuard} from '@ng/authentication';
 import {trigger, animate, style, query, transition, group, state} from '@angular/animations';
 
 /**
@@ -16,15 +14,15 @@ import {trigger, animate, style, query, transition, group, state} from '@angular
         [
             transition("* => *",
             [
-                style({'background-color': "*"}),
+                //style({'background-color': "#FFFFFF"}),
                 animate(1500, style({'background-color': "#00FFFF"}))
             ])
         ])
     ]
 })
-@ComponentRoute({path: ''})
 export class HomeComponent
 {
+    public static ngRoutes = [{path:'', component: HomeComponent}];
     //######################### public properties #########################
     public counter = 0;
 
