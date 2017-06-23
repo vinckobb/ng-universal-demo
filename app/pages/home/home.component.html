@@ -3,18 +3,23 @@
 
     <div>
         <button (click)="inc()">click</button>
+        <button (click)="toggle()">toggle</button>
     </div>
+
+    <ng-template #pagingComponent="ngComponentOutletEx" [ngComponentOutletEx]="paging"></ng-template>
 
     <div [@test]="trigger">
         <span>{{counter}}</span>
-        <div>
-            <span>xxxxxxxxxxxxxx</span>
-            <div [@test2]="trigger">inside</div>
-        </div>
-        <div>
-            YYYYYYYYYYY
+        <div *ngIf="trigger == 'in'">
+            <span>XXXXXXXXXXXXXX</span>
         </div>
 
-        <ng-template #pagingComponent="ngComponentOutletEx" [ngComponentOutletEx]="paging"></ng-template>
+        <div *ngIf="trigger == 'out'">
+            <div>YYYYYYYYYYYYYY</div>
+        </div>
+
+        <div *ngIf="show">
+            <div>ZZZZZZZZZZZZ</div>
+        </div>
     </div>
 </div>

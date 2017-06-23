@@ -1,11 +1,12 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
+import {trigger, animate, style, query, transition, group, state, animateChild} from '@angular/animations';
 import {ComponentRoute, NgComponentOutletEx} from "@ng/common";
 import {BasicPagingComponent, PagingAbstractComponent} from '@ng/grid';
 import {FlyInOutAnimation} from '@ng/animations';
 import {Authorize, AuthGuard} from '@ng/authentication';
+
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
-import {trigger, animate, style, query, transition, group, state, animateChild} from '@angular/animations';
 
 /**
  * Home component
@@ -24,36 +25,29 @@ import {trigger, animate, style, query, transition, group, state, animateChild} 
             [
                 group(
                 [
-                    query("@test>div",
+                    query("*:enter",
                     [
-                        style({'font-weight': 'bold', 'font-size': '0'}),
-                        animate(700, style({'background-color': "#FF00FF", 'font-size': '*'}))
+                        style({opacity: 0, position: 'absolute', transform: 'translateX(30%)'}),
+                        animate(400, style({opacity: 1, transform: 'translateX(0)'}))
                     ], {optional: true}),
-                    animate(500, style({'background-color': "#00FFFF"}))
+                    query("*:leave",
+                    [
+                        style({opacity: 1, position: 'absolute', transform: 'translateX(0)'}),
+                        animate(400, style({opacity: 0, transform: 'translateX(-30%)'}))
+                    ], {optional: true})
                 ]),
-                query('@test2', 
-                [
-                    animateChild(),
-                ]),
-                animate(500, style({'background-color': "#F0F0FF"}))
             ])
-        ]),
-        trigger("test2",
-        [
-            transition("* => *",
-            [
-                animate(1500, style({'background-color': "#FFFF00"}))
-            ])
-        ]),
+        ])
     ]
 })
-@ComponentRoute({path: '', canActivate: [AuthGuard], data: {test: 'ahoj'}})
+@ComponentRoute({path: '', canActivate: [AuthGuard], data: {animation: 'home-view'}})
 @Authorize("home-page")
 export class HomeComponent extends BaseAnimatedComponent implements OnInit, AfterViewInit
 {
     //######################### public properties #########################
     public subs: string;
     public pagingVisible: boolean = false;
+    public show: boolean = false;
     public counter = 0;
     public paging = BasicPagingComponent;
 
@@ -108,5 +102,10 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     {
         this.trigger = this.trigger == 'in' ? 'out' : 'in';
         this.counter++;
+    }
+
+    public toggle()
+    {
+        this.show = !this.show;
     }
 }
