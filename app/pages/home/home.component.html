@@ -8,6 +8,12 @@
 
     <ng-template #pagingComponent="ngComponentOutletEx" [ngComponentOutletEx]="paging"></ng-template>
 
+    <div style="overflow: hidden;" @slideInOut *ngIf="trigger == 'in'">
+        <div class="alert alert-warning">
+            This is warning
+        </div>
+    </div>
+
     <div [@test]="trigger">
         <span>{{counter}}</span>
         <div *ngIf="trigger == 'in'">

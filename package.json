@@ -47,7 +47,7 @@
         "@angular/http": "^4.2.3",
         "@angular/forms": "^4.2.3",
         "@angular/router": "^4.2.3",
-        "@ng/animations": "^3.1.0",
+        "@ng/animations": "^3.1.1",
         "@ng/authentication": "^3.0.0",
         "@ng/bootstrap": "^3.0.5",
         "@ng/common": "^3.0.5",
