@@ -1,6 +1,6 @@
 import {Component, HostBinding} from '@angular/core';
 import {ComponentRoute, StatusCodeService} from '@ng/common';
-import {FlyInOutAnimation} from '@ng/animations';
+import {flyInOutTrigger} from '@ng/animations';
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 
 /**
@@ -10,7 +10,7 @@ import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 {
     selector: 'access-denied-view',
     templateUrl: "accessDenied.component.html",
-    animations: [FlyInOutAnimation]
+    animations: [flyInOutTrigger]
 })
 @ComponentRoute({path:'accessDenied'})
 export class AccessDeniedComponent extends BaseAnimatedComponent

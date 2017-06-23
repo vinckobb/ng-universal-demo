@@ -2,7 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} from '@ng/common';
 import {GridOptions, GridComponent, LoadMorePagingComponent} from '@ng/grid';
 import {Authorize, AuthGuard} from '@ng/authentication';
-import {FlyInOutAnimation} from '@ng/animations';
+import {flyInOutTrigger} from '@ng/animations';
 
 import {GridDataService} from "../../../services/api/gridData/gridData.service";
 import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
@@ -15,7 +15,7 @@ import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
     selector: "grid-sample",
     templateUrl: "gridSample.component.html",
     providers: [GridDataService],
-    animations: [FlyInOutAnimation]
+    animations: [flyInOutTrigger]
 })
 @ComponentRedirectRoute('')
 @ComponentRoute({path: 'grid', canActivate: [AuthGuard]})

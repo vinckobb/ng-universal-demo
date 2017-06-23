@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ComponentRoute} from '@ng/common';
 import {Authorize, AuthGuard} from '@ng/authentication';
-import {FlyInOutAnimation} from '@ng/animations';
+import {flyInOutTrigger} from '@ng/animations';
 
 import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
 
@@ -9,7 +9,7 @@ import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
 {
     selector: "authorization-sample",
     templateUrl: 'authorizationSample.component.html',
-    animations: [FlyInOutAnimation]
+    animations: [flyInOutTrigger]
 })
 @ComponentRoute({path: 'authorization', canActivate: [AuthGuard]})
 @Authorize("authorizationSample-page")

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ComponentRoute} from '@ng/common';
 import {Authorize, AuthGuard} from '@ng/authentication';
-import {FlyInOutAnimation} from '@ng/animations';
+import {flyInOutTrigger} from '@ng/animations';
 import {GlobalNotificationsService, LocalNotificationsService} from '@ng/notifications';
 
 import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
@@ -11,7 +11,7 @@ import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
     selector: 'notifications-sample',
     templateUrl: 'notificationsSample.component.html',
     providers: [LocalNotificationsService],
-    animations: [FlyInOutAnimation]
+    animations: [flyInOutTrigger]
 })
 @ComponentRoute({path: 'notifications', canActivate: [AuthGuard]})
 @Authorize("notificationsSample-page")

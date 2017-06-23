@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ComponentRoute, ProgressIndicatorService, Utils} from '@ng/common';
 import {Authorize, AuthGuard} from '@ng/authentication';
-import {FlyInOutAnimation} from '@ng/animations';
+import {flyInOutTrigger} from '@ng/animations';
 
 import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
 
@@ -9,7 +9,7 @@ import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
 {
     selector: "common-samples",
     templateUrl: "commonSamples.component.html",
-    animations: [FlyInOutAnimation]
+    animations: [flyInOutTrigger]
 })
 @ComponentRoute({path: 'common', canActivate: [AuthGuard], data: {xxx: 'kukaj'}})
 @Authorize("commonSample-page")

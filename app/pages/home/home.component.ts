@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {trigger, animate, style, query, transition, group, state, animateChild} from '@angular/animations';
+import {trigger, animate, style, query, transition, group, state, animateChild, animation, useAnimation} from '@angular/animations';
 import {ComponentRoute, NgComponentOutletEx} from "@ng/common";
 import {BasicPagingComponent, PagingAbstractComponent} from '@ng/grid';
-import {FlyInOutAnimation} from '@ng/animations';
+import {flyInOutTrigger} from '@ng/animations';
 import {Authorize, AuthGuard} from '@ng/authentication';
 
 import {DataService} from "../../services/api/data/data.service";
@@ -18,7 +18,7 @@ import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
     providers: [DataService],
     animations: 
     [
-        FlyInOutAnimation,
+        flyInOutTrigger,
         trigger("test",
         [
             transition("* => *",

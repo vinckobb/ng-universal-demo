@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {ComponentRoute} from '@ng/common';
-import {FlyInOutAnimation} from '@ng/animations';
+import {flyInOutTrigger} from '@ng/animations';
 import {AuthenticationService, Authorize, AuthGuard} from '@ng/authentication';
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 import {Observable} from 'rxjs/Observable';
@@ -13,7 +13,7 @@ import {Observable} from 'rxjs/Observable';
 {
     selector: 'login-view',
     templateUrl: 'login.component.html',
-    animations: [FlyInOutAnimation]
+    animations: [flyInOutTrigger]
 })
 @ComponentRoute({path: 'login', canActivate: [AuthGuard]})
 @Authorize("login-page")

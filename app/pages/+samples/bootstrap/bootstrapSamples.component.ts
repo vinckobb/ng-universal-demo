@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ComponentRoute} from '@ng/common';
 import {Authorize, AuthGuard} from '@ng/authentication';
-import {FlyInOutAnimation} from '@ng/animations';
+import {flyInOutTrigger} from '@ng/animations';
 
 import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
 
@@ -12,7 +12,7 @@ import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
 {
     selector: "bootstrap-samples",
     templateUrl: "bootstrapSamples.component.html",
-    animations: [FlyInOutAnimation]
+    animations: [flyInOutTrigger]
 })
 @ComponentRoute({path: 'bootstrap', canActivate: [AuthGuard]})
 @Authorize("bootstrapSample-page")
