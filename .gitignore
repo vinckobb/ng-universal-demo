@@ -5,6 +5,7 @@
 /app/ngfactory/
 /app.aot/
 /testResults/
+package-lock.json
 *.log
 *.bak
 *~
