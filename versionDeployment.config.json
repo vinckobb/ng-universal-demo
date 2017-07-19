@@ -5,11 +5,5 @@
         "searchForPattern": "\"version\": \"(.*?)\",",
         "replaceWith": "\"version\": \"${version}\",",
         "isVersionReplaceSource": true
-    },
-    {
-        "inputFilesPattern": ["index.html"],
-        "searchInPath": ["."],
-        "searchForPattern": "\\?ver=.*?\"",
-        "replaceWith": "?ver=${version}\""
     }
 ]

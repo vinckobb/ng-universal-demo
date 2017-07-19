@@ -3,6 +3,7 @@ var webpack = require('webpack'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin'),
     HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin'),
+    CopyWebpackPlugin = require('copy-webpack-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
     VirtualModulePlugin = require('virtual-module-webpack-plugin'),
     preboot = require('preboot'),
@@ -244,6 +245,52 @@ module.exports = function(options)
         },
         plugins:
         [
+            new CopyWebpackPlugin(
+            [
+                {
+                    from: path.join(__dirname, "node_modules/font-awesome/css/*.*"),
+                    to: 'css/fa/css',
+                    flatten: true
+                },
+                {
+                    from: path.join(__dirname, "node_modules/font-awesome/fonts/*.*"),
+                    to: 'css/fa/fonts',
+                    flatten: true
+                },
+                {
+                    from: path.join(__dirname, "node_modules/bootstrap/dist/css/*.*"),
+                    to: 'css/b/css',
+                    flatten: true
+                },
+                {
+                    from: path.join(__dirname, "node_modules/bootstrap/dist/fonts/*.*"),
+                    to: 'css/b/fonts',
+                    flatten: true
+                },
+                {
+                    from: path.join(__dirname, "node_modules/bootstrap-select/dist/css/*.*"),
+                    to: 'css',
+                    flatten: true
+                },
+                {
+                    from: path.join(__dirname, "node_modules/eonasdan-bootstrap-datetimepicker/build/css/*.*"),
+                    to: 'css',
+                    flatten: true
+                },
+            ]),
+            new HtmlWebpackIncludeAssetsPlugin(
+            {
+                assets: 
+                [
+                    'css/fa/css/font-awesome.min.css',
+                    'css/b/css/bootstrap.min.css',
+                    'css/b/css/bootstrap-theme.min.css',
+                    'css/bootstrap-select.min.css',
+                    'css/bootstrap-datetimepicker.min.css'
+                ],
+                append: false,
+                hash: prod
+            }),
             new VirtualModulePlugin(
             {
                 moduleName: 'inline-preboot',
