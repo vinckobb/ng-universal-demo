@@ -51,5 +51,18 @@ declare module "config/global"
     export = _tmp;
 }
 
+declare module "config/version"
+{
+    var _tmp:
+    {
+        /**
+         * Version of current running application
+         */
+        version: string;
+    };
+
+    export = _tmp;
+}
+
 declare var preboot;
 declare var isProduction: boolean;
