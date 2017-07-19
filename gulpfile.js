@@ -25,48 +25,25 @@ gulp.task("create-aot-app", function()
 
 gulp.task("copy-config", function()
 {
-    return gulp.src("config/**/*.json")
+    return gulp.src("config/i18n/**/*.json")
         .pipe(logCopied())
-        .pipe(gulp.dest("wwwroot/config"));
+        .pipe(gulp.dest("wwwroot/config/i18n"));
 });
 
 gulp.task("watch-config", ["copy-config"], function()
 {
-    return watch('config/**/*.json', { events: ['change', 'add'] })
+    return watch('config/i18n/**/*.json', { events: ['change', 'add'] })
         .pipe(through2.obj(function(vinyl, enc, cb)
                            {
                                if(vinyl.event == 'change' || vinyl.event == 'add')
                                {
                                    console.log("File '" + vinyl.basename + "' is being copied.");
                                }
-                           
+
                                this.push(vinyl);
                                cb();
                            }))
-        .pipe(gulp.dest('wwwroot/config'));
-});
-
-gulp.task("copy-external-content", function()
-{
-    return gulp.src("content/external/**/*.*")
-        .pipe(logCopied())
-        .pipe(gulp.dest("wwwroot/content/external"));
-});
-
-gulp.task("watch-external-content", ["copy-external-content"], function()
-{
-    return watch('content/external/**/*.*', { events: ['change', 'add'] })
-        .pipe(through2.obj(function(vinyl, enc, cb)
-                           {
-                               if(vinyl.event == 'change' || vinyl.event == 'add')
-                               {
-                                   console.log("File '" + vinyl.basename + "' is being copied.");
-                               }
-                           
-                               this.push(vinyl);
-                               cb();
-                           }))
-        .pipe(gulp.dest('wwwroot/content/external'));
+        .pipe(gulp.dest('wwwroot/config/i18n'));
 });
 
 gulp.task("compile-scss", function()
@@ -76,22 +53,21 @@ gulp.task("compile-scss", function()
         .pipe(gulp.dest('wwwroot/content'));
 });
 
-gulp.task("build", 
-          ["copy-config",
-           "copy-external-content"],
+gulp.task("build",
+          ["copy-config"],
           function(cb)
 {
     console.log("Gulp build has finished");
-    
+
     cb();
 });
 
-gulp.task("build:aot", 
+gulp.task("build:aot",
           ["build",
            "create-aot-app"],
           function(cb)
 {
     console.log("Gulp build aot has finished");
-    
+
     cb();
 });
