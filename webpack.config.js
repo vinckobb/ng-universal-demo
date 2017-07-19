@@ -245,6 +245,7 @@ module.exports = function(options)
         },
         plugins:
         [
+            //copy external dependencies
             new CopyWebpackPlugin(
             [
                 {
@@ -278,6 +279,7 @@ module.exports = function(options)
                     flatten: true
                 },
             ]),
+            //include external dependencies
             new HtmlWebpackIncludeAssetsPlugin(
             {
                 assets: 
@@ -317,6 +319,7 @@ module.exports = function(options)
             inject: 'head',
             chunksSortMode: function orderEntryLast(a, b)
             {
+                //inline-preboot always as first
                 if(a.names[0] == 'inline-preboot')
                 {
                     return -1;
@@ -327,6 +330,7 @@ module.exports = function(options)
                     return 1;
                 }
 
+                //import-dependencies always as second
                 if(a.names[0] == 'import-dependencies')
                 {
                     return -1;
