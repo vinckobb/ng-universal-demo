@@ -128,7 +128,6 @@
         "style-loader": "~0.18.2",
         "through2": "~2.0.3",
         "typescript": "~2.3.4",
-        "virtual-module-webpack-plugin": "~0.2.2",
         "webpack": "~3.3.0",
         "webpack-dev-middleware": "~1.11.0",
         "webpack-hmr-module-loader": "1.0.5",

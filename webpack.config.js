@@ -5,8 +5,8 @@ var webpack = require('webpack'),
     HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
-    VirtualModulePlugin = require('virtual-module-webpack-plugin'),
     preboot = require('preboot'),
+    fs = require('fs'),
     AotPlugin =  require('@ngtools/webpack').AotPlugin;
 
 //Preboot options
@@ -45,6 +45,8 @@ const prebootOptions =
     ]
 };
 
+fs.writeFileSync(path.join(__dirname, "preboot.generated.js"), preboot.getInlineCode(prebootOptions)); 
+
 //array of paths for server and browser tsconfigs
 const tsconfigs =
 {
@@ -73,7 +75,7 @@ function getEntries(aot, ssr, prod, hmr, dll)
         {
             style: [path.join(__dirname, "content/site.scss")],
             client: hmr ? [path.join(__dirname, "app/main.browser.hmr.ts")] : (aot ? [path.join(__dirname, "app.aot/main.browser.ts")] : [path.join(__dirname, "app/main.browser.ts")]),
-            "inline-preboot": "./inline-preboot"
+            "inline-preboot": path.join(__dirname, "preboot.generated.js")
         };
 
         if(dll)
@@ -292,11 +294,6 @@ module.exports = function(options)
                 ],
                 append: false,
                 hash: prod
-            }),
-            new VirtualModulePlugin(
-            {
-                moduleName: 'inline-preboot',
-                contents: preboot.getInlineCode(prebootOptions)
             }),
             new webpack.DefinePlugin(
             {

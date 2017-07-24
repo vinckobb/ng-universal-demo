@@ -6,6 +6,7 @@
 /app.aot/
 /testResults/
 package-lock.json
+preboot.generated.js
 *.log
 *.bak
 *~
