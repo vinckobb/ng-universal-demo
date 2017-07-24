@@ -2,8 +2,7 @@
     "name": "ng-universal-demo",
     "version": "1.0.0",
     "description": "Angular universal sample application",
-    "scripts":
-    {
+    "scripts": {
         "build": "webpack --env.dll && webpack --env.ssr",
         "build:aot": "npm run ngc -- -p tsconfig.browser.json",
         "build:min": "webpack --env.aot --env.prod && webpack --env.aot --env.ssr",
@@ -29,14 +28,12 @@
         "start": "npm run build:gulp && concurrent \"npm run app-config:w\" \"npm run server -- --webpack\"",
         "test": "karma start karma.conf.js"
     },
-    "engines":
-    {
+    "engines": {
         "node": ">=6.0.0"
     },
     "author": "Marek Bukovský<marek.bukovsky@asseco-ce.com>",
     "license": "MIT",
-    "dependencies":
-    {
+    "dependencies": {
         "@angular/animations": "^4.3.0",
         "@angular/common": "^4.3.0",
         "@angular/compiler": "^4.3.0",
@@ -54,7 +51,7 @@
         "@ng/error-handling": "~3.0.1",
         "@ng/external-translation-loader": "~3.0.1",
         "@ng/grid": "~3.1.2",
-        "@ng/http-extensions": "^3.0.3",
+        "@ng/http-extensions": "~3.0.3",
         "@ng/notifications": "~3.1.1",
         "@ng/rest": "~3.0.4",
         "@ng/server-stuff": "~3.0.3",
@@ -82,8 +79,7 @@
         "xhr2": "^0.1.4",
         "zone.js": "^0.8.13"
     },
-    "devDependencies":
-    {
+    "devDependencies": {
         "@angular/compiler-cli": "^4.3.0",
         "@angular/language-service": "^4.3.0",
         "@ng/types": "1.1.2",
@@ -100,7 +96,6 @@
         "concurrently": "~3.5.0",
         "connect": "~3.6.2",
         "connect-history-api-fallback": "~1.3.0",
-        "copy-webpack-plugin": "~4.0.1",
         "css-loader": "~0.28.4",
         "exports-loader": "~0.6.4",
         "expose-loader": "~0.7.3",
@@ -110,6 +105,7 @@
         "gulp-aot-compliant": "1.0.3",
         "gulp-sass": "~3.1.0",
         "gulp-watch": "~4.3.11",
+        "copy-webpack-plugin": "~4.0.1",
         "html-webpack-include-assets-plugin": "~0.0.6",
         "html-webpack-plugin": "~2.29.0",
         "http-proxy-middleware": "~0.17.4",
