@@ -583,6 +583,77 @@ var sampleData =
 
 module.exports = function(app)
 {
+    var originalUse = app.use;
+
+    app.use = function()
+    {
+        var regex = arguments[0];
+        var func = arguments[1];
+        var method;
+
+        if(arguments.length == 3)
+        {
+            regex = arguments[1];
+            func = arguments[2];
+            method = arguments[0];
+        }
+
+        var methodSelector = function(req, res, next)
+        {
+            if(!method)
+            {
+                return true;
+            }
+
+            if(method == req.method)
+            {
+                if(!arguments[3])
+                {
+                    func(req, res, next);
+                }
+
+                return true;
+            }
+            else
+            {
+                next();
+
+                return false;
+            }
+        };
+
+        if(regex instanceof RegExp)
+        {
+            return originalUse.call(this, function (req, res, next)
+            {
+                if(!methodSelector(req, res, next, true))
+                {
+                    return;
+                }
+
+                if(regex.test(req.originalUrl))
+                {
+                    req.matches = regex.exec(req.originalUrl);
+
+                    func(req, res, next);
+                }
+                else
+                {
+                    next();
+                }
+            });
+        }
+
+        if(method)
+        {
+            return originalUse.call(this, arguments[1], methodSelector);
+        }
+        else
+        {
+            return originalUse.apply(this, arguments);
+        }
+    };
+
     var user = null;
 
     app.use(bodyParser.urlencoded({ extended: false }));
@@ -711,4 +782,6 @@ module.exports = function(app)
 
         console.timeEnd(`GET ${req.originalUrl}`);
     });
+
+    app.use = originalUse;
 };

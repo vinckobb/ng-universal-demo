@@ -1,7 +1,6 @@
 {
     "debug": false,
     "serverLogging": false,
-    "version": "1.0.0",
     "apiBaseUrl": "api/",
     "defaultApiHeaders": 
     {
@@ -10,6 +9,7 @@
     "defaultLanguage": "en",
     "defaultItemsPerPage": 10,
     "defaultPage": 1,
+    "theme": "dark",
     "availaleLanguages": 
     [
         {

@@ -9,6 +9,7 @@ import {ConfigReleaseService} from "../../services/api/configRelease/configRelea
 import {ConfigReleaseData} from "../../services/api/configRelease/configRelease.interface";
 import {Subscription} from 'rxjs/Subscription';
 import * as global from 'config/global';
+import * as version from 'config/version';
 
 /**
  * Navigation component containing navigation menu
@@ -58,7 +59,7 @@ export class NavigationComponent implements OnInit, OnDestroy
     /**
      * Displayed gui version
      */
-    public guiVersion: string = `Universal: ${global.version}`;
+    public guiVersion: string = `Universal: ${version.version}`;
 
     //######################### constructor #########################
     constructor(private _configReleaseService: ConfigReleaseService,

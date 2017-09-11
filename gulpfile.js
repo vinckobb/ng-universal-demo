@@ -2,7 +2,8 @@ const gulp = require('gulp'),
       sass = require('gulp-sass'),
       watch = require('gulp-watch'),
       through2 = require('through2'),
-      ngAotCompliant = require('gulp-aot-compliant');
+      ngAotCompliant = require('gulp-aot-compliant'),
+      gitVersion = require('gulp-git-version');
 
 function logCopied()
 {
@@ -53,8 +54,32 @@ gulp.task("compile-scss", function()
         .pipe(gulp.dest('wwwroot/content'));
 });
 
+gulp.task("prepare-version", function(cb)
+{
+    gitVersion(
+    {
+        path: "config",
+        filename: "version.json",
+        currentVersionRegex: '"version": "(.*?)"',
+        template:
+`{
+    "version": "{{version}}"
+}`,
+        extractorOptions:
+        {
+            branchName: process.env.BRANCH_NAME,
+            buildNumber: process.env.BUILD_NUMBER,
+            tagPrefix: "v",
+            ignoreBranchPrefix: "[a-z]+/|[a-z]+-\\d+/",
+            pre: process.env.BUILD_TYPE == "release" ? false : true,
+            suffix: process.env.SNAPSHOT_SUFFIX ? process.env.SNAPSHOT_SUFFIX : "build"
+        }
+    }, cb);
+});
+
 gulp.task("build",
-          ["copy-config"],
+          ["copy-config",
+           "prepare-version"],
           function(cb)
 {
     console.log("Gulp build has finished");

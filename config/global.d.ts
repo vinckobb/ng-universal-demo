@@ -13,11 +13,6 @@ declare module "config/global"
         serverLogging: boolean;
         
         /**
-         * Version of current running application
-         */
-        version: string;
-        
-        /**
          * Base url that is used for accessing REST api
          */
         apiBaseUrl: string;
@@ -41,6 +36,11 @@ declare module "config/global"
          * Default number of page when used paging
          */
         defaultPage: number;
+
+        /**
+         * Visual theme for UI themed pages
+         */
+        theme: string;
         
         /**
          * Available languages in application

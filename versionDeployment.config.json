@@ -1,9 +1,0 @@
-[
-    {
-        "inputFilesPattern": ["global.json", "global.development.json"],
-        "searchInPath": ["config"],
-        "searchForPattern": "\"version\": \"(.*?)\",",
-        "replaceWith": "\"version\": \"${version}\",",
-        "isVersionReplaceSource": true
-    }
-]

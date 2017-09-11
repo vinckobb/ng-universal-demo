@@ -1,12 +1,12 @@
 /node_modules/
-/dist/
-/lib/
 /wwwroot/
 /app/ngfactory/
 /app.aot/
 /testResults/
 package-lock.json
 preboot.generated.js
+**/config/version.json
 *.log
 *.bak
+*.orig
 *~

@@ -2,7 +2,7 @@
     "compilerOptions":
     {
         "target": "es5",
-        "module": "es2015",
+        "module": "esnext",
         "sourceMap": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
@@ -21,7 +21,8 @@
             "moment",
             "node",
             "systemjs",
-            "jasmine"
+            "jasmine",
+            "reflect-metadata"
         ],
         "typeRoots": 
         [

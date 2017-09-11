@@ -163,6 +163,7 @@ module.exports = function(options)
                 "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
                 "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
                 "config/global": path.join(__dirname, prod ? "config/global.json" : "config/global.development.json"),
+                "config/version": path.join(__dirname, "config/version.json"),
                 "preboot": path.join(__dirname, "node_modules/preboot/__dist/preboot_browser.js"),
                 "app": path.join(__dirname, "app")
             }
@@ -240,7 +241,7 @@ module.exports = function(options)
                     use: getStyleLoaders(prod)
                 },
                 {
-                    test: /\.(ttf|eot|svg)$/,
+                    test: /\.(ttf|eot|svg|png)$/,
                     loader: "file-loader"
                 }
             ]
