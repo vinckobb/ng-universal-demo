@@ -64,7 +64,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     }
 
     //######################### public methods #########################
-    public ngOnInit()
+    public async ngOnInit()
     {
         this.dataSvc.getData().map(data =>
         {
@@ -72,6 +72,32 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
         }).subscribe(data =>
         {
             this.subs = data;
+        });
+
+        let extensions = ['edit'];
+
+        await Promise.all(extensions.map(async extension =>
+        {
+            await import(`jquery.fancytree/jquery.fancytree.${extension}`);
+        }));
+
+        $("#tree").fancytree(
+        {
+            extensions: ["edit"],
+            source: 
+            [
+                {title: "Node 1", key: "1"},
+                {title: "Folder 2", key: "2", folder: true, children: 
+                [
+                    {title: "Node 2.1", key: "3"},
+                    {title: "Node 2.2", key: "4"}
+                ]}
+            ],
+            // edit: 
+            // {
+            //     triggerStart: ["f2"]
+            // },
+            debugLevel: 0
         });
     }
 

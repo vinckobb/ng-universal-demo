@@ -161,6 +161,7 @@ module.exports = function(options)
                 "numeral-languages": path.join(__dirname, "node_modules/numeral/locales.js"),
                 "handlebars": path.join(__dirname, "node_modules/handlebars/dist/handlebars.js"),
                 "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
+                "jquery.fancytree": path.join(__dirname, "node_modules/jquery.fancytree/src"),
                 "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
                 "config/global": path.join(__dirname, prod ? "config/global.json" : "config/global.development.json"),
                 "config/version": path.join(__dirname, "config/version.json"),
@@ -281,6 +282,11 @@ module.exports = function(options)
                     to: 'css',
                     flatten: true
                 },
+                {
+                    from: path.join(__dirname, "node_modules/jquery.fancytree/src/skin-lion/*.*"),
+                    to: 'css/fancytree',
+                    flatten: true
+                }
             ]),
             //include external dependencies
             new HtmlWebpackIncludeAssetsPlugin(
@@ -291,7 +297,8 @@ module.exports = function(options)
                     'css/b/css/bootstrap.min.css',
                     'css/b/css/bootstrap-theme.min.css',
                     'css/bootstrap-select.min.css',
-                    'css/bootstrap-datetimepicker.min.css'
+                    'css/bootstrap-datetimepicker.min.css',
+                    'css/fancytree/ui.fancytree.css'
                 ],
                 append: false,
                 hash: prod

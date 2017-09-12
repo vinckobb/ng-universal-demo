@@ -22,7 +22,8 @@
             "node",
             "systemjs",
             "jasmine",
-            "reflect-metadata"
+            "reflect-metadata",
+            "jquery.fancytree"
         ],
         "typeRoots": 
         [
