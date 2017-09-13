@@ -53,7 +53,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     public show: boolean = false;
     public counter = 0;
 
-    public treeOptions =
+    public treeOptions: Fancytree.FancytreeOptions =
     {
         icon: (val, val2: Fancytree.EventData) =>
         {
