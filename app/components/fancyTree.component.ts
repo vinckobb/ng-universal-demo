@@ -1,5 +1,7 @@
-import {Component, ChangeDetectionStrategy, AfterContentInit, ElementRef, Input, AfterViewChecked, ChangeDetectorRef, PLATFORM_ID, Inject, ContentChildren, QueryList} from '@angular/core';
+import {Component, ChangeDetectionStrategy, AfterContentInit, ElementRef, Input, AfterViewChecked, ChangeDetectorRef, PLATFORM_ID, Inject, ContentChildren, QueryList, OnDestroy} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
+import {isBlank} from '@ng/common';
+import {Subscription} from 'rxjs/Subscription';
 
 import {FancyTreeNodeData} from './fancyTree.interface';
 import {FancyTreeNodeComponent} from './fancyTreeNode.component';
@@ -13,9 +15,14 @@ import {FancyTreeNodeComponent} from './fancyTreeNode.component';
     templateUrl: 'fancyTree.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FancyTreeComponent implements AfterViewChecked, AfterContentInit
+export class FancyTreeComponent implements AfterViewChecked, AfterContentInit, OnDestroy
 {
     //######################### private fields #########################
+
+    /**
+     * Subscription for changes in nodes in content
+     */
+    private _nodeQuerySubscription: Subscription;
 
     /**
      * Indication that component was already initialized
@@ -81,11 +88,14 @@ export class FancyTreeComponent implements AfterViewChecked, AfterContentInit
      */
     public ngAfterContentInit()
     {
-        this.dataQuery
-            .changes
-            .subscribe((changes: QueryList<FancyTreeNodeComponent>) => this.data = this.dataQuery.toArray());
+        if(isBlank(this.data))
+        {
+            this._nodeQuerySubscription = this.dataQuery
+                .changes
+                .subscribe((changes: QueryList<FancyTreeNodeComponent>) => this.data = this.dataQuery.toArray());
 
-        this.data = this.dataQuery.toArray();
+            this.data = this.dataQuery.toArray();
+        }
     }
 
     //######################### public methods - implementation of AfterViewChecked #########################
@@ -95,7 +105,12 @@ export class FancyTreeComponent implements AfterViewChecked, AfterContentInit
      */
     public async ngAfterViewChecked()
     {
-        if(!this._initialized && this._isBrowser)
+        if(!this._isBrowser)
+        {
+            return;
+        }
+
+        if(!this._initialized)
         {
             if(this.options.extensions)
             {
@@ -113,6 +128,20 @@ export class FancyTreeComponent implements AfterViewChecked, AfterContentInit
         }
 
         setTimeout(() => this.tree.reload(), 10);
+    }
+
+    //######################### public methods - implementation of OnDestroy #########################
+    
+    /**
+     * Called when component is destroyed
+     */
+    public ngOnDestroy()
+    {
+        if(this._nodeQuerySubscription)
+        {
+            this._nodeQuerySubscription.unsubscribe();
+            this._nodeQuerySubscription = null;
+        }
     }
 
     //######################### public methods #########################

@@ -1,5 +1,6 @@
 import {Component, ChangeDetectionStrategy, TemplateRef, Input, ContentChild, QueryList, ContentChildren, AfterContentInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
+import {isBlank} from '@ng/common';
 
 import {FancyTreeNodeData} from './fancyTree.interface';
 
@@ -49,6 +50,7 @@ export class FancyTreeNodeComponent implements FancyTreeNodeData, AfterContentIn
     /**
      * Array of nested fancy tree nodes
      */
+    @Input()
     public children?: FancyTreeNodeData[];
 
     /**
@@ -193,11 +195,14 @@ export class FancyTreeNodeComponent implements FancyTreeNodeData, AfterContentIn
      */
     public ngAfterContentInit()
     {
-        this.childrenQuery
-            .changes
-            .subscribe((changes: QueryList<FancyTreeNodeComponent>) => this.children = changes.toArray().filter(itm => itm != this));
+        if(isBlank(this.children))
+        {
+            this._childrenQuerySubscription = this.childrenQuery
+                .changes
+                .subscribe((changes: QueryList<FancyTreeNodeComponent>) => this.children = changes.toArray().filter(itm => itm != this));
 
-        this.children = this.childrenQuery.toArray().filter(itm => itm != this);
+            this.children = this.childrenQuery.toArray().filter(itm => itm != this);
+        }
     }
 
     //######################### public methods - implementation of OnDestroy #########################

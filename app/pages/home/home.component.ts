@@ -8,6 +8,7 @@ import {Authorize, AuthGuard} from '@ng/authentication';
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 import {FancyTreeComponent} from '../../components/fancytree.component';
+import {FancyTreeNodeData} from '../../components/fancyTree.interface';
 
 /**
  * Home component
@@ -60,6 +61,36 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
         },
         debugLevel: 0
     };
+
+    public treeData: FancyTreeNodeData[] =
+    [
+        {
+            content: 'uzol 1'
+        },
+        {
+            content: 'uzol 2',
+            folder: true,
+            extraClasses: 'italic',
+            key: 'zzz',
+            expanded: true,
+            children:
+            [
+                {
+                    content: 'uzol 2.1'
+                },
+                {
+                    content: 'uzol 2.2',
+                    children: 
+                    [
+                        {
+                            content: 'uzol 2.2.1',
+                            extraClasses: 'bold'
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 
     public paging = BasicPagingComponent;
 

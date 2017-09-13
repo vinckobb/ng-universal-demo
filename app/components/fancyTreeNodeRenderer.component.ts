@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, Input} from '@angular/core';
+import {Component, ChangeDetectionStrategy, Input, HostBinding} from '@angular/core';
 
 import {FancyTreeNodeData} from './fancyTree.interface';
 
@@ -9,11 +9,7 @@ import {FancyTreeNodeData} from './fancyTree.interface';
 {
     selector: 'li[fancytree-node-renderer]',
     templateUrl: 'fancyTreeNodeRenderer.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    host: 
-    {
-        '[attr.data-json]': 'dataJson'
-    }
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FancyTreeNodeRendererComponent
 {
@@ -22,6 +18,7 @@ export class FancyTreeNodeRendererComponent
     /**
      * Gets serialized data for node
      */
+    @HostBinding('attr.data-json')
     public get dataJson(): string
     {
         if(!this.node)
