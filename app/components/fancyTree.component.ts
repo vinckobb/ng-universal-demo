@@ -108,7 +108,11 @@ export class FancyTreeComponent implements AfterViewChecked, AfterContentInit
             this.selector.fancytree(this.options);
 
             this._initialized = true;
+
+            return;
         }
+
+        setTimeout(() => this.tree.reload(), 10);
     }
 
     //######################### public methods #########################

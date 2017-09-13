@@ -31,7 +31,9 @@
 
     <ng-template #strongNode let-nodeData><strong>{{nodeData?.content}}</strong></ng-template>
 
-    <fancytree [options]="treeOptions">
+    {{trigger}}
+
+    <fancytree [options]="treeOptions" #treeview>
         <fancytree-node content="test 1" [contentHtml]="strongNode" [unselectable]="true"></fancytree-node>
 
         <fancytree-node *ngIf="trigger == 'in'" content="test 2" [folder]="true" [expanded]="true" [key]="'xxx'" [extraClasses]="'italic'">

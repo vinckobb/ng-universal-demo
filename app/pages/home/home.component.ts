@@ -7,6 +7,7 @@ import {Authorize, AuthGuard} from '@ng/authentication';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
+import {FancyTreeComponent} from '../../components/fancytree.component';
 
 /**
  * Home component
@@ -67,8 +68,12 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     @ViewChild('pagingComponent')
     public dynamicPaging: NgComponentOutletEx<PagingAbstractComponent>;
 
+    @ViewChild('treeview')
+    public tree: FancyTreeComponent;
+
     //######################### constructor #########################
-    constructor(private dataSvc: DataService)
+    constructor(private dataSvc: DataService,
+                private _changeDetector: ChangeDetectorRef)
     {
         super();
     }
@@ -107,6 +112,16 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
 
         paging.pageChange.subscribe(page => console.log('PAGE:', page));
         paging.itemsPerPageChange.subscribe(itemsPerPage => console.log('ITEMS PER PAGE:', itemsPerPage));
+    }
+
+    //######################### public methods - implementation of AfterViewInit #########################
+    
+    /**
+     * Called when view was initialized
+     */
+    public ngAfterViewChecked()
+    {
+        this.tree.invalidateVisuals();
     }
 
     public inc()
