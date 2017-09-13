@@ -29,12 +29,14 @@
         </div>
     </div>
 
-    <fancytree [options]="treeOptions">
-        <fancytree-node [content]="'test 1'"></fancytree-node>
+    <ng-template #strongNode let-nodeData><strong>{{nodeData?.content}}</strong></ng-template>
 
-        <fancytree-node *ngIf="trigger == 'in'" [content]="'test 2'" [folder]="true">
+    <fancytree [options]="treeOptions">
+        <fancytree-node content="test 1" [contentHtml]="strongNode" [unselectable]="true"></fancytree-node>
+
+        <fancytree-node *ngIf="trigger == 'in'" content="test 2" [folder]="true" [expanded]="true" [key]="'xxx'" [extraClasses]="'italic'">
             <fancytree-node content='node 2.1'>
-                <fancytree-node content='node 2.1.1'></fancytree-node>
+                <fancytree-node content='node 2.1.1' [contentHtml]="strongNode"></fancytree-node>
                 <fancytree-node content='node 2.1.2'></fancytree-node>
             </fancytree-node>
         </fancytree-node>
