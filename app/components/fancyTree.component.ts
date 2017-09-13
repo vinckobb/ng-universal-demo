@@ -12,7 +12,10 @@ import {FancyTreeNodeComponent} from './fancyTreeNode.component';
 @Component(
 {
     selector: 'fancytree',
-    templateUrl: 'fancyTree.component.html',
+    template:
+   `<ul style="display: none;">
+        <li *ngFor="let node of data" [fancytree-node-renderer]="node"></li>
+    </ul>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FancyTreeComponent implements AfterViewChecked, AfterContentInit, OnDestroy
@@ -44,14 +47,6 @@ export class FancyTreeComponent implements AfterViewChecked, AfterContentInit, O
         return $(this._element.nativeElement);
     }
 
-    /**
-     * Gets instance of tree
-     */
-    private get tree(): Fancytree.Fancytree
-    {
-        return this.selector.fancytree("getTree");
-    }
-
     //######################### public properties - inputs #########################
 
     /**
@@ -74,6 +69,16 @@ export class FancyTreeComponent implements AfterViewChecked, AfterContentInit, O
     @ContentChildren(FancyTreeNodeComponent)
     public dataQuery: QueryList<FancyTreeNodeComponent>;
 
+    //######################### public properties  #########################
+
+    /**
+     * Gets instance of tree
+     */
+    public get tree(): Fancytree.Fancytree
+    {
+        return this.selector.fancytree("getTree");
+    }
+
     //######################### constructor #########################
     constructor(private _element: ElementRef,
                 private _changeDetector: ChangeDetectorRef,
@@ -86,7 +91,7 @@ export class FancyTreeComponent implements AfterViewChecked, AfterContentInit, O
     /**
      * Called when content was initialized
      */
-    public ngAfterContentInit()
+    public ngAfterContentInit(): void
     {
         if(isBlank(this.data))
         {
@@ -135,7 +140,7 @@ export class FancyTreeComponent implements AfterViewChecked, AfterContentInit, O
     /**
      * Called when component is destroyed
      */
-    public ngOnDestroy()
+    public ngOnDestroy(): void
     {
         if(this._nodeQuerySubscription)
         {

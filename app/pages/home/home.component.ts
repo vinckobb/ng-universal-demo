@@ -57,7 +57,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     {
         icon: (val, val2: Fancytree.EventData) =>
         {
-            return !val2.node.isFolder() ? 'fa fa-file' : 'fa fa-folder';
+            return !val2.node.isFolder() ? 'fa fa-file text-info' : 'fa fa-folder text-warning';
         },
         debugLevel: 0
     };

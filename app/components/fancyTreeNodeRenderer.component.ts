@@ -8,7 +8,16 @@ import {FancyTreeNodeData} from './fancyTree.interface';
 @Component(
 {
     selector: 'li[fancytree-node-renderer]',
-    templateUrl: 'fancyTreeNodeRenderer.component.html',
+    template: 
+   `<ng-template #defaultTemplate>
+        {{node?.content}}
+    </ng-template>
+
+    <ng-container *ngTemplateOutlet="(!node?.contentHtml ? defaultTemplate : node?.contentHtml); context: {$implicit: node}"></ng-container>
+
+    <ul *ngIf="!!node?.children">
+        <li *ngFor="let childNode of node?.children" [fancytree-node-renderer]="childNode"></li>
+    </ul>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FancyTreeNodeRendererComponent
