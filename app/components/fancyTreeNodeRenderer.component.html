@@ -1,0 +1,5 @@
+{{node?.content}}
+
+<ul *ngIf="!!node?.children">
+    <li *ngFor="let childNode of node?.children" [fancytree-node-renderer]="childNode"></li>
+</ul>

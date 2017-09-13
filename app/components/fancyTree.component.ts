@@ -5,7 +5,7 @@ import {FancyTreeNodeData} from './fancyTree.interface';
 import {FancyTreeNodeComponent} from './fancyTreeNode.component';
 
 /**
- * Component used for definition of fancytree node
+ * Component used for displaying of fancytree
  */
 @Component(
 {

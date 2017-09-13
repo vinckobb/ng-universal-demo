@@ -20,6 +20,7 @@ import {providers} from './app.config';
 import * as config from 'config/global';
 import {FancyTreeNodeComponent} from '../components/fancyTreeNode.component';
 import {FancyTreeComponent} from '../components/fancytree.component';
+import {FancyTreeNodeRendererComponent} from '../components/fancyTreeNodeRenderer.component';
 
 /**
  * Factory for HttpErrorInterceptorOptions
@@ -70,7 +71,7 @@ export function externalTranslationLoaderOptionsFactory()
         appRoutesModule
     ],
     providers: providers,
-    declarations: [AppComponent, NavigationComponent, FancyTreeNodeComponent, FancyTreeComponent, ...appComponents],
+    declarations: [AppComponent, NavigationComponent, FancyTreeNodeComponent, FancyTreeComponent, FancyTreeNodeRendererComponent, ...appComponents],
     exports: [AppComponent]
 })
 export class AppModule

@@ -53,11 +53,6 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
 
     public treeOptions =
     {
-        extensions: ["edit"],
-        edit:
-        {
-            triggerStart: ["f2"]
-        },
         icon: (val, val2: Fancytree.EventData) =>
         {
             return !val2.node.isFolder() ? 'fa fa-file' : 'fa fa-folder';

@@ -195,9 +195,9 @@ export class FancyTreeNodeComponent implements FancyTreeNodeData, AfterContentIn
     {
         this.childrenQuery
             .changes
-            .subscribe((changes: QueryList<FancyTreeNodeComponent>) => this.children = changes.toArray());
+            .subscribe((changes: QueryList<FancyTreeNodeComponent>) => this.children = changes.toArray().filter(itm => itm != this));
 
-        this.children = this.childrenQuery.toArray()
+        this.children = this.childrenQuery.toArray().filter(itm => itm != this);
     }
 
     //######################### public methods - implementation of OnDestroy #########################

@@ -33,7 +33,10 @@
         <fancytree-node [content]="'test 1'"></fancytree-node>
 
         <fancytree-node *ngIf="trigger == 'in'" [content]="'test 2'" [folder]="true">
-            <fancytree-node content='node 2.1'></fancytree-node>
+            <fancytree-node content='node 2.1'>
+                <fancytree-node content='node 2.1.1'></fancytree-node>
+                <fancytree-node content='node 2.1.2'></fancytree-node>
+            </fancytree-node>
         </fancytree-node>
     </fancytree>
 </div>
