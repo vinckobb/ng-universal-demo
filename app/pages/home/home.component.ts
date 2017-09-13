@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef} from '@angular/core';
 import {trigger, animate, style, query, transition, group, state, keyframes, animateChild, animation, useAnimation} from '@angular/animations';
 import {ComponentRoute, NgComponentOutletEx} from "@ng/common";
 import {BasicPagingComponent, PagingAbstractComponent} from '@ng/grid';
@@ -16,7 +16,7 @@ import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
     selector: 'home-view',
     templateUrl: 'home.component.html',
     providers: [DataService],
-    animations: 
+    animations:
     [
         slideInOutTriggerFactory({inParams: {heightDuration: '150ms', opacityDuration: '350ms'}, outParams: {heightDuration: '150ms 150ms', opacityDuration: '250ms'}}),
         flyInOutTrigger,
@@ -50,6 +50,21 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     public pagingVisible: boolean = false;
     public show: boolean = false;
     public counter = 0;
+
+    public treeOptions =
+    {
+        extensions: ["edit"],
+        edit:
+        {
+            triggerStart: ["f2"]
+        },
+        icon: (val, val2: Fancytree.EventData) =>
+        {
+            return !val2.node.isFolder() ? 'fa fa-file' : 'fa fa-folder';
+        },
+        debugLevel: 0
+    };
+
     public paging = BasicPagingComponent;
 
     public trigger = "in";
@@ -64,7 +79,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     }
 
     //######################### public methods #########################
-    public async ngOnInit()
+    public ngOnInit()
     {
         this.dataSvc.getData().map(data =>
         {
@@ -73,36 +88,10 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
         {
             this.subs = data;
         });
-
-        let extensions = ['edit'];
-
-        await Promise.all(extensions.map(async extension =>
-        {
-            await import(`jquery.fancytree/jquery.fancytree.${extension}`);
-        }));
-
-        $("#tree").fancytree(
-        {
-            extensions: ["edit"],
-            source: 
-            [
-                {title: "Node 1", key: "1"},
-                {title: "Folder 2", key: "2", folder: true, children: 
-                [
-                    {title: "Node 2.1", key: "3"},
-                    {title: "Node 2.2", key: "4"}
-                ]}
-            ],
-            // edit: 
-            // {
-            //     triggerStart: ["f2"]
-            // },
-            debugLevel: 0
-        });
     }
 
     //######################### public methods - implementation of AfterViewInit #########################
-    
+
     /**
      * Called when view was initialized
      */

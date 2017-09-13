@@ -18,6 +18,8 @@ import {APP_TRANSFER_ID} from '../misc/constants';
 import {GlobalizationService as GlobalizationServiceImpl} from '../services/globalization/globalization.service';
 import {providers} from './app.config';
 import * as config from 'config/global';
+import {FancyTreeNodeComponent} from '../components/fancyTreeNode.component';
+import {FancyTreeComponent} from '../components/fancytree.component';
 
 /**
  * Factory for HttpErrorInterceptorOptions
@@ -68,7 +70,7 @@ export function externalTranslationLoaderOptionsFactory()
         appRoutesModule
     ],
     providers: providers,
-    declarations: [AppComponent, NavigationComponent, ...appComponents],
+    declarations: [AppComponent, NavigationComponent, FancyTreeNodeComponent, FancyTreeComponent, ...appComponents],
     exports: [AppComponent]
 })
 export class AppModule

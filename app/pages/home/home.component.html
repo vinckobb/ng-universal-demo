@@ -29,5 +29,11 @@
         </div>
     </div>
 
-    <div id="tree"></div>
+    <fancytree [options]="treeOptions">
+        <fancytree-node [content]="'test 1'"></fancytree-node>
+
+        <fancytree-node *ngIf="trigger == 'in'" [content]="'test 2'" [folder]="true">
+            <fancytree-node content='node 2.1'></fancytree-node>
+        </fancytree-node>
+    </fancytree>
 </div>
