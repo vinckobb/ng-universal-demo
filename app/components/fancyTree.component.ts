@@ -132,7 +132,7 @@ export class FancyTreeComponent implements AfterViewChecked, AfterContentInit, O
             return;
         }
 
-        setTimeout(() => this.tree.reload(), 10);
+        // setTimeout(() => this.tree.reload(), 10);
     }
 
     //######################### public methods - implementation of OnDestroy #########################
