@@ -8,6 +8,7 @@ import {CommonModule as NgCommonModule} from '@ng/common';
 import {NotificationsModule} from '@ng/notifications';
 import {InternalServerErrorModule, ServerValidationsModule} from '@ng/error-handling';
 import {AuthorizationModule} from '@ng/authentication';
+import {FancyTreeModule} from '@ng/treeview';
 import {TranslateModule} from '@ngx-translate/core';
 
 // import {NavigationComponent} from './components/navigation/navigation.component';
@@ -28,6 +29,7 @@ import {TranslateModule} from '@ngx-translate/core';
         NotificationsModule,
         GridModule,
         AuthorizationModule,
+        FancyTreeModule,
         InternalServerErrorModule,
         ServerValidationsModule,
         BootstrapModule

@@ -54,6 +54,7 @@
         "@ng/notifications": "3.1.1",
         "@ng/rest": "3.0.5",
         "@ng/server-stuff": "3.0.3",
+        "@ng/treeview": "3.0.0",
         "@ngx-translate/core": "6.0.1",
         "web-animations-js": "2.3.1",
         "core-js": "2.5.1",

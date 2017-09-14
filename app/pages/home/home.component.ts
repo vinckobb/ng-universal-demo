@@ -4,11 +4,10 @@ import {ComponentRoute, NgComponentOutletEx} from "@ng/common";
 import {BasicPagingComponent, PagingAbstractComponent} from '@ng/grid';
 import {flyInOutTrigger, slideInOutTriggerFactory} from '@ng/animations';
 import {Authorize, AuthGuard} from '@ng/authentication';
+import {FancyTreeNodeData, FancyTreeComponent} from '@ng/treeview';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
-import {FancyTreeComponent} from '../../components/fancytree.component';
-import {FancyTreeNodeData} from '../../components/fancyTree.interface';
 
 /**
  * Home component
