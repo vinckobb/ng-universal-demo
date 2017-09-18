@@ -1,6 +1,5 @@
 import './dependencies';
 import './dependencies.browser';
-import 'preboot';
 import 'zone.js/dist/zone';
 import './hacks';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
@@ -19,9 +18,4 @@ Utils.common.runWhenModuleStable(platform.bootstrapModule(BrowserAppModule), (mo
     bootstrap && bootstrap();
 
     hmrFinishedNotification();
-
-    setTimeout(() =>
-    {
-        preboot.complete();
-    }, 100);
 }, config.debug);

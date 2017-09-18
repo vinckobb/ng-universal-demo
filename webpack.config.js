@@ -5,47 +5,7 @@ var webpack = require('webpack'),
     HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
-    preboot = require('preboot'),
-    fs = require('fs'),
     AotPlugin =  require('@ngtools/webpack').AotPlugin;
-
-//Preboot options
-const prebootOptions =
-{
-    appRoot: "app",
-    buffer: false,
-    eventSelectors:
-    [
-        {
-            selector: "input,textarea",
-            events: ["keypress","keyup","keydown","input","change"]
-        },
-        {
-            selector: "select,option",
-            events: ["change"]
-        },
-        {
-            selector: "input",
-            events: ["keyup"],
-            preventDefault: true,
-            keyCodes: [13],
-            freeze: true
-        },
-        {
-            selector: "input,textarea",
-            events: ["focusin","focusout","mousedown","mouseup"],
-            noReplay: true
-        },
-        {
-            selector: "input[type=\"submit\"],button",
-            events: ["click"],
-            preventDefault: true,
-            freeze: true
-        }
-    ]
-};
-
-fs.writeFileSync(path.join(__dirname, "preboot.generated.js"), preboot.getInlineCode(prebootOptions)); 
 
 //array of paths for server and browser tsconfigs
 const tsconfigs =
@@ -74,8 +34,7 @@ function getEntries(aot, ssr, prod, hmr, dll)
         var entries =
         {
             style: [path.join(__dirname, "content/site.scss")],
-            client: hmr ? [path.join(__dirname, "app/main.browser.hmr.ts")] : (aot ? [path.join(__dirname, "app.aot/main.browser.ts")] : [path.join(__dirname, "app/main.browser.ts")]),
-            "inline-preboot": path.join(__dirname, "preboot.generated.js")
+            client: hmr ? [path.join(__dirname, "app/main.browser.hmr.ts")] : (aot ? [path.join(__dirname, "app.aot/main.browser.ts")] : [path.join(__dirname, "app/main.browser.ts")])
         };
 
         if(dll)
@@ -165,7 +124,6 @@ module.exports = function(options)
                 "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
                 "config/global": path.join(__dirname, prod ? "config/global.json" : "config/global.development.json"),
                 "config/version": path.join(__dirname, "config/version.json"),
-                "preboot": path.join(__dirname, "node_modules/preboot/__dist/preboot_browser.js"),
                 "app": path.join(__dirname, "app")
             }
         },
@@ -173,21 +131,6 @@ module.exports = function(options)
         {
             rules:
             [
-                //preboot
-                {
-                    test: path.join(__dirname, "node_modules/preboot/__dist/preboot_browser.js"),
-                    use:
-                    [
-                        {
-                            loader: 'expose-loader',
-                            options: 'preboot'
-                        },
-                        {
-                            loader: 'exports-loader',
-                            options: 'preboot'
-                        }
-                    ]
-                },
                 //server globals
                 {
                     test: require.resolve("form-data"),
@@ -324,18 +267,7 @@ module.exports = function(options)
             inject: 'head',
             chunksSortMode: function orderEntryLast(a, b)
             {
-                //inline-preboot always as first
-                if(a.names[0] == 'inline-preboot')
-                {
-                    return -1;
-                }
-
-                if(b.names[0] == 'inline-preboot')
-                {
-                    return 1;
-                }
-
-                //import-dependencies always as second
+                //import-dependencies always as first
                 if(a.names[0] == 'import-dependencies')
                 {
                     return -1;
@@ -348,12 +280,6 @@ module.exports = function(options)
 
                 return 0;
             }
-        }));
-
-        config.plugins.push(new ScriptExtHtmlWebpackPlugin(
-        {
-            defaultAttribute: 'defer',
-            inline: 'inline-preboot'
         }));
     }
 

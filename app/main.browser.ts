@@ -1,6 +1,5 @@
 import './dependencies';
 import './dependencies.browser';
-import 'preboot';
 import 'zone.js/dist/zone';
 import './hacks';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
@@ -18,10 +17,5 @@ Utils.common.runWhenModuleStable(platformBrowserDynamic().bootstrapModule(Browse
 {
     const bootstrap = moduleRef.instance['ngOnBootstrap'];
     bootstrap && bootstrap();
-
-    setTimeout(() =>
-    {
-        preboot.complete();
-    }, 100);
 }, config.debug);
 

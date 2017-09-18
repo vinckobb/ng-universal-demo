@@ -64,5 +64,4 @@ declare module "config/version"
     export = _tmp;
 }
 
-declare var preboot;
 declare var isProduction: boolean;

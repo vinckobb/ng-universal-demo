@@ -72,7 +72,6 @@ module.exports = function(config)
                     "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
                     "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
                     "config/global": path.join(__dirname, "config/global.development.json"),
-                    "preboot": path.join(__dirname, "node_modules/preboot/__dist/preboot_browser.js"),
                     "app": path.join(__dirname, "app")
                 }
             },
