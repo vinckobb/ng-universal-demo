@@ -32,6 +32,7 @@ import "@ng/grid";
 import "@ng/http-extensions";
 import "@ng/notifications";
 import "@ng/rest";
+import "@ng/treeview";
 import "@ngx-translate/core";
 
 import 'zone.js/dist/zone';
