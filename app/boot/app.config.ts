@@ -14,7 +14,8 @@ export function appInitializerFactory(authService: AuthenticationService<any>)
         {
             authService
                 .getUserIdentity()
-                .then(() => success());
+                .then(() => success())
+                .catch(reason => alert(`Authentication failed: ${reason}`));
         });
     };
 }

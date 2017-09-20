@@ -229,6 +229,11 @@ module.exports = function(options)
                     from: path.join(__dirname, "node_modules/jquery.fancytree/src/skin-lion/*.*"),
                     to: 'css/fancytree',
                     flatten: true
+                },
+                {
+                    from: path.join(__dirname, "node_modules/bootstrap-switch/dist/css/bootstrap3/*.min.css"),
+                    to: 'css',
+                    flatten: true
                 }
             ]),
             //include external dependencies
@@ -241,7 +246,8 @@ module.exports = function(options)
                     'css/b/css/bootstrap-theme.min.css',
                     'css/bootstrap-select.min.css',
                     'css/bootstrap-datetimepicker.min.css',
-                    'css/fancytree/ui.fancytree.css'
+                    'css/fancytree/ui.fancytree.css',
+                    'css/bootstrap-switch.min.css'
                 ],
                 append: false,
                 hash: prod
