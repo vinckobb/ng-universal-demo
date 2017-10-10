@@ -1,6 +1,7 @@
 import {NgModule, ClassProvider} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
 import {HttpModule} from '@angular/http';
 import {ExternalTranslationLoader, ExternalTranslationLoaderOptions, ExternalTranslationLoaderModule} from '@ng/external-translation-loader';
 import {NotificationsModule} from '@ng/notifications';
@@ -51,6 +52,7 @@ export function externalTranslationLoaderOptionsFactory()
         {
             appId: APP_TRANSFER_ID
         }),
+        HttpClientModule,
         HttpModule,
         TranslateModule.forRoot(
         {
