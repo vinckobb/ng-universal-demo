@@ -15,7 +15,7 @@ import * as config from 'config/global';
  */
 export function reportingExceptionHandlerOptionsFactory()
 {
-	return new ReportingExceptionHandlerOptions(config.debug, true, false, false, false, false);
+    return new ReportingExceptionHandlerOptions(config.debug, true, false, false, false, false);
 }
 
 /**
@@ -23,31 +23,31 @@ export function reportingExceptionHandlerOptionsFactory()
  */
 @NgModule(
 {
-	bootstrap: [AppComponent],
-	imports:
-	[
-		AppModule,
-		BrowserAnimationsModule,
-		BrowserTransferStateRestModule.forRoot(),
-		InterceptableHttpModule.forRoot(),
-		ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory),
-		BrowserPrebootModule.replayEvents()
-	]
+    bootstrap: [AppComponent],
+    imports:
+    [
+        AppModule,
+        BrowserAnimationsModule,
+        BrowserTransferStateRestModule.forRoot(),
+        InterceptableHttpModule.forRoot(),
+        ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory),
+        BrowserPrebootModule.replayEvents()
+    ]
 })
 export class BrowserAppModule
 {
-	//######################### public properties #########################
+    //######################### public properties #########################
     
     /**
      * Method called when application is stable 
      */
-	public ngOnBootstrap = () =>
-	{
-		this._transferState.deactivate();
-	}
+    public ngOnBootstrap = () =>
+    {
+        this._transferState.deactivate();
+    }
 
-	//######################### constructor #########################
-	constructor(private _transferState: TransferStateService)
-	{
-	}
+    //######################### constructor #########################
+    constructor(private _transferState: TransferStateService)
+    {
+    }
 }

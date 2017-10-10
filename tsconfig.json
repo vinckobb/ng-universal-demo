@@ -20,7 +20,6 @@
         [
             "moment",
             "node",
-            "systemjs",
             "jasmine",
             "reflect-metadata",
             "jquery.fancytree",

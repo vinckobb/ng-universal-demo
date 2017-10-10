@@ -3,8 +3,8 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {ComponentRoute} from '@ng/common';
 import {flyInOutTrigger} from '@ng/animations';
 import {AuthenticationService, Authorize, AuthGuard} from '@ng/authentication';
-import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 import {Observable} from 'rxjs/Observable';
+import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 
 /**
  * Page containing login form

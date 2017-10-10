@@ -1,6 +1,5 @@
 /node_modules/
 /wwwroot/
-/app/ngfactory/
 /app.aot/
 /testResults/
 package-lock.json

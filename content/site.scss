@@ -4,11 +4,26 @@
 @import "scss/bootstrap-override.scss";
 
 // ---------------------- COMMON ----------------------
+html
+{
+    height: 100%;
+}
+
 body
 {
     margin: 0;
     padding: 0;
     font-family: "Open Sans";
+    font-size: 13px;
+    min-width: 1024px;
+    min-height: 100%;
+}
+
+app
+{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
 // ---------------------- APP STARTING ----------------------
@@ -63,6 +78,12 @@ body
 }
 
 // ---------------------- CONTAINER ----------------------
+.container.main
+{
+    padding: 0;
+    flex: 1;
+}
+
 @media screen and (min-width: 1140px)
 {
     .container.main
@@ -76,5 +97,30 @@ body
     .container.main
     {
         width: 90%;
+    }
+}
+
+// ---------------------- LOGIN VIEW ----------------------
+login-view.app-page
+{
+    width: 33%;
+    height: calc(100vh - 72px);
+    margin-left: auto;
+    margin-right: auto;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 0;
+
+    &.ng-animating
+    {
+        width: 33%;
+        margin-left: 33%;
+    }
+
+    &>div
+    {
+        flex: 1 0 auto;
     }
 }

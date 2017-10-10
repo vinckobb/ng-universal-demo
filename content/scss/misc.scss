@@ -37,6 +37,21 @@
     margin-bottom: $xsWidth;
 }
 
+.margin-xs-right
+{
+    margin-right: $xsWidth;
+}
+
+.margin-xs-bottom
+{
+    margin-bottom: $xsWidth;
+}
+
+.margin-xs-left
+{
+    margin-left: $xsWidth;
+}
+
 .margin-sm-top
 {
     margin-top: $smWidth;
@@ -45,6 +60,11 @@
 .margin-sm-left
 {
     margin-left: $smWidth;
+}
+
+.margin-sm-bottom
+{
+    margin-bottom: $smWidth;
 }
 
 .margin-sm-vertical
@@ -71,6 +91,11 @@
 .margin-md-left
 {
     margin-left: $mdWidth;
+}
+
+.margin-md-bottom
+{
+    margin-bottom: $mdWidth;
 }
 
 .margin-lg-top
@@ -227,6 +252,8 @@
 
 .fly-in-out.ng-animating
 {
+    position: absolute;
+    display: block;
     width: 90%;
 }
 
