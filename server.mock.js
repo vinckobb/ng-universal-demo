@@ -662,7 +662,7 @@ module.exports = function(app)
     {
         console.time(`GET ${req.originalUrl}`);
 
-        res.setHeader('Content-Type', 'text/html');
+        res.statusCode = 204;
 
         if(req.body.j_username != 'admin' || req.body.j_password != 'admin')
         {

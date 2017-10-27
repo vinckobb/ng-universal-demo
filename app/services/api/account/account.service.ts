@@ -1,8 +1,8 @@
 import {Injectable, Optional, Inject, Injector} from '@angular/core';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
-import {Http, Headers, RequestOptions, Response} from '@angular/http';
-import {RESTClient, GET, BaseUrl, DefaultHeaders, ResponseTransform, TransferStateService, POST} from '@ng/rest';
+import {HttpClient, HttpRequest, HttpParams, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {RESTClient, GET, BaseUrl, DefaultHeaders, ResponseTransform, TransferStateService, POST, FullHttpResponse} from '@ng/rest';
 import {SERVER_BASE_URL, SERVER_COOKIE_HEADER, SERVER_AUTH_HEADER} from "@ng/common";
 import {AuthenticationServiceOptions, UserIdentity, AccessToken} from '@ng/authentication';
 import {Observable} from 'rxjs/Observable';
@@ -18,7 +18,7 @@ import * as global from 'config/global';
 export class AccountService extends RESTClient implements AuthenticationServiceOptions<any>
 {
     //######################### constructor #########################
-    public constructor(http: Http,
+    public constructor(http: HttpClient,
                        private _injector: Injector,
                        private _location: Location,
                        @Optional() transferState?: TransferStateService,
@@ -38,23 +38,14 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
      */
     public login(accessToken: AccessToken): Observable<any>
     {
-        var headers = new Headers();
-        headers.append('Accept', 'application/json, text/plain, */*');
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
-
-        var options = new RequestOptions(
-        {
-            headers: headers
-        });
-
         return this.http.post(`${global.apiBaseUrl}authentication`,
-                              $.param(
+                              new HttpParams()
+                                  .append("j_username", accessToken.userName)
+                                  .append("j_password", accessToken.password)
+                                  .append("remember-me", accessToken.rememberMe.toString()),
                               {
-                                  "j_username": accessToken.userName,
-                                  "j_password": accessToken.password,
-                                  "remember-me": accessToken.rememberMe
-                              }),
-                              options);
+                                  observe: 'response'
+                              });
     }
 
     /**
@@ -81,6 +72,7 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
      * @returns Observable
      */
     @ResponseTransform()
+    @FullHttpResponse()
     @GET("myaccount")
     public getUserIdentity(): Observable<UserIdentity<any>>
     {
@@ -110,9 +102,9 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
      * @param  {Observable<IFinancialRecordResponse>} response Response to be transformed
      * @returns Observable Transformed response
      */
-    private getUserIdentityResponseTransform(response: Observable<Response>): Observable<any>
+    private getUserIdentityResponseTransform(response: Observable<HttpResponse<any>>): Observable<any>
     {
-        return response.catch((error: Response) =>
+        return response.catch((error: HttpErrorResponse) =>
         {
             if(error.status == 401)
             {
@@ -135,9 +127,9 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
         })
         .map(data =>
         {
-            if(data instanceof Response)
+            if(data instanceof HttpResponse)
             {
-                var tmp: any = data.json();
+                var tmp: any = data.body;
 
                 return {
                     isAuthenticated: true,
