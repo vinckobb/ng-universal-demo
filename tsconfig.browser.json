@@ -7,7 +7,6 @@
     ],
     "angularCompilerOptions":
     {
-        "excludes": [],
         "genDir": "./app.aot/ngfactory",
         "entryModule": "./app.aot/boot/browser-app.module#BrowserAppModule",
         "skipMetadataEmit" : true

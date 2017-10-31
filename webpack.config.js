@@ -5,7 +5,7 @@ var webpack = require('webpack'),
     HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
-    AotPlugin =  require('@ngtools/webpack').AotPlugin;
+    AngularCompilerPlugin =  require('@ngtools/webpack').AngularCompilerPlugin;
 
 //array of paths for server and browser tsconfigs
 const tsconfigs =
@@ -26,7 +26,7 @@ function getEntries(aot, ssr, prod, hmr, dll)
     if(ssr)
     {
         return {
-            server: aot ? path.join(__dirname, "app.aot/main.server.aot.ts") : path.join(__dirname, "app/main.server.ts")
+            server: aot ? path.join(__dirname, "app.aot/main.server.ts") : path.join(__dirname, "app/main.server.ts")
         };
     }
     else
@@ -54,10 +54,9 @@ function getEntries(aot, ssr, prod, hmr, dll)
  */
 function getAotPlugin(platform)
 {
-    return new AotPlugin(
+    return new AngularCompilerPlugin(
     {
-        tsConfigPath: tsconfigs[platform],
-        skipCodeGeneration: false
+        tsConfigPath: tsconfigs[platform]
     });
 }
 
