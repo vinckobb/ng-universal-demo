@@ -1,4 +1,4 @@
-import {Provider, ValueProvider} from "@angular/core";
+import {StaticProvider, ValueProvider} from "@angular/core";
 import {SERVER_BASE_URL, SERVER_COOKIE_HEADER} from '@ng/common';
 
 /**
@@ -21,7 +21,7 @@ export interface AdditionalData
  * Gets additional providers
  * @param additionalData Additional data
  */
-export function getAdditionalProviders(additionalData: AdditionalData): Provider[]
+export function getAdditionalProviders(additionalData: AdditionalData): StaticProvider[]
 {
     return [
         <ValueProvider>

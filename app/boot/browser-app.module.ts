@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserTransferStateRestModule, TransferStateService} from '@ng/rest';
-import {InterceptableHttpModule} from '@ng/http-extensions';
 import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';
 import {BrowserPrebootModule} from 'preboot/browser';
 
@@ -28,7 +27,6 @@ export function reportingExceptionHandlerOptionsFactory()
         AppModule,
         BrowserAnimationsModule,
         BrowserTransferStateRestModule.forRoot(),
-        InterceptableHttpModule.forRoot(),
         ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory),
         BrowserPrebootModule.replayEvents()
     ]
