@@ -1,5 +1,9 @@
 {
     "extends": "./tsconfig.json",
+    "compilerOptions":
+    {
+        "outDir": "www"
+    },
     "exclude":
     [
         "node_modules",
@@ -7,8 +11,8 @@
     ],
     "angularCompilerOptions":
     {
-        "genDir": "./app.aot/ngfactory",
+        "excludes": [],
         "entryModule": "./app.aot/boot/browser-app.module#BrowserAppModule",
-        "skipMetadataEmit" : true
+        "skipMetadataEmit": true
     }
 }

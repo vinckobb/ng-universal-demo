@@ -5,6 +5,7 @@ var webpack = require('webpack'),
     HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
+    DashboardPlugin = require('webpack-dashboard/plugin'),
     AngularCompilerPlugin =  require('@ngtools/webpack').AngularCompilerPlugin;
 
 //array of paths for server and browser tsconfigs
@@ -191,6 +192,7 @@ module.exports = function(options)
         },
         plugins:
         [
+            new DashboardPlugin(),
             //copy external dependencies
             new CopyWebpackPlugin(
             [

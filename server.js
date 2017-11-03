@@ -84,12 +84,12 @@ app.use(function (req, res, next)
         {
             res.setHeader('Content-Type', 'text/html');
 
-            if(succ.statusCode)
+            if(succ && succ.statusCode)
             {
                 res.statusCode = succ.statusCode;
             }
 
-            res.end(err || succ.html);
+            res.end(err.toString() || succ.html);
         });
 
         return;
