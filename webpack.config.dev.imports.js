@@ -1,6 +1,7 @@
 import './app/dependencies';
 import './app/dependencies.browser';
 
+import 'rxjs/operators';
 import 'moment';
 import 'handlebars';
 import 'html2canvas';

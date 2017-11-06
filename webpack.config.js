@@ -6,6 +6,8 @@ var webpack = require('webpack'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
     DashboardPlugin = require('webpack-dashboard/plugin'),
+    rxPaths = require('rxjs/_esm5/path-mapping'),
+    extend = require('extend'),
     AngularCompilerPlugin =  require('@ngtools/webpack').AngularCompilerPlugin;
 
 //array of paths for server and browser tsconfigs
@@ -115,7 +117,7 @@ module.exports = function(options)
         resolve:
         {
             extensions: ['.ts', '.js'],
-            alias:
+            alias: extend(rxPaths(), 
             {
                 "numeral-languages": path.join(__dirname, "node_modules/numeral/locales.js"),
                 "handlebars": path.join(__dirname, "node_modules/handlebars/dist/handlebars.js"),
@@ -125,7 +127,7 @@ module.exports = function(options)
                 "config/global": path.join(__dirname, prod ? "config/global.json" : "config/global.development.json"),
                 "config/version": path.join(__dirname, "config/version.json"),
                 "app": path.join(__dirname, "app")
-            }
+            })
         },
         module:
         {
@@ -192,7 +194,8 @@ module.exports = function(options)
         },
         plugins:
         [
-            new DashboardPlugin(),
+            //new DashboardPlugin(),
+            new webpack.optimize.ModuleConcatenationPlugin(),
             //copy external dependencies
             new CopyWebpackPlugin(
             [

@@ -3,7 +3,8 @@ var connect = require('connect'),
     history = require('connect-history-api-fallback'),
     proxy = require('http-proxy-middleware'),
     argv = require('yargs').argv,
-    path = require('path')
+    path = require('path'),
+    DashboardPlugin = require('webpack-dashboard/plugin'),
     url = require('url');
 
 var app = connect();
@@ -48,6 +49,7 @@ if(!!argv.webpack)
         hmr = require("webpack-hot-middleware");
 
     var compiler = webpack(webpackConfig);
+    //compiler.apply(new DashboardPlugin());
 
     //enables webpack dev middleware
     app.use(webpackDev(compiler,

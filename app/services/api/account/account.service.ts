@@ -7,6 +7,7 @@ import {SERVER_BASE_URL, SERVER_COOKIE_HEADER, SERVER_AUTH_HEADER} from "@ng/com
 import {AuthenticationServiceOptions, UserIdentity, AccessToken} from '@ng/authentication';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
+import {catchError, map} from 'rxjs/operators';
 import * as global from 'config/global';
 
 /**
@@ -104,7 +105,7 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
      */
     private getUserIdentityResponseTransform(response: Observable<HttpResponse<any>>): Observable<any>
     {
-        return response.catch((error: HttpErrorResponse) =>
+        return response.pipe(catchError((error: HttpErrorResponse) =>
         {
             if(error.status == 401)
             {
@@ -124,8 +125,8 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
             }
 
             return Observable.throw(error);
-        })
-        .map(data =>
+        }),
+        map(data =>
         {
             if(data instanceof HttpResponse)
             {
@@ -143,6 +144,6 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
             {
                 return data;
             }
-        });
+        }));
     }
 }

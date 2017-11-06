@@ -7,6 +7,7 @@ import {CookieService} from "@ng/common";
 import {TranslateService} from '@ngx-translate/core';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
+import {empty} from 'rxjs/observable/empty';
 
 import {NavigationComponent} from './navigation.component';
 import {FakeTestingModule, FakeAuthorizeDirective, FakeTranslatePipe} from "../../misc/tests";
@@ -60,7 +61,7 @@ describe('NavigationComponent - fullName property (OnPush)', () =>
                     <ValueProvider>
                     {
                         provide: ConfigReleaseService,
-                        useValue: {get: () => Observable.empty()}
+                        useValue: {get: () => empty()}
                     }
                 ]
             }

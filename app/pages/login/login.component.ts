@@ -4,6 +4,8 @@ import {ComponentRoute} from '@ng/common';
 import {flyInOutTrigger} from '@ng/animations';
 import {AuthenticationService, Authorize, AuthGuard} from '@ng/authentication';
 import {Observable} from 'rxjs/Observable';
+import {empty} from 'rxjs/observable/empty';
+import {catchError} from 'rxjs/operators';
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 
 /**
@@ -63,12 +65,12 @@ export class LoginComponent extends BaseAnimatedComponent
                 password: this.password,
                 rememberMe: this.rememberMe
             })
-            .catch(() =>
+            .pipe(catchError(() =>
             {
                 this.authenticationError = true;
                 
-                return Observable.empty();
-            })
+                return empty();
+            }))
             .subscribe(() =>
             {
                 this.authenticationError = false;
