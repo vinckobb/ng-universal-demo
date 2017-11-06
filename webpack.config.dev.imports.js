@@ -14,6 +14,7 @@ import "@angular/core/testing";
 import "@angular/compiler";
 import "@angular/common";
 import "@angular/common/testing";
+import "@angular/common/http";
 import "@angular/platform-browser";
 import "@angular/platform-browser-dynamic";
 import "@angular/platform-browser-dynamic/testing";

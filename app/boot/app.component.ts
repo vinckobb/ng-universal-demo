@@ -1,6 +1,6 @@
 import {Component, OnDestroy} from '@angular/core';
 import {Router, NavigationStart, NavigationEnd, NavigationError, NavigationCancel} from '@angular/router';
-import {Utils, GlobalizationService, ProgressIndicatorService, CookieService} from '@ng/common';
+import {GlobalizationService, ProgressIndicatorService, CookieService} from '@ng/common';
 import {AuthenticationService} from '@ng/authentication';
 import {TranslateService} from "@ngx-translate/core";
 import {LANG_COOKIE} from '../misc/constants';

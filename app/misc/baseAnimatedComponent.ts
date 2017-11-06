@@ -1,5 +1,4 @@
-import {HostBinding, HostListener} from '@angular/core';
-import {AnimationEvent} from '@angular/animations';
+import {HostBinding} from '@angular/core';
 
 /**
  * Base class that enables fly in out animation

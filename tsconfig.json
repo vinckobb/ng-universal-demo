@@ -8,6 +8,7 @@
         "experimentalDecorators": true,
         "removeComments": true,
         "noImplicitAny": false,
+        "noUnusedLocals": false,
         "strictNullChecks": false,
         "moduleResolution": "node",
         "outDir": "wwwroot/app",

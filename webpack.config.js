@@ -8,6 +8,7 @@ var webpack = require('webpack'),
     DashboardPlugin = require('webpack-dashboard/plugin'),
     rxPaths = require('rxjs/_esm5/path-mapping'),
     extend = require('extend'),
+    AliasRegexOverridePlugin = require('alias-regex-webpack-plugin'),
     AngularCompilerPlugin =  require('@ngtools/webpack').AngularCompilerPlugin;
 
 //array of paths for server and browser tsconfigs
@@ -297,6 +298,10 @@ module.exports = function(options)
     if(aot)
     {
         config.plugins.unshift(getAotPlugin(ssr ? 'server' : 'client'));
+    }
+    else
+    {
+        config.plugins.unshift(new AliasRegexOverridePlugin(/^@ng\/(.*?)$/, './node_modules/@ng/$1/distJit/index.js'));
     }
 
     if(hmr)

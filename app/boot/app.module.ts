@@ -1,10 +1,9 @@
-import {NgModule, ClassProvider} from '@angular/core';
+import {NgModule, FactoryProvider} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {CommonModule} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
-import {ExternalTranslationLoader, ExternalTranslationLoaderOptions, ExternalTranslationLoaderModule} from '@ng/external-translation-loader';
+import {HttpClientModule, HttpClient} from '@angular/common/http';
+import {ExternalTranslationLoader, ExternalTranslationLoaderOptions} from '@ng/external-translation-loader';
 import {NotificationsModule} from '@ng/notifications';
-import {CommonModule as NgCommonModule, ProgressIndicatorModule} from '@ng/common';
+import {CommonModule as NgCommonModule, ProgressIndicatorModule, SERVER_BASE_URL} from '@ng/common';
 import {AuthorizationModule} from '@ng/authentication';
 import {ServerValidationsModule, HttpErrorInterceptorModule, HttpErrorInterceptorOptions, InternalServerErrorModule} from '@ng/error-handling';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
@@ -28,16 +27,18 @@ export function httpErrorInterceptorModuleFactory()
 }
 
 /**
- * Factory method that is used for creating InterceptableHttp
+ * Factory method that is used for creating external translation loader
  */
-export function externalTranslationLoaderOptionsFactory()
+export function externalTranslationLoaderFactory(http: HttpClient, baseUrl: string)
 {
-    return new ExternalTranslationLoaderOptions("config/i18n",
-                                                ["global", 
-                                                 "navigation", 
-                                                 "pages/home",
-                                                 "pages/samplePages"],
-                                                ".json")
+    return new ExternalTranslationLoader(new ExternalTranslationLoaderOptions("config/i18n",
+                                                                              ["global", 
+                                                                               "navigation", 
+                                                                               "pages/home",
+                                                                               "pages/samplePages"],
+                                                                              ".json"),
+                                         baseUrl,
+                                         http);
 }
 
 /**
@@ -54,11 +55,15 @@ export function externalTranslationLoaderOptionsFactory()
         HttpClientModule,
         TranslateModule.forRoot(
         {
-            loader: <ClassProvider>{provide: TranslateLoader, useClass: ExternalTranslationLoader}
+            loader: <FactoryProvider>
+            {
+                provide: TranslateLoader, 
+                useFactory: externalTranslationLoaderFactory,
+                deps: [HttpClient, SERVER_BASE_URL]
+            }
         }),
         NotificationsModule.forRoot(),
         NgCommonModule.forRootWithGlobalization(GlobalizationServiceImpl),
-        ExternalTranslationLoaderModule.forRootWithOptions(externalTranslationLoaderOptionsFactory),
         AuthorizationModule.forRoot(AccountService),
         ServerValidationsModule.forRoot(),
         InternalServerErrorModule.forRoot(),

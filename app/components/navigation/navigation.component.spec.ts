@@ -2,15 +2,14 @@ import {ComponentFixture, TestBed, fakeAsync, tick} from '@angular/core/testing'
 import {RouterTestingModule} from '@angular/router/testing';
 import {ValueProvider, DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
-import {AuthenticationService, UserIdentity} from "@ng/authentication";
+import {AuthenticationService} from "@ng/authentication";
 import {CookieService} from "@ng/common";
 import {TranslateService} from '@ngx-translate/core';
-import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {empty} from 'rxjs/observable/empty';
 
 import {NavigationComponent} from './navigation.component';
-import {FakeTestingModule, FakeAuthorizeDirective, FakeTranslatePipe} from "../../misc/tests";
+import {FakeAuthorizeDirective, FakeTranslatePipe} from "../../misc/tests";
 import {ConfigReleaseService} from "../../services/api/configRelease/configRelease.service";
 
 describe('NavigationComponent - fullName property (OnPush)', () =>
