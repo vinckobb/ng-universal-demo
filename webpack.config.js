@@ -301,7 +301,7 @@ module.exports = function(options)
     }
     else
     {
-        config.plugins.unshift(new AliasRegexOverridePlugin(/^@ng\/(.*?)$/, './node_modules/@ng/$1/distJit/index.js'));
+        config.plugins.unshift(new AliasRegexOverridePlugin(/^@ng\/(.*?)$/, path.join(__dirname, 'node_modules/@ng/$1/distJit/index.js')));
     }
 
     if(hmr)

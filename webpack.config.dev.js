@@ -70,7 +70,7 @@ module.exports = function()
                 path: path.join(__dirname, distPath + '/[name]-manifest.json'),
                 name: '[name]_[hash]'
             }),
-            new AliasRegexOverridePlugin(/^@ng\/(.*?)$/, './node_modules/@ng/$1/distJit/index.js')
+            new AliasRegexOverridePlugin(/^@ng\/(.*?)$/, path.join(__dirname, 'node_modules/@ng/$1/distJit/index.js'))
         ]
     };
 
