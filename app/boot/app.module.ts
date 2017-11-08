@@ -1,4 +1,4 @@
-import {NgModule, FactoryProvider} from '@angular/core';
+import {NgModule, FactoryProvider, Injector} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
 import {ExternalTranslationLoader, ExternalTranslationLoaderOptions} from '@ng/external-translation-loader';
@@ -29,7 +29,7 @@ export function httpErrorInterceptorModuleFactory()
 /**
  * Factory method that is used for creating external translation loader
  */
-export function externalTranslationLoaderFactory(http: HttpClient, baseUrl: string)
+export function externalTranslationLoaderFactory(http: HttpClient, injector: Injector)
 {
     return new ExternalTranslationLoader(new ExternalTranslationLoaderOptions("config/i18n",
                                                                               ["global", 
@@ -37,7 +37,7 @@ export function externalTranslationLoaderFactory(http: HttpClient, baseUrl: stri
                                                                                "pages/home",
                                                                                "pages/samplePages"],
                                                                               ".json"),
-                                         baseUrl,
+                                         injector.get(SERVER_BASE_URL, null),
                                          http);
 }
 
@@ -59,7 +59,7 @@ export function externalTranslationLoaderFactory(http: HttpClient, baseUrl: stri
             {
                 provide: TranslateLoader, 
                 useFactory: externalTranslationLoaderFactory,
-                deps: [HttpClient, SERVER_BASE_URL]
+                deps: [HttpClient, Injector]
             }
         }),
         NotificationsModule.forRoot(),

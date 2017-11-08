@@ -3,7 +3,7 @@ import {ServerModule} from '@angular/platform-server';
 import {TransferStateService} from '@ng/rest';
 import {ServerTransferStateRestModule} from '@ng/server-stuff';
 import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';
-import {ServerPrebootModule} from 'preboot/server';
+//import {ServerPrebootModule} from 'preboot/server';
 
 import {AppComponent} from './app.component';
 import {AppModule} from './app.module';
@@ -28,8 +28,8 @@ export function reportingExceptionHandlerOptionsFactory()
         ServerModule,
         AppModule,
         ServerTransferStateRestModule.forRoot(),
-        ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory),
-        ServerPrebootModule.recordEvents({appRoot: 'app'})
+        ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory)
+        //ServerPrebootModule.recordEvents({appRoot: 'app'})
     ]
 })
 export class ServerAppModule 
