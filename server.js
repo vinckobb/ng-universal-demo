@@ -11,7 +11,9 @@ var app = connect();
 
 const wwwroot = "wwwroot";
 const serverPath = path.join(__dirname, wwwroot, 'dist/server.js');
+const proxyUrlFile = path.join(__dirname, 'proxyUrl.js');
 var serverRenderFunc;
+var proxyUrl = "http://127.0.0.1:8080";
 
 /**
  * Gets function used for server side rendering
@@ -26,11 +28,11 @@ function getServerRenderFunc()
     return serverRenderFunc;
 }
 
-function isServerRenderAvailable()
+function isRequireAvailable(path)
 {
     try
     {
-        require.resolve(serverPath);
+        require.resolve(path);
     }
     catch(e)
     {
@@ -39,6 +41,13 @@ function isServerRenderAvailable()
 
     return true;
 }
+
+if(isRequireAvailable(proxyUrlFile))
+{
+    proxyUrl = require(proxyUrlFile);
+}
+
+console.log(`Using proxy url '${proxyUrl}'`);
 
 //enable webpack only if run with --webpack param
 if(!!argv.webpack)
@@ -75,7 +84,7 @@ app.use(function (req, res, next)
 {
     if(req.url == '/index.html')
     {
-        if(!isServerRenderAvailable())
+        if(!isRequireAvailable(serverPath))
         {
             next();
 

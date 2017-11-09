@@ -4,6 +4,7 @@
 /testResults/
 package-lock.json
 **/config/version.json
+proxyUrl.js
 *.log
 *.bak
 *.orig

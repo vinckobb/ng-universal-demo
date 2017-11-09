@@ -1,6 +1,5 @@
 var webpack = require('webpack'),
-    path = require('path'),
-    AliasRegexOverridePlugin = require('alias-regex-webpack-plugin');
+    path = require('path');
 
 module.exports = function()
 {
@@ -69,8 +68,7 @@ module.exports = function()
             {
                 path: path.join(__dirname, distPath + '/[name]-manifest.json'),
                 name: '[name]_[hash]'
-            }),
-            new AliasRegexOverridePlugin(/^@ng\/(.*?)$/, path.join(__dirname, 'node_modules/@ng/$1/distJit/index.js'))
+            })
         ]
     };
 
