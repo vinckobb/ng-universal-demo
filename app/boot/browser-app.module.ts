@@ -1,4 +1,5 @@
 import {NgModule} from '@angular/core';
+import {ServiceWorkerModule} from '@angular/service-worker'
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserTransferStateRestModule, TransferStateService} from '@ng/rest';
 import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';
@@ -27,7 +28,8 @@ export function reportingExceptionHandlerOptionsFactory()
         AppModule,
         BrowserAnimationsModule,
         BrowserTransferStateRestModule.forRoot(),
-        ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory)
+        ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory),
+        isProduction ? ServiceWorkerModule.register('/ngsw-worker.js') : []
         //BrowserPrebootModule.replayEvents()
     ]
 })

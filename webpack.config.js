@@ -195,7 +195,6 @@ module.exports = function(options)
         plugins:
         [
             //new DashboardPlugin(),
-            new webpack.optimize.ModuleConcatenationPlugin(),
             //copy external dependencies
             new CopyWebpackPlugin(
             [
@@ -334,6 +333,7 @@ module.exports = function(options)
         config.output.filename = "[name].[hash].js";
         config.output.chunkFilename = `[name].${ssr ? 'server' : 'client'}.chunk.[chunkhash].js`;
 
+        config.plugins.unshift(new webpack.optimize.ModuleConcatenationPlugin());
         config.plugins.unshift(new webpack.optimize.UglifyJsPlugin({
                                                                        beautify: false,
                                                                        mangle:

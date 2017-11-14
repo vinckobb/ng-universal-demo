@@ -1,5 +1,9 @@
 {
     "extends": "./tsconfig.json",
+    "compilerOptions":
+    {
+        "outDir": "app.aot"
+    },
     "exclude": 
     [
         "node_modules",

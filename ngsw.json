@@ -1,0 +1,64 @@
+{
+    "index": "/index.html",
+    "assetGroups":
+    [
+        {
+            "name": "app",
+            "installMode": "prefetch",
+            "updateMode": "prefetch",
+            "resources":
+            {
+                "files":
+                [
+                    "/index.html"
+                ],
+                "versionedFiles":
+                [
+                    "/dist/*.*",
+                    "!/dist/server.js"
+                ]
+            }
+        },
+        {
+            "name": "localizations",
+            "installMode": "prefetch",
+            "updateMode": "prefetch",
+            "resources":
+            {
+                "files":
+                [
+                    "/config/**"
+                ]
+            }
+        },
+        {
+            "name": "externals",
+            "installMode": "lazy",
+            "updateMode": "prefetch",
+            "resources":
+            {
+                "files":
+                [
+                    "/dist/css/**"
+                ]
+            }
+        }
+    ],
+    "dataGroups": 
+    [
+        {
+            "name": "api-performance",
+            "urls": 
+            [
+                "/api/**"
+            ],
+            "cacheConfig": 
+            {
+                "maxSize": 200,
+                "maxAge": "30m",
+                "timeout": "5s",
+                "strategy": "performance"
+            }
+        }
+    ]
+}
