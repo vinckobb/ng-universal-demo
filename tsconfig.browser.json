@@ -2,16 +2,16 @@
     "extends": "./tsconfig.json",
     "compilerOptions":
     {
-        "outDir": "app.aot"
+        "outDir": ""
     },
     "exclude":
     [
         "node_modules",
-        "app"
+        "app",
+        "karma-test-shim.ts"
     ],
     "angularCompilerOptions":
     {
-        "excludes": [],
         "entryModule": "./app.aot/boot/browser-app.module#BrowserAppModule",
         "skipMetadataEmit": true
     }

@@ -47,7 +47,7 @@
     "dataGroups": 
     [
         {
-            "name": "api-performance",
+            "name": "api-freshness",
             "urls": 
             [
                 "/api/**"
@@ -55,9 +55,9 @@
             "cacheConfig": 
             {
                 "maxSize": 200,
-                "maxAge": "30m",
-                "timeout": "5s",
-                "strategy": "performance"
+                "maxAge": "6h",
+                "timeout": "90s",
+                "strategy": "freshness"
             }
         }
     ]

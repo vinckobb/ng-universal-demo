@@ -29,7 +29,7 @@ export function reportingExceptionHandlerOptionsFactory()
         BrowserAnimationsModule,
         BrowserTransferStateRestModule.forRoot(),
         ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory),
-        isProduction ? ServiceWorkerModule.register('/ngsw-worker.js') : []
+        ServiceWorkerModule.register('/ngsw-worker.js')
         //BrowserPrebootModule.replayEvents()
     ]
 })
