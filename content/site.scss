@@ -77,6 +77,35 @@ app
     color: #969696
 }
 
+.navbar-update-available
+{
+    margin-top: 10px;
+    cursor: pointer;
+    display: inline-block;
+
+    &>span
+    {
+        background-image: linear-gradient(to top, #245580, #c1d2e0, #245580);
+        background-size: 400% 400%;
+        color:transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: TextGradientAnimate 1.5s ease infinite;
+        font-size: 28px;
+    }
+
+    &>span+span
+    {
+        font-size: 16px;
+    }
+}
+
+@keyframes TextGradientAnimate 
+{
+    0%{background-position: 50% 0%}
+    100%{background-position: 50% 100%}
+}
+
 // ---------------------- CONTAINER ----------------------
 .container.main
 {

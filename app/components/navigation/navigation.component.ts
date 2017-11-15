@@ -1,6 +1,8 @@
-import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Injector, Inject, PLATFORM_ID} from '@angular/core';
 import {Router} from "@angular/router";
-import {CookieService} from '@ng/common';
+import {isPlatformBrowser} from "@angular/common";
+import {SwUpdate} from "@angular/service-worker";
+import {CookieService, APP_STABLE} from '@ng/common';
 import {AuthenticationService} from "@ng/authentication";
 import {TranslateService} from '@ngx-translate/core';
 
@@ -8,6 +10,7 @@ import {LANG_COOKIE} from '../../misc/constants';
 import {ConfigReleaseService} from "../../services/api/configRelease/configRelease.service";
 import {ConfigReleaseData} from "../../services/api/configRelease/configRelease.interface";
 import {Subscription} from 'rxjs/Subscription';
+import {interval} from 'rxjs/observable/interval';
 import * as global from 'config/global';
 import * as version from 'config/version';
 
@@ -34,12 +37,28 @@ export class NavigationComponent implements OnInit, OnDestroy
      * Subscription for navigation changes
      */
     private _navigationSubscription: Subscription = null;
+
+    /**
+     * Indication whether is code running in browser
+     */
+    private _isBrowser: boolean = isPlatformBrowser(this._platformId);
+
+    /**
+     * Subscription for update check
+     */
+    private _updateCheckSubscription: Subscription;
+
     //######################### public properties #########################
 
     /**
      * List of available languages
      */
     public availableLanguages = global.availaleLanguages;
+
+    /**
+     * Indication that update is available
+     */
+    public updateAvailable: boolean = false;
 
     /**
      * Instance of config object
@@ -67,7 +86,9 @@ export class NavigationComponent implements OnInit, OnDestroy
                 private _router: Router,
                 private translate: TranslateService,
                 private _cookies: CookieService,
-                private _changeDetector: ChangeDetectorRef)
+                private _changeDetector: ChangeDetectorRef,
+                private _injector: Injector,
+                @Inject(PLATFORM_ID) private _platformId: Object)
     {
         this._navigationSubscription = this._router
             .events
@@ -81,6 +102,26 @@ export class NavigationComponent implements OnInit, OnDestroy
      */
     public ngOnInit()
     {
+        if(this._isBrowser && isProduction)
+        {
+            let update = this._injector.get(SwUpdate);
+
+            update.activated.subscribe(() => window.location.reload());
+            update.available.subscribe(() =>
+            { 
+                this.updateAvailable = true;
+                this._changeDetector.detectChanges();
+            });
+    
+            APP_STABLE.then(() =>
+            {
+                update.checkForUpdate();
+
+                this._updateCheckSubscription = interval(3600000)
+                    .subscribe(time => update.checkForUpdate());
+            });
+        }
+
         this.translate.onLangChange.subscribe(itm =>
         {
             this.activeLang = itm.lang;
@@ -138,9 +179,28 @@ export class NavigationComponent implements OnInit, OnDestroy
             this._navigationSubscription.unsubscribe();
             this._navigationSubscription = null;
         }
+
+        if(this._updateCheckSubscription)
+        {
+            this._updateCheckSubscription.unsubscribe();
+            this._updateCheckSubscription = null;
+        }
     }
 
     //######################### public methods #########################
+
+    /**
+     * Activates update
+     */
+    public activateUpdate()
+    {
+        if(this._isBrowser && isProduction)
+        {
+            let update = this._injector.get(SwUpdate);
+
+            update.activateUpdate();
+        }
+    }
 
     /**
      * Changes selected language for translation

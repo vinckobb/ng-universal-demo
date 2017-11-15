@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Angular universal sample application",
     "scripts": {
-        "build": "webpack --env.dll && webpack --env.ssr",
+        "build": "webpack --env.dll",
         "build:aot": "npm run ngc -- -p tsconfig.browser.json",
         "build:min": "webpack --env.prod",
         "build:gulp": "gulp build",

@@ -17,6 +17,11 @@
         </a>
 
         <a class="navbar-brand pointer-cursor">{{'global.appName' | translate}}</a>
+
+        <a *ngIf="updateAvailable" class="navbar-update-available" title="Nová verzia aplikácie dostupná, prosím aktualizujte" data-placement="bottom" (click)="activateUpdate()">
+            <span class="fa fa-arrow-up"></span>
+            <span>Aktualizovať</span>
+        </a>
     </div>
 
     <div class="collapse navbar-collapse" id="navigation-panel-id">
