@@ -77,7 +77,9 @@ function getTypescriptLoaders(prod, aot, hmr)
     }
     else
     {
-        return ['awesome-typescript-loader' + (prod ? '' : '?sourceMap=true'), 'angular2-template-loader', 'webpack-lazy-module-loader'].concat(hmr ? ['webpack-hmr-module-loader'] : []);
+        return ['awesome-typescript-loader' + (prod ? '' : '?sourceMap=true'), 'angular2-template-loader', 'webpack-lazy-module-loader']
+            .concat(hmr ? ['webpack-hmr-module-loader'] : [])
+            .concat(prod ? [] : [{loader: 'webpack-ngswdev-module-loader', options: {filenames: 'browser-app.module.ts'}}]);
     }
 }
 
