@@ -20,7 +20,11 @@ gulp.task("create-aot-app", function()
 {
     return gulp.src("app/**/*")
         .pipe(logCopied())
-        .pipe(ngAotCompliant())
+        .pipe(ngAotCompliant({
+                                 mainFilename: 'main.server.ts',
+                                 serverModule: 'ServerAppModule',
+                                 serverModuleFilename: 'server-app.module'
+                             }))
         .pipe(gulp.dest("app.aot"));
 });
 
