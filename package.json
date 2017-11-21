@@ -51,7 +51,7 @@
         "@ng/common": "^4.0.5",
         "@ng/error-handling": "^4.0.4",
         "@ng/external-translation-loader": "^4.0.3",
-        "@ng/grid": "^4.0.2",
+        "@ng/grid": "^4.0.3",
         "@ng/http-extensions": "^4.0.2",
         "@ng/notifications": "^4.0.2",
         "@ng/rest": "^4.0.2",
@@ -83,10 +83,10 @@
         "form-data": "2.3.1"
     },
     "devDependencies": {
-        "@types/node": "8.0.28",
-        "@types/webpack": "3.0.10",
+        "@types/node": "8.0.50",
+        "@types/webpack": "3.8.0",
         "@types/connect": "3.4.31",
-        "@types/jquery": "3.2.12",
+        "@types/jquery": "3.2.16",
         "@types/jasmine": "2.5.54",
         "@types/d3": "4.10.0",
         "@types/reflect-metadata": "0.0.5",
