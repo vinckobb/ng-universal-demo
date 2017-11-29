@@ -48,4 +48,19 @@
 
         <p class="form-control-static">{{select}}</p>
     </div>
+
+    <div class="form-group">
+        <label class="control-label">Typeahead</label>
+        <input class="form-control" placeholder="Meno osoby" typeahead taSource [(ngModel)]="typeahead" [freeInput]="true">
+    </div>
+
+    <div>{{typeahead | json}}</div>
+
+    <div class="form-group">
+        <label class="control-label">Typeahead</label>
+        <div class="form-control" placeholder="Meno osoby" typeaheadtags taTagsSource [(ngModel)]="typeaheadTags">
+        </div>
+    </div>
+
+    <div>{{typeaheadTags | json}}</div>
 </div>

@@ -120,6 +120,16 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
         });
     }
 
+    public longCall()
+    {
+        this.dataSvc.longCall().subscribe(() => console.log('done'));
+    }
+
+    public continue()
+    {
+        this.dataSvc.continue().subscribe(() => console.log('done'));
+    }
+
     //######################### public methods - implementation of AfterViewInit #########################
 
     /**

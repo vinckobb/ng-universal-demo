@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {RESTClient, GET, ResponseType, Produces, BaseUrl, DefaultHeaders} from '@ng/rest';
+import {RESTClient, GET, ResponseType, Produces, BaseUrl, DefaultHeaders, Query} from '@ng/rest';
+import * as global from 'config/global';
 
 import {Data} from "./data.interface";
 import {Observable} from 'rxjs/Observable';
-import * as global from 'config/global';
+import {PagedData, KodPopisValue} from "../../../misc/types";
 
 /**
  * Service used to access sample data
@@ -14,12 +15,39 @@ import * as global from 'config/global';
 export class DataService extends RESTClient
 {
     //######################### public methods #########################
+    
     /**
      * Gets data
      */
-    @Produces(ResponseType.Json)
     @GET("data")
     public getData(): Observable<Data>
+    {
+        return null;
+    }
+
+    /**
+     * Gets cis
+     */
+    @GET("cis")
+    public getCis(@Query('search') query: string, @Query('size') size: number): Observable<PagedData<KodPopisValue>>
+    {
+        return null;
+    }
+
+    /**
+     * Gets long call 5 min
+     */
+    @GET("longcall")
+    public longCall(): Observable<void>
+    {
+        return null;
+    }
+
+    /**
+     * Gets continue response
+     */
+    @GET("continue")
+    public continue(): Observable<void>
     {
         return null;
     }

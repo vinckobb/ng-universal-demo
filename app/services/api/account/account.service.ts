@@ -8,6 +8,7 @@ import {AuthenticationServiceOptions, UserIdentity, AccessToken} from '@ng/authe
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import {catchError, map} from 'rxjs/operators';
+import {_throw} from 'rxjs/observable/throw';
 import * as global from 'config/global';
 
 /**
@@ -103,6 +104,7 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
      * @param  {Observable<IFinancialRecordResponse>} response Response to be transformed
      * @returns Observable Transformed response
      */
+    //@ts-ignore
     private getUserIdentityResponseTransform(response: Observable<HttpResponse<any>>): Observable<any>
     {
         return response.pipe(catchError((error: HttpErrorResponse) =>
@@ -124,7 +126,7 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
                 });
             }
 
-            return Observable.throw(error);
+            return _throw(error);
         }),
         map(data =>
         {

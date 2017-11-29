@@ -21,6 +21,8 @@ export class BootstrapSamplesComponent extends BaseAnimatedComponent
     //######################### public properties #########################
     public date: moment.Moment = null;
     public select: string;
+    public typeahead: any;
+    public typeaheadTags: any[] = [];
     public selectValues = [{key: 1, value: "prva"}, {key: 2, value: "druha"}, {key: 3, value: "tretia"}];
 
     //######################### public methods #########################
