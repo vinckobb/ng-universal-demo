@@ -100,7 +100,7 @@ app.use(function (req, res, next)
                 res.statusCode = succ.statusCode;
             }
 
-            res.end(err.toString() || succ.html);
+            res.end((err && err.toString()) || succ.html);
         });
 
         return;

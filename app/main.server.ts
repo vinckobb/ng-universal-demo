@@ -7,21 +7,22 @@ xhr2.prototype._restrictedHeaders.cookie = false;
 import 'form-data';
 import 'zone.js/dist/zone-node';
 import './hacks';
-import {enableProdMode, StaticProvider, NgModuleRef} from '@angular/core';
-import {platformDynamicServer} from '@angular/platform-server';
-import {serverRenderFactory} from "@ng/server-stuff";
+import {enableProdMode} from '@angular/core';
+import {renderModule} from '@angular/platform-server';
+
 import {ServerAppModule} from './boot/server-app.module';
 import {AdditionalData, getAdditionalProviders} from './server.providers';
+import {serverRenderFactory, ServerRenderOptions} from './serverRenderFactory';
 
 enableProdMode();
 
 /**
- * Gets bootstrapped server module
- * @param extraProviders Extra providers proveded for module
+ * Gets promise that renders app into string
+ * @param {ServerRenderOptions} options Options for server render
  */
-function getNgModule(extraProviders: StaticProvider[]): Promise<NgModuleRef<{}>>
+function getRenderPromise(options: ServerRenderOptions): Promise<string>
 {
-    return platformDynamicServer(extraProviders).bootstrapModule(ServerAppModule);
+    return renderModule(ServerAppModule, options);
 }
 
-exports.serverRender = serverRenderFactory<AdditionalData>(getNgModule, getAdditionalProviders);
+exports.serverRender = serverRenderFactory<AdditionalData>(getRenderPromise, getAdditionalProviders);
