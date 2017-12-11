@@ -5,6 +5,7 @@ import {BasicPagingComponent, PagingAbstractComponent} from '@ng/grid';
 import {flyInOutTrigger, slideInOutTriggerFactory} from '@ng/animations';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {FancyTreeNodeData, FancyTreeComponent} from '@ng/treeview';
+import {map} from 'rxjs/operators';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
@@ -111,10 +112,10 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     //######################### public methods #########################
     public ngOnInit()
     {
-        this.dataSvc.getData().map(data =>
+        this.dataSvc.getData().pipe(map(data =>
         {
             return `${data.greeting} ${data.name}`;
-        }).subscribe(data =>
+        })).subscribe(data =>
         {
             this.subs = data;
         });
