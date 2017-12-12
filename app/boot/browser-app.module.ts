@@ -4,7 +4,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CommonModule as NgCommonModule} from '@ng/common';
 import {BrowserTransferStateRestModule, TransferStateService} from '@ng/rest';
 import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';
-//import {BrowserPrebootModule} from 'preboot/browser';
 
 import {AppComponent} from './app.component';
 import {AppModule} from './app.module';
@@ -33,23 +32,8 @@ export function reportingExceptionHandlerOptionsFactory()
         NgCommonModule.forRootBrowserWithGlobalization(GlobalizationServiceImpl),
         ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory),
         ServiceWorkerModule.register('/ngsw-worker.js')
-        //BrowserPrebootModule.replayEvents()
     ]
 })
 export class BrowserAppModule
 {
-    //######################### public properties #########################
-    
-    /**
-     * Method called when application is stable 
-     */
-    public ngOnBootstrap = () =>
-    {
-        this._transferState.deactivate();
-    }
-
-    //######################### constructor #########################
-    constructor(private _transferState: TransferStateService)
-    {
-    }
 }

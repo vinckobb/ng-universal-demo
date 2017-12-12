@@ -9,10 +9,10 @@ import 'zone.js/dist/zone-node';
 import './hacks';
 import {enableProdMode} from '@angular/core';
 import {renderModule} from '@angular/platform-server';
+import {serverRenderFactory, ServerRenderOptions} from '@ng/server-stuff';
 
 import {ServerAppModule} from './boot/server-app.module';
 import {AdditionalData, getAdditionalProviders} from './server.providers';
-import {serverRenderFactory, ServerRenderOptions} from './serverRenderFactory';
 
 enableProdMode();
 

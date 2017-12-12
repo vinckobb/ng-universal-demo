@@ -15,7 +15,5 @@ if(isProduction)
 
 Utils.common.runWhenModuleStable(platformBrowserDynamic().bootstrapModule(BrowserAppModule), (moduleRef: NgModuleRef<{}>) => 
 {
-    const bootstrap = moduleRef.instance['ngOnBootstrap'];
-    bootstrap && bootstrap();
 }, config.debug);
 

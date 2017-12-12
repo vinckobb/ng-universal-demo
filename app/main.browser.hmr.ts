@@ -14,8 +14,5 @@ var platform = platformBrowserDynamic();
 
 Utils.common.runWhenModuleStable(platform.bootstrapModule(BrowserAppModule), (moduleRef: NgModuleRef<{}>) => 
 {
-    const bootstrap = moduleRef.instance['ngOnBootstrap'];
-    bootstrap && bootstrap();
-
     hmrFinishedNotification();
 }, config.debug);

@@ -7,6 +7,7 @@ import {CommonModule as NgCommonModule, ProgressIndicatorModule, SERVER_BASE_URL
 import {AuthorizationModule} from '@ng/authentication';
 import {ServerValidationsModule, HttpErrorInterceptorModule, HttpErrorInterceptorOptions, InternalServerErrorModule} from '@ng/error-handling';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {PrebootModule} from 'preboot';
 
 import {AppComponent} from './app.component';
 import {NavigationComponent} from '../components/navigation/navigation.component';
@@ -69,6 +70,7 @@ export function externalTranslationLoaderFactory(http: HttpClient, injector: Inj
         InternalServerErrorModule.forRoot(),
         ProgressIndicatorModule.forRoot(),
         HttpErrorInterceptorModule.forRootWithOptions(httpErrorInterceptorModuleFactory),
+        PrebootModule.withConfig({ appRoot: 'app' }),
         CommonSharedModule,
         appRoutesModule
     ],

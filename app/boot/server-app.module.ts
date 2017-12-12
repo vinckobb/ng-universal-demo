@@ -1,9 +1,7 @@
 import {NgModule} from '@angular/core';
 import {ServerModule} from '@angular/platform-server';
-import {TransferStateService} from '@ng/rest';
-import {ServerTransferStateRestModule} from '@ng/server-stuff';
 import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';
-//import {ServerPrebootModule} from 'preboot/server';
+import {ServerProvidersModule} from '@ng/server-stuff';
 
 import {AppComponent} from './app.component';
 import {AppModule} from './app.module';
@@ -27,25 +25,10 @@ export function reportingExceptionHandlerOptionsFactory()
     [
         ServerModule,
         AppModule,
-        ServerTransferStateRestModule.forRoot(),
+        ServerProvidersModule.forRoot(),
         ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory)
-        //ServerPrebootModule.recordEvents({appRoot: 'app'})
     ]
 })
 export class ServerAppModule 
 {
-    //######################### public properties #########################
-    
-    /**
-     * Method called when application is stable 
-     */
-    public ngOnBootstrap = () => 
-    {
-        this._transferState.inject();
-    }
-
-    //######################### constructor #########################
-    constructor(private _transferState: TransferStateService) 
-    {
-    }
 }
