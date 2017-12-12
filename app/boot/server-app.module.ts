@@ -26,7 +26,7 @@ export function reportingExceptionHandlerOptionsFactory()
         AppModule,
         ServerModule,
         ServerTransferStateModule,
-        ServerProvidersModule.forRoot(),
+        ServerProvidersModule,
         ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory)
     ]
 })

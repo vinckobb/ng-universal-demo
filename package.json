@@ -55,7 +55,7 @@
         "@ng/http-extensions": "^4.0.2",
         "@ng/notifications": "^4.0.2",
         "@ng/rest": "^4.0.7",
-        "@ng/server-stuff": "^4.0.3",
+        "@ng/server-stuff": "^4.0.4",
         "@ng/treeview": "^4.0.2",
         "@ngx-translate/core": "9.0.1",
         "web-animations-js": "2.3.1",
