@@ -2,7 +2,7 @@ import {Injectable, Optional, Inject, Injector} from '@angular/core';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {HttpClient, HttpRequest, HttpParams, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {RESTClient, GET, BaseUrl, DefaultHeaders, ResponseTransform, TransferStateService, POST, FullHttpResponse} from '@ng/rest';
+import {RESTClient, GET, BaseUrl, DefaultHeaders, ResponseTransform, RestTransferStateService, POST, FullHttpResponse} from '@ng/rest';
 import {SERVER_BASE_URL, SERVER_COOKIE_HEADER, SERVER_AUTH_HEADER} from "@ng/common";
 import {AuthenticationServiceOptions, UserIdentity, AccessToken} from '@ng/authentication';
 import {Observable} from 'rxjs/Observable';
@@ -23,7 +23,7 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
     public constructor(http: HttpClient,
                        private _injector: Injector,
                        private _location: Location,
-                       @Optional() transferState?: TransferStateService,
+                       @Optional() transferState?: RestTransferStateService,
                        @Optional() @Inject(SERVER_BASE_URL) baseUrl?: string,
                        @Optional() @Inject(SERVER_COOKIE_HEADER) serverCookieHeader?: string,
                        @Optional() @Inject(SERVER_AUTH_HEADER) serverAuthHeader?: string)

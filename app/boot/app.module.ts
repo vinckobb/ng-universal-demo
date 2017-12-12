@@ -5,6 +5,7 @@ import {ExternalTranslationLoader, ExternalTranslationLoaderOptions} from '@ng/e
 import {NotificationsModule} from '@ng/notifications';
 import {CommonModule as NgCommonModule, ProgressIndicatorModule, SERVER_BASE_URL} from '@ng/common';
 import {AuthorizationModule} from '@ng/authentication';
+import {RestTransferStateModule} from '@ng/rest';
 import {ServerValidationsModule, HttpErrorInterceptorModule, HttpErrorInterceptorOptions, InternalServerErrorModule} from '@ng/error-handling';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {PrebootModule} from 'preboot';
@@ -64,6 +65,7 @@ export function externalTranslationLoaderFactory(http: HttpClient, injector: Inj
             }
         }),
         NotificationsModule.forRoot(),
+        RestTransferStateModule.forRoot(),
         NgCommonModule.forRootWithGlobalization(GlobalizationServiceImpl),
         AuthorizationModule.forRoot(AccountService),
         ServerValidationsModule.forRoot(),

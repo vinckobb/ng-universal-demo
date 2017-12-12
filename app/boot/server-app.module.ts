@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {ServerModule} from '@angular/platform-server';
+import {ServerModule, ServerTransferStateModule} from '@angular/platform-server';
 import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';
 import {ServerProvidersModule} from '@ng/server-stuff';
 
@@ -23,8 +23,9 @@ export function reportingExceptionHandlerOptionsFactory()
     bootstrap: [AppComponent],
     imports: 
     [
-        ServerModule,
         AppModule,
+        ServerModule,
+        ServerTransferStateModule,
         ServerProvidersModule.forRoot(),
         ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory)
     ]

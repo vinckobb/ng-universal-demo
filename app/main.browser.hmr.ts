@@ -5,6 +5,7 @@ import './hacks';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {NgModuleRef} from '@angular/core';
 import {hmrAccept, hmrFinishedNotification, Utils} from '@ng/common';
+import {RestTransferStateService} from '@ng/rest';
 import {BrowserAppModule} from './boot/browser-app.module';
 import * as config from 'config/global';
 
@@ -12,7 +13,11 @@ import * as config from 'config/global';
 hmrAccept(platform);
 var platform = platformBrowserDynamic();
 
-Utils.common.runWhenModuleStable(platform.bootstrapModule(BrowserAppModule), (moduleRef: NgModuleRef<{}>) => 
+document.addEventListener('DOMContentLoaded', () => 
 {
-    hmrFinishedNotification();
-}, config.debug);
+    Utils.common.runWhenModuleStable(platform.bootstrapModule(BrowserAppModule), (moduleRef: NgModuleRef<{}>) => 
+    {
+        moduleRef.injector.get(RestTransferStateService).clearAndDeactivate();
+        hmrFinishedNotification();
+    }, config.debug);
+});

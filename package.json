@@ -54,7 +54,7 @@
         "@ng/grid": "^4.0.3",
         "@ng/http-extensions": "^4.0.2",
         "@ng/notifications": "^4.0.2",
-        "@ng/rest": "^4.0.6",
+        "@ng/rest": "^4.0.7",
         "@ng/server-stuff": "^4.0.3",
         "@ng/treeview": "^4.0.2",
         "@ngx-translate/core": "9.0.1",
