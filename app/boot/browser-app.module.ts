@@ -1,12 +1,14 @@
 import {NgModule} from '@angular/core';
 import {ServiceWorkerModule} from '@angular/service-worker'
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {CommonModule as NgCommonModule} from '@ng/common';
 import {BrowserTransferStateRestModule, TransferStateService} from '@ng/rest';
 import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';
 //import {BrowserPrebootModule} from 'preboot/browser';
 
 import {AppComponent} from './app.component';
 import {AppModule} from './app.module';
+import {GlobalizationService as GlobalizationServiceImpl} from '../services/globalization/globalization.service';
 import * as config from 'config/global';
 
 /**
@@ -28,6 +30,7 @@ export function reportingExceptionHandlerOptionsFactory()
         AppModule,
         BrowserAnimationsModule,
         BrowserTransferStateRestModule.forRoot(),
+        NgCommonModule.forRootBrowserWithGlobalization(GlobalizationServiceImpl),
         ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory),
         ServiceWorkerModule.register('/ngsw-worker.js')
         //BrowserPrebootModule.replayEvents()
