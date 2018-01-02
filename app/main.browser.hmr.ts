@@ -13,11 +13,8 @@ import * as config from 'config/global';
 hmrAccept(platform);
 var platform = platformBrowserDynamic();
 
-document.addEventListener('DOMContentLoaded', () => 
+Utils.common.runWhenModuleStable(platform.bootstrapModule(BrowserAppModule), (moduleRef: NgModuleRef<{}>) => 
 {
-    Utils.common.runWhenModuleStable(platform.bootstrapModule(BrowserAppModule), (moduleRef: NgModuleRef<{}>) => 
-    {
-        moduleRef.injector.get(RestTransferStateService).clearAndDeactivate();
-        hmrFinishedNotification();
-    }, config.debug);
-});
+    moduleRef.injector.get(RestTransferStateService).clearAndDeactivate();
+    hmrFinishedNotification();
+}, config.debug);
