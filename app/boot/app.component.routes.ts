@@ -17,6 +17,10 @@ var routes =
         path: 'samples', 
         loadChildren: '../pages/+samples/samples.module#SamplesModule'
     },
+    { 
+        path: 'filter', 
+        loadChildren: '../pages/+filter/filter.module#FilterModule'
+    },
     ...componentRoutes
 ];
 

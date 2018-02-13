@@ -60,7 +60,7 @@ gulp.task("compile-scss", function()
 
 gulp.task("prepare-version", function(cb)
 {
-    gitVersion(
+    /*gitVersion(
     {
         path: "config",
         filename: "version.json",
@@ -78,7 +78,7 @@ gulp.task("prepare-version", function(cb)
             pre: process.env.BUILD_TYPE == "release" ? false : true,
             suffix: process.env.SNAPSHOT_SUFFIX ? process.env.SNAPSHOT_SUFFIX : "build"
         }
-    }, cb);
+    }, cb);*/
 });
 
 gulp.task("build",
