@@ -1,27 +1,42 @@
 import {Component, ViewChild} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} from '@ng/common';
 import {GridOptions, GridComponent, AsyncDataLoaderOptions, SimpleOrdering, BasicPagingOptions, DataResponse} from '@ng/grid';
+import {refreshDataToDefaults} from "@ng/grid/dist/extensions/refreshDataToDefaults";
+import {setPage} from "@ng/grid/dist/extensions/setPage";
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {flyInOutTrigger} from '@ng/animations';
 
 import {GridDataService} from "../../../services/api/gridData/gridData.service";
 import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
+import {Subscription} from 'rxjs/Subscription';
+import {ActivatedRoute} from '@angular/router';
 
 /**
- * Grid samples component
+ * Grid benchmark component
  */
 @Component(
 {
-    selector: "grid-sample",
-    templateUrl: "gridSample.component.html",
+    selector: "grid-benchmark",
+    templateUrl: "gridBenchmark.component.html",
     providers: [GridDataService],
     animations: [flyInOutTrigger]
 })
-@ComponentRedirectRoute('')
-@ComponentRoute({path: 'grid', canActivate: [AuthGuard]})
-@Authorize("gridSample-page")
-export class GridSampleComponent extends BaseAnimatedComponent
+@ComponentRoute({path: 'grid-benchmark'})
+@ComponentRoute({path: 'grid-benchmark/:items'})
+export class GridBenchmarkComponent extends BaseAnimatedComponent
 {
+    //######################### private properties ########################
+
+    /**
+     * Route params subscription
+     */
+    private _subscription: Subscription;
+
+    /**
+     * Number of items that will appear in grid
+     */
+    private _maxItems: number = 50;
+
     //######################### public properties #########################
 
     /**
@@ -45,9 +60,20 @@ export class GridSampleComponent extends BaseAnimatedComponent
     public grid: GridComponent;
 
     //######################### constructor #########################
-    constructor(private _dataSvc: GridDataService)
+    constructor(private _dataSvc: GridDataService,
+                private _route: ActivatedRoute)
     {
         super();
+
+        this._subscription = this._route
+                                 .params
+                                 .subscribe(params => {
+                                     let maxItems = +params['items'];
+                                     if (!isNaN(maxItems))
+                                     {
+                                        this._maxItems = maxItems;
+                                     }
+                                 });
         
         this.gridOptions =
         {
@@ -57,6 +83,7 @@ export class GridSampleComponent extends BaseAnimatedComponent
                 {
                     options: <AsyncDataLoaderOptions<any, SimpleOrdering>>
                     {
+                        autoLoadData: false,
                         dataCallback: this._getData.bind(this)
                     }
                 },
@@ -64,8 +91,8 @@ export class GridSampleComponent extends BaseAnimatedComponent
                 {
                     options: <BasicPagingOptions>
                     {
-                        itemsPerPageValues: [10, 25, 50],
-                        initialItemsPerPage: 25
+                        itemsPerPageValues: [this._maxItems],
+                        initialItemsPerPage: this._maxItems
                     }
                 }
             }
@@ -73,6 +100,19 @@ export class GridSampleComponent extends BaseAnimatedComponent
     }
 
     //######################### public methods #########################
+    
+    /**
+     * Sets page for first grid sample
+     */
+    public clean()
+    {
+        this.grid.execute(setPage(-1));
+    }
+
+    public load()
+    {
+        this.grid.execute(setPage(1));
+    }
 
     //######################### private methods #########################
 
@@ -84,6 +124,14 @@ export class GridSampleComponent extends BaseAnimatedComponent
      */
     private async _getData(page: number, itemsPerPage: number, orderBy: SimpleOrdering): Promise<DataResponse<any>>
     {
+        if (page == -1)
+        {
+            return {
+                data: [],
+                totalCount: 0
+            };
+        }
+
         let data = await this._dataSvc
             .getGridData(
             {

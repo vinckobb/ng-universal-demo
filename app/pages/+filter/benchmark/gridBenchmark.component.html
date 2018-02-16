@@ -1,0 +1,21 @@
+<h3>Grid Benchmark</h3>
+
+<div>
+    <button class="btn btn-primary" (click)="clean()">Clean data</button>
+    <button class="btn btn-primary" (click)="load()">Load data</button>
+</div>
+
+<ng-grid #grid [gridOptions]="gridOptions">
+    <basic-table-metadata>
+        <basic-table-column name="id" title="ID"></basic-table-column>
+        <basic-table-column name="index" title="Index"></basic-table-column>
+        <basic-table-column name="isActive" title="Active"></basic-table-column>
+        <basic-table-column name="balance" title="Balance"></basic-table-column>
+        <basic-table-column name="age" title="Age"></basic-table-column>
+        <basic-table-column name="name" title="First name"></basic-table-column>
+        <basic-table-column name="surname" title="Surname"></basic-table-column>
+        <basic-table-column name="email" title="E-Mail"></basic-table-column>
+        <basic-table-column name="address" title="Address"></basic-table-column>
+        <basic-table-column name="phone" title="Phone"></basic-table-column>
+    </basic-table-metadata>
+</ng-grid>

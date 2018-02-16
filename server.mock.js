@@ -792,7 +792,7 @@ module.exports = function(app)
     {
         console.time(`GET ${req.originalUrl}`);
 
-        var data = sampleData;
+        var data = [];
         var query = url.parse(req.url, true).query;
 
         let items = data.length;
@@ -803,8 +803,11 @@ module.exports = function(app)
             let size = parseInt(query.size);
             let page = parseInt(query.page);
 
-            data = data.slice(page * size, (page * size) + size);
-            last = items <= (page * size) + size;
+            for (let i = 0; i < size; i++)
+            {
+                data.push(sampleData[i%sampleData.length]);
+            }
+            last = false;
         }
         
         res.setHeader('Content-Type', 'application/json');
@@ -813,7 +816,7 @@ module.exports = function(app)
         {
             content: data,
             last: last,
-            totalElements: sampleData.length
+            totalElements: data.length
         }));
 
         console.timeEnd(`GET ${req.originalUrl}`);
