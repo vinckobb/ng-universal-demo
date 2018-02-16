@@ -59,6 +59,13 @@ module.exports = function()
                             options: 'numeral'
                         }
                     ]
+                },
+                {
+                    test: /\.html$/,
+                    use: 
+                    {
+                        loader: 'html-loader'
+                    }
                 }
             ]
         },

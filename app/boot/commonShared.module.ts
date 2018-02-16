@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {BootstrapModule} from '@ng/bootstrap';
-import {GridModule} from '@ng/grid';
+import {GridModule, GridLegacyModule} from '@ng/grid';
 import {CommonModule as NgCommonModule} from '@ng/common';
 import {NotificationsModule} from '@ng/notifications';
 import {InternalServerErrorModule, ServerValidationsModule} from '@ng/error-handling';
@@ -28,6 +28,7 @@ import {TranslateModule} from '@ngx-translate/core';
         NgCommonModule,
         TranslateModule,
         NotificationsModule,
+        GridLegacyModule,
         GridModule,
         AuthorizationModule,
         FancyTreeModule,

@@ -1,6 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} from '@ng/common';
-import {GridOptions, GridComponent, LoadMorePagingComponent} from '@ng/grid';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {flyInOutTrigger} from '@ng/animations';
 

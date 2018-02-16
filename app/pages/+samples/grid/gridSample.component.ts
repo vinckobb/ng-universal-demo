@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} from '@ng/common';
-import {GridOptions, GridComponent, LoadMorePagingComponent} from '@ng/grid';
+import {GridOptions, GridComponent, LoadMorePagingLegacyComponent, GridLegacyOptions, GridLegacyComponent} from '@ng/grid';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {flyInOutTrigger} from '@ng/animations';
 
@@ -27,7 +27,7 @@ export class GridSampleComponent extends BaseAnimatedComponent
     /**
      * Grid options that are used for grid initialization
      */
-    public gridOptions: GridOptions;
+    public gridOptions: GridLegacyOptions;
 
     /**
      * Data for grid
@@ -42,7 +42,7 @@ export class GridSampleComponent extends BaseAnimatedComponent
     /**
      * Grid options that are used for grid initialization
      */
-    public gridLoadMoreOptions: GridOptions;
+    public gridLoadMoreOptions: GridLegacyOptions;
 
     /**
      * Data for grid
@@ -58,7 +58,7 @@ export class GridSampleComponent extends BaseAnimatedComponent
      * Grid component instance
      */
     @ViewChild('gridSample')
-    public _sampleGrid: GridComponent;
+    public _sampleGrid: GridLegacyComponent;
 
     //######################### constructor #########################
     constructor(private _dataSvc: GridDataService)
@@ -79,7 +79,7 @@ export class GridSampleComponent extends BaseAnimatedComponent
             initialItemsPerPage: 20,
             initialPage: 1,
             dataCallback: this._getLoadMoreData.bind(this),
-            pagingType: LoadMorePagingComponent,
+            pagingType: LoadMorePagingLegacyComponent,
             columnsSelection: true
         };
     }

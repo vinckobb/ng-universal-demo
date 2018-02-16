@@ -2,18 +2,18 @@
 
 <h4>Grid with default paging</h4>
 
-<ng-grid id="gridSample" #gridSample [data]="data" [options]="gridOptions" [totalCount]="totalCount">
-    <ng-column name="id" title="ID"></ng-column>
-    <ng-column name="index" title="Index"></ng-column>
-    <ng-column name="isActive" title="Active"></ng-column>
-    <ng-column name="balance" title="Balance"></ng-column>
-    <ng-column name="age" title="Age"></ng-column>
-    <ng-column name="name" title="First name"></ng-column>
-    <ng-column name="surname" title="Surname"></ng-column>
-    <ng-column name="email" title="E-Mail"></ng-column>
-    <ng-column name="address" title="Address"></ng-column>
-    <ng-column name="phone" title="Phone"></ng-column>
-</ng-grid>
+<ng-legacy-grid id="gridSample" #gridSample [data]="data" [options]="gridOptions" [totalCount]="totalCount">
+    <ng-legacy-column name="id" title="ID"></ng-legacy-column>
+    <ng-legacy-column name="index" title="Index"></ng-legacy-column>
+    <ng-legacy-column name="isActive" title="Active"></ng-legacy-column>
+    <ng-legacy-column name="balance" title="Balance"></ng-legacy-column>
+    <ng-legacy-column name="age" title="Age"></ng-legacy-column>
+    <ng-legacy-column name="name" title="First name"></ng-legacy-column>
+    <ng-legacy-column name="surname" title="Surname"></ng-legacy-column>
+    <ng-legacy-column name="email" title="E-Mail"></ng-legacy-column>
+    <ng-legacy-column name="address" title="Address"></ng-legacy-column>
+    <ng-legacy-column name="phone" title="Phone"></ng-legacy-column>
+</ng-legacy-grid>
 
 <div>
     <button class="btn btn-primary" (click)="setPage(2)">2nd page</button>
@@ -22,15 +22,15 @@
 
 <h4>Grid with load more paging</h4>
 
-<ng-grid id="gridLoadMoreSample" [data]="dataLoadMore" [options]="gridLoadMoreOptions" [totalCount]="totalCountLoadMore">
-    <ng-column name="id" title="ID"></ng-column>
-    <ng-column name="index" title="Index"></ng-column>
-    <ng-column name="isActive" title="Active"></ng-column>
-    <ng-column name="balance" title="Balance"></ng-column>
-    <ng-column name="age" title="Age"></ng-column>
-    <ng-column name="name" title="First name"></ng-column>
-    <ng-column name="surname" title="Surname"></ng-column>
-    <ng-column name="email" title="E-Mail"></ng-column>
-    <ng-column name="address" title="Address"></ng-column>
-    <ng-column name="phone" title="Phone"></ng-column>
-</ng-grid>
+<ng-legacy-grid id="gridLoadMoreSample" [data]="dataLoadMore" [options]="gridLoadMoreOptions" [totalCount]="totalCountLoadMore">
+    <ng-legacy-column name="id" title="ID"></ng-legacy-column>
+    <ng-legacy-column name="index" title="Index"></ng-legacy-column>
+    <ng-legacy-column name="isActive" title="Active"></ng-legacy-column>
+    <ng-legacy-column name="balance" title="Balance"></ng-legacy-column>
+    <ng-legacy-column name="age" title="Age"></ng-legacy-column>
+    <ng-legacy-column name="name" title="First name"></ng-legacy-column>
+    <ng-legacy-column name="surname" title="Surname"></ng-legacy-column>
+    <ng-legacy-column name="email" title="E-Mail"></ng-legacy-column>
+    <ng-legacy-column name="address" title="Address"></ng-legacy-column>
+    <ng-legacy-column name="phone" title="Phone"></ng-legacy-column>
+</ng-legacy-grid>
