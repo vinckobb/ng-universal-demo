@@ -750,6 +750,7 @@ module.exports = function(app)
                 'logoutAction-menu',
                 'samplesGroup-menu',
                 'gridSample-page',
+                'gridLegacySample-page',
                 'bootstrapSample-page',
                 'commonSample-page',
                 'notificationsSample-page',

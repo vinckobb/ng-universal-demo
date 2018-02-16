@@ -46,8 +46,12 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Samples <span class="caret"></span></a>
 
                 <ul class="dropdown-menu">
-                    <li *authorize="'gridSample-page'">
+                    <li *authorize="'gridLegacySample-page'">
                         <a routerLink="/samples/grid">Grid</a>
+                    </li>
+
+                    <li *authorize="'gridSample-page'">
+                        <a routerLink="/samples/grid-legacy">Legacy Grid</a>
                     </li>
 
                     <li *authorize="'bootstrapSample-page'">

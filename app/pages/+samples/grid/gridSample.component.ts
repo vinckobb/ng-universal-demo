@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} from '@ng/common';
-import {GridOptions, GridComponent, LoadMorePagingLegacyComponent, GridLegacyOptions, GridLegacyComponent} from '@ng/grid';
+import {GridOptions, GridComponent, LoadMorePagingLegacyComponent, GridLegacyOptions, GridLegacyComponent, AsyncDataLoaderOptions, SimpleOrdering, BasicPagingOptions, DataResponse} from '@ng/grid';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {flyInOutTrigger} from '@ng/animations';
 
@@ -27,7 +27,7 @@ export class GridSampleComponent extends BaseAnimatedComponent
     /**
      * Grid options that are used for grid initialization
      */
-    public gridOptions: GridLegacyOptions;
+    public gridOptions: GridOptions;
 
     /**
      * Data for grid
@@ -38,27 +38,11 @@ export class GridSampleComponent extends BaseAnimatedComponent
      * Number of all items
      */
     public totalCount: number = 0;
-
-    /**
-     * Grid options that are used for grid initialization
-     */
-    public gridLoadMoreOptions: GridLegacyOptions;
-
-    /**
-     * Data for grid
-     */
-    public dataLoadMore: any[] = [];
-
-    /**
-     * Number of all items
-     */
-    public totalCountLoadMore: number = 0;
-
     /**
      * Grid component instance
      */
     @ViewChild('gridSample')
-    public _sampleGrid: GridLegacyComponent;
+    public _sampleGrid: GridComponent;
 
     //######################### constructor #########################
     constructor(private _dataSvc: GridDataService)
@@ -67,20 +51,24 @@ export class GridSampleComponent extends BaseAnimatedComponent
         
         this.gridOptions =
         {
-            initialItemsPerPage: 10,
-            initialPage: 1,
-            dataCallback: this._getData.bind(this),
-            pagingOptions: {itemsPerPageValues: [10, 20]},
-            columnsSelection: true
-        };
-
-        this.gridLoadMoreOptions =
-        {
-            initialItemsPerPage: 20,
-            initialPage: 1,
-            dataCallback: this._getLoadMoreData.bind(this),
-            pagingType: LoadMorePagingLegacyComponent,
-            columnsSelection: true
+            plugins:
+            {
+                dataLoader:
+                {
+                    options: <AsyncDataLoaderOptions<any, SimpleOrdering>>
+                    {
+                        dataCallback: this._getData.bind(this)
+                    }
+                },
+                paging:
+                {
+                    options: <BasicPagingOptions>
+                    {
+                        itemsPerPageValues: [10, 25, 50],
+                        initialItemsPerPage: 25
+                    }
+                }
+            }
         };
     }
 
@@ -92,7 +80,7 @@ export class GridSampleComponent extends BaseAnimatedComponent
      */
     public setPage(page: number)
     {
-        this._sampleGrid.page = page;
+        this._sampleGrid.getPlugin
     }
 
     //######################### private methods #########################
@@ -101,45 +89,21 @@ export class GridSampleComponent extends BaseAnimatedComponent
      * Gets data for grid
      * @param  {number} page Index of requested page
      * @param  {number} itemsPerPage Number of items per page
-     * @param  {string} orderBy Order by column name
-     * @param  {OrderByDirection} orderByDirection Order by direction
-     * @param  {IFinancialRecordFilter} filterData Filter data
+     * @param  {TOrdering} orderBy Order by column name
      */
-    private _getData(page: number, itemsPerPage: number, orderBy: string, orderByDirection: OrderByDirection): void
+    private async _getData(page: number, itemsPerPage: number, orderBy: SimpleOrdering): Promise<DataResponse<any>>
     {
-        this._dataSvc
+        let data = await this._dataSvc
             .getGridData(
             {
                 page: (page - 1),
                 size: itemsPerPage
             })
-            .subscribe(data =>
-            {
-                this.data = data.content;
-                this.totalCount = data.totalElements;
-            });
-    }
+            .toPromise();
 
-    /**
-     * Gets data for grid sample 2
-     * @param  {number} page Index of requested page
-     * @param  {number} itemsPerPage Number of items per page
-     * @param  {string} orderBy Order by column name
-     * @param  {OrderByDirection} orderByDirection Order by direction
-     * @param  {IFinancialRecordFilter} filterData Filter data
-     */
-    private _getLoadMoreData(page: number, itemsPerPage: number, orderBy: string, orderByDirection: OrderByDirection): void
-    {
-        this._dataSvc
-            .getGridData(
-            {
-                page: (page - 1),
-                size: itemsPerPage
-            })
-            .subscribe(data =>
-            {
-                this.dataLoadMore = [...this.dataLoadMore.concat(data.content)];
-                this.totalCountLoadMore = data.last ? this.dataLoadMore.length : (this.dataLoadMore.length + 1);
-            });
+        return {
+            data: data.content,
+            totalCount: data.totalElements
+        };
     }
 }
