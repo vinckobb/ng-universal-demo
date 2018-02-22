@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef} from '@angular/core';
-import {trigger, animate, style, query, transition, group, state, keyframes, animateChild, animation, useAnimation} from '@angular/animations';
+import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
+import {trigger, animate, style, query, transition, group} from '@angular/animations';
 import {ComponentRoute, NgComponentOutletEx} from "@ng/common";
-import {BasicPagingComponent, PagingAbstractComponent} from '@ng/grid';
+import {BasicPagingComponent, PagingAbstractLegacyComponent} from '@ng/grid';
 import {flyInOutTrigger, slideInOutTriggerFactory} from '@ng/animations';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {FancyTreeNodeData, FancyTreeComponent} from '@ng/treeview';
@@ -97,14 +97,13 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     public trigger = "in";
 
     @ViewChild('pagingComponent')
-    public dynamicPaging: NgComponentOutletEx<PagingAbstractComponent>;
+    public dynamicPaging: NgComponentOutletEx<PagingAbstractLegacyComponent>;
 
     @ViewChild('treeview')
     public tree: FancyTreeComponent;
 
     //######################### constructor #########################
-    constructor(private dataSvc: DataService,
-                private _changeDetector: ChangeDetectorRef)
+    constructor(private dataSvc: DataService)
     {
         super();
     }

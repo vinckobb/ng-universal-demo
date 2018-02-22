@@ -1,6 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
-import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} from '@ng/common';
-import {GridOptions, GridComponent, LoadMorePagingComponent} from '@ng/grid';
+import {ComponentRedirectRoute, ComponentRoute} from '@ng/common';
+import {GridOptions, GridComponent, SimpleOrdering, DataResponse, AsyncDataLoaderOptions, BasicPagingOptions, AdvancedMetadataSelectorComponent, AdvancedMetadataSelectorOptions} from '@ng/grid';
+import {setPage} from '@ng/grid/dist/extensions';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {flyInOutTrigger} from '@ng/animations';
 
@@ -67,21 +68,48 @@ export class GridSampleComponent extends BaseAnimatedComponent
         
         this.gridOptions =
         {
-            initialItemsPerPage: 10,
-            initialPage: 1,
-            dataCallback: this._getData.bind(this),
-            pagingOptions: {itemsPerPageValues: [10, 20]},
-            columnsSelection: true
+            plugins:
+            {
+                dataLoader:
+                {
+                    options: <AsyncDataLoaderOptions<any, SimpleOrdering>>
+                    {
+                        dataCallback: this._getData.bind(this)
+                    }
+                },
+                paging:
+                {
+                    options: <BasicPagingOptions>
+                    {
+                        itemsPerPageValues: [10, 20],
+                        initialItemsPerPage: 10,
+                        initialPage: 1
+                    }
+                },
+                metadataSelector:
+                {
+                    type: AdvancedMetadataSelectorComponent,
+                    options: <AdvancedMetadataSelectorOptions>
+                    {
+                        cookieName: 'sample-grid',
+                        texts:
+                        {
+                            btnOpenSelection: 'VÝBER STĹPCOV',
+                            titleAvailableColumns: 'Dostupné stĺpce'
+                        }
+                    }
+                }
+            }
         };
 
-        this.gridLoadMoreOptions =
-        {
-            initialItemsPerPage: 20,
-            initialPage: 1,
-            dataCallback: this._getLoadMoreData.bind(this),
-            pagingType: LoadMorePagingComponent,
-            columnsSelection: true
-        };
+        // this.gridLoadMoreOptions =
+        // {
+        //     initialItemsPerPage: 20,
+        //     initialPage: 1,
+        //     dataCallback: this._getLoadMoreData.bind(this),
+        //     pagingType: LoadMorePagingComponent,
+        //     columnsSelection: true
+        // };
     }
 
     //######################### public methods #########################
@@ -92,54 +120,52 @@ export class GridSampleComponent extends BaseAnimatedComponent
      */
     public setPage(page: number)
     {
-        this._sampleGrid.page = page;
+        this._sampleGrid.execute(setPage(page));
     }
 
     //######################### private methods #########################
 
     /**
-     * Gets data for grid
+     * Callback used for obtaining data
      * @param  {number} page Index of requested page
      * @param  {number} itemsPerPage Number of items per page
-     * @param  {string} orderBy Order by column name
-     * @param  {OrderByDirection} orderByDirection Order by direction
-     * @param  {IFinancialRecordFilter} filterData Filter data
+     * @param  {TOrdering} ordering Order by column name
      */
-    private _getData(page: number, itemsPerPage: number, orderBy: string, orderByDirection: OrderByDirection): void
+    private async _getData(page: number, itemsPerPage: number, ordering: SimpleOrdering): Promise<DataResponse<any>>
     {
-        this._dataSvc
+        let result = await this._dataSvc
             .getGridData(
             {
                 page: (page - 1),
                 size: itemsPerPage
-            })
-            .subscribe(data =>
-            {
-                this.data = data.content;
-                this.totalCount = data.totalElements;
-            });
+            }).toPromise();
+
+        return {
+            data: result.content,
+            totalCount: result.totalElements
+        };
     }
 
-    /**
-     * Gets data for grid sample 2
-     * @param  {number} page Index of requested page
-     * @param  {number} itemsPerPage Number of items per page
-     * @param  {string} orderBy Order by column name
-     * @param  {OrderByDirection} orderByDirection Order by direction
-     * @param  {IFinancialRecordFilter} filterData Filter data
-     */
-    private _getLoadMoreData(page: number, itemsPerPage: number, orderBy: string, orderByDirection: OrderByDirection): void
-    {
-        this._dataSvc
-            .getGridData(
-            {
-                page: (page - 1),
-                size: itemsPerPage
-            })
-            .subscribe(data =>
-            {
-                this.dataLoadMore = [...this.dataLoadMore.concat(data.content)];
-                this.totalCountLoadMore = data.last ? this.dataLoadMore.length : (this.dataLoadMore.length + 1);
-            });
-    }
+    // /**
+    //  * Gets data for grid sample 2
+    //  * @param  {number} page Index of requested page
+    //  * @param  {number} itemsPerPage Number of items per page
+    //  * @param  {string} orderBy Order by column name
+    //  * @param  {OrderByDirection} orderByDirection Order by direction
+    //  * @param  {IFinancialRecordFilter} filterData Filter data
+    //  */
+    // private _getLoadMoreData(page: number, itemsPerPage: number, orderBy: string, orderByDirection: OrderByDirection): void
+    // {
+    //     this._dataSvc
+    //         .getGridData(
+    //         {
+    //             page: (page - 1),
+    //             size: itemsPerPage
+    //         })
+    //         .subscribe(data =>
+    //         {
+    //             this.dataLoadMore = [...this.dataLoadMore.concat(data.content)];
+    //             this.totalCountLoadMore = data.last ? this.dataLoadMore.length : (this.dataLoadMore.length + 1);
+    //         });
+    // }
 }

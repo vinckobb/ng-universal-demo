@@ -3,7 +3,6 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {ComponentRoute} from '@ng/common';
 import {flyInOutTrigger} from '@ng/animations';
 import {AuthenticationService, Authorize, AuthGuard} from '@ng/authentication';
-import {Observable} from 'rxjs/Observable';
 import {empty} from 'rxjs/observable/empty';
 import {catchError} from 'rxjs/operators';
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";

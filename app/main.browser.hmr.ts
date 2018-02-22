@@ -4,7 +4,9 @@ import 'zone.js/dist/zone';
 import './hacks';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {NgModuleRef} from '@angular/core';
-import {hmrAccept, hmrFinishedNotification, Utils} from '@ng/common';
+//@ts-ignore
+import {hmrAccept, hmrFinishedNotification} from '@ng/common';
+import {Utils} from '@ng/common';
 import {RestTransferStateService} from '@ng/rest';
 import {BrowserAppModule} from './boot/browser-app.module';
 import * as config from 'config/global';

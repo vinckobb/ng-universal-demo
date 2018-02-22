@@ -63,7 +63,6 @@ if(!!argv.webpack)
     //enables webpack dev middleware
     app.use(webpackDev(compiler,
     {
-        noInfo: true,
         publicPath: webpackConfig.output.publicPath
     }));
 

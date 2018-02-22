@@ -75,6 +75,7 @@ module.exports = function(config)
                     "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
                     "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
                     "config/global": path.join(__dirname, "config/global.development.json"),
+                    "config/version": path.join(__dirname, "config/version.json"),
                     "app": path.join(__dirname, "app")
                 }
             },
@@ -125,7 +126,7 @@ module.exports = function(config)
                         use: ['style-loader', 'css-loader', 'sass-loader']
                     },
                     {
-                        test: /\.(ttf|eot|svg)$/,
+                        test: /\.(ttf|eot|svg|png)$/,
                         loader: "file-loader"
                     }
                 ]

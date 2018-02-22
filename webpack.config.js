@@ -173,7 +173,7 @@ module.exports = function(options)
                 },
                 //file processing
                 {
-                    test: /\.ts$/,
+                    test: aot ? /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/ : /\.ts$/,
                     use: getTypescriptLoaders(prod, aot, hmr)
                 },
                 {

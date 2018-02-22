@@ -1,5 +1,4 @@
-import {Directive, Input} from '@angular/core';
-import {isString, isBlank} from '@ng/common';
+import {Directive} from '@angular/core';
 import {map} from 'rxjs/operators';
 
 import {DataService} from "../../services/api/data/data.service";

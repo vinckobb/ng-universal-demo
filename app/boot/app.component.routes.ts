@@ -1,4 +1,5 @@
 import {RouterModule} from '@angular/router';
+//@ts-ignore
 import {Utils} from '@ng/common';
 
 import {HomeComponent} from '../pages/home/home.component';

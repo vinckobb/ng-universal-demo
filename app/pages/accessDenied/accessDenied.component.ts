@@ -1,4 +1,4 @@
-import {Component, HostBinding} from '@angular/core';
+import {Component} from '@angular/core';
 import {ComponentRoute, StatusCodeService} from '@ng/common';
 import {flyInOutTrigger} from '@ng/animations';
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";

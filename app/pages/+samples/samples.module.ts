@@ -1,4 +1,4 @@
-import {NgModule, Component} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 
 import {SamplesComponent} from "./samples.component";
@@ -12,7 +12,7 @@ import {TypeaheadTagsSourceDirective, TypeaheadSourceDirective} from "../../comp
     imports: 
     [
         CommonSharedModule,
-        RouterModule.forChild([{path: '', component: SamplesComponent, children: sampleComponentRoutes, data: {testxxx: 'ahoj kuko'}}])
+        RouterModule.forChild([{path: '', component: SamplesComponent, children: sampleComponentRoutes}])
     ]
 })
 export class SamplesModule 
