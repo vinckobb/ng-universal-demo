@@ -5,7 +5,9 @@ var connect = require('connect'),
     argv = require('yargs').argv,
     path = require('path'),
     DashboardPlugin = require('webpack-dashboard/plugin'),
-    url = require('url');
+    url = require('url'),
+    fs = require('fs'),
+    https = require('https');
 
 var app = connect();
 
@@ -14,6 +16,15 @@ const serverPath = path.join(__dirname, wwwroot, 'dist/server.js');
 const proxyUrlFile = path.join(__dirname, 'proxyUrl.js');
 var serverRenderFunc;
 var proxyUrl = "http://127.0.0.1:8080";
+
+var key = fs.readFileSync('server.key');
+var cert = fs.readFileSync('server.crt');
+
+var options = 
+{
+    key: key,
+    cert: cert
+  };
 
 /**
  * Gets function used for server side rendering
@@ -73,7 +84,7 @@ if(!!argv.webpack)
 require('./server.mock')(app);
 
 //proxy special requests to other location
-app.use(proxy(['/api'], {target: 'http://localhost:8080', ws: true}));
+app.use(proxy(['/api'], {target: proxyUrl, ws: true}));
 
 //enable html5 routing
 app.use(history());
@@ -108,9 +119,22 @@ app.use(function (req, res, next)
     next();
 });
 
+//enable browsersync only if run with --browsersync param
+//used for writing documentation
+if(!!argv.browsersync)
+{
+    var browserSync = require('browser-sync');
+    var bs = browserSync.create().init({ logSnippet: false, files: '**/*.md' });
+
+    app.use(require('connect-browser-sync')(bs));
+}
+
 //return static files
 app.use(serveStatic(wwwroot));
 
 console.log("Listening on port 8888 => http://localhost:8888");
 //create node.js http server and listen on port
 app.listen(8888);
+console.log("Listening on port 443 => https://localhost");
+//create node.js https server and listen on port
+https.createServer(options, app).listen(443);

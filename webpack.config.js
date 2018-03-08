@@ -37,7 +37,18 @@ function getEntries(aot, ssr, prod, hmr, dll)
         var entries =
         {
             style: [path.join(__dirname, "content/site.scss")],
-            client: hmr ? [path.join(__dirname, "app/main.browser.hmr.ts")] : (aot ? [path.join(__dirname, "app.aot/main.browser.ts")] : [path.join(__dirname, "app/main.browser.ts")])
+            client: hmr ? [path.join(__dirname, "app/main.browser.hmr.ts")] : (aot ? [path.join(__dirname, "app.aot/main.browser.ts")] : [path.join(__dirname, "app/main.browser.ts")]),
+            externalStyle: 
+            [
+                "font-awesome/css/font-awesome.min.css",
+                "bootstrap/dist/css/bootstrap.min.css",
+                "bootstrap/dist/css/bootstrap-theme.min.css",
+                "bootstrap-select/dist/css/bootstrap-select.min.css",
+                "eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
+                "jquery.fancytree/skin-lion/ui.fancytree.css",
+                "bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css",
+                "highlight.js/styles/googlecode.css"
+            ]
         };
 
         if(dll)
@@ -78,9 +89,17 @@ function getTypescriptLoaders(prod, aot, hmr)
     else
     {
         return ['awesome-typescript-loader' + (prod ? '' : '?sourceMap=true'), 'angular2-template-loader', 'webpack-lazy-module-loader']
-            .concat(hmr ? ['webpack-hmr-module-loader'] : [])
-            .concat(prod ? [] : [{loader: 'webpack-ngswdev-module-loader', options: {filenames: 'browser-app.module.ts'}}]);
+            .concat(hmr ? ['webpack-hmr-module-loader'] : []);
     }
+}
+
+/**
+ * Gets array of webpack loaders for external style files
+ * @param {boolean} prod Indication that currently is running production build
+ */
+function getExternalStyleLoaders(prod)
+{
+    return prod ? ExtractTextPlugin.extract({fallback: "style-loader", use: ['css-loader'], publicPath: ""}) : ['style-loader', 'css-loader'];
 }
 
 /**
@@ -99,6 +118,15 @@ module.exports = function(options)
     var aot = !!options && !!options.aot;
     var ssr = !!options && !!options.ssr;
     var dll = !!options && !!options.dll;
+    var ngsw = process.env.NGSW == "true";
+
+    if(!!options && options.ngsw != undefined)
+    {
+        ngsw = !!options.ngsw;
+    }
+
+    console.log(`Angular service worker enabled: ${ngsw}.`);
+
     var distPath = "wwwroot/dist";
     options = options || {};
 
@@ -182,14 +210,14 @@ module.exports = function(options)
                 },
                 {
                     test: /\.css$/,
-                    loader: 'raw-loader'
+                    use: getExternalStyleLoaders(prod)
                 },
                 {
                     test: /\.scss$/,
                     use: getStyleLoaders(prod)
                 },
                 {
-                    test: /\.(ttf|eot|svg|png)$/,
+                    test: /\.(ttf|woff|woff2|eot|svg|png|jpeg|jpg|bmp|gif|icon|ico)$/,
                     loader: "file-loader"
                 }
             ]
@@ -200,66 +228,11 @@ module.exports = function(options)
             //copy external dependencies
             new CopyWebpackPlugin(
             [
-                {
-                    from: path.join(__dirname, "node_modules/font-awesome/css/*.*"),
-                    to: 'css/fa/css',
-                    flatten: true
-                },
-                {
-                    from: path.join(__dirname, "node_modules/font-awesome/fonts/*.*"),
-                    to: 'css/fa/fonts',
-                    flatten: true
-                },
-                {
-                    from: path.join(__dirname, "node_modules/bootstrap/dist/css/*.*"),
-                    to: 'css/b/css',
-                    flatten: true
-                },
-                {
-                    from: path.join(__dirname, "node_modules/bootstrap/dist/fonts/*.*"),
-                    to: 'css/b/fonts',
-                    flatten: true
-                },
-                {
-                    from: path.join(__dirname, "node_modules/bootstrap-select/dist/css/*.*"),
-                    to: 'css',
-                    flatten: true
-                },
-                {
-                    from: path.join(__dirname, "node_modules/eonasdan-bootstrap-datetimepicker/build/css/*.*"),
-                    to: 'css',
-                    flatten: true
-                },
-                {
-                    from: path.join(__dirname, "node_modules/jquery.fancytree/src/skin-lion/*.*"),
-                    to: 'css/fancytree',
-                    flatten: true
-                },
-                {
-                    from: path.join(__dirname, "node_modules/bootstrap-switch/dist/css/bootstrap3/*.min.css"),
-                    to: 'css',
-                    flatten: true
-                }
             ]),
-            //include external dependencies
-            new HtmlWebpackIncludeAssetsPlugin(
-            {
-                assets: 
-                [
-                    'css/fa/css/font-awesome.min.css',
-                    'css/b/css/bootstrap.min.css',
-                    'css/b/css/bootstrap-theme.min.css',
-                    'css/bootstrap-select.min.css',
-                    'css/bootstrap-datetimepicker.min.css',
-                    'css/fancytree/ui.fancytree.css',
-                    'css/bootstrap-switch.min.css'
-                ],
-                append: false,
-                hash: prod
-            }),
             new webpack.DefinePlugin(
             {
-                isProduction: prod
+                isProduction: prod,
+                isNgsw: ngsw
             })
         ]
     };
@@ -285,6 +258,16 @@ module.exports = function(options)
                 }
 
                 if(b.names[0] == 'import-dependencies')
+                {
+                    return 1;
+                }
+
+                if(a.names[0] == 'externalStyle')
+                {
+                    return -1;
+                }
+
+                if(b.names[0] == 'externalStyle')
                 {
                     return 1;
                 }

@@ -30,18 +30,6 @@
                     "/config/**"
                 ]
             }
-        },
-        {
-            "name": "externals",
-            "installMode": "lazy",
-            "updateMode": "prefetch",
-            "resources":
-            {
-                "files":
-                [
-                    "/dist/css/**"
-                ]
-            }
         }
     ],
     "dataGroups": 

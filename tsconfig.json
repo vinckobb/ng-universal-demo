@@ -24,7 +24,9 @@
             "jasmine",
             "reflect-metadata",
             "jquery.fancytree",
-            "jquery.fancytree.extended"
+            "jquery.fancytree.extended",
+            "scrollmagic",
+            "highlight.js"
         ],
         "typeRoots": 
         [
