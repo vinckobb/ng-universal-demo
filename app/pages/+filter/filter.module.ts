@@ -5,6 +5,7 @@ import {CommonSharedModule} from "../../boot/commonShared.module";
 import {TypeaheadTagsSourceDirective, TypeaheadSourceDirective} from "../../components/directives/taSources";
 import {FilterComponent} from './filter.component';
 import {filterComponents, filterComponentRoutes} from './filter.component.routes';
+import { TableModule } from 'primeng/table';
 
 @NgModule(
 {
@@ -12,6 +13,7 @@ import {filterComponents, filterComponentRoutes} from './filter.component.routes
     imports: 
     [
         CommonSharedModule,
+        TableModule,
         RouterModule.forChild([{path: '', component: FilterComponent, children: filterComponentRoutes}])
     ]
 })

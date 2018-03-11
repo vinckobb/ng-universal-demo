@@ -759,10 +759,10 @@ module.exports = function(app)
             ]
         };
 
-        if(!user)
+        /*if(!user)
         {
             res.statusCode = 401;
-        }
+        }*/
 
         res.setHeader('Content-Type', 'application/json');
 

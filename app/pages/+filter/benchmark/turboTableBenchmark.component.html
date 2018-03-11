@@ -1,0 +1,37 @@
+<h3>Grid Benchmark</h3>
+
+<div>
+    <button class="btn btn-primary" id="clean" (click)="clean()">Clean data</button>
+    <button class="btn btn-primary" id="load" (click)="load()">Load data</button>
+</div>
+
+<p-table #turboTable class="table table-condensed table-striped table-hover" [value]="data" [lazy]="true" (onLazyLoad)="getData($event)">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>ID</th>
+            <th>Index</th>
+            <th>Active</th>
+            <th>Balance</th>
+            <th>Age</th>
+            <th>First name</th>
+            <th>Surname</th>
+            <th>E-Mail</th>
+            <th>Address</th>
+            <th>Phone</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-col>
+        <tr>
+            <td>{{col.id}}</td>
+            <td>{{col.index}}</td>
+            <td>{{col.isActive}}</td>
+            <td>{{col.balance}}</td>
+            <td>{{col.age}}</td>
+            <td>{{col.name}}</td>
+            <td>{{col.surname}}</td>
+            <td>{{col.email}}</td>
+            <td>{{col.address}}</td>
+            <td>{{col.phone}}</td>
+        </tr>
+    </ng-template>
+</p-table>

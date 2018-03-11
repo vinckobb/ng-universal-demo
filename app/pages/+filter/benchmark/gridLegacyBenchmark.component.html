@@ -1,8 +1,8 @@
 <h3>Legacy Grid Sample</h3>
 
 <div>
-    <button class="btn btn-primary" (click)="clean()">Clean data</button>
-    <button class="btn btn-primary" (click)="load()">Load data</button>
+    <button class="btn btn-primary" id="clean" (click)="clean()">Clean data</button>
+    <button class="btn btn-primary" id="load" (click)="load()">Load data</button>
 </div>
 
 <ng-legacy-grid id="gridSample" #gridSample [data]="data" [options]="gridOptions" [totalCount]="totalCount">

@@ -1,13 +1,8 @@
-<h3>Grid Benchmark</h3>
+<h3>Scroll magic Sample</h3>
 
-<div>
-    <button class="btn btn-primary" id="clean" (click)="clean()">Clean data</button>
-    <button class="btn btn-primary" id="load" (click)="load()">Load data</button>
-</div>
-
-<ng-grid #grid [gridOptions]="gridOptions">
+<ng-grid #grid [gridOptions]="gridOptions" floatThead>
     <basic-table-metadata>
-        <basic-table-column name="id" title="ID"></basic-table-column>
+        <basic-table-column width="250px" name="id" title="ID"></basic-table-column>
         <basic-table-column name="index" title="Index"></basic-table-column>
         <basic-table-column name="isActive" title="Active"></basic-table-column>
         <basic-table-column name="balance" title="Balance"></basic-table-column>

@@ -8,6 +8,7 @@ import 'html2canvas';
 import 'extend';
 import 'jquery-param';
 import 'crypto-js';
+import 'floatthead';
 
 import "@angular/core";
 import "@angular/core/testing";

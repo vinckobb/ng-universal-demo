@@ -1,43 +1,33 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, forwardRef, AfterViewChecked, ChangeDetectionStrategy, AfterContentChecked, OnDestroy} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} from '@ng/common';
-import {GridOptions, GridComponent, AsyncDataLoaderOptions, SimpleOrdering, BasicPagingOptions, DataResponse} from '@ng/grid';
-import {refreshDataToDefaults} from "@ng/grid/dist/extensions/refreshDataToDefaults";
-import {setPage} from "@ng/grid/dist/extensions/setPage";
+import {GridOptions, GridComponent, AsyncDataLoaderOptions, SimpleOrdering, BasicPagingOptions, DataResponse, AdvancedTableBodyContentRendererComponent, PluginDescription, ContentRendererOptions, TableContentRendererOptions, AdvancedMetadataSelectorComponent, METADATA_SELECTOR_TYPE, METADATA_SELECTOR, MetadataSelector, DataLoader, DATA_LOADER, ContentRenderer, CONTENT_RENDERER, BODY_CONTENT_RENDERER, BodyContentRenderer} from '@ng/grid';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {flyInOutTrigger} from '@ng/animations';
 
 import {GridDataService} from "../../../services/api/gridData/gridData.service";
 import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
-import {Subscription} from 'rxjs/Subscription';
-import {ActivatedRoute} from '@angular/router';
-import { resolve } from 'dns';
-import { TestResolver } from '../../../misc/testResolver';
 
 /**
- * Grid benchmark component
+ * Scroll magic sample component
  */
 @Component(
 {
-    selector: "grid-benchmark",
-    templateUrl: "gridBenchmark.component.html",
+    selector: "scroll-magic-sample",
+    templateUrl: "scrollMagicSample.component.html",
     providers: [GridDataService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [flyInOutTrigger]
 })
-@ComponentRoute({path: 'grid-benchmark'})
-@ComponentRoute({path: 'grid-benchmark/:items', resolve: [TestResolver]})
-export class GridBenchmarkComponent extends BaseAnimatedComponent
+@ComponentRedirectRoute('')
+@ComponentRoute({path: 'scroll-magic'})
+export class ScrollMagicSampleComponent extends BaseAnimatedComponent implements AfterViewInit, OnDestroy
 {
     //######################### private properties ########################
 
     /**
-     * Route params subscription
+     * Mutation observer for @ng/grid
      */
-    private _subscription: Subscription;
-
-    /**
-     * Number of items that will appear in grid
-     */
-    private _maxItems: number = 50;
+    private _mutationObserver: MutationObserver;
 
     //######################### public properties #########################
 
@@ -62,20 +52,9 @@ export class GridBenchmarkComponent extends BaseAnimatedComponent
     public grid: GridComponent;
 
     //######################### constructor #########################
-    constructor(private _dataSvc: GridDataService,
-                private _route: ActivatedRoute)
+    constructor(private _dataSvc: GridDataService)
     {
         super();
-
-        this._subscription = this._route
-                                 .params
-                                 .subscribe(params => {
-                                     let maxItems = +params['items'];
-                                     if (!isNaN(maxItems))
-                                     {
-                                        this._maxItems = maxItems;
-                                     }
-                                 });
         
         this.gridOptions =
         {
@@ -85,7 +64,6 @@ export class GridBenchmarkComponent extends BaseAnimatedComponent
                 {
                     options: <AsyncDataLoaderOptions<any, SimpleOrdering>>
                     {
-                        autoLoadData: false,
                         dataCallback: this._getData.bind(this)
                     }
                 },
@@ -93,8 +71,8 @@ export class GridBenchmarkComponent extends BaseAnimatedComponent
                 {
                     options: <BasicPagingOptions>
                     {
-                        itemsPerPageValues: [this._maxItems],
-                        initialItemsPerPage: this._maxItems
+                        itemsPerPageValues: [10, 100, 2500],
+                        initialItemsPerPage: 100
                     }
                 }
             }
@@ -102,18 +80,43 @@ export class GridBenchmarkComponent extends BaseAnimatedComponent
     }
 
     //######################### public methods #########################
-    
-    /**
-     * Sets page for first grid sample
-     */
-    public clean()
+
+    public ngAfterViewInit()
     {
-        this.grid.execute(setPage(-1));
+        /*this.grid.execute(() =>
+        {
+            let bodyContentRenderer = this.grid.getPlugin<BodyContentRenderer<any, any>>(BODY_CONTENT_RENDERER);
+            let contentRenderer = this.grid.getPlugin<ContentRenderer<any>>(CONTENT_RENDERER);
+
+            if (contentRenderer)
+            {
+                let jqueryElement: any = $(contentRenderer.pluginElement.nativeElement);
+                jqueryElement.floatThead({
+                    position: 'fixed'
+                });
+
+                this._mutationObserver = new MutationObserver(data =>
+                    {
+                        jqueryElement.trigger('reflow');
+                    }
+                );
+    
+                if (bodyContentRenderer)
+                {
+                    this._mutationObserver.observe(bodyContentRenderer.pluginElement.nativeElement, {childList: true});
+                }
+            }
+        });*/
     }
 
-    public load()
+    public ngOnDestroy()
     {
-        this.grid.execute(setPage(1));
+        if (this._mutationObserver)
+        {
+            this._mutationObserver.disconnect();
+        }
+
+        this._mutationObserver = null;
     }
 
     //######################### private methods #########################
@@ -126,14 +129,6 @@ export class GridBenchmarkComponent extends BaseAnimatedComponent
      */
     private async _getData(page: number, itemsPerPage: number, orderBy: SimpleOrdering): Promise<DataResponse<any>>
     {
-        if (page == -1)
-        {
-            return {
-                data: [],
-                totalCount: 0
-            };
-        }
-
         let data = await this._dataSvc
             .getGridData(
             {

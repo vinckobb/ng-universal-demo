@@ -1,6 +1,8 @@
-import {Component, ViewChild, OnDestroy} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute, OrderByDirection, Paginator} from '@ng/common';
-import {GridOptions, GridComponent, LoadMorePagingLegacyComponent, GridLegacyOptions, GridLegacyComponent} from '@ng/grid';
+import {GridOptions, GridComponent, AsyncDataLoaderOptions, SimpleOrdering, BasicPagingOptions, DataResponse} from '@ng/grid';
+import {refreshDataToDefaults} from "@ng/grid/dist/extensions/refreshDataToDefaults";
+import {setPage} from "@ng/grid/dist/extensions/setPage";
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {flyInOutTrigger} from '@ng/animations';
 
@@ -8,20 +10,21 @@ import {GridDataService} from "../../../services/api/gridData/gridData.service";
 import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute} from '@angular/router';
+import { Table } from 'primeng/table';
 
 /**
- * Grid legacy benchmark component
+ * Grid benchmark component
  */
 @Component(
 {
-    selector: "grid-legacy-benchmark",
-    templateUrl: "gridLegacyBenchmark.component.html",
+    selector: "turbo-table-benchmark",
+    templateUrl: "turboTableBenchmark.component.html",
     providers: [GridDataService],
     animations: [flyInOutTrigger]
 })
-@ComponentRoute({path: 'grid-legacy-benchmark'})
-@ComponentRoute({path: 'grid-legacy-benchmark/:items'})
-export class GridLegacyBenchmarkComponent extends BaseAnimatedComponent implements OnDestroy
+@ComponentRoute({path: 'turbo-table-benchmark'})
+@ComponentRoute({path: 'turbo-table-benchmark/:items'})
+export class TurboTableBenchmarkComponent extends BaseAnimatedComponent
 {
     //######################### private properties ########################
 
@@ -40,7 +43,7 @@ export class GridLegacyBenchmarkComponent extends BaseAnimatedComponent implemen
     /**
      * Grid options that are used for grid initialization
      */
-    public gridOptions: GridLegacyOptions;
+    public gridOptions: GridOptions;
 
     /**
      * Data for grid
@@ -52,11 +55,8 @@ export class GridLegacyBenchmarkComponent extends BaseAnimatedComponent implemen
      */
     public totalCount: number = 0;
 
-    /**
-     * Grid component instance
-     */
-    @ViewChild('gridSample')
-    public _sampleGrid: GridLegacyComponent;
+    @ViewChild('turboTable')
+    public table: Table
 
     //######################### constructor #########################
     constructor(private _dataSvc: GridDataService,
@@ -67,41 +67,27 @@ export class GridLegacyBenchmarkComponent extends BaseAnimatedComponent implemen
         this._subscription = this._route
                                  .params
                                  .subscribe(params => {
-                                    let maxItems = +params['items'];
-                                    if (!isNaN(maxItems))
-                                    {
-                                       this._maxItems = maxItems;
-                                    }
-                                    });
-        
-        this.gridOptions =
-        {
-            initialItemsPerPage: this._maxItems,
-            initialPage: 1,
-            dataCallback: this._getData.bind(this),
-            pagingOptions: {itemsPerPageValues: [this._maxItems]},
-            autoLoadData: false,
-            columnsSelection: true
-        };
+                                     let maxItems = +params['items'];
+                                     if (!isNaN(maxItems))
+                                     {
+                                        this._maxItems = maxItems;
+                                     }
+                                 });
     }
 
     //######################### public methods #########################
     
     /**
-     * Removes all data from grid
+     * Sets page for first grid sample
      */
     public clean()
     {
         this.data = [];
-        this.totalCount = 0;
     }
 
-    /** 
-     * Loads grid data
-     */
     public load()
     {
-        this._sampleGrid.refreshToDefault();
+        this.table.reset();
     }
 
     //######################### private methods #########################
@@ -110,29 +96,19 @@ export class GridLegacyBenchmarkComponent extends BaseAnimatedComponent implemen
      * Gets data for grid
      * @param  {number} page Index of requested page
      * @param  {number} itemsPerPage Number of items per page
-     * @param  {string} orderBy Order by column name
-     * @param  {OrderByDirection} orderByDirection Order by direction
-     * @param  {IFinancialRecordFilter} filterData Filter data
+     * @param  {TOrdering} orderBy Order by column name
      */
-    private _getData(page: number, itemsPerPage: number, orderBy: string, orderByDirection: OrderByDirection): void
+    public getData(event)
     {
-        this._dataSvc
+        let data = this._dataSvc
             .getGridData(
             {
-                page: (page - 1),
-                size: itemsPerPage
+                page: 0,
+                size: this._maxItems
             })
             .subscribe(data =>
             {
                 this.data = data.content;
-                this.totalCount = data.totalElements;
             });
-    }
-
-    /** 
-     * Implementation of ngOnDestroy
-     */
-    ngOnDestroy() {
-        this._subscription.unsubscribe();
     }
 }

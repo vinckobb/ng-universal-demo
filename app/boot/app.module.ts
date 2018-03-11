@@ -19,6 +19,7 @@ import {APP_TRANSFER_ID} from '../misc/constants';
 import {GlobalizationService as GlobalizationServiceImpl} from '../services/globalization/globalization.service';
 import {providers} from './app.config';
 import * as config from 'config/global';
+import { AdvancedTableBodyContentRendererComponent } from '@ng/grid';
 
 /**
  * Factory for HttpErrorInterceptorOptions

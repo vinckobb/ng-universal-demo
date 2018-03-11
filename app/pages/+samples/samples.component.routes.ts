@@ -4,10 +4,12 @@ import {CommonSamplesComponent} from './common/commonSamples.component';
 import {NotificationsSampleComponent} from './notifications/notificationsSample.component';
 import {AuthorizationSampleComponent} from "./authorization/authorizationSample.component";
 import {Utils} from '@ng/common';
-import { GridLegacySampleComponent } from './grid/gridLegacySample.component';
+import {GridLegacySampleComponent} from './grid/gridLegacySample.component';
+import {ScrollMagicSampleComponent} from './scrollMagic/scrollMagicSample.component';
 
 export var sampleComponentRoutes = Utils.routerHelper.extractRoutes([GridSampleComponent,
                                                                      GridLegacySampleComponent,
+                                                                     ScrollMagicSampleComponent,
                                                                      BootstrapSamplesComponent,
                                                                      CommonSamplesComponent,
                                                                      NotificationsSampleComponent,
@@ -15,6 +17,7 @@ export var sampleComponentRoutes = Utils.routerHelper.extractRoutes([GridSampleC
 
 export var sampleComponents = [GridSampleComponent,
                                GridLegacySampleComponent,
+                               ScrollMagicSampleComponent,
                                BootstrapSamplesComponent,
                                CommonSamplesComponent,
                                NotificationsSampleComponent,

@@ -5,6 +5,8 @@ import {SamplesComponent} from "./samples.component";
 import {sampleComponentRoutes, sampleComponents} from './samples.component.routes';
 import {CommonSharedModule} from "../../boot/commonShared.module";
 import {TypeaheadTagsSourceDirective, TypeaheadSourceDirective} from "../../components/directives/taSources";
+import { AdvancedTableBodyContentRendererComponent } from '@ng/grid';
+import {TableModule} from 'primeng/table';
 
 @NgModule(
 {
@@ -12,6 +14,7 @@ import {TypeaheadTagsSourceDirective, TypeaheadSourceDirective} from "../../comp
     imports: 
     [
         CommonSharedModule,
+        TableModule,
         RouterModule.forChild([{path: '', component: SamplesComponent, children: sampleComponentRoutes, data: {testxxx: 'ahoj kuko'}}])
     ]
 })
