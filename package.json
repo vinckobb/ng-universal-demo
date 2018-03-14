@@ -52,7 +52,7 @@
         "@ng/common": "4.0.16",
         "@ng/error-handling": "4.0.4",
         "@ng/external-translation-loader": "4.0.3",
-        "@ng/grid": "5.0.0-beta.11",
+        "@ng/grid": "5.0.0-beta.13",
         "@ng/grid-extensions": "5.0.0-beta.2",
         "@ng/notifications": "4.0.2",
         "@ng/rest": "4.0.13",

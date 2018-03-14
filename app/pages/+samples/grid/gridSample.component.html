@@ -2,6 +2,8 @@
 
 <h4>Grid with default paging</h4>
 
+<button (click)="test()">click</button>
+
 <ng-grid #gridSample [gridOptions]="gridOptions">
     <basic-table-metadata>
         <basic-table-column id="id" name="id" title="ID"></basic-table-column>
@@ -24,15 +26,34 @@
 
 <h4>Grid with load more paging</h4>
 
-<!-- <ng-grid id="gridLoadMoreSample" [data]="dataLoadMore" [options]="gridLoadMoreOptions" [totalCount]="totalCountLoadMore">
-    <ng-column name="id" title="ID"></ng-column>
-    <ng-column name="index" title="Index"></ng-column>
-    <ng-column name="isActive" title="Active"></ng-column>
-    <ng-column name="balance" title="Balance"></ng-column>
-    <ng-column name="age" title="Age"></ng-column>
-    <ng-column name="name" title="First name"></ng-column>
-    <ng-column name="surname" title="Surname"></ng-column>
-    <ng-column name="email" title="E-Mail"></ng-column>
-    <ng-column name="address" title="Address"></ng-column>
-    <ng-column name="phone" title="Phone"></ng-column>
-</ng-grid> -->
+<ng-grid #gridLoadMore [gridOptions]="gridLoadMoreOptions">
+    <basic-table-metadata>
+        <basic-table-column id="id" name="id" title="ID"></basic-table-column>
+        <basic-table-column id="index" name="index" title="Index"></basic-table-column>
+        <basic-table-column id="isActive" name="isActive" title="Active"></basic-table-column>
+        <basic-table-column id="balance" name="balance" title="Balance"></basic-table-column>
+        <basic-table-column id="age" name="age" title="Age"></basic-table-column>
+        <basic-table-column id="name" name="name" title="First name"></basic-table-column>
+        <basic-table-column id="surname" name="surname" title="Surname"></basic-table-column>
+        <basic-table-column id="email" name="email" title="E-Mail"></basic-table-column>
+        <basic-table-column id="address" name="address" title="Address"></basic-table-column>
+        <basic-table-column id="phone" name="phone" title="Phone"></basic-table-column>
+    </basic-table-metadata>
+</ng-grid>
+
+<h4>Grid with previous next paging</h4>
+
+<ng-grid #gridPreviousNext [gridOptions]="gridPreviousNextOptions">
+    <basic-table-metadata>
+        <basic-table-column id="id" name="id" title="ID"></basic-table-column>
+        <basic-table-column id="index" name="index" title="Index"></basic-table-column>
+        <basic-table-column id="isActive" name="isActive" title="Active"></basic-table-column>
+        <basic-table-column id="balance" name="balance" title="Balance"></basic-table-column>
+        <basic-table-column id="age" name="age" title="Age"></basic-table-column>
+        <basic-table-column id="name" name="name" title="First name"></basic-table-column>
+        <basic-table-column id="surname" name="surname" title="Surname"></basic-table-column>
+        <basic-table-column id="email" name="email" title="E-Mail"></basic-table-column>
+        <basic-table-column id="address" name="address" title="Address"></basic-table-column>
+        <basic-table-column id="phone" name="phone" title="Phone"></basic-table-column>
+    </basic-table-metadata>
+</ng-grid>

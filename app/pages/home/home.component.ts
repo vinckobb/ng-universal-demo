@@ -1,7 +1,6 @@
-import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {trigger, animate, style, query, transition, group} from '@angular/animations';
-import {ComponentRoute, NgComponentOutletEx} from "@ng/common";
-import {BasicPagingComponent, PagingAbstractLegacyComponent} from '@ng/grid';
+import {ComponentRoute} from "@ng/common";
 import {flyInOutTrigger, slideInOutTriggerFactory} from '@ng/animations';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {FancyTreeNodeData, FancyTreeComponent} from '@ng/treeview';
@@ -45,11 +44,10 @@ import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 })
 @ComponentRoute({path: '', canActivate: [AuthGuard], data: {animation: 'home-view'}})
 @Authorize("home-page")
-export class HomeComponent extends BaseAnimatedComponent implements OnInit, AfterViewInit
+export class HomeComponent extends BaseAnimatedComponent implements OnInit
 {
     //######################### public properties #########################
     public subs: string;
-    public pagingVisible: boolean = false;
     public show: boolean = false;
     public counter = 0;
 
@@ -92,12 +90,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
         }
     ]
 
-    public paging = BasicPagingComponent;
-
     public trigger = "in";
-
-    @ViewChild('pagingComponent')
-    public dynamicPaging: NgComponentOutletEx<PagingAbstractLegacyComponent>;
 
     @ViewChild('treeview')
     public tree: FancyTreeComponent;
@@ -128,30 +121,6 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit, Afte
     public continue()
     {
         this.dataSvc.continue().subscribe(() => console.log('done'));
-    }
-
-    //######################### public methods - implementation of AfterViewInit #########################
-
-    /**
-     * Called when view was initialized
-     */
-    public ngAfterViewInit()
-    {
-        if(!this.dynamicPaging)
-        {
-            return;
-        }
-
-        var paging = this.dynamicPaging.component;
-
-        paging.pagingOptions = {itemsPerPageValues: [10, 20]};
-        paging.page = 1;
-        paging.itemsPerPage = 10;
-        paging.totalCount = 16;
-        paging.invalidateVisuals();
-
-        paging.pageChange.subscribe(page => console.log('PAGE:', page));
-        paging.itemsPerPageChange.subscribe(itemsPerPage => console.log('ITEMS PER PAGE:', itemsPerPage));
     }
 
     //######################### public methods - implementation of AfterViewInit #########################
