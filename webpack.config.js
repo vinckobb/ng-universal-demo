@@ -88,7 +88,7 @@ function getTypescriptLoaders(prod, aot, hmr)
     }
     else
     {
-        return ['awesome-typescript-loader' + (prod ? '' : '?sourceMap=true'), 'angular2-template-loader', 'webpack-lazy-module-loader']
+        return ['awesome-typescript-loader', 'angular2-template-loader', 'webpack-lazy-module-loader']
             .concat(hmr ? ['webpack-hmr-module-loader'] : []);
     }
 }
@@ -142,7 +142,7 @@ module.exports = function(options)
             publicPath: prod ? 'dist/' : '/dist/',
             chunkFilename: `[name].${ssr ? 'server' : 'client'}.chunk.js`
         },
-        devtool: prod ? false : 'source-map',
+        devtool: 'source-map',//prod ? false : 'source-map',
         target: ssr ? 'node' : 'web',
         resolve:
         {
@@ -332,7 +332,8 @@ module.exports = function(options)
                                                                            screw_ie8: true
                                                                        },
                                                                        comments: false,
-                                                                       sourceMap: false
+                                                                       //sourceMap: false
+                                                                       sourceMap: true
                                                                    }));
 
         config.plugins.push(new ExtractTextPlugin("style.[contenthash].css"));

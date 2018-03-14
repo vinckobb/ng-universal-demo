@@ -65,3 +65,4 @@ declare module "config/version"
 }
 
 declare var isProduction: boolean;
+declare var isNgsw: boolean;

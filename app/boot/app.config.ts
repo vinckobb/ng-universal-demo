@@ -1,6 +1,6 @@
 import {FactoryProvider, APP_INITIALIZER} from '@angular/core';
 import {AuthenticationService} from '@ng/authentication';
-import {PROGRESS_INTERCEPTOR_PROVIDER} from "@ng/http-extensions";
+import {PROGRESS_INTERCEPTOR_PROVIDER} from '@ng/common';
 
 /**
  * Creates APP initialization factory, that first try to authorize user before doing anything else

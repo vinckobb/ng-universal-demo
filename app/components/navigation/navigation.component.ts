@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Injector, Inject, PLATFORM_ID} from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Inject, PLATFORM_ID} from '@angular/core';
 import {Router} from "@angular/router";
 import {isPlatformBrowser} from "@angular/common";
 import {SwUpdate} from "@angular/service-worker";
@@ -87,7 +87,8 @@ export class NavigationComponent implements OnInit, OnDestroy
                 private translate: TranslateService,
                 private _cookies: CookieService,
                 private _changeDetector: ChangeDetectorRef,
-                private _injector: Injector,
+                private _update: SwUpdate,
+                @Inject(APP_STABLE) private _appStablePromise: Promise<void>,
                 @Inject(PLATFORM_ID) private _platformId: Object)
     {
         this._navigationSubscription = this._router
@@ -102,23 +103,21 @@ export class NavigationComponent implements OnInit, OnDestroy
      */
     public ngOnInit()
     {
-        if(this._isBrowser && isProduction)
+        if(this._isBrowser && this._update.isEnabled)
         {
-            let update = this._injector.get(SwUpdate);
-
-            update.activated.subscribe(() => window.location.reload());
-            update.available.subscribe(() =>
+            this._update.activated.subscribe(() => window.location.reload());
+            this._update.available.subscribe(() =>
             { 
                 this.updateAvailable = true;
                 this._changeDetector.detectChanges();
             });
-    
-            APP_STABLE.then(() =>
+
+            this._appStablePromise.then(() =>
             {
-                update.checkForUpdate();
+                this._update.checkForUpdate();
 
                 this._updateCheckSubscription = interval(3600000)
-                    .subscribe(time => update.checkForUpdate());
+                    .subscribe(() => this._update.checkForUpdate());
             });
         }
 
@@ -194,11 +193,9 @@ export class NavigationComponent implements OnInit, OnDestroy
      */
     public activateUpdate()
     {
-        if(this._isBrowser && isProduction)
+        if(this._isBrowser)
         {
-            let update = this._injector.get(SwUpdate);
-
-            update.activateUpdate();
+            this._update.activateUpdate();
         }
     }
 

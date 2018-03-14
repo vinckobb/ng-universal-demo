@@ -1,5 +1,6 @@
 import {NgModule, FactoryProvider, Injector} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import {ServiceWorkerModule} from '@angular/service-worker';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
 import {ExternalTranslationLoader, ExternalTranslationLoaderOptions} from '@ng/external-translation-loader';
 import {NotificationsModule} from '@ng/notifications';
@@ -72,6 +73,7 @@ export function externalTranslationLoaderFactory(http: HttpClient, injector: Inj
         InternalServerErrorModule.forRoot(),
         ProgressIndicatorModule.forRoot(),
         HttpErrorInterceptorModule.forRootWithOptions(httpErrorInterceptorModuleFactory),
+        ServiceWorkerModule.register('/ngsw-worker.js', {enabled: isNgsw}),
         PrebootModule.withConfig({ appRoot: 'app' }),
         CommonSharedModule,
         appRoutesModule

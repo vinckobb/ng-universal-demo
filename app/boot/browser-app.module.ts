@@ -1,5 +1,4 @@
 import {NgModule} from '@angular/core';
-import {ServiceWorkerModule} from '@angular/service-worker'
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserTransferStateModule} from '@angular/platform-browser';
 import {CommonModule as NgCommonModule} from '@ng/common';
@@ -30,8 +29,7 @@ export function reportingExceptionHandlerOptionsFactory()
         BrowserAnimationsModule,
         BrowserTransferStateModule,
         NgCommonModule.forRootBrowserWithGlobalization(GlobalizationServiceImpl),
-        ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory),
-        ServiceWorkerModule.register('/ngsw-worker.js', {enabled: isNgsw})
+        ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory)
     ]
 })
 export class BrowserAppModule
