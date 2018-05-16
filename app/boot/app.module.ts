@@ -2,7 +2,7 @@ import {NgModule, FactoryProvider, Injector} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
-import {ExternalTranslationLoader, ExternalTranslationLoaderOptions} from '@ng/external-translation-loader';
+import {ExternalTranslationLoader, ExternalTranslationLoaderOptions} from '@ng/translate-extensions';
 import {NotificationsModule} from '@ng/notifications';
 import {CommonModule as NgCommonModule, ProgressIndicatorModule, SERVER_BASE_URL} from '@ng/common';
 import {AuthorizationModule} from '@ng/authentication';

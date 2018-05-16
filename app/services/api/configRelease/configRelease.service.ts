@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {RESTClient, GET, BaseUrl, DefaultHeaders} from '@ng/rest';
 import {ConfigReleaseData} from './configRelease.interface';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as global from 'config/global';
 
 /**

@@ -4,7 +4,7 @@ import {GlobalizationService, ProgressIndicatorService, CookieService} from '@ng
 import {AuthenticationService} from '@ng/authentication';
 import {TranslateService} from "@ngx-translate/core";
 import {LANG_COOKIE} from '../misc/constants';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import * as global from 'config/global';
 import * as moment from 'moment';
 

@@ -3,7 +3,7 @@ import {RESTClient, GET, ResponseType, Produces, BaseUrl, DefaultHeaders, QueryO
 
 import {GridItem} from "./gridData.interface";
 import {PagedData, Pageable} from "../../../misc/types";
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as global from 'config/global';
 
 /**

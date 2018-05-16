@@ -1,7 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute} from '@ng/common';
-import {GridOptions, GridComponent, SimpleOrdering, DataResponse, AsyncDataLoaderOptions, BasicPagingOptions, AdvancedMetadataSelectorComponent, AdvancedMetadataSelectorOptions} from '@ng/grid';
-import {setPage} from '@ng/grid/dist/extensions';
+import {GridOptions, GridComponent, SimpleOrdering, DataResponse, AsyncDataLoaderOptions, BasicPagingOptions, AdvancedMetadataSelectorComponent, AdvancedMetadataSelectorOptions, QueryPagingInitializerComponent, TableContentRendererOptions, DATA_LOADER, DataLoader, PreviousNextPagingComponent, PreviousNextPagingOptions, ContentVirtualScrollPagingComponent, ContentVirtualScrollPagingOptions, LoadMorePagingComponent, LoadMorePagingOptions, PageVirtualScrollPagingComponent, PageVirtualScrollPagingOptions} from '@ng/grid';
+import {setPage, reinitializeOptions} from '@ng/grid/extensions';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {flyInOutTrigger} from '@ng/animations';
 
@@ -15,7 +15,10 @@ import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
 {
     selector: "grid-sample",
     templateUrl: "gridSample.component.html",
-    providers: [GridDataService],
+    providers:
+    [
+        GridDataService,
+    ],
     animations: [flyInOutTrigger]
 })
 @ComponentRedirectRoute('')
@@ -31,29 +34,24 @@ export class GridSampleComponent extends BaseAnimatedComponent
     public gridOptions: GridOptions;
 
     /**
-     * Data for grid
-     */
-    public data: any[] = [];
-
-    /**
-     * Number of all items
-     */
-    public totalCount: number = 0;
-
-    /**
      * Grid options that are used for grid initialization
      */
     public gridLoadMoreOptions: GridOptions;
 
     /**
-     * Data for grid
+     * Grid options that are used for grid initialization
      */
-    public dataLoadMore: any[] = [];
+    public gridContentScrollOptions: GridOptions;
 
     /**
-     * Number of all items
+     * Grid options that are used for grid initialization
      */
-    public totalCountLoadMore: number = 0;
+    public gridPageScrollOptions: GridOptions;
+
+    /**
+     * Grid options that are used for grid initialization
+     */
+    public gridPreviousNextOptions: GridOptions;
 
     /**
      * Grid component instance
@@ -61,15 +59,41 @@ export class GridSampleComponent extends BaseAnimatedComponent
     @ViewChild('gridSample')
     public _sampleGrid: GridComponent;
 
+    /**
+     * Grid component instance
+     */
+    @ViewChild('gridLoadMore')
+    public _gridLoadMore: GridComponent;
+
+
+    /**
+     * Grid component instance
+     */
+    @ViewChild('gridContentScroll')
+    public _gridContentScroll: GridComponent;
+
+
+    /**
+     * Grid component instance
+     */
+    @ViewChild('gridPageScroll')
+    public _gridPageScroll: GridComponent;
+
     //######################### constructor #########################
     constructor(private _dataSvc: GridDataService)
     {
         super();
-        
+
         this.gridOptions =
         {
             plugins:
             {
+                contentRenderer:
+                {
+                    options: <TableContentRendererOptions>
+                    {
+                    }
+                },
                 dataLoader:
                 {
                     options: <AsyncDataLoaderOptions<any, SimpleOrdering>>
@@ -83,37 +107,139 @@ export class GridSampleComponent extends BaseAnimatedComponent
                     {
                         itemsPerPageValues: [10, 20],
                         initialItemsPerPage: 10,
-                        initialPage: 1
+                        initialPage: 1,
+                        pagingInitializer:
+                        {
+                            type: QueryPagingInitializerComponent
+                        }
                     }
                 },
-                metadataSelector:
+                // metadataSelector:
+                // {
+                //     type: AdvancedMetadataSelectorComponent,
+                //     options: <AdvancedMetadataSelectorOptions>
+                //     {
+                //         cookieName: 'sample-grid',
+                //         texts:
+                //         {
+                //             btnOpenSelection: 'VÝBER STĹPCOV',
+                //             titleAvailableColumns: 'Dostupné stĺpce'
+                //         }
+                //     }
+                // }
+            }
+        };
+
+        this.gridLoadMoreOptions =
+        {
+            plugins:
+            {
+                dataLoader:
                 {
-                    type: AdvancedMetadataSelectorComponent,
-                    options: <AdvancedMetadataSelectorOptions>
+                    options: <AsyncDataLoaderOptions<any, SimpleOrdering>>
                     {
-                        cookieName: 'sample-grid',
-                        texts:
+                        dataCallback: (page: number, itemsPerPage: number, ordering: SimpleOrdering) =>
                         {
-                            btnOpenSelection: 'VÝBER STĹPCOV',
-                            titleAvailableColumns: 'Dostupné stĺpce'
+                            let dataLoader = this._gridLoadMore.getPlugin(DATA_LOADER) as DataLoader<DataResponse<any>>;
+                            return this._getDataLoadMore(page, itemsPerPage, ordering, dataLoader);
                         }
+                    }
+                },
+                paging:
+                {
+                    type: LoadMorePagingComponent,
+                    options: <LoadMorePagingOptions>
+                    {
+                        initialItemsPerPage: 10,
+                        initialPage: 1
                     }
                 }
             }
         };
 
-        // this.gridLoadMoreOptions =
-        // {
-        //     initialItemsPerPage: 20,
-        //     initialPage: 1,
-        //     dataCallback: this._getLoadMoreData.bind(this),
-        //     pagingType: LoadMorePagingComponent,
-        //     columnsSelection: true
-        // };
+        this.gridContentScrollOptions =
+        {
+            plugins:
+            {
+                dataLoader:
+                {
+                    options: <AsyncDataLoaderOptions<any, SimpleOrdering>>
+                    {
+                        dataCallback: (page: number, itemsPerPage: number, ordering: SimpleOrdering) =>
+                        {
+                            let dataLoader = this._gridContentScroll.getPlugin(DATA_LOADER) as DataLoader<DataResponse<any>>;
+                            return this._getDataLoadMore(page, itemsPerPage, ordering, dataLoader);
+                        }
+                    }
+                },
+                paging:
+                {
+                    type: ContentVirtualScrollPagingComponent,
+                    options: <ContentVirtualScrollPagingOptions>
+                    {
+                        initialItemsPerPage: 10,
+                        initialPage: 1,
+                        maxHeight: "300px"
+                    }
+                }
+            }
+        };
+
+        this.gridPageScrollOptions =
+        {
+            plugins:
+            {
+                dataLoader:
+                {
+                    options: <AsyncDataLoaderOptions<any, SimpleOrdering>>
+                    {
+                        dataCallback: (page: number, itemsPerPage: number, ordering: SimpleOrdering) =>
+                        {
+                            let dataLoader = this._gridPageScroll.getPlugin(DATA_LOADER) as DataLoader<DataResponse<any>>;
+                            return this._getDataLoadMore(page, itemsPerPage, ordering, dataLoader);
+                        }
+                    }
+                },
+                paging:
+                {
+                    type: PageVirtualScrollPagingComponent,
+                    options: <PageVirtualScrollPagingOptions>
+                    {
+                        initialItemsPerPage: 10,
+                        initialPage: 1,
+                        loadOffsetTreshold: 0.9
+                    }
+                }
+            }
+        };
+
+        this.gridPreviousNextOptions =
+        {
+            plugins:
+            {
+                dataLoader:
+                {
+                    options: <AsyncDataLoaderOptions<any, SimpleOrdering>>
+                    {
+                        dataCallback: this._getData.bind(this)
+                    }
+                },
+                paging:
+                {
+                    type: PreviousNextPagingComponent,
+                    options: <PreviousNextPagingOptions>
+                    {
+                        initialItemsPerPage: 10,
+                        initialPage: 1,
+                        itemsPerPageValues: [10, 20, 50]
+                    }
+                }
+            }
+        };
     }
 
     //######################### public methods #########################
-    
+
     /**
      * Sets page for first grid sample
      * @param {number} page Page to be set
@@ -121,6 +247,25 @@ export class GridSampleComponent extends BaseAnimatedComponent
     public setPage(page: number)
     {
         this._sampleGrid.execute(setPage(page));
+    }
+
+    public test()
+    {
+        this.gridOptions.plugins.metadataSelector =
+        {
+            type: AdvancedMetadataSelectorComponent,
+            options: <AdvancedMetadataSelectorOptions>
+            {
+                cookieName: 'sample-grid',
+                texts:
+                {
+                    btnOpenSelection: 'VÝBER STĹPCOV',
+                    titleAvailableColumns: 'Dostupné stĺpce'
+                }
+            }
+        };
+
+        this._sampleGrid.execute(reinitializeOptions(this.gridOptions));
     }
 
     //######################### private methods #########################
@@ -146,26 +291,26 @@ export class GridSampleComponent extends BaseAnimatedComponent
         };
     }
 
-    // /**
-    //  * Gets data for grid sample 2
-    //  * @param  {number} page Index of requested page
-    //  * @param  {number} itemsPerPage Number of items per page
-    //  * @param  {string} orderBy Order by column name
-    //  * @param  {OrderByDirection} orderByDirection Order by direction
-    //  * @param  {IFinancialRecordFilter} filterData Filter data
-    //  */
-    // private _getLoadMoreData(page: number, itemsPerPage: number, orderBy: string, orderByDirection: OrderByDirection): void
-    // {
-    //     this._dataSvc
-    //         .getGridData(
-    //         {
-    //             page: (page - 1),
-    //             size: itemsPerPage
-    //         })
-    //         .subscribe(data =>
-    //         {
-    //             this.dataLoadMore = [...this.dataLoadMore.concat(data.content)];
-    //             this.totalCountLoadMore = data.last ? this.dataLoadMore.length : (this.dataLoadMore.length + 1);
-    //         });
-    // }
+    /**
+     * Callback used for obtaining data
+     * @param  {number} page Index of requested page
+     * @param  {number} itemsPerPage Number of items per page
+     * @param  {TOrdering} ordering Order by column name
+     */
+    private async _getDataLoadMore(page: number, itemsPerPage: number, ordering: SimpleOrdering, dataLoader: DataLoader<DataResponse<any>>): Promise<DataResponse<any>>
+    {
+        let result = await this._dataSvc
+            .getGridData(
+            {
+                page: (page - 1),
+                size: itemsPerPage
+            }).toPromise();
+
+        let data = [...dataLoader.result.data, ...result.content];
+
+        return {
+            data: data,
+            totalCount: result.last ? data.length : (data.length + 1)
+        };
+    }
 }

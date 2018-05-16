@@ -1,6 +1,5 @@
 {
     "debug": true,
-    "serverLogging": false,
     "apiBaseUrl": "api/",
     "defaultApiHeaders": 
     {

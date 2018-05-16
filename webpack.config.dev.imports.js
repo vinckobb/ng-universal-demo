@@ -1,17 +1,17 @@
 import './app/dependencies';
 import './app/dependencies.browser';
 
-import 'rxjs/operators';
 import 'moment';
-import 'd3';
-import 'marked';
 import 'handlebars';
-import 'scrollmagic';
-import 'highlight.js';
 import 'html2canvas';
 import 'extend';
 import 'jquery-param';
 import 'crypto-js';
+import 'd3';
+import 'marked';
+import 'scrollmagic';
+import 'highlight.js';
+import 'sourcemapped-stacktrace';
 
 import "@angular/core";
 import "@angular/core/testing";
@@ -33,11 +33,12 @@ import "@ng/authentication";
 import "@ng/bootstrap";
 import "@ng/common";
 import "@ng/error-handling";
-import "@ng/external-translation-loader";
 import "@ng/grid";
 import "@ng/grid-extensions";
+import "@ng/md-help/web";
 import "@ng/notifications";
 import "@ng/rest";
+import "@ng/translate-extensions";
 import "@ng/treeview";
 import "@ngx-translate/core";
 

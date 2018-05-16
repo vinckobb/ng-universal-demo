@@ -3,7 +3,7 @@ import {RESTClient, GET, BaseUrl, DefaultHeaders, Query} from '@ng/rest';
 import * as global from 'config/global';
 
 import {Data} from "./data.interface";
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {PagedData, KodPopisValue} from "../../../misc/types";
 
 /**

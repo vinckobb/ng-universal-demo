@@ -8,11 +8,6 @@ declare module "config/global"
         debug: boolean;
         
         /**
-         * Indication whether enable server logging of js errors
-         */
-        serverLogging: boolean;
-        
-        /**
          * Base url that is used for accessing REST api
          */
         apiBaseUrl: string;

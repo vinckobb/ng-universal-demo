@@ -5,7 +5,7 @@ var webpack = require('webpack'),
     HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
-    DashboardPlugin = require('webpack-dashboard/plugin'),
+    //DashboardPlugin = require('webpack-dashboard/plugin'),
     rxPaths = require('rxjs/_esm5/path-mapping'),
     extend = require('extend'),
     AngularCompilerPlugin =  require('@ngtools/webpack').AngularCompilerPlugin;
@@ -21,10 +21,9 @@ const tsconfigs =
  * Gets entries for webpack
  * @param {boolean} aot Indicates that it should be AOT entries
  * @param {boolean} ssr Indicates that it should be entries for server side rendering
- * @param {boolean} prod Indication that currently is running production build
  * @param {boolean} hmr Indication that currently is running hmr build
  */
-function getEntries(aot, ssr, prod, hmr, dll)
+function getEntries(aot, ssr, hmr, dll)
 {
     if(ssr)
     {
@@ -76,11 +75,10 @@ function getAotPlugin(platform)
 
 /**
  * Gets array of webpack loaders for typescript files
- * @param {boolean} prod Indication that currently is running production build
  * @param {boolean} aot Indication that currently is running build using AOT
  * @param {boolean} hmr Indication that currently is running build using HMR
  */
-function getTypescriptLoaders(prod, aot, hmr)
+function getTypescriptLoaders(aot, hmr)
 {
     if(aot)
     {
@@ -111,9 +109,9 @@ function getStyleLoaders(prod)
     return prod ? ExtractTextPlugin.extract({fallback: "style-loader", use: ['css-loader', 'sass-loader'], publicPath: ""}) : ['style-loader', 'css-loader', 'sass-loader'];
 }
 
-module.exports = function(options)
+module.exports = function(options, args)
 {
-    var prod = !!options && !!options.prod;
+    var prod = args && args.mode == 'production';
     var hmr = !!options && !!options.hmr;
     var aot = !!options && !!options.aot;
     var ssr = !!options && !!options.ssr;
@@ -134,7 +132,7 @@ module.exports = function(options)
 
     var config =
     {
-        entry: getEntries(aot, ssr, prod, hmr, dll),
+        entry: getEntries(aot, ssr, hmr, dll),
         output:
         {
             path: path.join(__dirname, distPath),
@@ -142,7 +140,8 @@ module.exports = function(options)
             publicPath: prod ? 'dist/' : '/dist/',
             chunkFilename: `[name].${ssr ? 'server' : 'client'}.chunk.js`
         },
-        devtool: 'source-map',//prod ? false : 'source-map',
+        mode: 'development',
+        devtool: prod ? 'source-map' : 'cheap-module-eval-source-map',
         target: ssr ? 'node' : 'web',
         resolve:
         {
@@ -202,7 +201,7 @@ module.exports = function(options)
                 //file processing
                 {
                     test: aot ? /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/ : /\.ts$/,
-                    use: getTypescriptLoaders(prod, aot, hmr)
+                    use: getTypescriptLoaders(aot, hmr)
                 },
                 {
                     test: /\.html$/,
@@ -228,6 +227,21 @@ module.exports = function(options)
             //copy external dependencies
             new CopyWebpackPlugin(
             [
+                // {
+                //     context: path.join(__dirname, "content/help"),
+                //     from: '**/*.*',
+                //     to: 'md'
+                // },
+                // {
+                //     from: path.join(__dirname, "../changelog.md"),
+                //     to: 'md',
+                //     flatten: true
+                // },
+                // {
+                //     from: path.join(__dirname, "../readme.md"),
+                //     to: 'md',
+                //     flatten: true
+                // }
             ]),
             new webpack.DefinePlugin(
             {
@@ -275,17 +289,22 @@ module.exports = function(options)
                 return 0;
             }
         }));
+
+        config.plugins.push(new ScriptExtHtmlWebpackPlugin(
+                            {
+                                defaultAttribute: 'defer'
+                            }));
     }
 
     //aot specific settings
     if(aot)
     {
-        config.plugins.unshift(getAotPlugin(ssr ? 'server' : 'client'));
+        config.plugins.push(getAotPlugin(ssr ? 'server' : 'client'));
     }
 
     if(hmr)
     {
-        config.plugins.unshift(new webpack.HotModuleReplacementPlugin());
+        config.plugins.push(new webpack.HotModuleReplacementPlugin());
 
         Object.keys(config.entry).forEach(entry =>
         {
@@ -299,13 +318,13 @@ module.exports = function(options)
     //only if dll package is required, use only for development
     if(dll)
     {
-        config.plugins.unshift(new webpack.DllReferencePlugin(
+        config.plugins.push(new webpack.DllReferencePlugin(
         {
             context: __dirname,
             manifest: require(path.join(__dirname, distPath + '/dependencies-manifest.json'))
         }));
 
-        config.plugins.unshift(new HtmlWebpackIncludeAssetsPlugin(
+        config.plugins.push(new HtmlWebpackIncludeAssetsPlugin(
         {
             assets: ['dependencies.js'],
             append: false
@@ -318,25 +337,7 @@ module.exports = function(options)
         config.output.filename = "[name].[hash].js";
         config.output.chunkFilename = `[name].${ssr ? 'server' : 'client'}.chunk.[chunkhash].js`;
 
-        config.plugins.unshift(new webpack.optimize.ModuleConcatenationPlugin());
-        config.plugins.unshift(new webpack.optimize.UglifyJsPlugin({
-                                                                       beautify: false,
-                                                                       mangle:
-                                                                       {
-                                                                           screw_ie8: true,
-                                                                           keep_fnames: true
-                                                                       },
-                                                                       compress:
-                                                                       {
-                                                                           warnings: false,
-                                                                           screw_ie8: true
-                                                                       },
-                                                                       comments: false,
-                                                                       //sourceMap: false
-                                                                       sourceMap: true
-                                                                   }));
-
-        config.plugins.push(new ExtractTextPlugin("style.[contenthash].css"));
+        config.plugins.push(new ExtractTextPlugin("style.[md5:contenthash:hex:20].css"));
     }
 
     return config;

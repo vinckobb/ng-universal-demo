@@ -20,6 +20,8 @@ module.exports = function()
             filename: '[name].js',
             library: '[name]_[hash]'
         },
+        mode: 'development',
+        devtool: 'cheap-module-eval-source-map',
         resolve:
         {
             extensions: ['.ts', '.js'],

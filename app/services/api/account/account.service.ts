@@ -2,13 +2,11 @@ import {Injectable, Optional, Inject, Injector} from '@angular/core';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {HttpClient, HttpParams, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {RESTClient, GET, BaseUrl, DefaultHeaders, ResponseTransform, RestTransferStateService, POST, FullHttpResponse} from '@ng/rest';
-import {SERVER_BASE_URL, SERVER_COOKIE_HEADER, SERVER_AUTH_HEADER} from "@ng/common";
-import {AuthenticationServiceOptions, UserIdentity, AccessToken} from '@ng/authentication';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
+import {RESTClient, GET, BaseUrl, DefaultHeaders, ResponseTransform, RestTransferStateService, POST, FullHttpResponse, DisableInterceptor} from '@ng/rest';
+import {SERVER_BASE_URL, SERVER_COOKIE_HEADER, SERVER_AUTH_HEADER, IgnoredInterceptorsService} from "@ng/common";
+import {AuthenticationServiceOptions, UserIdentity, AccessToken, AuthInterceptor} from '@ng/authentication';
+import {Observable, Observer, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {_throw} from 'rxjs/observable/throw';
 import * as global from 'config/global';
 
 /**
@@ -26,9 +24,10 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
                        @Optional() transferState?: RestTransferStateService,
                        @Optional() @Inject(SERVER_BASE_URL) baseUrl?: string,
                        @Optional() @Inject(SERVER_COOKIE_HEADER) serverCookieHeader?: string,
-                       @Optional() @Inject(SERVER_AUTH_HEADER) serverAuthHeader?: string)
+                       @Optional() @Inject(SERVER_AUTH_HEADER) serverAuthHeader?: string,
+                       @Optional() ignoredInterceptorsService?: IgnoredInterceptorsService)
     {
-        super(http, transferState, baseUrl, serverCookieHeader, serverAuthHeader);
+        super(http, transferState, baseUrl, serverCookieHeader, serverAuthHeader, ignoredInterceptorsService, _injector);
     }
 
     //######################### public methods - implementation of AuthenticationServiceOptions #########################
@@ -75,6 +74,7 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
      */
     @ResponseTransform()
     @FullHttpResponse()
+    @DisableInterceptor(AuthInterceptor)
     @GET("myaccount")
     public getUserIdentity(): Observable<UserIdentity<any>>
     {
@@ -126,7 +126,7 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
                 });
             }
 
-            return _throw(error);
+            return throwError(error);
         }),
         map(data =>
         {

@@ -153,3 +153,35 @@ login-view.app-page
         flex: 1 0 auto;
     }
 }
+
+// ---------------------- HELP VIEW ----------------------
+help-view, .help-view
+{
+    background-color: #FFF;
+    display: block;
+    padding: 10px;
+    font-size: 1.4em;
+
+    @media print
+    {
+        h2
+        {
+            page-break-before: always;
+        }
+    }
+
+    div
+    {
+        &>img
+        {
+            width: 100%;
+
+            &+*
+            {
+                display: block;
+                text-align: center;
+                font-weight: bold;
+            }
+        }
+    }
+}

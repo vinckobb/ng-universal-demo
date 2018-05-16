@@ -4,12 +4,15 @@ var connect = require('connect'),
     proxy = require('http-proxy-middleware'),
     argv = require('yargs').argv,
     path = require('path'),
-    DashboardPlugin = require('webpack-dashboard/plugin'),
+    //DashboardPlugin = require('webpack-dashboard/plugin'),
     url = require('url'),
     fs = require('fs'),
-    https = require('https');
+    https = require('https'),
+    connectExtensions = require('ace-nodejs-connect-extensions');
 
 var app = connect();
+
+connectExtensions.extendConnectUse(app);
 
 const wwwroot = "wwwroot";
 const serverPath = path.join(__dirname, wwwroot, 'dist/server.js');

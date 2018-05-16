@@ -16,6 +16,24 @@
     display: inline-block;
 }
 
+.flex-row
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-column
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-1
+{
+    flex: 1;
+    min-width: 0;
+}
+
 .relative
 {
     position: relative;
@@ -52,6 +70,12 @@
     margin-left: $xsWidth;
 }
 
+.margin-xs-horizontal
+{
+    margin-left: $xsWidth;
+    margin-right: $xsWidth;
+}
+
 .margin-sm-top
 {
     margin-top: $smWidth;
@@ -76,6 +100,12 @@
 .margin-sm-right
 {
     margin-right: $smWidth;
+}
+
+.margin-sm-horizontal
+{
+    margin-right: $smWidth;
+    margin-left: $smWidth;
 }
 
 .margin-md-top
@@ -191,9 +221,19 @@
     margin-bottom: 200px;
 }
 
+.content-wrap
+{
+    white-space: normal;
+}
+
 .content-nowrap
 {
     white-space: nowrap;
+}
+
+.max-width-none
+{
+    max-width: 0;
 }
 
 .half-width
@@ -260,4 +300,9 @@
 .overflow-hidden
 {
     overflow: hidden;
+}
+
+.table-container
+{
+    overflow-x: auto;
 }

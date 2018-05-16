@@ -1,5 +1,5 @@
 import {isFunction, isBlank} from '@ng/common';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as moment from 'moment';
 import * as config from 'config/global';
 

@@ -5,8 +5,7 @@ import {By} from '@angular/platform-browser';
 import {AuthenticationService} from "@ng/authentication";
 import {CookieService} from "@ng/common";
 import {TranslateService} from '@ngx-translate/core';
-import {Subject} from 'rxjs/Subject';
-import {empty} from 'rxjs/observable/empty';
+import {Subject, empty} from 'rxjs';
 
 import {NavigationComponent} from './navigation.component';
 import {FakeAuthorizeDirective, FakeTranslatePipe} from "../../misc/tests";

@@ -9,8 +9,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {LANG_COOKIE} from '../../misc/constants';
 import {ConfigReleaseService} from "../../services/api/configRelease/configRelease.service";
 import {ConfigReleaseData} from "../../services/api/configRelease/configRelease.interface";
-import {Subscription} from 'rxjs/Subscription';
-import {interval} from 'rxjs/observable/interval';
+import {Subscription, interval} from 'rxjs';
 import * as global from 'config/global';
 import * as version from 'config/version';
 

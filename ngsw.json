@@ -10,12 +10,21 @@
             {
                 "files":
                 [
-                    "/index.html"
-                ],
-                "versionedFiles":
-                [
+                    "/index.html",
                     "/dist/*.*",
                     "!/dist/server.js"
+                ]
+            }
+        },
+        {
+            "name": "markdown",
+            "installMode": "lazy",
+            "updateMode": "lazy",
+            "resources":
+            {
+                "files":
+                [
+                    "/dist/md/**"
                 ]
             }
         },
