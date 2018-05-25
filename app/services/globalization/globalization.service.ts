@@ -12,7 +12,7 @@ export class GlobalizationService extends GlobalizationServiceInterface
     /**
      * Gets current name of locale, that is used within picker
      */
-    public getLocale(): string
+    public get locale(): string
     {
         return "sk";
     }
@@ -20,7 +20,7 @@ export class GlobalizationService extends GlobalizationServiceInterface
     /**
      * Gets observable that emits data when locale changes and change should be applied to picker
      */
-    public getLocaleChange(): Observable<string>
+    public get localeChange(): Observable<void>
     {
         return empty();
     }

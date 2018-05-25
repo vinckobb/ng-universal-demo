@@ -3,31 +3,17 @@ import {BrowserModule} from '@angular/platform-browser';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
 import {ExternalTranslationLoader, ExternalTranslationLoaderOptions} from '@ng/translate-extensions';
-import {NotificationsModule} from '@ng/notifications';
-import {CommonModule as NgCommonModule, ProgressIndicatorModule, SERVER_BASE_URL} from '@ng/common';
-import {AuthorizationModule} from '@ng/authentication';
-import {RestTransferStateModule} from '@ng/rest';
-import {ServerValidationsModule, HttpErrorInterceptorModule, HttpErrorInterceptorOptions, InternalServerErrorModule} from '@ng/error-handling';
+import {ProgressIndicatorModule, SERVER_BASE_URL} from '@ng/common';
+import {InternalServerErrorModule} from '@ng/error-handling';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {PrebootModule} from 'preboot';
 
 import {AppComponent} from './app.component';
 import {NavigationComponent} from '../components/navigation/navigation.component';
-import {AccountService} from "../services/api/account/account.service";
 import {appComponents, appRoutesModule} from './app.component.routes';
 import {CommonSharedModule} from './commonShared.module';
 import {APP_TRANSFER_ID} from '../misc/constants';
-import {GlobalizationService as GlobalizationServiceImpl} from '../services/globalization/globalization.service';
 import {providers} from './app.config';
-import * as config from 'config/global';
-
-/**
- * Factory for HttpErrorInterceptorOptions
- */
-export function httpErrorInterceptorModuleFactory()
-{
-    return new HttpErrorInterceptorOptions(config.debug);
-}
 
 /**
  * Factory method that is used for creating external translation loader
@@ -65,15 +51,9 @@ export function externalTranslationLoaderFactory(http: HttpClient, injector: Inj
                 deps: [HttpClient, Injector]
             }
         }),
-        NotificationsModule.forRoot(),
-        RestTransferStateModule.forRoot(),
-        NgCommonModule.forRootWithGlobalization(GlobalizationServiceImpl),
-        AuthorizationModule.forRoot(AccountService),
-        ServerValidationsModule.forRoot(),
-        InternalServerErrorModule.forRoot(),
-        ProgressIndicatorModule.forRoot(),
-        HttpErrorInterceptorModule.forRootWithOptions(httpErrorInterceptorModuleFactory),
-        ServiceWorkerModule.register('/ngsw-worker.js', {enabled: isNgsw}),
+        InternalServerErrorModule,
+        ProgressIndicatorModule,
+        ServiceWorkerModule.register('/ngsw-worker.js', {enabled: false}),
         PrebootModule.withConfig({ appRoot: 'app' }),
         CommonSharedModule,
         appRoutesModule

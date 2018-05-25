@@ -1,6 +1,6 @@
-import {NgModule} from '@angular/core';
+import {NgModule, FactoryProvider} from '@angular/core';
 import {ServerModule, ServerTransferStateModule} from '@angular/platform-server';
-import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';
+import {ReportingExceptionHandlerOptions} from '@ng/error-handling';
 import {ServerProvidersModule} from '@ng/server-stuff';
 
 import {AppComponent} from './app.component';
@@ -26,8 +26,15 @@ export function reportingExceptionHandlerOptionsFactory()
         AppModule,
         ServerModule,
         ServerTransferStateModule,
-        ServerProvidersModule,
-        ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory)
+        ServerProvidersModule
+    ],
+    providers:
+    [
+        <FactoryProvider>
+        {
+            provide: ReportingExceptionHandlerOptions,
+            useFactory: reportingExceptionHandlerOptionsFactory
+        }
     ]
 })
 export class ServerAppModule 

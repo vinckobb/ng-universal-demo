@@ -1,12 +1,10 @@
-import {NgModule} from '@angular/core';
+import {NgModule, FactoryProvider} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserTransferStateModule} from '@angular/platform-browser';
-import {CommonModule as NgCommonModule} from '@ng/common';
-import {ExceptionHandlingModule, ReportingExceptionHandlerOptions} from '@ng/error-handling';
+import {ReportingExceptionHandlerOptions} from '@ng/error-handling';
 
 import {AppComponent} from './app.component';
 import {AppModule} from './app.module';
-import {GlobalizationService as GlobalizationServiceImpl} from '../services/globalization/globalization.service';
 import * as config from 'config/global';
 
 /**
@@ -27,9 +25,15 @@ export function reportingExceptionHandlerOptionsFactory()
     [
         AppModule,
         BrowserAnimationsModule,
-        BrowserTransferStateModule,
-        NgCommonModule.forRootBrowserWithGlobalization(GlobalizationServiceImpl),
-        ExceptionHandlingModule.forRootWithOptions(reportingExceptionHandlerOptionsFactory)
+        BrowserTransferStateModule
+    ],
+    providers:
+    [
+        <FactoryProvider>
+        {
+            provide: ReportingExceptionHandlerOptions,
+            useFactory: reportingExceptionHandlerOptionsFactory
+        }
     ]
 })
 export class BrowserAppModule

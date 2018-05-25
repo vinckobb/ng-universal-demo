@@ -53,7 +53,7 @@ export class AppComponent implements OnDestroy
             currentLang = storedCookie;
         }
         
-        moment.locale(globalization.getLocale());
+        moment.locale(globalization.locale);
         translate.setDefaultLang(currentLang);
         translate.use(currentLang);
 

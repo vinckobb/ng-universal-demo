@@ -11,8 +11,6 @@ import {AuthorizationModule} from '@ng/authentication';
 import {FancyTreeModule} from '@ng/treeview';
 import {TranslateModule} from '@ngx-translate/core';
 
-// import {NavigationComponent} from './components/navigation/navigation.component';
-
 /**
  * Common module for all other modules
  */
