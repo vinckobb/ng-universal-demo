@@ -53,7 +53,7 @@
         "@ng/authentication": "5.0.0",
         "@ng/bootstrap": "5.0.0",
         "@ng/common": "5.0.0",
-        "@ng/error-handling": "5.0.0 ",
+        "@ng/error-handling": "5.0.0",
         "@ng/grid": "5.0.0",
         "@ng/grid-extensions": "5.0.0",
         "@ng/md-help": "5.0.0",

@@ -1,4 +1,5 @@
-import {HostBinding} from '@angular/core';
+import {AnimationEvent} from '@angular/animations';
+import {HostBinding, HostListener} from '@angular/core';
 
 /**
  * Base class that enables fly in out animation
@@ -18,4 +19,23 @@ export class BaseAnimatedComponent
      */
     @HostBinding('class.fly-in-out')
     public animatedComponentClass = true;
+    
+    /**
+     * Called when animation has completed
+     */
+    @HostListener('@flyInOut.done', ['$event'])
+    public animationDone(event: AnimationEvent)
+    {
+        this._animationDone(event);
+    }
+
+    //######################### protected methods #########################
+    
+    /**
+     * Called when animation has finished its duration
+     * @param {AnimationEvent} event Event of finished animation
+     */
+    protected _animationDone(event: AnimationEvent)
+    {
+    }
 }
