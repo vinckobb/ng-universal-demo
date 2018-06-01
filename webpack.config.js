@@ -6,6 +6,7 @@ var webpack = require('webpack'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
     WebpackNotifierPlugin = require('webpack-notifier'),
+    CompressionPlugin = require("compression-webpack-plugin"),
     //DashboardPlugin = require('webpack-dashboard/plugin'),
     rxPaths = require('rxjs/_esm5/path-mapping'),
     extend = require('extend'),
@@ -225,7 +226,6 @@ module.exports = function(options, args)
         plugins:
         [
             new WebpackNotifierPlugin({title: `Webpack - ${hmr ? 'HMR' : (ssr ? 'SSR' : 'BUILD')}`, excludeWarnings: true, alwaysNotify: true}),
-            //new DashboardPlugin(),
             //copy external dependencies
             new CopyWebpackPlugin(
             [
@@ -307,6 +307,7 @@ module.exports = function(options, args)
     if(hmr)
     {
         config.plugins.push(new webpack.HotModuleReplacementPlugin());
+        //config.plugins.push(new DashboardPlugin());
 
         Object.keys(config.entry).forEach(entry =>
         {
@@ -340,6 +341,7 @@ module.exports = function(options, args)
         config.output.chunkFilename = `[name].${ssr ? 'server' : 'client'}.chunk.[chunkhash].js`;
 
         config.plugins.push(new ExtractTextPlugin("style.[md5:contenthash:hex:20].css"));
+        config.plugins.push(new CompressionPlugin({test: /\.js$|\.css$/}));
     }
 
     return config;
