@@ -1,5 +1,6 @@
 var connect = require('connect'),
     gzipStatic = require('connect-gzip-static'),
+    serveStatic = require('serve-static'),
     history = require('connect-history-api-fallback'),
     proxy = require('http-proxy-middleware'),
     argv = require('yargs').argv,
@@ -14,7 +15,6 @@ var app = connect();
 
 connectExtensions.extendConnectUse(app);
 
-const oneDay = 86400000;
 const wwwroot = "wwwroot";
 const serverPath = path.join(__dirname, wwwroot, 'dist/server.js');
 const proxyUrlFile = path.join(__dirname, 'proxyUrl.js');
@@ -134,7 +134,18 @@ if(!!argv.browsersync)
 }
 
 //return static files
-app.use(gzipStatic(wwwroot, { maxAge: oneDay }));
+app.use(gzipStatic(wwwroot, 
+                   {
+                       maxAge: '2d',
+                       setHeaders: function setCustomCacheControl (res, path) 
+                       {
+                           if (serveStatic.mime.lookup(path) === 'text/html') 
+                           {
+                               // Custom Cache-Control for HTML files
+                               res.setHeader('Cache-Control', 'public, max-age=0');
+                           }
+                       }
+                   }));
 
 console.log("Listening on port 8888 => http://localhost:8888");
 //create node.js http server and listen on port
