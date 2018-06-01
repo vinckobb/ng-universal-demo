@@ -5,6 +5,7 @@ var webpack = require('webpack'),
     HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
+    WebpackNotifierPlugin = require('webpack-notifier'),
     //DashboardPlugin = require('webpack-dashboard/plugin'),
     rxPaths = require('rxjs/_esm5/path-mapping'),
     extend = require('extend'),
@@ -141,7 +142,7 @@ module.exports = function(options, args)
             chunkFilename: `[name].${ssr ? 'server' : 'client'}.chunk.js`
         },
         mode: 'development',
-        devtool: prod ? 'source-map' : 'cheap-module-eval-source-map',
+        devtool: hmr ? 'none' : 'source-map',
         target: ssr ? 'node' : 'web',
         resolve:
         {
@@ -223,6 +224,7 @@ module.exports = function(options, args)
         },
         plugins:
         [
+            new WebpackNotifierPlugin({title: `Webpack - ${hmr ? 'HMR' : (ssr ? 'SSR' : 'BUILD')}`, excludeWarnings: true, alwaysNotify: true}),
             //new DashboardPlugin(),
             //copy external dependencies
             new CopyWebpackPlugin(

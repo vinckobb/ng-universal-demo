@@ -21,7 +21,7 @@ module.exports = function()
             library: '[name]_[hash]'
         },
         mode: 'development',
-        devtool: 'cheap-module-eval-source-map',
+        devtool: 'source-map',
         resolve:
         {
             extensions: ['.ts', '.js'],
