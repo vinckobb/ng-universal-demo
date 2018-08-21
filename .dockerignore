@@ -1,3 +1,15 @@
-*
+.include/index.html.hbs
+.utils/
+.vscode/
+node_modules/
+app/
+app.aot/
+config/
+content/
+build/
+testResults/
 
-!package.json
+*.log
+*.bak
+*.orig
+*~

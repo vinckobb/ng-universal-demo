@@ -2,10 +2,10 @@ import {NgModule, FactoryProvider} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserTransferStateModule} from '@angular/platform-browser';
 import {ReportingExceptionHandlerOptions} from '@ng/error-handling';
+import * as config from 'config/global';
 
 import {AppComponent} from './app.component';
 import {AppModule} from './app.module';
-import * as config from 'config/global';
 
 /**
  * Factory for ReportingExceptionHandlerOptions

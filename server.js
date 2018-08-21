@@ -6,9 +6,9 @@ var connect = require('connect'),
     argv = require('yargs').argv,
     path = require('path'),
     //DashboardPlugin = require('webpack-dashboard/plugin'),
-    url = require('url'),
     fs = require('fs'),
     https = require('https'),
+    bodyParser = require('body-parser'),
     connectExtensions = require('ace-nodejs-connect-extensions');
 
 var app = connect();
@@ -90,6 +90,9 @@ require('./server.mock')(app);
 //proxy special requests to other location
 app.use(proxy(['/api'], {target: proxyUrl, ws: true}));
 
+//parse html request json body
+app.use(bodyParser.json({limit: '50mb'}));
+
 //enable html5 routing
 app.use(history());
 
@@ -136,7 +139,7 @@ if(!!argv.browsersync)
 //return static files
 app.use(gzipStatic(wwwroot, 
                    {
-                       maxAge: '2d',
+                       maxAge: '1d',
                        setHeaders: function setCustomCacheControl (res, path) 
                        {
                            if (serveStatic.mime.lookup(path) === 'text/html') 

@@ -1,10 +1,10 @@
 import {Injectable, Optional, Inject, Injector} from '@angular/core';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
-import {HttpClient, HttpParams, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpErrorResponse, HttpResponse, HttpRequest, HttpEventType} from '@angular/common/http';
 import {RESTClient, GET, BaseUrl, DefaultHeaders, ResponseTransform, RestTransferStateService, POST, FullHttpResponse, DisableInterceptor} from '@ng/rest';
-import {SERVER_BASE_URL, SERVER_COOKIE_HEADER, SERVER_AUTH_HEADER, IgnoredInterceptorsService} from "@ng/common";
-import {AuthenticationServiceOptions, UserIdentity, AccessToken, AuthInterceptor} from '@ng/authentication';
+import {SERVER_BASE_URL, SERVER_COOKIE_HEADER, SERVER_AUTH_HEADER, IgnoredInterceptorsService, HttpRequestIgnoredInterceptorId} from "@ng/common";
+import {AuthenticationServiceOptions, UserIdentity, AccessToken, AuthInterceptor, SuppressAuthInterceptor} from '@ng/authentication';
 import {Observable, Observer, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import * as global from 'config/global';
@@ -39,14 +39,29 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
      */
     public login(accessToken: AccessToken): Observable<any>
     {
-        return this.http.post(`${global.apiBaseUrl}authentication`,
-                              new HttpParams()
-                                  .append("j_username", accessToken.userName)
-                                  .append("j_password", accessToken.password)
-                                  .append("remember-me", accessToken.rememberMe.toString()),
-                              {
-                                  observe: 'response'
-                              });
+        return Observable.create((observer: Observer<any>) =>
+        {
+            let req: HttpRequestIgnoredInterceptorId<any> = new HttpRequest<any>('POST',
+                                                                                 `${global.apiBaseUrl}authentication`,
+                                                                                 new HttpParams()
+                                                                                    .append("j_username", accessToken.userName)
+                                                                                    .append("j_password", accessToken.password)
+                                                                                    .append("remember-me", accessToken.rememberMe.toString()));
+
+            req.requestId = 'authenticate-call';
+
+            this.ignoredInterceptorsService.addInterceptor(SuppressAuthInterceptor, req);
+
+            this.http.request(req).subscribe(result =>
+                                             {
+                                                if(result.type == HttpEventType.Response)
+                                                {
+                                                    observer.next(result);
+                                                    observer.complete();
+                                                }
+                                             },
+                                             error => observer.error(error));
+        });
     }
 
     /**
@@ -74,6 +89,7 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
      */
     @ResponseTransform()
     @FullHttpResponse()
+    @DisableInterceptor(SuppressAuthInterceptor)
     @DisableInterceptor(AuthInterceptor)
     @GET("myaccount")
     public getUserIdentity(): Observable<UserIdentity<any>>
@@ -84,17 +100,17 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
     /**
      * Redirects current page to authentication page
      */
-    public showAuthPage(): void
+    public showAuthPage(): Promise<boolean>
     {
-        this._injector.get(Router).navigate(['/login'], {queryParams: {returnUrl: this._location.path()}});
+        return this._injector.get(Router).navigate(['/login'], {queryParams: {returnUrl: this._location.path()}});
     }
 
     /**
      * Redirects current page to access denied page
      */
-    public showAccessDenied(): void
+    public showAccessDenied(): Promise<boolean>
     {
-        this._injector.get(Router).navigate(['/accessDenied']);
+        return this._injector.get(Router).navigate(['/accessDenied']);
     }
 
     //######################### private methods #########################

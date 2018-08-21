@@ -21,22 +21,12 @@ export class AuthConfig extends AuthInterceptorConfig
      */
     private _accountSvc: AuthenticationServiceOptions<any>;
 
-    /**
-     * Indication that call of get identity is blocked
-     */
-    private _blocked: boolean = false;
-
-    /**
-     * Resolve method for blocked auth
-     */
-    private _blockedPromise: Promise<boolean>;
-
     //######################### private properties #########################
 
     /**
      * Gets auth service
      */
-    private get AuthSvc(): AuthenticationService<any>
+    private get authSvc(): AuthenticationService<any>
     {
         return this._authSvc || (this._authSvc = this._injector.get(AuthenticationService));
     }
@@ -44,7 +34,7 @@ export class AuthConfig extends AuthInterceptorConfig
     /**
      * Gets account service
      */
-    private get AccountSvc(): AuthenticationServiceOptions<any>
+    private get accountSvc(): AuthenticationServiceOptions<any>
     {
         return this._accountSvc || (this._accountSvc = this._injector.get(AUTHENTICATION_SERVICE_OPTIONS));
     }
@@ -65,39 +55,12 @@ export class AuthConfig extends AuthInterceptorConfig
     {
         return new Promise((resolve, reject) =>
         {
-            if(this._blocked)
-            {
-                this._blockedPromise.then(block => block ? reject() : resolve(true));
-            }
-            else
-            {
-                let resolveBlock;
-
-                this._blockedPromise = new Promise(resolve =>
+            this.authSvc.getUserIdentity(true)
+                .catch(error => reject(error))
+                .then((identity: UserIdentity<any>) =>
                 {
-                    resolveBlock = resolve;
+                    resolve(identity.isAuthenticated);
                 });
-
-                this.AuthSvc.getUserIdentity(true)
-                    .catch(error => reject(error))
-                    .then((identity: UserIdentity<any>) =>
-                    {
-                        this._blocked = !identity.isAuthenticated;
-
-                        if(this._blocked)
-                        {
-                            resolveBlock(true);
-                        }
-                        else
-                        {
-                            resolveBlock(false);
-                        }
-
-                        resolve(identity.isAuthenticated);
-                    });
-            }
-
-            this._blocked = true;
         });
     }
 
@@ -107,33 +70,22 @@ export class AuthConfig extends AuthInterceptorConfig
      */
     public isAuthPage(): boolean
     {
-        return this.AccountSvc.isAuthPage();
+        return this.accountSvc.isAuthPage();
     }
 
     /**
      * Redirects current page to authentication page
      */
-    public showAuthPage(): void
+    public showAuthPage(): Promise<boolean>
     {
-        this.AccountSvc.showAuthPage();
+        return this.accountSvc.showAuthPage();
     }
 
     /**
      * Redirects current page to access denied page
      */
-    public showAccessDenied(): void
+    public showAccessDenied(): Promise<boolean>
     {
-        this.AccountSvc.showAccessDenied();
-    }
-
-    //######################### public methods #########################
-
-    /**
-     * Unblocks call of getting user identity
-     */
-    public unblock()
-    {
-        this._blocked = false;
-        this._blockedPromise = null;
+        return this.accountSvc.showAccessDenied();
     }
 }

@@ -13,6 +13,7 @@ import 'scrollmagic';
 import 'highlight.js';
 import 'sourcemapped-stacktrace';
 
+import "@angular/animations";
 import "@angular/core";
 import "@angular/core/testing";
 import "@angular/compiler";
@@ -22,7 +23,6 @@ import "@angular/common/http";
 import "@angular/platform-browser";
 import "@angular/platform-browser-dynamic";
 import "@angular/platform-browser-dynamic/testing";
-import "@angular/animations";
 import "@angular/http";
 import "@angular/http/testing";
 import "@angular/forms";

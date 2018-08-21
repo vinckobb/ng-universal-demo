@@ -106,7 +106,7 @@ gulp.task("prepare-version", function(cb)
             branchName: process.env.BRANCH_NAME,
             buildNumber: process.env.BUILD_NUMBER,
             tagPrefix: "v",
-            ignoreBranchPrefix: "[a-z]+/|[a-z]+-\\d+/",
+            ignoreBranchPrefix: "[a-z]+/|(?:[a-z]+-)+\\d+/",
             pre: process.env.BUILD_TYPE == "release" ? false : true,
             suffix: process.env.SNAPSHOT_SUFFIX ? process.env.SNAPSHOT_SUFFIX : "build"
         }

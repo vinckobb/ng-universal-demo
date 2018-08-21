@@ -23,11 +23,6 @@ export class LoginComponent extends BaseAnimatedComponent
     //######################### public properties #########################
 
     /**
-     * Indication that logged user should be remembered
-     */    
-    public rememberMe: boolean = true;
-
-    /**
      * Username for logging in
      */
     public username: string = "";
@@ -62,7 +57,7 @@ export class LoginComponent extends BaseAnimatedComponent
             {
                 userName: this.username,
                 password: this.password,
-                rememberMe: this.rememberMe
+                rememberMe: false
             })
             .pipe(catchError(() =>
             {

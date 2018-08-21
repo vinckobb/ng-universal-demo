@@ -4,12 +4,15 @@ var webpack = require('webpack'),
     ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin'),
     HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
-    ExtractTextPlugin = require("extract-text-webpack-plugin"),
+    MiniCssExtractPlugin = require("mini-css-extract-plugin"),
     WebpackNotifierPlugin = require('webpack-notifier'),
     CompressionPlugin = require("compression-webpack-plugin"),
     //DashboardPlugin = require('webpack-dashboard/plugin'),
+    SpeedMeasurePlugin = require("speed-measure-webpack-plugin"),
+    BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin,
     rxPaths = require('rxjs/_esm5/path-mapping'),
     extend = require('extend'),
+    HardSourceWebpackPlugin = require('hard-source-webpack-plugin'),
     AngularCompilerPlugin =  require('@ngtools/webpack').AngularCompilerPlugin;
 
 //array of paths for server and browser tsconfigs
@@ -100,7 +103,7 @@ function getTypescriptLoaders(aot, hmr)
  */
 function getExternalStyleLoaders(prod)
 {
-    return prod ? ExtractTextPlugin.extract({fallback: "style-loader", use: ['css-loader'], publicPath: ""}) : ['style-loader', 'css-loader'];
+    return prod ? [{loader: MiniCssExtractPlugin.loader, options: {publicPath: ""}}, 'css-loader'] : ['style-loader', 'css-loader'];
 }
 
 /**
@@ -109,7 +112,7 @@ function getExternalStyleLoaders(prod)
  */
 function getStyleLoaders(prod)
 {
-    return prod ? ExtractTextPlugin.extract({fallback: "style-loader", use: ['css-loader', 'sass-loader'], publicPath: ""}) : ['style-loader', 'css-loader', 'sass-loader'];
+    return prod ? [{loader: MiniCssExtractPlugin.loader, options: {publicPath: ""}}, 'css-loader', 'sass-loader'] : ['style-loader', 'css-loader', 'sass-loader'];
 }
 
 module.exports = function(options, args)
@@ -119,6 +122,7 @@ module.exports = function(options, args)
     var aot = !!options && !!options.aot;
     var ssr = !!options && !!options.ssr;
     var dll = !!options && !!options.dll;
+    var debug = !!options && !!options.debug;
     var ngsw = process.env.NGSW == "true";
 
     if(!!options && options.ngsw != undefined)
@@ -131,7 +135,7 @@ module.exports = function(options, args)
     var distPath = "wwwroot/dist";
     options = options || {};
 
-    console.log(`Running build with following configuration Production: ${prod} Hot Module Replacement: ${hmr} Ahead Of Time Compilation: ${aot} Server Side Rendering: ${ssr}`)
+    console.log(`Running build with following configuration Production: ${prod} Hot Module Replacement: ${hmr} Ahead Of Time Compilation: ${aot} Server Side Rendering: ${ssr} Debugging compilation: ${debug}`);
 
     var config =
     {
@@ -250,7 +254,15 @@ module.exports = function(options, args)
             {
                 isProduction: prod,
                 isNgsw: ngsw
-            })
+            }),
+            // new webpack.IgnorePlugin(/\.\/locale$/),
+            new HardSourceWebpackPlugin(),
+            new HardSourceWebpackPlugin.ExcludeModulePlugin(
+            [
+                {
+                    test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
+                }
+            ])
         ]
     };
 
@@ -293,10 +305,13 @@ module.exports = function(options, args)
             }
         }));
 
-        config.plugins.push(new ScriptExtHtmlWebpackPlugin(
-                            {
-                                defaultAttribute: 'defer'
-                            }));
+        if(!debug)
+        {
+            config.plugins.push(new ScriptExtHtmlWebpackPlugin(
+                                {
+                                    defaultAttribute: 'defer'
+                                }));
+        }
     }
 
     //aot specific settings
@@ -328,11 +343,14 @@ module.exports = function(options, args)
             manifest: require(path.join(__dirname, distPath + '/dependencies-manifest.json'))
         }));
 
-        config.plugins.push(new HtmlWebpackIncludeAssetsPlugin(
+        if(!debug)
         {
-            assets: ['dependencies.js'],
-            append: false
-        }));
+            config.plugins.push(new HtmlWebpackIncludeAssetsPlugin(
+            {
+                assets: ['dependencies.js'],
+                append: false
+            }));
+        }
     }
 
     //production specific settings - prod is used only for client part
@@ -341,9 +359,24 @@ module.exports = function(options, args)
         config.output.filename = "[name].[hash].js";
         config.output.chunkFilename = `[name].${ssr ? 'server' : 'client'}.chunk.[chunkhash].js`;
 
-        config.plugins.push(new ExtractTextPlugin("style.[md5:contenthash:hex:20].css"));
+        config.plugins.push(new MiniCssExtractPlugin(
+        {
+            filename: '[name].[hash].css',
+            chunkFilename: '[id].[hash].css',
+        }));
+            
         config.plugins.push(new CompressionPlugin({test: /\.js$|\.css$/}));
     }
 
+    //this is used for debugging speed of compilation
+    if(debug)
+    {
+        config.plugins.push(new BundleAnalyzerPlugin());
+
+        let smp = new SpeedMeasurePlugin({outputFormat: 'humanVerbose'});
+    
+        return smp.wrap(config);
+    }
+    
     return config;
 }
