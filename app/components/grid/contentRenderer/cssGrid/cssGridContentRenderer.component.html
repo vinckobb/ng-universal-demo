@@ -1,0 +1,9 @@
+<div *ngFor="let meta of metadata?.columns; let index=index" role="columnheader">
+    {{meta?.title}}
+</div>
+<ng-template ngFor [ngForOf]="data" let-datum>
+    <div *ngFor="let meta of metadata?.columns" role="gridcell">
+        {{datum[meta?.name]}}
+    </div>
+</ng-template>
+

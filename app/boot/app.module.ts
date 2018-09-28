@@ -14,6 +14,7 @@ import {appComponents, appRoutesModule} from './app.component.routes';
 import {CommonSharedModule} from './commonShared.module';
 import {APP_TRANSFER_ID} from '../misc/constants';
 import {providers} from './app.config';
+import {CssGridContentRendererComponent} from '../components/grid/contentRenderer/cssGrid/cssGridContentRenderer.component';
 
 /**
  * Factory method that is used for creating external translation loader
@@ -59,8 +60,9 @@ export function externalTranslationLoaderFactory(http: HttpClient, injector: Inj
         appRoutesModule
     ],
     providers: providers,
-    declarations: [AppComponent, NavigationComponent, ...appComponents],
-    exports: [AppComponent]
+    declarations: [AppComponent, NavigationComponent, CssGridContentRendererComponent, ...appComponents],
+    exports: [AppComponent],
+    entryComponents: [CssGridContentRendererComponent]
 })
 export class AppModule
 {

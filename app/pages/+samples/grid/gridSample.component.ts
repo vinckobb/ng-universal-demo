@@ -7,6 +7,7 @@ import {flyInOutTrigger} from '@ng/animations';
 
 import {GridDataService} from "../../../services/api/gridData/gridData.service";
 import {BaseAnimatedComponent} from "../../../misc/baseAnimatedComponent";
+import {CssGridContentRendererComponent} from '../../../components/grid/contentRenderer/cssGrid/cssGridContentRenderer.component';
 
 /**
  * Grid samples component
@@ -90,6 +91,7 @@ export class GridSampleComponent extends BaseAnimatedComponent
             {
                 contentRenderer:
                 {
+                    type: CssGridContentRendererComponent,
                     options: <TableContentRendererOptions>
                     {
                     }

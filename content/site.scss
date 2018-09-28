@@ -185,3 +185,23 @@ help-view, .help-view
         }
     }
 }
+
+.css-grid-content-renderer
+{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+    height: 250px;
+    overflow-y: auto;
+
+    [role=columnheader] {
+        background-color: #F9F9FA;
+        position: sticky;
+        top: 0;
+        padding: 5px;
+        border-bottom: 1px solid #E3E4E4;
+    }
+
+    [role=gridcell] {
+        padding: 2px 5px;
+    }
+}
