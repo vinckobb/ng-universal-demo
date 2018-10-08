@@ -12,6 +12,7 @@ import 'marked';
 import 'scrollmagic';
 import 'highlight.js';
 import 'sourcemapped-stacktrace';
+import 'file-saver';
 
 import "@angular/animations";
 import "@angular/core";
