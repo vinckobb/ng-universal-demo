@@ -97,7 +97,8 @@
         "marked": "0.5.1",
         "scrollmagic": "2.0.6",
         "highlight.js": "9.13.1",
-        "sourcemapped-stacktrace": "1.1.9"
+        "sourcemapped-stacktrace": "1.1.9",
+        "positions": "1.6.2"
     },
     "devDependencies": {
         "@types/node": "10.1.0",
