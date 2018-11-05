@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, OnDestroy, Input, AfterContentInit, ContentChildren, Inject, OnInit} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, OnDestroy, Input, AfterContentInit, ContentChildren, Inject, OnInit, HostListener} from "@angular/core";
 import {DOCUMENT} from '@angular/common';
 import * as positions from 'positions';
 
@@ -219,6 +219,31 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
     }
 
     //######################### public methods - template bindings #########################
+
+    //######################### public methods - host #########################
+
+    /**
+     * Handles keyboard events
+     * @param event Keyboard event
+     * @internal
+     */
+    @HostListener('keypress', ['$event'])
+    public handleKeyboard(event: KeyboardEvent)
+    {
+        if(event.key == "ArrowDown" || event.key == "Tab")
+        {
+            
+
+            event.preventDefault();
+        }
+
+        if(event.key == "ArrowUp")
+        {
+
+
+            event.preventDefault();
+        }
+    }
 
     //######################### private methods #########################
 
