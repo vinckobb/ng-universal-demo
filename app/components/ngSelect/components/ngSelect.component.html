@@ -18,6 +18,10 @@
      [style.left.px]="optionsDivStyle?.left"
      [style.top.px]="optionsDivStyle?.top">
     <ng-template ngFor [ngForOf]="options" let-option>
-        <ng-container *ngTemplateOutlet="defaultOptionLook; context: {$implicit: option, select: this}"></ng-container>
+        <a tabindex="0"
+           class="option"
+           [class.active]="option?.value == value">
+            <ng-container *ngTemplateOutlet="defaultOptionLook; context: {$implicit: option, select: this}"></ng-container>
+        </a>
     </ng-template>
 </div>

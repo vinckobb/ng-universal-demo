@@ -47,9 +47,32 @@ import {OptionComponent} from "./option/option.component";
             overflow: auto;
         }
 
+        .optionsDiv a.option
+        {
+            color: inherit;
+        }
+
+        .optionsDiv a.option:hover,
+        .optionsDiv a.option:active, 
+        .optionsDiv a.option:focus
+        {
+            text-decoration: none;
+            outline: none;
+        }
+
         .optionsDiv .optionDiv
         {
             padding: 3px 6px;
+        }
+
+        .optionsDiv a.option.active .optionDiv
+        {
+            background-color: #BBBBBB;
+        }
+
+        .optionsDiv a.option:hover .optionDiv
+        {
+            background-color: #E0E0E0;
         }`
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -136,6 +159,8 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
     public ngOnInit()
     {
         this._document.addEventListener('mouseup', this._handleClickOutside);
+        window.addEventListener('resize', this._handleResizeAndScroll);
+        window.addEventListener('scroll', this._handleResizeAndScroll);
     }
 
     //######################### public methods - implementation of AfterViewInit #########################
@@ -189,11 +214,21 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
         }
 
         this._document.removeEventListener('mouseup', this._handleClickOutside);
+        window.removeEventListener('resize', this._handleResizeAndScroll);
+        window.removeEventListener('scroll', this._handleResizeAndScroll);
     }
 
     //######################### public methods - template bindings #########################
 
     //######################### private methods #########################
+
+    /**
+     * Handles resize event
+     */
+    private _handleResizeAndScroll = () =>
+    {
+        this._calculatePositionAndDimensions();
+    };
 
     /**
      * Handles click outside of select element
@@ -250,7 +285,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
             //space above is not enough
             if(selectRect.top < rect.height)
             {
-                optionsDiv.style.maxHeight = `${selectRect.top}px`;
+                optionsDiv.style.maxHeight = `${selectRect.top - 2}px`;
 
                 return true;
             }
@@ -267,7 +302,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
             //space below is not enough
             if(h - selectRect.bottom < rect.height)
             {
-                optionsDiv.style.maxHeight = `${h - selectRect.bottom}px`;
+                optionsDiv.style.maxHeight = `${h - selectRect.bottom - 2}px`;
 
                 return true;
             }
@@ -306,7 +341,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
             optionsCoordinates = this._flipVertiacal(optionsCoordinates);
             selectCoordinates = this._flipVertiacal(selectCoordinates);
         }
-        
+
         //horizontal overflow
         if((w < (rect.left + rect.width) &&
             spaceAfter < spaceBefore) ||
