@@ -47,49 +47,36 @@ import {OptionComponent} from "./option/option.component";
             overflow: auto;
         }
 
-        .optionsDiv a.option
-        {
-            color: inherit;
-        }
-
-        .optionsDiv a.option:hover,
-        .optionsDiv a.option:active, 
-        .optionsDiv a.option:focus
-        {
-            text-decoration: none;
-            outline: none;
-        }
-
-        .optionsDiv .optionDiv
+        .optionsDiv .optionItem
         {
             padding: 3px 6px;
         }
 
-        .optionsDiv a.option.active .optionDiv
+        .optionsDiv .optionItem.active
         {
             background-color: #BBBBBB;
         }
 
-        .optionsDiv a.option:hover .optionDiv
+        .optionsDiv .optionItem:hover
         {
             background-color: #E0E0E0;
         }`
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContentInit, OnInit
+export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, AfterContentInit, OnInit
 {
-    //######################### private fields #########################
+    //######################### protected fields #########################
 
     /**
      * Subscription for changes of visibility of optionsDiv
      */
-    private _optionsDivVisibleSubscription: Subscription;
+    protected _optionsDivVisibleSubscription: Subscription;
 
     /**
      * Subscription for changes of available options
      */
-    private _optionsChildrenSubscription: Subscription;
+    protected _optionsChildrenSubscription: Subscription;
 
     //######################### public properties - inputs #########################
 
@@ -105,12 +92,30 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
     @Input()
     public selectCoordinates: Positions.PositionsCoordinates = 'bottom left';
 
+    /**
+     * Nothing selected text
+     */
+    @Input()
+    public nothingSelectedText: string;
+
+    /**
+     * Method used for comparision of selected value and options
+     */
+    @Input()
+    public valueComparer: (source: TValue|Array<TValue>, target: TValue) => boolean = (source, target) => source == target;
+
+    /**
+     * Method used for transforming value into string to be displayed
+     */
+    @Input()
+    public valueSelector: (value: TValue) => string = value => value.toString();
+
     //######################### public properties - template bindings #########################
 
     /**
      * Currently selected value
      */
-    public value: any;
+    public value: TValue|Array<TValue>;
 
     /**
      * Indication whether is options div visible
@@ -126,8 +131,9 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
 
     /**
      * Array of available options
+     * @internal
      */
-    public options: OptionComponent[] = [];
+    public options: OptionComponent<TValue>[] = [];
 
     //######################### public properties - children #########################
 
@@ -140,14 +146,15 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
 
     /**
      * Available options
+     * @internal
      */
     @ContentChildren(OptionComponent)
-    public optionsChildren: QueryList<OptionComponent>;
+    public optionsChildren: QueryList<OptionComponent<TValue>>;
 
     //######################### constructor #########################
-    constructor(private _element: ElementRef<HTMLElement>,
-                private _changeDetector: ChangeDetectorRef,
-                @Inject(DOCUMENT) private _document: HTMLDocument)
+    constructor(protected _element: ElementRef<HTMLElement>,
+                protected _changeDetector: ChangeDetectorRef,
+                @Inject(DOCUMENT) protected _document: HTMLDocument)
     {
     }
 
@@ -155,6 +162,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
 
     /**
      * Initialize component
+     * @internal
      */
     public ngOnInit()
     {
@@ -181,6 +189,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
 
     /**
      * Called when content was initialized
+     * @internal
      */
     public ngAfterContentInit()
     {
@@ -198,6 +207,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
 
     /**
      * Called when component is destroyed
+     * @internal
      */
     public ngOnDestroy()
     {
@@ -230,7 +240,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
     @HostListener('keypress', ['$event'])
     public handleKeyboard(event: KeyboardEvent)
     {
-        if(event.key == "ArrowDown" || event.key == "Tab")
+        if(event.key == "ArrowDown")
         {
             
 
@@ -245,12 +255,23 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
         }
     }
 
-    //######################### private methods #########################
+    /**
+     * Handles keyboard events
+     * @param event Keyboard event
+     * @internal
+     */
+    @HostListener('blur', ['$event'])
+    public handleBlur(event: FocusEvent)
+    {
+        console.log(event);
+    }
+
+    //######################### protected methods #########################
 
     /**
      * Handles resize event
      */
-    private _handleResizeAndScroll = () =>
+    protected _handleResizeAndScroll = () =>
     {
         this._calculatePositionAndDimensions();
     };
@@ -259,7 +280,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
      * Handles click outside of select element
      * @param event Mouse event object
      */
-    private _handleClickOutside = (event: MouseEvent) =>
+    protected _handleClickOutside = (event: MouseEvent) =>
     {
         if(this._element.nativeElement != event.target && !isDescendant(this._element.nativeElement, event.target as HTMLElement))
         {
@@ -272,7 +293,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
     /**
      * Calculates positions and dimensions of popup
      */
-    private _calculatePositionAndDimensions()
+    protected _calculatePositionAndDimensions()
     {
         let optionsDiv = this.optionsDiv.first;
 
@@ -280,12 +301,15 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
         {
             optionsDiv.nativeElement.style.minWidth = `${this._element.nativeElement.clientWidth}px`;
 
+            //set to default position
             this.optionsDivStyle = positions(optionsDiv.nativeElement, this.optionsCoordinates, this._element.nativeElement, this.selectCoordinates);
             this._changeDetector.detectChanges();
 
+            //flip if collision with viewport
             this.optionsDivStyle = this._flipIfCollision(optionsDiv.nativeElement);
             this._changeDetector.detectChanges();
 
+            //set maxHeight if there is not more place
             if(this._updateHeight(optionsDiv.nativeElement))
             {
                 this.optionsDivStyle = this._flipIfCollision(optionsDiv.nativeElement);
@@ -298,7 +322,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
      * Updates height of element
      * @param optionsDiv Html element for options div
      */
-    private _updateHeight(optionsDiv: HTMLElement): boolean
+    protected _updateHeight(optionsDiv: HTMLElement): boolean
     {
         let rect = optionsDiv.getBoundingClientRect(),
             selectRect = this._element.nativeElement.getBoundingClientRect(),
@@ -344,7 +368,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
      * Flips html element position if collision occur
      * @param optionsDiv Html element to be flipped if collisions occur
      */
-    private _flipIfCollision(optionsDiv: HTMLElement): Positions.PositionsCss
+    protected _flipIfCollision(optionsDiv: HTMLElement): Positions.PositionsCss
     {
         let w = Math.max(this._document.documentElement.clientWidth, window.innerWidth || 0),
             h = Math.max(this._document.documentElement.clientHeight, window.innerHeight || 0),
@@ -384,7 +408,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
      * Flips vertical position
      * @param position Position to be flipped vertically
      */
-    private _flipVertiacal(position: Positions.PositionsCoordinates): Positions.PositionsCoordinates
+    protected _flipVertiacal(position: Positions.PositionsCoordinates): Positions.PositionsCoordinates
     {
         if(position.indexOf('top') >= 0)
         {
@@ -402,7 +426,7 @@ export class NgSelectComponent implements AfterViewInit, OnDestroy, AfterContent
      * Flips horizontal position
      * @param position Position to be flipped horizontally
      */
-    private _flipHorizontal(position: Positions.PositionsCoordinates): Positions.PositionsCoordinates
+    protected _flipHorizontal(position: Positions.PositionsCoordinates): Positions.PositionsCoordinates
     {
         if(position.indexOf('right') >= 0)
         {

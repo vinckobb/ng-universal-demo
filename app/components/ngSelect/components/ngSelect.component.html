@@ -1,11 +1,17 @@
-<ng-template #defaultLook let-select>
-    <span class="selected-value">{{select?.value}}</span>
+<ng-template #defaultLook>
+    <span class="selected-value">{{value | ngSelectValue: valueSelector: nothingSelectedText}}</span>
     <span class="selected-caret fa fa-caret-down"></span>
 </ng-template>
 
-<ng-template #defaultOptionLook let-option let-select="select">
-    <div class="optionDiv"
-         (click)="select.value = option?.value">{{option?.value}}</div>
+<ng-template #defaultOptionLook let-option>
+    <div class="optionItem"
+         (click)="value = option?.value">{{option?.value}}</div>
+</ng-template>
+
+<ng-template #defaultOptionsDivLook>
+    <ng-template ngFor [ngForOf]="options" let-option>
+        <ng-container *ngTemplateOutlet="defaultOptionLook; context: {$implicit: option, select: this}"></ng-container>
+    </ng-template>
 </ng-template>
 
 <button class="btn btn-select" (click)="optionsDivVisible = !optionsDivVisible">
@@ -17,11 +23,5 @@
      class="absolute optionsDiv"
      [style.left.px]="optionsDivStyle?.left"
      [style.top.px]="optionsDivStyle?.top">
-    <ng-template ngFor [ngForOf]="options" let-option>
-        <a tabindex="-1"
-           class="option"
-           [class.active]="option?.value == value">
-            <ng-container *ngTemplateOutlet="defaultOptionLook; context: {$implicit: option, select: this}"></ng-container>
-        </a>
-    </ng-template>
+    <ng-container *ngTemplateOutlet="defaultOptionsDivLook; context: {$implicit: this}"></ng-container>
 </div>
