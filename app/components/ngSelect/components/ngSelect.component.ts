@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, OnDestroy, Input, AfterContentInit, ContentChildren, Inject, OnInit, HostListener} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, OnDestroy, Input, AfterContentInit, ContentChildren, Inject, OnInit, HostListener, Attribute} from "@angular/core";
 import {DOCUMENT} from '@angular/common';
 import * as positions from 'positions';
 
@@ -52,6 +52,7 @@ import {OptionComponent} from "./option/option.component";
             padding: 3px 6px;
         }
 
+        .optionsDiv .optionItem.selected,
         .optionsDiv .optionItem.active
         {
             background-color: #BBBBBB;
@@ -78,6 +79,11 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
      */
     protected _optionsChildrenSubscription: Subscription;
 
+    /**
+     * Currently selected value
+     */
+    private _value: TValue|Array<TValue>;
+
     //######################### public properties - inputs #########################
 
     /**
@@ -102,7 +108,7 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
      * Method used for comparision of selected value and options
      */
     @Input()
-    public valueComparer: (source: TValue|Array<TValue>, target: TValue) => boolean = (source, target) => source == target;
+    public valueComparer: (source: TValue, target: TValue) => boolean = (source, target) => source == target;
 
     /**
      * Method used for transforming value into string to be displayed
@@ -115,7 +121,10 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     /**
      * Currently selected value
      */
-    public value: TValue|Array<TValue>;
+    public get value(): TValue|Array<TValue>
+    {
+        return this._value;
+    }
 
     /**
      * Indication whether is options div visible
@@ -134,6 +143,11 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
      * @internal
      */
     public options: OptionComponent<TValue>[] = [];
+
+    /**
+     * Indication whether select should behave as multiselect
+     */
+    public multiselect: boolean = false;
 
     //######################### public properties - children #########################
 
@@ -154,8 +168,11 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     //######################### constructor #########################
     constructor(protected _element: ElementRef<HTMLElement>,
                 protected _changeDetector: ChangeDetectorRef,
-                @Inject(DOCUMENT) protected _document: HTMLDocument)
+                @Inject(DOCUMENT) protected _document: HTMLDocument,
+                @Attribute('multiple') multiple)
     {
+        this.multiselect = multiple === "";
+        this._value = [];
     }
 
     //######################### public methods - implementation of OnInit #########################
@@ -230,6 +247,61 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
 
     //######################### public methods - template bindings #########################
 
+    /**
+     * Sets value to select
+     * @param value Value to be set to select
+     */
+    public setValue(value: TValue|Array<TValue>)
+    {
+        this._value = value;
+
+        this._setSelected();
+    }
+
+    /**
+     * Toggles selected/deselected value
+     * @param value Value to be selected/deselected
+     */
+    public toggleValue(value: TValue)
+    {
+        if(this.multiselect)
+        {
+            if(!this._value)
+            {
+                this._value = [];
+            }
+
+            if(Array.isArray(this._value))
+            {
+                let index = this._value.indexOf(value);
+
+                //select
+                if(index < 0)
+                {
+                    this._value.push(value);
+                }
+                //deselect
+                else
+                {
+                    this._value.splice(index, 1);
+                }
+
+                this._value = [...this._value];
+            }
+        }
+        else
+        {
+            this._value = value;
+        }
+
+        this._setSelected();
+
+        if(!this.multiselect)
+        {
+            this.optionsDivVisible = false;
+        }
+    }
+
     //######################### public methods - host #########################
 
     /**
@@ -237,36 +309,77 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
      * @param event Keyboard event
      * @internal
      */
-    @HostListener('keypress', ['$event'])
+    @HostListener('keydown', ['$event'])
     public handleKeyboard(event: KeyboardEvent)
     {
-        if(event.key == "ArrowDown")
+        if(event.key == "ArrowDown" || event.key == "ArrowUp")
         {
-            
+            let activeOption = this.options.find(itm => itm.active);
+
+            if(activeOption)
+            {
+                let index = this.options.indexOf(activeOption);
+                activeOption.active = false;
+
+                //move down cursor
+                if(event.key == "ArrowDown")
+                {
+                    index += 1;
+                }
+                //move up cursor
+                else
+                {
+                    index -= 1;
+                }
+
+                if(index < 0)
+                {
+                    index = this.options.length - 1;
+                }
+
+                index = index % this.options.length;
+
+                this.options[index].active = true;
+            }
+            //none active before
+            else if(this.options.length)
+            {
+                this.options[0].active = true;
+            }
 
             event.preventDefault();
         }
 
-        if(event.key == "ArrowUp")
+        if(event.key == "Tab")
         {
-
-
-            event.preventDefault();
+            this.optionsDivVisible = false;
         }
-    }
-
-    /**
-     * Handles keyboard events
-     * @param event Keyboard event
-     * @internal
-     */
-    @HostListener('blur', ['$event'])
-    public handleBlur(event: FocusEvent)
-    {
-        console.log(event);
     }
 
     //######################### protected methods #########################
+
+    /**
+     * Sets selected indications
+     */
+    protected _setSelected()
+    {
+        if(this.multiselect && Array.isArray(this._value))
+        {
+            let value = this._value;
+
+            this.options.forEach(option =>
+            {
+                option.selected = !!value.find(itm => this.valueComparer(itm, option.value));
+            });
+        }
+        else
+        {
+            this.options.forEach(option =>
+            {
+                option.selected = this.valueComparer(option.value, this._value as TValue);
+            });
+        }
+    }
 
     /**
      * Handles resize event
