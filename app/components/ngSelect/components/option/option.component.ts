@@ -30,4 +30,10 @@ export class OptionComponent<TValue>
      */
     @Input()
     public value: TValue;
+
+    /**
+     * Text to be displayed for this value
+     */
+    @Input()
+    public text: string;
 }
