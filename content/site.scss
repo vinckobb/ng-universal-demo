@@ -203,5 +203,11 @@ help-view, .help-view
 
     [role=gridcell] {
         padding: 2px 5px;
+        position: relative;
+    }
+
+    .contentsRow:hover > *
+    {
+        background-color: red;
     }
 }

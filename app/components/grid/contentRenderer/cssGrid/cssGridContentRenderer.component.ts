@@ -46,4 +46,9 @@ export class CssGridContentRendererComponent<TOrdering, TData, TMetadata> extend
 
         this._changeDetector.detectChanges();
     }
+
+    public logTest()
+    {
+        console.log("clicked on display:contents");
+    }
 }
