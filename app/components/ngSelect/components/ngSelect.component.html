@@ -1,5 +1,5 @@
 <ng-template #defaultLook>
-    <span class="selected-value">{{value | ngSelectValue: valueSelector: nothingSelectedText}}</span>
+    <span class="selected-value">{{value | ngSelectValue: optionsAndValueManager.selectedOption}}</span>
     <span class="selected-caret fa fa-caret-down"></span>
 </ng-template>
 
@@ -7,11 +7,11 @@
     <div class="optionItem"
          [class.selected]="option?.selected"
          [class.active]="option?.active"
-         (click)="toggleValue(option?.value)">{{option?.text}}</div>
+         (click)="optionsAndValueManager.setSelected(option)">{{option?.text}}</div>
 </ng-template>
 
 <ng-template #defaultOptionsDivLook>
-    <ng-template ngFor [ngForOf]="options" let-option>
+    <ng-template ngFor [ngForOf]="optionsAndValueManager.options" let-option>
         <ng-container *ngTemplateOutlet="defaultOptionLook; context: {$implicit: option, select: this}"></ng-container>
     </ng-template>
 </ng-template>

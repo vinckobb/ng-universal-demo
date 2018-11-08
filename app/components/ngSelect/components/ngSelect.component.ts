@@ -1,9 +1,12 @@
-import {Component, ChangeDetectionStrategy, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, OnDestroy, Input, AfterContentInit, ContentChildren, Inject, OnInit, HostListener, Attribute} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, OnDestroy, Input, AfterContentInit, ContentChildren, Inject, OnInit, HostListener, Attribute, OnChanges, SimpleChanges} from "@angular/core";
 import {DOCUMENT} from '@angular/common';
+import {nameof} from "@ng/common";
 import * as positions from 'positions';
 
 import {Subscription} from "rxjs";
 import {OptionComponent} from "./option/option.component";
+import {OptionsAndValueManager, CompareValueFunc, GetOptionsCallback} from "../misc/optionsAndValueManager.interface";
+import {OptionsAndValueManager as OptionsAndValueManagerClass} from "../misc/optionsAndValueManager";
 
 /**
  * Component used for rendering bootstrap select
@@ -65,7 +68,7 @@ import {OptionComponent} from "./option/option.component";
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, AfterContentInit, OnInit
+export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, AfterContentInit, OnInit, OnChanges
 {
     //######################### protected fields #########################
 
@@ -80,9 +83,19 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     protected _optionsChildrenSubscription: Subscription;
 
     /**
-     * Currently selected value
+     * Instance of options and value manager, used for handling options and selected value
      */
-    private _value: TValue|Array<TValue>;
+    protected _optionsAndValueManager: OptionsAndValueManager<TValue>;
+
+    //######################### public properties #########################
+
+    /**
+     * Gets options and value manager, used for handling options and selected value
+     */
+    public get optionsAndValueManager(): OptionsAndValueManager<TValue>
+    {
+        return this._optionsAndValueManager;
+    }
 
     //######################### public properties - inputs #########################
 
@@ -108,13 +121,13 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
      * Method used for comparision of selected value and options
      */
     @Input()
-    public valueComparer: (source: TValue, target: TValue) => boolean = (source, target) => source == target;
+    public valueComparer: CompareValueFunc<TValue> = (source, target) => source == target;
 
     /**
-     * Method used for transforming value into string to be displayed
+     * Method used for obtaining options
      */
     @Input()
-    public valueSelector: (value: TValue) => string = value => value.toString();
+    public optionsObtainer: GetOptionsCallback<TValue>;
 
     //######################### public properties - template bindings #########################
 
@@ -123,7 +136,7 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
      */
     public get value(): TValue|Array<TValue>
     {
-        return this._value;
+        return this._optionsAndValueManager.value;
     }
 
     /**
@@ -139,13 +152,8 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     public optionsDivStyle: Positions.PositionsCss = {};
 
     /**
-     * Array of available options
-     * @internal
-     */
-    public options: OptionComponent<TValue>[] = [];
-
-    /**
      * Indication whether select should behave as multiselect
+     * @internal
      */
     public multiselect: boolean = false;
 
@@ -172,7 +180,13 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
                 @Attribute('multiple') multiple)
     {
         this.multiselect = multiple === "";
-        this._value = [];
+        this._optionsAndValueManager = new OptionsAndValueManagerClass<TValue>(this, this._changeDetector, this.multiselect);
+        this._optionsAndValueManager.registerCompareValue(this.valueComparer);
+
+        if(this.multiselect)
+        {
+            this._optionsAndValueManager.setValue([]);
+        }
     }
 
     //######################### public methods - implementation of OnInit #########################
@@ -186,6 +200,24 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
         this._document.addEventListener('mouseup', this._handleClickOutside);
         window.addEventListener('resize', this._handleResizeAndScroll);
         window.addEventListener('scroll', this._handleResizeAndScroll);
+    }
+
+    //######################### public methods - implementation of OnChanges #########################
+    
+    /**
+     * Called when input value changes
+     */
+    public ngOnChanges(changes: SimpleChanges): void
+    {
+        if(nameof<NgSelectComponent<TValue>>('valueComparer') in changes && changes[nameof<NgSelectComponent<TValue>>('valueComparer')].currentValue)
+        {
+            this._optionsAndValueManager.registerCompareValue(this.valueComparer);
+        }
+
+        if(nameof<NgSelectComponent<TValue>>('optionsObtainer') in changes && changes[nameof<NgSelectComponent<TValue>>('optionsObtainer')].currentValue)
+        {
+            this._optionsAndValueManager.registerGetOptions(this.optionsObtainer);
+        }
     }
 
     //######################### public methods - implementation of AfterViewInit #########################
@@ -212,12 +244,12 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     {
         this._optionsChildrenSubscription = this.optionsChildren.changes.subscribe(() =>
         {
-            this.options = this.optionsChildren.toArray();
+            this._optionsAndValueManager.setOptions(this.optionsChildren.toArray());
 
             this._changeDetector.detectChanges();
         });
 
-        this.options = this.optionsChildren.toArray();
+        this._optionsAndValueManager.setOptions(this.optionsChildren.toArray());
     }
 
     //######################### public methods - implementation of OnDestroy #########################
@@ -245,63 +277,6 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
         window.removeEventListener('scroll', this._handleResizeAndScroll);
     }
 
-    //######################### public methods - template bindings #########################
-
-    /**
-     * Sets value to select
-     * @param value Value to be set to select
-     */
-    public setValue(value: TValue|Array<TValue>)
-    {
-        this._value = value;
-
-        this._setSelected();
-    }
-
-    /**
-     * Toggles selected/deselected value
-     * @param value Value to be selected/deselected
-     */
-    public toggleValue(value: TValue)
-    {
-        if(this.multiselect)
-        {
-            if(!this._value)
-            {
-                this._value = [];
-            }
-
-            if(Array.isArray(this._value))
-            {
-                let index = this._value.indexOf(value);
-
-                //select
-                if(index < 0)
-                {
-                    this._value.push(value);
-                }
-                //deselect
-                else
-                {
-                    this._value.splice(index, 1);
-                }
-
-                this._value = [...this._value];
-            }
-        }
-        else
-        {
-            this._value = value;
-        }
-
-        this._setSelected();
-
-        if(!this.multiselect)
-        {
-            this.optionsDivVisible = false;
-        }
-    }
-
     //######################### public methods - host #########################
 
     /**
@@ -314,11 +289,11 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     {
         if(event.key == "ArrowDown" || event.key == "ArrowUp")
         {
-            let activeOption = this.options.find(itm => itm.active);
+            let activeOption = this.optionsAndValueManager.options.find(itm => itm.active);
 
             if(activeOption)
             {
-                let index = this.options.indexOf(activeOption);
+                let index = this.optionsAndValueManager.options.indexOf(activeOption);
                 activeOption.active = false;
 
                 //move down cursor
@@ -334,17 +309,17 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
 
                 if(index < 0)
                 {
-                    index = this.options.length - 1;
+                    index = this.optionsAndValueManager.options.length - 1;
                 }
 
-                index = index % this.options.length;
+                index = index % this.optionsAndValueManager.options.length;
 
-                this.options[index].active = true;
+                this.optionsAndValueManager.options[index].active = true;
             }
             //none active before
-            else if(this.options.length)
+            else if(this.optionsAndValueManager.options.length)
             {
-                this.options[0].active = true;
+                this.optionsAndValueManager.options[0].active = true;
             }
 
             event.preventDefault();
@@ -356,30 +331,17 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
         }
     }
 
-    //######################### protected methods #########################
+    //######################### public methods #########################
 
     /**
-     * Sets selected indications
+     * Explicitly runs invalidation of content (change detection)
      */
-    protected _setSelected()
+    public invalidateVisuals()
     {
-        if(this.multiselect && Array.isArray(this._value))
-        {
-            let value = this._value;
-
-            this.options.forEach(option =>
-            {
-                option.selected = !!value.find(itm => this.valueComparer(itm, option.value));
-            });
-        }
-        else
-        {
-            this.options.forEach(option =>
-            {
-                option.selected = this.valueComparer(option.value, this._value as TValue);
-            });
-        }
+        this._changeDetector.detectChanges();
     }
+
+    //######################### protected methods #########################
 
     /**
      * Handles resize event
