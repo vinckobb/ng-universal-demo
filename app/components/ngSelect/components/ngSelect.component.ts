@@ -177,10 +177,11 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     constructor(protected _element: ElementRef<HTMLElement>,
                 protected _changeDetector: ChangeDetectorRef,
                 @Inject(DOCUMENT) protected _document: HTMLDocument,
-                @Attribute('multiple') multiple)
+                @Attribute('multiple') multiple,
+                @Attribute('strict') strict)
     {
         this.multiselect = multiple === "";
-        this._optionsAndValueManager = new OptionsAndValueManagerClass<TValue>(this, this._changeDetector, this.multiselect);
+        this._optionsAndValueManager = new OptionsAndValueManagerClass<TValue>(this, this._changeDetector, this.multiselect, strict);
         this._optionsAndValueManager.registerCompareValue(this.valueComparer);
 
         if(this.multiselect)
@@ -206,6 +207,7 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     
     /**
      * Called when input value changes
+     * @internal
      */
     public ngOnChanges(changes: SimpleChanges): void
     {
@@ -245,8 +247,6 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
         this._optionsChildrenSubscription = this.optionsChildren.changes.subscribe(() =>
         {
             this._optionsAndValueManager.setOptions(this.optionsChildren.toArray());
-
-            this._changeDetector.detectChanges();
         });
 
         this._optionsAndValueManager.setOptions(this.optionsChildren.toArray());

@@ -1,5 +1,5 @@
 <ng-template #defaultLook>
-    <span class="selected-value">{{value | ngSelectValue: optionsAndValueManager.selectedOption}}</span>
+    <span class="selected-value">{{optionsAndValueManager.selectedOption | ngSelectValue: nothingSelectedText}}</span>
     <span class="selected-caret fa fa-caret-down"></span>
 </ng-template>
 

@@ -16,12 +16,12 @@ export class OptionComponent<TValue>
     /**
      * Indication whether is item active
      */
-    public active: boolean = false;
+    public active?: boolean = false;
 
     /**
      * Indication whether this option is selected
      */
-    public selected: boolean = false;
+    public selected?: boolean = false;
 
     //######################### public properties - inputs #########################
 
@@ -29,11 +29,11 @@ export class OptionComponent<TValue>
      * Value of option
      */
     @Input()
-    public value: TValue;
+    public value?: TValue;
 
     /**
      * Text to be displayed for this value
      */
     @Input()
-    public text: string;
+    public text?: string;
 }

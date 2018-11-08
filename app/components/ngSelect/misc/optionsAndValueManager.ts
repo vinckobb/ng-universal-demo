@@ -1,4 +1,5 @@
 import {ChangeDetectorRef} from '@angular/core';
+import {isBlank, isPresent} from '@ng/common';
 import {Observable, Subject} from 'rxjs';
 
 import {OptionsAndValueManager as OptionsAndValueManagerInterface, GetOptionsCallback, CompareValueFunc} from './optionsAndValueManager.interface';
@@ -13,19 +14,19 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
     //######################### private fields #########################
 
     /**
+     * Indication whether options were initialized
+     */
+    private _optionsInitialized: boolean = false;
+
+    /**
      * Array of all options
      */
     private _allOptions: Array<OptionComponent<TValue>> = [];
 
     /**
-     * Currently selected value
-     */
-    private _value: TValue|Array<TValue>;
-
-    /**
      * Occurs when value changes
      */
-    private _valueChangeSubject: Subject<void>;
+    private _valueChangeSubject: Subject<void> = new Subject<void>();
 
     /**
      * Array of displayed options
@@ -35,7 +36,7 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
     /**
      * Currently selected option(s)
      */
-    private _selectedOptions: OptionComponent<TValue>|Array<OptionComponent<TValue>>;
+    private _selectedOption: OptionComponent<TValue>|Array<OptionComponent<TValue>>;
 
     /**
      * Value comparer used for value comparison
@@ -54,7 +55,17 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
      */
     public get value(): TValue|Array<TValue>
     {
-        return this._value;
+        if(!this._selectedOption || (Array.isArray(this._selectedOption) && !this._selectedOption.length))
+        {
+            return null;
+        }
+
+        if(this._multiselect && Array.isArray(this._selectedOption))
+        {
+            return this._selectedOption.map(itm => itm.value);
+        }
+
+        return (this._selectedOption as OptionComponent<TValue>).value;
     }
 
     /**
@@ -78,13 +89,14 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
      */
     public get selectedOption(): OptionComponent<TValue>|Array<OptionComponent<TValue>>
     {
-        return this._selectedOptions;
+        return this._selectedOption;
     }
 
     //######################### constructor #########################
     constructor(private _ngSelect: NgSelectComponent<TValue>,
                 private _changeDetector: ChangeDetectorRef,
-                private _multiselect: boolean)
+                private _multiselect: boolean,
+                private _strict: boolean)
     {
     }
 
@@ -96,26 +108,99 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
      */
     public setSelected(option: OptionComponent<TValue>)
     {
+        if(this._multiselect)
+        {
+            if(Array.isArray(this._selectedOption))
+            {
+                let index = this._selectedOption.indexOf(option);
 
+                //select
+                if(index < 0)
+                {
+                    this._selectedOption.push(option);
+                    option.selected = true;
+                }
+                //deselect
+                else
+                {
+                    this._selectedOption.splice(index, 1);
+                    option.selected = false;
+                }
+
+                this._selectedOption = [...this._selectedOption];
+            }
+        }
+        else
+        {
+            if(this._selectedOption)
+            {
+                (this._selectedOption as OptionComponent<TValue>).selected = false;
+            }
+            
+            option.selected = true;
+            this._selectedOption = option;
+            this._ngSelect.optionsDivVisible = false;
+        }
+
+        this._valueChangeSubject.next();
     }
 
     /**
      * Sets value of select
      * @param value Value to be set for select
      */
-    public setValue(value: TValue|Array<TValue>)
+    public async setValue(value: TValue|Array<TValue>, options?: {noModelChange?: boolean})
     {
-        this._value = value;
+        this._allOptions.forEach(option =>option.active = option.selected = false);
+        this._selectedOption = null;
 
-        this._setSelected();
+        if(isPresent(value))
+        {
+            await this._setSelectedOptions(value);
+
+            if(this._optionsInitialized)
+            {
+                await this._setSelectedOptions(value);
+            }
+        }
+
+        this._changeDetector.detectChanges();
+
+        if(!options || !options.noModelChange)
+        {
+            this._valueChangeSubject.next();
+        }
     }
 
     /**
      * Sets all available options
      */
-    public setOptions(options: Array<OptionComponent<TValue>>)
+    public async setOptions(options: Array<OptionComponent<TValue>>)
     {
+        this._allOptions = options || [];
+        this._options = this._allOptions;
 
+        await this._sync();
+        this._strictSync();
+        this._optionsInitialized = true;
+    }
+
+    /**
+     * Filters displayed options using query
+     * @param query Query used for filtering
+     */
+    public async filterOptions(query: string)
+    {
+        //no filtering options
+        if(isBlank(query) || query === '')
+        {
+            this._options = [...this._allOptions];
+
+            return;
+        }
+
+        this._options = await this._optionsObtainer(query, [...this._allOptions]);
+        this._changeDetector.detectChanges();
     }
 
     /**
@@ -124,7 +209,7 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
      */
     public registerGetOptions(callback: GetOptionsCallback<TValue>)
     {
-        
+        this._optionsObtainer = callback;
     }
 
     /**
@@ -133,75 +218,143 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
      */
     public registerCompareValue(func: CompareValueFunc<TValue>)
     {
-        
+        this._valueComparer = func;
     }
 
     //######################### private methods #########################
 
     /**
-     * Toggles selected/deselected value
-     * @param value Value to be selected/deselected
+     * Sets selected options
+     * @param value Value to be set
      */
-    private toggleValue(value: TValue)
+    private async _setSelectedOptions(value: TValue|Array<TValue>)
     {
-        if(this._multiselect)
+        if(this._multiselect && Array.isArray(value))
         {
-            if(!this._value)
+            if(!this._selectedOption)
             {
-                this._value = [];
+                this._selectedOption = [];
             }
 
-            if(Array.isArray(this._value))
+            if(Array.isArray(this._selectedOption))
             {
-                let index = this._value.indexOf(value);
-
-                //select
-                if(index < 0)
+                for(let x = 0; x < value.length; x++)
                 {
-                    this._value.push(value);
-                }
-                //deselect
-                else
-                {
-                    this._value.splice(index, 1);
-                }
+                    let selectedOption = await this._getOption(value[x]);
 
-                this._value = [...this._value];
+                    if(!selectedOption)
+                    {
+                        selectedOption = 
+                        {
+                            value: value[x],
+                            active: false,
+                            selected: true
+                        };
+                    }
+
+                    this._selectedOption.push(selectedOption);
+                    selectedOption.selected = true;
+                }
             }
         }
         else
         {
-            this._value = value;
-        }
+            this._selectedOption = await this._getOption(value as TValue);
 
-        this._setSelected();
+            if(!this._selectedOption)
+            {
+                this._selectedOption = 
+                {
+                    value: value as TValue,
+                    active: false,
+                    selected: true
+                };
+            }
 
-        if(!this._multiselect)
-        {
-            this._ngSelect.optionsDivVisible = false;
+            this._selectedOption.selected = true;
         }
     }
 
     /**
-     * Sets selected indications
+     * Obtains option for value
+     * @param value Value for which is option obtained
      */
-    private _setSelected()
+    private async _getOption(value: TValue): Promise<OptionComponent<TValue>>
     {
-        if(this._multiselect && Array.isArray(this._value))
+        if(this._optionsObtainer)
         {
-            let value = this._value;
+            let options = await this._optionsObtainer(value, [...this._allOptions]);
 
-            this.options.forEach(option =>
+            return options.find(option => this._valueComparer(option.value, value));
+        }
+
+        return this._allOptions.find(option => this._valueComparer(option.value, value));
+    }
+
+    /**
+     * Performs synchronization of values
+     */
+    private async _sync()
+    {
+        let value: TValue|Array<TValue>;
+
+        if(this._multiselect && Array.isArray(this._selectedOption))
+        {
+            //empty options
+            if(!this._selectedOption.length)
             {
-                option.selected = !!value.find(itm => this._valueComparer(itm, option.value));
-            });
+                return;
+            }
+
+            value = this._selectedOption.map(option => option.value);
         }
         else
         {
-            this.options.forEach(option =>
+            //empty option
+            if(isBlank(this._selectedOption))
             {
-                option.selected = this._valueComparer(option.value, this._value as TValue);
+                return;
+            }
+
+            value = (this._selectedOption as OptionComponent<TValue>).value;
+        }
+
+        this._selectedOption = null;
+        await this._setSelectedOptions(value);
+    }
+
+    /**
+     * Synchronize options and values, removes values which are not strictly contained in options
+     */
+    private _strictSync()
+    {
+        if(!this._strict)
+        {
+            return;
+        }
+
+        if(this._multiselect && Array.isArray(this._selectedOption))
+        {
+            let selectedOptions = [];
+
+            this._selectedOption.forEach(selectedOption =>
+            {
+                if(this._allOptions.find(option => this._valueComparer(selectedOption.value, option.value)))
+                {
+                    selectedOptions.push(selectedOption);
+                }
             });
+
+            this._selectedOption = selectedOptions;
+        }
+        else
+        {
+            let selectedOption = this._selectedOption as OptionComponent<TValue>;
+            
+            if(!this._allOptions.find(option => this._valueComparer(selectedOption.value, option.value)))
+            {
+                this._selectedOption = null;
+            }
         }
     }
 }

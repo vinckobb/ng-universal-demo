@@ -1,5 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {trigger, animate, style, query, transition, group} from '@angular/animations';
+import {FormBuilder, FormControl} from '@angular/forms';
 import {ComponentRoute} from "@ng/common";
 import {flyInOutTrigger, slideInOutTriggerFactory} from '@ng/animations';
 import {Authorize, AuthGuard} from '@ng/authentication';
@@ -92,13 +93,18 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
 
     public trigger = "in";
 
+    public ngSelect: FormControl;
+
     @ViewChild('treeview')
     public tree: FancyTreeComponent;
 
     //######################### constructor #########################
-    constructor(private dataSvc: DataService)
+    constructor(private dataSvc: DataService,
+                formBuilder: FormBuilder)
     {
         super();
+
+        this.ngSelect = formBuilder.control(['first', 'fifth']);
     }
 
     //######################### public methods #########################

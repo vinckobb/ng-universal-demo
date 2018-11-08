@@ -50,7 +50,9 @@
 </div>
 
 <div>
-    <ng-select>
+    <div>x{{ngSelect?.value | json}}x</div>
+
+    <ng-select [formControl]="ngSelect" multiple>
         <option value="first" text="123"></option>
         <option value="second" text="452"></option>
         <option value="third" text="sdfa sd"></option>

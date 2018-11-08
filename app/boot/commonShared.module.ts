@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {BootstrapModule} from '@ng/bootstrap';
 import {GridModule} from '@ng/grid';
@@ -21,6 +21,7 @@ import {TranslateModule} from '@ngx-translate/core';
     [
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         RouterModule,
         NgCommonModule,
         TranslateModule,

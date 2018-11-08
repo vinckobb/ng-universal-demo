@@ -14,7 +14,7 @@ import {appComponents, appRoutesModule} from './app.component.routes';
 import {CommonSharedModule} from './commonShared.module';
 import {APP_TRANSFER_ID} from '../misc/constants';
 import {providers} from './app.config';
-import {NgSelectComponent, OptionComponent, NgSelectValuePipe} from '../components/ngSelect';
+import {NgSelectComponent, OptionComponent, NgSelectValuePipe, NgSelectControlValueAccessor} from '../components/ngSelect';
 
 /**
  * Factory method that is used for creating external translation loader
@@ -60,7 +60,7 @@ export function externalTranslationLoaderFactory(http: HttpClient, injector: Inj
         appRoutesModule
     ],
     providers: providers,
-    declarations: [AppComponent, NavigationComponent, NgSelectComponent, OptionComponent, NgSelectValuePipe, ...appComponents],
+    declarations: [AppComponent, NavigationComponent, NgSelectComponent, OptionComponent, NgSelectValuePipe, NgSelectControlValueAccessor, ...appComponents],
     exports: [AppComponent]
 })
 export class AppModule

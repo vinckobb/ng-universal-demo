@@ -62,13 +62,20 @@ export interface OptionsAndValueManager<TValue>
     /**
      * Sets value of select
      * @param value Value to be set for select
+     * @param options Options for changes of value
      */
-    setValue(value: TValue|Array<TValue>);
+    setValue(value: TValue|Array<TValue>, options?: {noModelChange?: boolean}): Promise<void>;
 
     /**
      * Sets all available options
      */
     setOptions(options: Array<OptionComponent<TValue>>);
+
+    /**
+     * Filters displayed options using query
+     * @param query Query used for filtering
+     */
+    filterOptions(query: string);
 
     /**
      * Registers callback used for obtaining options
