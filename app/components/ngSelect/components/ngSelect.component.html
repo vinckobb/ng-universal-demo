@@ -7,7 +7,10 @@
     <div class="optionItem"
          [class.selected]="option?.selected"
          [class.active]="option?.active"
-         (click)="optionsAndValueManager.setSelected(option)">{{option?.text}}</div>
+         (click)="optionsAndValueManager.setSelected(option)">
+         <div class="option-item-text">{{option?.text}}</div>
+         <div *ngIf="option?.selected && multiselect" class="fa fa-check"></div>
+    </div>
 </ng-template>
 
 <ng-template #defaultOptionsDivLook>
@@ -25,5 +28,10 @@
      class="absolute optionsDiv"
      [style.left.px]="optionsDivStyle?.left"
      [style.top.px]="optionsDivStyle?.top">
+    <div *ngIf="!!optionsObtainer"
+          class="search-bar">
+        <input (input)="optionsAndValueManager.filterOptions($event.target.value)">
+    </div>
+
     <ng-container *ngTemplateOutlet="defaultOptionsDivLook; context: {$implicit: this}"></ng-container>
 </div>

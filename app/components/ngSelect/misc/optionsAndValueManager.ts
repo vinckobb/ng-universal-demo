@@ -163,6 +163,7 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
             this._ngSelect.optionsDivVisible = false;
         }
 
+        this._options = this._allOptions;
         this._valueChangeSubject.next();
     }
 
@@ -172,7 +173,7 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
      */
     public async setValue(value: TValue|Array<TValue>, options?: {noModelChange?: boolean})
     {
-        this._allOptions.forEach(option =>option.active = option.selected = false);
+        this._allOptions.forEach(option => option.active = option.selected = false);
         this._selectedOption = null;
 
         if(isPresent(value))
@@ -216,6 +217,7 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
         }
 
         this._options = await this._optionsObtainer(query, [...this._allOptions]);
+
         this._changeDetector.detectChanges();
     }
 
@@ -264,7 +266,8 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
                         {
                             value: value[x],
                             active: false,
-                            selected: true
+                            selected: true,
+                            text: (value[x] || '').toString()
                         };
                     }
 
@@ -283,7 +286,8 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
                 {
                     value: value as TValue,
                     active: false,
-                    selected: true
+                    selected: true,
+                    text: (value || '').toString()
                 };
             }
 

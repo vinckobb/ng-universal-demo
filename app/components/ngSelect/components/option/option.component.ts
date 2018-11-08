@@ -29,11 +29,11 @@ export class OptionComponent<TValue>
      * Value of option
      */
     @Input()
-    public value?: TValue;
+    public value: TValue;
 
     /**
      * Text to be displayed for this value
      */
     @Input()
-    public text?: string;
+    public text: string;
 }

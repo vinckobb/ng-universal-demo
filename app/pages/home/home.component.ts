@@ -9,6 +9,7 @@ import {map} from 'rxjs/operators';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
+import {GetOptionsCallback, OptionComponent} from '../../components/ngSelect';
 
 /**
  * Home component
@@ -94,6 +95,11 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     public trigger = "in";
 
     public ngSelect: FormControl;
+
+    public optionsGetter: GetOptionsCallback<string> = (query: string, options: Array<OptionComponent<string>>) =>
+    {
+        return Promise.resolve(options.filter(itm => itm.text.indexOf(query) >= 0));
+    }
 
     @ViewChild('treeview')
     public tree: FancyTreeComponent;

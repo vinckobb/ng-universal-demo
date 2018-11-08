@@ -53,6 +53,24 @@ import {OptionsAndValueManager as OptionsAndValueManagerClass} from "../misc/opt
         .optionsDiv .optionItem
         {
             padding: 3px 6px;
+            display: flex;
+            align-items: center;
+        }
+
+        .optionItem .option-item-text
+        {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .optionItem .option-item-text:hover
+        {
+            cursor: pointer;
+        }
+
+        .optionItem .fa-check
+        {
+            margin-left: 8px;
         }
 
         .optionsDiv .optionItem.selected,
@@ -64,6 +82,19 @@ import {OptionsAndValueManager as OptionsAndValueManagerClass} from "../misc/opt
         .optionsDiv .optionItem:hover
         {
             background-color: #E0E0E0;
+            cursor: pointer;
+        }
+        
+        .optionsDiv .search-bar
+        {
+            padding: 2px 6px;
+            border-bottom: 1px solid #BBBBBB;
+        }
+        
+        .optionsDiv .search-bar input
+        {
+            width: 100%;
+            border-radius: 4px;
         }`
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
