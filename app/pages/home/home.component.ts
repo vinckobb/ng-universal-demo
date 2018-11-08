@@ -104,7 +104,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     {
         super();
 
-        this.ngSelect = formBuilder.control(['first', 'fifth']);
+        this.ngSelect = formBuilder.control('third');
     }
 
     //######################### public methods #########################

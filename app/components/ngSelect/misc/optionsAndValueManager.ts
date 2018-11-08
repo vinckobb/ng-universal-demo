@@ -14,11 +14,6 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
     //######################### private fields #########################
 
     /**
-     * Indication whether options were initialized
-     */
-    private _optionsInitialized: boolean = false;
-
-    /**
      * Array of all options
      */
     private _allOptions: Array<OptionComponent<TValue>> = [];
@@ -27,6 +22,11 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
      * Occurs when value changes
      */
     private _valueChangeSubject: Subject<void> = new Subject<void>();
+
+    /**
+     * Occurs when last know value is requested and to be set
+     */
+    private _lastValueRequestSubject: Subject<void> = new Subject<void>();
 
     /**
      * Array of displayed options
@@ -48,6 +48,11 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
      */
     private _optionsObtainer: GetOptionsCallback<TValue>;
 
+    /**
+     * Indication whether is manager initialized and ready to be set
+     */
+    private _initialized: boolean;
+
     //######################### public properties #########################
 
     /**
@@ -57,7 +62,7 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
     {
         if(!this._selectedOption || (Array.isArray(this._selectedOption) && !this._selectedOption.length))
         {
-            return null;
+            return this._multiselect ? [] : null;
         }
 
         if(this._multiselect && Array.isArray(this._selectedOption))
@@ -77,6 +82,14 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
     }
 
     /**
+     * Occurs when last know value is requested and to be set
+     */
+    public get lastValueRequest(): Observable<void>
+    {
+        return this._lastValueRequestSubject.asObservable();
+    }
+
+    /**
      * Array of displayed options
      */
     public get options(): Array<OptionComponent<TValue>>
@@ -90,6 +103,14 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
     public get selectedOption(): OptionComponent<TValue>|Array<OptionComponent<TValue>>
     {
         return this._selectedOption;
+    }
+
+    /**
+     * Indication whether is manager initialized and ready to be set
+     */
+    public get initialized(): boolean
+    {
+        return this._initialized;
     }
 
     //######################### constructor #########################
@@ -157,11 +178,7 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
         if(isPresent(value))
         {
             await this._setSelectedOptions(value);
-
-            if(this._optionsInitialized)
-            {
-                await this._setSelectedOptions(value);
-            }
+            this._strictSync();
         }
 
         this._changeDetector.detectChanges();
@@ -179,10 +196,9 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
     {
         this._allOptions = options || [];
         this._options = this._allOptions;
+        this._initialized = true;
 
-        await this._sync();
-        this._strictSync();
-        this._optionsInitialized = true;
+        this._lastValueRequestSubject.next();
     }
 
     /**
@@ -292,38 +308,6 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
     }
 
     /**
-     * Performs synchronization of values
-     */
-    private async _sync()
-    {
-        let value: TValue|Array<TValue>;
-
-        if(this._multiselect && Array.isArray(this._selectedOption))
-        {
-            //empty options
-            if(!this._selectedOption.length)
-            {
-                return;
-            }
-
-            value = this._selectedOption.map(option => option.value);
-        }
-        else
-        {
-            //empty option
-            if(isBlank(this._selectedOption))
-            {
-                return;
-            }
-
-            value = (this._selectedOption as OptionComponent<TValue>).value;
-        }
-
-        this._selectedOption = null;
-        await this._setSelectedOptions(value);
-    }
-
-    /**
      * Synchronize options and values, removes values which are not strictly contained in options
      */
     private _strictSync()
@@ -332,6 +316,8 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
         {
             return;
         }
+
+        let valueStripped = false;
 
         if(this._multiselect && Array.isArray(this._selectedOption))
         {
@@ -343,6 +329,10 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
                 {
                     selectedOptions.push(selectedOption);
                 }
+                else
+                {
+                    valueStripped = true;
+                }
             });
 
             this._selectedOption = selectedOptions;
@@ -353,8 +343,15 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
             
             if(!this._allOptions.find(option => this._valueComparer(selectedOption.value, option.value)))
             {
+                valueStripped = true;
+
                 this._selectedOption = null;
             }
+        }
+
+        if(valueStripped)
+        {
+            this._valueChangeSubject.next();
         }
     }
 }

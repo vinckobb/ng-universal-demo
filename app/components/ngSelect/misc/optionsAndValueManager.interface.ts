@@ -44,6 +44,11 @@ export interface OptionsAndValueManager<TValue>
     valueChange: Observable<void>;
 
     /**
+     * Occurs when last know value is requested and to be set
+     */
+    lastValueRequest: Observable<void>;
+
+    /**
      * Array of displayed options
      */
     options: Array<OptionComponent<TValue>>;
@@ -52,6 +57,11 @@ export interface OptionsAndValueManager<TValue>
      * Currently selected option(s)
      */
     selectedOption: OptionComponent<TValue>|Array<OptionComponent<TValue>>;
+
+    /**
+     * Indication whether is manager initialized and ready to be set
+     */
+    initialized: boolean;
 
     /**
      * Sets selected option, in case of multiselect it toggles selected value
