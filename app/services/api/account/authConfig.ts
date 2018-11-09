@@ -113,17 +113,17 @@ export class AuthConfig extends AuthInterceptorConfig
     /**
      * Redirects current page to authentication page
      */
-    public showAuthPage(): void
+    public showAuthPage(): Promise<boolean>
     {
-        this.AccountSvc.showAuthPage();
+        return this.AccountSvc.showAuthPage();
     }
 
     /**
      * Redirects current page to access denied page
      */
-    public showAccessDenied(): void
+    public showAccessDenied(): Promise<boolean>
     {
-        this.AccountSvc.showAccessDenied();
+        return this.AccountSvc.showAccessDenied();
     }
 
     //######################### public methods #########################

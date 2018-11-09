@@ -188,26 +188,30 @@ help-view, .help-view
 
 .css-grid-content-renderer
 {
-    display: grid;
-    grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
-    height: 250px;
-    overflow-y: auto;
-
-    [role=columnheader] {
-        background-color: #F9F9FA;
-        position: sticky;
-        top: 0;
-        padding: 5px;
-        border-bottom: 1px solid #E3E4E4;
-    }
-
-    [role=gridcell] {
-        padding: 2px 5px;
-        position: relative;
-    }
-
-    .contentsRow:hover > *
+    .css-grid-table
     {
-        background-color: red;
+        overflow-x: auto;
+    }
+
+    .header-default
+    {
+        font-weight: bold;
+        padding: 3px;
+        line-height: 1.42857143;
+        vertical-align: middle;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .row-default > *
+    {
+        padding: 3px;
+        line-height: 1.42857143;
+        vertical-align: middle;
+        border-top: 1px solid #ddd;
+    }
+
+    .row-default:nth-of-type(odd) > *
+    {
+        background-color: #f9f9f9;
     }
 }

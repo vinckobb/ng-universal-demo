@@ -1,11 +1,13 @@
-<div *ngFor="let meta of metadata?.columns; let index=index" role="columnheader">
-    {{meta?.title}}
-</div>
-<ng-template ngFor [ngForOf]="data" let-datum>
-    <div class="contentsRow" style="display: contents;" (click)="logTest()">
-        <div *ngFor="let meta of metadata?.columns" role="gridcell">
-            {{datum[meta?.name]}}
-        </div>
+<div [ngClass]="options?.cssClasses?.grid" [style.grid-template-columns]="gridTemplateColumns">
+    <div [ngClass]="options?.cssClasses?.headerCell" *ngFor="let meta of metadata?.columns; let index=index" role="columnheader">
+        {{meta?.title}}
     </div>
-</ng-template>
+    <ng-template ngFor [ngForOf]="data" let-datum>
+        <div [ngClass]="options?.cssClasses?.row" role="gridrow">
+            <div [ngClass]="mergeStringClasses(options?.cssClasses?.cell, meta?.cellClass)" *ngFor="let meta of metadata?.columns" role="gridcell">
+                {{datum[meta?.name]}}
+            </div>
+        </div>
+    </ng-template>
+</div>
 

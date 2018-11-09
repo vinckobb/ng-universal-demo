@@ -5,6 +5,11 @@ import {ContentRendererOptions, ContentRendererPlugins, ContentRenderer} from "@
  */
 export interface CssClassesCssGridContentRenderer
 {
+    grid?: string;
+    containerDiv?: string;
+    headerCell?: string;
+    row?: string;
+    cell?: string;
 }
 
 /**

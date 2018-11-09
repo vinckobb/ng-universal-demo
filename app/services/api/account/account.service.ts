@@ -84,17 +84,17 @@ export class AccountService extends RESTClient implements AuthenticationServiceO
     /**
      * Redirects current page to authentication page
      */
-    public showAuthPage(): void
+    public showAuthPage(): Promise<boolean>
     {
-        this._injector.get(Router).navigate(['/login'], {queryParams: {returnUrl: this._location.path()}});
+        return this._injector.get(Router).navigate(['/login'], {queryParams: {returnUrl: this._location.path()}});
     }
 
     /**
      * Redirects current page to access denied page
      */
-    public showAccessDenied(): void
+    public showAccessDenied(): Promise<boolean>
     {
-        this._injector.get(Router).navigate(['/accessDenied']);
+        return this._injector.get(Router).navigate(['/accessDenied']);
     }
 
     //######################### private methods #########################

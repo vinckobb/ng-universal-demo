@@ -1,8 +1,8 @@
 import {Component, ChangeDetectionStrategy, Inject, Optional, OnDestroy, ElementRef, ChangeDetectorRef} from "@angular/core";
-import {Utils} from "@ng/common";
+import {Utils, isArray} from "@ng/common";
 import {CssGridContentRendererOptions} from "./cssGridContentRenderer.interface";
 import {SimpleContentRendererAbstractComponent} from "../simpleContentRendererAbstract.component";
-import {GRID_PLUGIN_INSTANCES, CONTENT_RENDERER_OPTIONS, GridPluginInstances} from "@ng/grid";
+import {GRID_PLUGIN_INSTANCES, CONTENT_RENDERER_OPTIONS, GridPluginInstances, BasicTableMetadata, BasicTableColumn} from "@ng/grid";
 
 /**
  * Default options for 'CssGridContentRendererComponent'
@@ -12,6 +12,11 @@ const defaultOptions: CssGridContentRendererOptions =
 {
     cssClasses:
     {
+        grid: 'css-grid-table',
+        containerDiv: '',
+        headerCell: 'header-default',
+        row: 'row-default',
+        cell: 'cell-default'
     },
     plugins:
     {
@@ -25,10 +30,33 @@ const defaultOptions: CssGridContentRendererOptions =
 {
     selector: 'div.css-grid-content-renderer',
     templateUrl: 'cssGridContentRenderer.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styles: [`
+        .css-grid-table
+        {
+            display: grid;
+        }
+
+        [role=gridrow]
+        {
+            display: contents;
+        }
+
+        .row-default:hover > *
+        {
+            background-color: #E3E3E3;
+            cursor: pointer;
+        }
+
+        .cell-default
+        {
+        }
+    `]
 })
-export class CssGridContentRendererComponent<TOrdering, TData, TMetadata> extends SimpleContentRendererAbstractComponent<TOrdering, TData, TMetadata, CssGridContentRendererOptions> implements OnDestroy
+export class CssGridContentRendererComponent<TOrdering, TData> extends SimpleContentRendererAbstractComponent<TOrdering, TData, BasicTableMetadata<BasicTableColumn<TData>>, CssGridContentRendererOptions> implements OnDestroy
 {
+    public gridTemplateColumns: string = "";
+
     //######################### constructor #########################
     constructor(pluginElement: ElementRef,
                 private _changeDetector: ChangeDetectorRef,
@@ -44,11 +72,35 @@ export class CssGridContentRendererComponent<TOrdering, TData, TMetadata> extend
     {
         super.invalidateVisuals();
 
+        this._setGridColumnsWidth();
+
         this._changeDetector.detectChanges();
     }
 
-    public logTest()
+    /**
+     * Merges css classes specified as strings
+     */
+    public mergeStringClasses(...classes: string[])
     {
-        console.log("clicked on display:contents");
+        let result = [];
+
+        classes.forEach(cls => cls ? (result.push(cls)) : null);
+
+        return result;
+    }
+
+    private _setGridColumnsWidth()
+    {
+        if (isArray(this.metadata.columns))
+        {
+            let gridTemplateColumns: string[] = [];
+            this.metadata.columns.forEach(column => {
+                if (column.visible)
+                {
+                    gridTemplateColumns.push(column.width ? column.width : 'auto');
+                }
+            });
+            this.gridTemplateColumns = gridTemplateColumns.join(" ");
+        }
     }
 }
