@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, OnDestroy, Input, AfterContentInit, ContentChildren, Inject, OnInit, HostListener, Attribute, OnChanges, SimpleChanges} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, OnDestroy, Input, AfterContentInit, ContentChildren, Inject, OnInit, HostListener, Attribute, OnChanges, SimpleChanges, ContentChild, TemplateRef} from "@angular/core";
 import {DOCUMENT} from '@angular/common';
 import {nameof} from "@ng/common";
 import * as positions from 'positions';
@@ -7,6 +7,7 @@ import {Subscription} from "rxjs";
 import {OptionComponent} from "./option/option.component";
 import {OptionsAndValueManager, CompareValueFunc, GetOptionsCallback} from "../misc/optionsAndValueManager.interface";
 import {OptionsAndValueManager as OptionsAndValueManagerClass} from "../misc/optionsAndValueManager";
+import {NgSelectTemplateContext, NgSelectOptionTemplateContext} from "./ngSelect.interface";
 
 /**
  * Component used for rendering bootstrap select
@@ -204,6 +205,34 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     @ContentChildren(OptionComponent)
     public optionsChildren: QueryList<OptionComponent<TValue>>;
 
+    /**
+     * Template used for main look customization
+     * @internal
+     */
+    @ContentChild('look')
+    public look: TemplateRef<NgSelectTemplateContext<TValue>>;
+
+    /**
+     * Template used for options div look customization
+     * @internal
+     */
+    @ContentChild('optionsDivLook')
+    public optionsDivLook: TemplateRef<NgSelectTemplateContext<TValue>>;
+
+    /**
+     * Template used for option look customization
+     * @internal
+     */
+    @ContentChild('optionLook')
+    public optionLook: TemplateRef<NgSelectOptionTemplateContext<TValue>>;
+
+    /**
+     * Template used for option text look customization
+     * @internal
+     */
+    @ContentChild('optionTextLook')
+    public optionTextLook: TemplateRef<NgSelectOptionTemplateContext<TValue>>;
+
     //######################### constructor #########################
     constructor(protected _element: ElementRef<HTMLElement>,
                 protected _changeDetector: ChangeDetectorRef,
@@ -320,11 +349,12 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     {
         if(event.key == "ArrowDown" || event.key == "ArrowUp")
         {
-            let activeOption = this.optionsAndValueManager.options.find(itm => itm.active);
+            this.optionsDivVisible = true;
+            let activeOption = this._optionsAndValueManager.options.find(itm => itm.active);
 
             if(activeOption)
             {
-                let index = this.optionsAndValueManager.options.indexOf(activeOption);
+                let index = this._optionsAndValueManager.options.indexOf(activeOption);
                 activeOption.active = false;
 
                 //move down cursor
@@ -340,20 +370,30 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
 
                 if(index < 0)
                 {
-                    index = this.optionsAndValueManager.options.length - 1;
+                    index = this._optionsAndValueManager.options.length - 1;
                 }
 
-                index = index % this.optionsAndValueManager.options.length;
+                index = index % this._optionsAndValueManager.options.length;
 
-                this.optionsAndValueManager.options[index].active = true;
+                this._optionsAndValueManager.options[index].active = true;
             }
             //none active before
-            else if(this.optionsAndValueManager.options.length)
+            else if(this._optionsAndValueManager.options.length)
             {
-                this.optionsAndValueManager.options[0].active = true;
+                this._optionsAndValueManager.options[0].active = true;
             }
 
             event.preventDefault();
+        }
+
+        if(event.key == "Enter")
+        {
+            let activeOption = this._optionsAndValueManager.options.find(itm => itm.active);
+
+            if(activeOption)
+            {
+                this._optionsAndValueManager.setSelected(activeOption);
+            }
         }
 
         if(event.key == "Tab")
@@ -370,6 +410,19 @@ export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, Afte
     public invalidateVisuals()
     {
         this._changeDetector.detectChanges();
+    }
+
+    //######################### public methods - template bindings #########################
+
+    /**
+     * Toggles options div visibility
+     * @internal
+     */
+    public toggleOptionsDiv()
+    {
+        this.optionsDivVisible = !this.optionsDivVisible;
+
+        this._optionsAndValueManager.options.forEach(option => option.active = false);
     }
 
     //######################### protected methods #########################

@@ -217,6 +217,7 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
         }
 
         this._options = await this._optionsObtainer(query, [...this._allOptions]);
+        this._resetActive();
 
         this._changeDetector.detectChanges();
     }
@@ -357,5 +358,19 @@ export class OptionsAndValueManager<TValue> implements OptionsAndValueManagerInt
         {
             this._valueChangeSubject.next();
         }
+    }
+
+    /**
+     * Resets options active flag
+     */
+    private _resetActive()
+    {
+        if(this._selectedOption && Array.isArray(this._selectedOption))
+        {
+            this._selectedOption.forEach(option => option.active = false);
+        }
+
+        this._options.forEach(option => option.active = false);
+        this._allOptions.forEach(option => option.active = false);
     }
 }
