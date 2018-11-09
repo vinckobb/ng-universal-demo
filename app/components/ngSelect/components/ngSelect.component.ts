@@ -7,7 +7,7 @@ import {Subscription} from "rxjs";
 import {OptionComponent} from "./option/option.component";
 import {OptionsAndValueManager, CompareValueFunc, GetOptionsCallback} from "../misc/optionsAndValueManager.interface";
 import {OptionsAndValueManager as OptionsAndValueManagerClass} from "../misc/optionsAndValueManager";
-import {NgSelectTemplateContext, NgSelectOptionTemplateContext} from "./ngSelect.interface";
+import {NgSelectTemplateContext, NgSelectOptionTemplateContext, NgSelectApi} from "./ngSelect.interface";
 
 /**
  * Component used for rendering bootstrap select
@@ -100,7 +100,7 @@ import {NgSelectTemplateContext, NgSelectOptionTemplateContext} from "./ngSelect
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, AfterContentInit, OnInit, OnChanges
+export class NgSelectComponent<TValue> implements AfterViewInit, OnDestroy, AfterContentInit, OnInit, OnChanges, NgSelectApi<TValue>
 {
     //######################### protected fields #########################
 
