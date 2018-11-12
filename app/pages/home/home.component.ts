@@ -5,11 +5,11 @@ import {ComponentRoute} from "@ng/common";
 import {flyInOutTrigger, slideInOutTriggerFactory} from '@ng/animations';
 import {Authorize, AuthGuard} from '@ng/authentication';
 import {FancyTreeNodeData, FancyTreeComponent} from '@ng/treeview';
+import {GetOptionsCallback, OptionComponent} from '@ng/select';
 import {map} from 'rxjs/operators';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
-import {GetOptionsCallback, OptionComponent} from '../../components/ngSelect';
 
 /**
  * Home component
