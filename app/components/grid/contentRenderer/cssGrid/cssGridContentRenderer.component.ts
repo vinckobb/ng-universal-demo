@@ -1,8 +1,9 @@
-import {Component, ChangeDetectionStrategy, Inject, Optional, OnDestroy, ElementRef, ChangeDetectorRef} from "@angular/core";
+import {Component, ChangeDetectionStrategy, Inject, Optional, OnDestroy, ElementRef, ChangeDetectorRef, forwardRef} from "@angular/core";
 import {Utils, isArray} from "@ng/common";
 import {CssGridContentRendererOptions} from "./cssGridContentRenderer.interface";
-import {SimpleContentRendererAbstractComponent} from "../simpleContentRendererAbstract.component";
-import {GRID_PLUGIN_INSTANCES, CONTENT_RENDERER_OPTIONS, GridPluginInstances, BasicTableMetadata, BasicTableColumn} from "@ng/grid";
+import {GRID_PLUGIN_INSTANCES, CONTENT_RENDERER_OPTIONS, GridPluginInstances, BasicTableMetadata, BasicTableColumn, ContentRendererAbstractComponent, PluginDescription} from "@ng/grid";
+import {CssGridBodyContentRendererComponent} from "./body/cssGridBodyContentRenderer.component";
+import {CssGridHeaderContentRendererComponent} from "./header/cssGridHeaderContentRenderer.component";
 
 /**
  * Default options for 'CssGridContentRendererComponent'
@@ -12,14 +13,18 @@ const defaultOptions: CssGridContentRendererOptions =
 {
     cssClasses:
     {
-        grid: 'css-grid-table',
-        containerDiv: '',
-        headerCell: 'header-default',
-        row: 'row-default',
-        cell: 'cell-default'
+        gridDiv: 'css-grid-table'
     },
     plugins:
     {
+        bodyRenderer: <PluginDescription<CssGridBodyContentRendererComponent<any>>>
+        {
+            type: forwardRef(() => CssGridBodyContentRendererComponent)
+        },
+        headerRenderer: <PluginDescription<CssGridHeaderContentRendererComponent<any>>>
+        {
+            type: forwardRef(() => CssGridHeaderContentRendererComponent)
+        }
     }
 };
 
@@ -36,24 +41,9 @@ const defaultOptions: CssGridContentRendererOptions =
         {
             display: grid;
         }
-
-        [role=gridrow]
-        {
-            display: contents;
-        }
-
-        .row-default:hover > *
-        {
-            background-color: #E3E3E3;
-            cursor: pointer;
-        }
-
-        .cell-default
-        {
-        }
     `]
 })
-export class CssGridContentRendererComponent<TOrdering, TData> extends SimpleContentRendererAbstractComponent<TOrdering, TData, BasicTableMetadata<BasicTableColumn<TData>>, CssGridContentRendererOptions> implements OnDestroy
+export class CssGridContentRendererComponent<TOrdering, TData, TMetadata> extends ContentRendererAbstractComponent<TOrdering, TData, TMetadata, CssGridContentRendererOptions> implements OnDestroy
 {
     public gridTemplateColumns: string = "";
 
@@ -68,33 +58,23 @@ export class CssGridContentRendererComponent<TOrdering, TData> extends SimpleCon
         this._options = Utils.common.extend(true, {}, defaultOptions, options);
     }
 
-    public invalidateVisuals()
+    protected _invalidateVisuals()
     {
-        super.invalidateVisuals();
+        super._invalidateVisuals();
 
         this._setGridColumnsWidth();
 
         this._changeDetector.detectChanges();
     }
 
-    /**
-     * Merges css classes specified as strings
-     */
-    public mergeStringClasses(...classes: string[])
-    {
-        let result = [];
-
-        classes.forEach(cls => cls ? (result.push(cls)) : null);
-
-        return result;
-    }
-
     private _setGridColumnsWidth()
     {
-        if (isArray(this.metadata.columns))
+        let metadata: BasicTableMetadata<BasicTableColumn<TData>> = <any>this._metadataSelector.metadata;
+
+        if (isArray(metadata.columns))
         {
             let gridTemplateColumns: string[] = [];
-            this.metadata.columns.forEach(column => {
+            metadata.columns.forEach(column => {
                 if (column.visible)
                 {
                     gridTemplateColumns.push(column.width ? column.width : 'auto');
