@@ -28,3 +28,14 @@ export interface DynamicComponentMetadata
      */
     options: any;
 }
+
+/**
+ * Metadata containing instance of dynamic component
+ */
+export interface DynamicComponentMetadataInstance<TComponent> extends DynamicComponentMetadata
+{
+    /**
+     * Instance of created component
+     */
+    instance: TComponent;
+}
