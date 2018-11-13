@@ -2,6 +2,10 @@
     <h3>{{subs}}</h3>
 
     <div>
+        <ng-container *componentRenderer="metadata"></ng-container>
+    </div>
+
+    <div>
         <button (click)="inc()">click</button>
         <button (click)="toggle()">toggle</button>
         <button (click)="longCall()">long call</button>

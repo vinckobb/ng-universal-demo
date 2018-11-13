@@ -10,6 +10,7 @@ import {map} from 'rxjs/operators';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
+import {DynamicComponentMetadata} from '../../ngDynamic-core/interfaces/metadata/dynamicComponent.metadata';
 
 /**
  * Home component
@@ -52,6 +53,15 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     public subs: string;
     public show: boolean = false;
     public counter = 0;
+
+    public metadata: DynamicComponentMetadata =
+    {
+        id: 'simple',
+        options: {},
+        componentPackage: 'simple',
+        componentModule: 'SimpleModule',
+        componentName: 'SimpleComponent'
+    };
 
     public treeOptions: Fancytree.FancytreeOptions =
     {

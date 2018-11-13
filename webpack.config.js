@@ -42,7 +42,7 @@ function getEntries(aot, ssr, hmr, dll)
         {
             style: [path.join(__dirname, "content/site.scss")],
             client: hmr ? [path.join(__dirname, "app/main.browser.hmr.ts")] : (aot ? [path.join(__dirname, "app.aot/main.browser.ts")] : [path.join(__dirname, "app/main.browser.ts")]),
-            externalStyle: 
+            externalStyle:
             [
                 "font-awesome/css/font-awesome.min.css",
                 "bootstrap/dist/css/bootstrap.min.css",
@@ -153,7 +153,7 @@ module.exports = function(options, args)
         resolve:
         {
             extensions: ['.ts', '.js'],
-            alias: extend(rxPaths(), 
+            alias: extend(rxPaths(),
             {
                 "numeral-languages": path.join(__dirname, "node_modules/numeral/locales.js"),
                 "handlebars": path.join(__dirname, "node_modules/handlebars/dist/handlebars.js"),
@@ -162,7 +162,8 @@ module.exports = function(options, args)
                 "moment": path.join(__dirname, "node_modules/moment/min/moment-with-locales.js"),
                 "config/global": path.join(__dirname, prod ? "config/global.json" : "config/global.development.json"),
                 "config/version": path.join(__dirname, "config/version.json"),
-                "app": path.join(__dirname, "app")
+                "app": path.join(__dirname, "app"),
+                "@ngDynamic": path.join(__dirname, "app/dynamicPackage")
             })
         },
         module:
@@ -253,7 +254,8 @@ module.exports = function(options, args)
             new webpack.DefinePlugin(
             {
                 isProduction: prod,
-                isNgsw: ngsw
+                isNgsw: ngsw,
+                isAot: aot
             }),
             // new webpack.IgnorePlugin(/\.\/locale$/),
             new HardSourceWebpackPlugin(),
@@ -364,7 +366,7 @@ module.exports = function(options, args)
             filename: '[name].[hash].css',
             chunkFilename: '[id].[hash].css',
         }));
-            
+
         config.plugins.push(new CompressionPlugin({test: /\.js$|\.css$/}));
     }
 
@@ -374,9 +376,9 @@ module.exports = function(options, args)
         config.plugins.push(new BundleAnalyzerPlugin());
 
         let smp = new SpeedMeasurePlugin({outputFormat: 'humanVerbose'});
-    
+
         return smp.wrap(config);
     }
-    
+
     return config;
 }

@@ -1,7 +1,7 @@
-import {ComponentFactoryResolver, EventEmitter, ComponentRef, Directive, Injector, Input, NgModuleFactory, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, Type, ViewContainerRef, Output} from '@angular/core';
-import {nameof} from '@asseco/common';
+import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef} from '@angular/core';
 
 import {DynamicComponentMetadata} from '../../interfaces/metadata/dynamicComponent.metadata';
+import {ComponentLoader} from '../../componentLoader';
     
 /**
 * Creates dynamically instance of component by its metadata
@@ -30,34 +30,8 @@ export class ComponentRendererDirective<TComponent> implements OnChanges, OnDest
     /**
      * Type that should be dynamically created into current container
      */
-    @Input() 
-    public componentRenderer: DynamicComponentMetadata;
-
-    /**
-     * Custom injector that will be used for newly created component
-     */
-    @Input() 
-    public ngComponentOutletExInjector: Injector;
-
-    /**
-     * Projectable nodes that can be injected into component
-     */
-    @Input() 
-    public ngComponentOutletExContent: any[][];
-
-    /**
-     * Different module factory that is used for creation of new component
-     */
-    @Input() 
-    public ngComponentOutletExNgModuleFactory: NgModuleFactory<any>;
-
-    //######################### public properties - outputs #########################
-
-    /**
-     * Occurs when component is created or destroyed, it can send instance of component, or null
-     */
-    @Output()
-    public ngComponentOutletExCreated: EventEmitter<TComponent|null> = new EventEmitter<TComponent|null>();
+    @Input('componentRenderer') 
+    public componentMetadata: DynamicComponentMetadata;
 
     //######################### private properties #########################
 
@@ -75,44 +49,27 @@ export class ComponentRendererDirective<TComponent> implements OnChanges, OnDest
     }
 
     //######################### constructor #########################
-    constructor(private _viewContainerRef: ViewContainerRef)
+    constructor(private _viewContainerRef: ViewContainerRef,
+                private _componentLoader: ComponentLoader)
     {
     }
 
     //######################### public methods - implementation of OnChanges #########################
-    public ngOnChanges(changes: SimpleChanges)
+    public async ngOnChanges(changes: SimpleChanges)
     {
         this._viewContainerRef.clear();
         this._componentRef = null;
 
-        if (this.ngComponentOutletEx)
+        if (this._moduleRef)
         {
-            const elInjector = this.ngComponentOutletExInjector || this._viewContainerRef.parentInjector;
-
-            if (changes[nameof<NgComponentOutletEx<TComponent>>('ngComponentOutletExNgModuleFactory')])
-            {
-                if (this._moduleRef)
-                {
-                    this._moduleRef.destroy();
-                }
-
-                if (this.ngComponentOutletExNgModuleFactory)
-                {
-                    const parentModule = elInjector.get(NgModuleRef);
-                    this._moduleRef = this.ngComponentOutletExNgModuleFactory.create(parentModule.injector);
-                }
-                else
-                {
-                    this._moduleRef = null;
-                }
-            }
-
-            const componentFactoryResolver = this._moduleRef ? this._moduleRef.componentFactoryResolver : elInjector.get(ComponentFactoryResolver);
-            const componentFactory = componentFactoryResolver.resolveComponentFactory(this.ngComponentOutletEx);
-            this._componentRef = this._viewContainerRef.createComponent<TComponent>(componentFactory, this._viewContainerRef.length, elInjector, this.ngComponentOutletExContent);
+            this._moduleRef.destroy();
         }
 
-        this.ngComponentOutletExCreated.emit(this.component);
+        console.log(this.component);
+
+        let resolved = await this._componentLoader.resolveComponentFactory<TComponent>(this.componentMetadata, this._viewContainerRef.parentInjector);
+        this._moduleRef = resolved.module;        
+        this._componentRef = this._viewContainerRef.createComponent<TComponent>(resolved.factory, this._viewContainerRef.length, this._viewContainerRef.parentInjector);
     }
 
     //######################### public methods - implementation of OnDestroy #########################
