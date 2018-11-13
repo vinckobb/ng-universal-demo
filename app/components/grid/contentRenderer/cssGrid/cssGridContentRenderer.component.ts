@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, Inject, Optional, OnDestroy, ElementRef, ChangeDetectorRef, forwardRef} from "@angular/core";
+import {Component, ChangeDetectionStrategy, Inject, Optional, OnDestroy, ElementRef, ChangeDetectorRef, forwardRef, HostBinding, SkipSelf} from "@angular/core";
 import {Utils, isArray} from "@ng/common";
 import {CssGridContentRendererOptions} from "./cssGridContentRenderer.interface";
 import {GRID_PLUGIN_INSTANCES, CONTENT_RENDERER_OPTIONS, GridPluginInstances, BasicTableMetadata, BasicTableColumn, ContentRendererAbstractComponent, PluginDescription} from "@ng/grid";
@@ -37,7 +37,7 @@ const defaultOptions: CssGridContentRendererOptions =
     templateUrl: 'cssGridContentRenderer.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     styles: [`
-        .css-grid-table
+        :host
         {
             display: grid;
         }
@@ -45,26 +45,40 @@ const defaultOptions: CssGridContentRendererOptions =
 })
 export class CssGridContentRendererComponent<TOrdering, TData, TMetadata> extends ContentRendererAbstractComponent<TOrdering, TData, TMetadata, CssGridContentRendererOptions> implements OnDestroy
 {
+
     public gridTemplateColumns: string = "";
+    
+    @HostBinding('style.grid-template-columns')
+    public get gridTemplateColumn(): string
+    {
+        return this.gridTemplateColumns;
+    }
 
     //######################### constructor #########################
     constructor(pluginElement: ElementRef,
-                private _changeDetector: ChangeDetectorRef,
                 @Inject(GRID_PLUGIN_INSTANCES) @Optional() gridPlugins: GridPluginInstances,
-                @Inject(CONTENT_RENDERER_OPTIONS) @Optional() options?: CssGridContentRendererOptions)
+                @Inject(CONTENT_RENDERER_OPTIONS) @Optional() options?: CssGridContentRendererOptions,
+                @SkipSelf() private _gridChangeDetector?: ChangeDetectorRef)
     {
         super(pluginElement, gridPlugins);
-
         this._options = Utils.common.extend(true, {}, defaultOptions, options);
     }
 
-    protected _invalidateVisuals()
+    initialize()
     {
-        super._invalidateVisuals();
+        super.initialize();
 
         this._setGridColumnsWidth();
+        this._gridChangeDetector.detectChanges();
 
-        this._changeDetector.detectChanges();
+        this._metadataSelector
+            .metadataChange
+            .subscribe(() =>
+                {
+                    this._setGridColumnsWidth();
+                    this._gridChangeDetector.detectChanges();
+                }
+            );
     }
 
     private _setGridColumnsWidth()

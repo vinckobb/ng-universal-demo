@@ -263,7 +263,20 @@ export class GridSampleComponent extends BaseAnimatedComponent
                 {
                     btnOpenSelection: 'VÝBER STĹPCOV',
                     titleAvailableColumns: 'Dostupné stĺpce'
+                },
+                headerColumnGetter: (header: HTMLElement) =>
+                {
+                    let cols = header.children;
+                    let result = [];
+            
+                    for(let x = 0; x < cols.length; x++)
+                    {
+                        result.push(cols[x].clientWidth);
+                    }
+            
+                    return result;
                 }
+            
             }
         };
 

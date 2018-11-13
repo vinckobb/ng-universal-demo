@@ -1,5 +1,3 @@
-<div [ngClass]="options?.cssClasses?.gridDiv" [style.grid-template-columns]="gridTemplateColumns">
-    <ng-template [ngComponentOutletEx]="options?.plugins?.headerRenderer?.type" (ngComponentOutletExCreated)="setHeaderRendererComponent($event)"></ng-template>
-    <ng-template [ngComponentOutletEx]="options?.plugins?.bodyRenderer?.type" (ngComponentOutletExCreated)="setBodyRendererComponent($event)"></ng-template>
-</div>
+<ng-template [ngComponentOutletEx]="options?.plugins?.headerRenderer?.type" (ngComponentOutletExCreated)="setHeaderRendererComponent($event)"></ng-template>
+<ng-template [ngComponentOutletEx]="options?.plugins?.bodyRenderer?.type" (ngComponentOutletExCreated)="setBodyRendererComponent($event)"></ng-template>
 
