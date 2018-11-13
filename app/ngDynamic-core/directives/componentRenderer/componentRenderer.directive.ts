@@ -2,6 +2,7 @@ import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, Simpl
 
 import {DynamicComponentMetadata} from '../../interfaces/metadata/dynamicComponent.metadata';
 import {ComponentLoader} from '../../componentLoader';
+import {DynamicComponent} from '../../interfaces/dynamicComponent/dynamicComponent.interface';
 
 /**
 * Creates dynamically instance of component by its metadata
@@ -11,7 +12,7 @@ import {ComponentLoader} from '../../componentLoader';
     selector: '[componentRenderer]',
     exportAs: 'componentRenderer'
 })
-export class ComponentRendererDirective<TComponent> implements OnChanges, OnDestroy
+export class ComponentRendererDirective<TComponent extends DynamicComponent<any>> implements OnChanges, OnDestroy
 {
     //######################### private fields #########################
 
@@ -79,6 +80,7 @@ export class ComponentRendererDirective<TComponent> implements OnChanges, OnDest
 
         this._moduleRef = resolved.module;
         this._componentRef = this._viewContainerRef.createComponent<TComponent>(resolved.factory, this._viewContainerRef.length, this._viewContainerRef.parentInjector);
+        this._componentRef.instance.options = this.componentMetadata.options;
     }
 
     //######################### public methods - implementation of OnDestroy #########################

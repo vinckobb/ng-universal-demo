@@ -57,7 +57,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     public metadata: DynamicComponentMetadata =
     {
         id: 'simple',
-        options: {},
+        options: 'funguje',
         componentPackage: 'more',
         componentName: 'simple'
     };
