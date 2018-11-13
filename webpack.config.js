@@ -163,7 +163,7 @@ module.exports = function(options, args)
                 "config/global": path.join(__dirname, prod ? "config/global.json" : "config/global.development.json"),
                 "config/version": path.join(__dirname, "config/version.json"),
                 "app": path.join(__dirname, "app"),
-                "@ngDynamic": path.join(__dirname, "app/dynamicPackage")
+                "@ngDynamic": path.join(__dirname, (aot ? "app.aot" : "app") + "/dynamicPackage")
             })
         },
         module:

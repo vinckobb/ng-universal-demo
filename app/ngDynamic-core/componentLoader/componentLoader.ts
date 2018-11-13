@@ -1,7 +1,10 @@
-import {Injectable, ComponentFactory, Injector, NgModuleFactory, Compiler, NgModuleRef, Type} from "@angular/core";
+import {Injectable, ComponentFactory, Injector, NgModuleRef, NgModuleFactory, Compiler} from "@angular/core";
 import {isString} from "@asseco/common";
 
 import {DynamicComponentMetadata} from "../interfaces/metadata/dynamicComponent.metadata";
+import {DynamicModule} from "./componentLoader.interface";
+
+declare var isAot: boolean;
 
 /**
  * Loader used for obtaining ComponentFactory from component`s metadata
@@ -26,7 +29,7 @@ export class ComponentLoader
         this._validate(componentMetadata);
 
         //loads npm package dynamicaly
-        let npmPackage = await import(`@ngDynamic/${componentMetadata.componentPackage}/dynamicPackage`)
+        let npmPackage: DynamicModule<TComponent> = await import(`@ngDynamic/${componentMetadata.componentPackage}/${componentMetadata.componentName}/importIndex`)
             .catch(error =>
             {
                 throw new Error(`Unable to obtain '${componentMetadata.componentPackage}' component\`s package, error '${error}'.`);
@@ -37,35 +40,30 @@ export class ComponentLoader
             return null;
         }
 
-        let moduleFactory: NgModuleFactory<any>;
-
-        //gets module factory
-        if(`${componentMetadata.componentModule}NgFactory` in npmPackage)
-        {
-            moduleFactory = npmPackage[`${componentMetadata.componentModule}NgFactory`];
-        }
+        let moduleFactoryPromise = await npmPackage.moduleFactory;
+        let moduleFactory: NgModuleFactory<any> = moduleFactoryPromise && moduleFactoryPromise.ngModuleFactory;
 
         //not aot build
-        if(!isAot && componentMetadata.componentModule in npmPackage)
+        if(!isAot && !moduleFactory && npmPackage.module)
         {
             let compiler: Compiler = this._injector.get(Compiler);
-            moduleFactory = compiler.compileModuleSync(npmPackage[componentMetadata.componentModule]);
+            moduleFactory = compiler.compileModuleSync(npmPackage.module);
         }
 
         //module not found
         if(!moduleFactory)
         {
-            throw new Error(`Unable to obtain '${componentMetadata.componentModule}' component\`s module!`);
+            throw new Error(`Unable to obtain component\`s module for '${componentMetadata.componentName}'!`);
         }
 
-        if(!(componentMetadata.componentName in npmPackage))
+        if(!npmPackage.component)
         {
             throw new Error(`Unable to obtain '${componentMetadata.componentName}' component!`);
         }
 
         let parentModule = parentInjector.get(NgModuleRef);
         let moduleRef = moduleFactory.create(parentModule.injector);
-        let componentFactory = moduleRef.componentFactoryResolver.resolveComponentFactory(npmPackage[componentMetadata.componentName] as Type<TComponent>);
+        let componentFactory = moduleRef.componentFactoryResolver.resolveComponentFactory(npmPackage.component);
 
         return {
             factory: componentFactory,
@@ -84,11 +82,6 @@ export class ComponentLoader
         if(!componentMetadata.id || !isString(componentMetadata.id))
         {
             throw new Error(`Component\`s id '${componentMetadata.id}' is not string!`);
-        }
-
-        if(!componentMetadata.componentModule || !isString(componentMetadata.componentModule))
-        {
-            throw new Error(`Component\`s module '${componentMetadata.id}' is not string!`);
         }
 
         if(!componentMetadata.componentName || !isString(componentMetadata.componentName))

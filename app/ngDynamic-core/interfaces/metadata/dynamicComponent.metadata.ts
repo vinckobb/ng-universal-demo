@@ -14,11 +14,6 @@ export interface DynamicComponentMetadata
     componentPackage: string;
 
     /**
-     * Name of module which holds declaration and export of component
-     */
-    componentModule: string;
-
-    /**
      * Name of component to be displayed
      */
     componentName: string;

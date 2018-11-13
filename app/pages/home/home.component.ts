@@ -58,9 +58,8 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     {
         id: 'simple',
         options: {},
-        componentPackage: 'simple',
-        componentModule: 'SimpleModule',
-        componentName: 'SimpleComponent'
+        componentPackage: 'more',
+        componentName: 'simple'
     };
 
     public treeOptions: Fancytree.FancytreeOptions =

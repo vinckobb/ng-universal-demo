@@ -2,7 +2,7 @@ import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, Simpl
 
 import {DynamicComponentMetadata} from '../../interfaces/metadata/dynamicComponent.metadata';
 import {ComponentLoader} from '../../componentLoader';
-    
+
 /**
 * Creates dynamically instance of component by its metadata
 */
@@ -30,13 +30,13 @@ export class ComponentRendererDirective<TComponent> implements OnChanges, OnDest
     /**
      * Type that should be dynamically created into current container
      */
-    @Input('componentRenderer') 
+    @Input('componentRenderer')
     public componentMetadata: DynamicComponentMetadata;
 
     //######################### private properties #########################
 
     /**
-     * Instance of dynamically created component 
+     * Instance of dynamically created component
      */
     private get component(): TComponent|null
     {
@@ -63,12 +63,21 @@ export class ComponentRendererDirective<TComponent> implements OnChanges, OnDest
         if (this._moduleRef)
         {
             this._moduleRef.destroy();
+            this._moduleRef = null;
         }
 
         console.log(this.component);
 
         let resolved = await this._componentLoader.resolveComponentFactory<TComponent>(this.componentMetadata, this._viewContainerRef.parentInjector);
-        this._moduleRef = resolved.module;        
+
+        if(!resolved)
+        {
+            this._componentRef = null;
+
+            return;
+        }
+
+        this._moduleRef = resolved.module;
         this._componentRef = this._viewContainerRef.createComponent<TComponent>(resolved.factory, this._viewContainerRef.length, this._viewContainerRef.parentInjector);
     }
 
