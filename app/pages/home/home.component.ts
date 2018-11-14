@@ -58,7 +58,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     public metadata: DynamicComponentMetadata<StackComponentOptions> =
     {
         id: 'first-stack',
-        options: 
+        options:
         {
             children:
             [
@@ -111,7 +111,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                 },
                 {
                     content: 'uzol 2.2',
-                    children: 
+                    children:
                     [
                         {
                             content: 'uzol 2.2.1',
@@ -152,11 +152,11 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                     provide: ComponentRelationManager,
                     useValue: new ComponentRelationManager(
                     {
-                        relations: 
+                        relations:
                         {
                             "simple-1":
                             {
-                                outputs: 
+                                outputs:
                                 [
                                     {
                                         outputName: 'simpleOutput',
@@ -165,6 +165,22 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                                             {
                                                 inputName: 'simpleInput',
                                                 nodeId: 'simple-2'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "simple-2":
+                            {
+                                outputs:
+                                [
+                                    {
+                                        outputName: 'simpleOutput',
+                                        inputs:
+                                        [
+                                            {
+                                                inputName: 'simpleInput',
+                                                nodeId: 'simple-1'
                                             }
                                         ]
                                     }
@@ -208,7 +224,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     }
 
     //######################### public methods - implementation of AfterViewInit #########################
-    
+
     /**
      * Called when view was initialized
      */
