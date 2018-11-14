@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 
-import {SimpleComponent} from "../components/simple/simple.component";
+import {SimpleComponent} from "../component";
 
 /**
  * Module for simple component showcase

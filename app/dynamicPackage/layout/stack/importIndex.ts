@@ -1,11 +1,11 @@
-import {noop} from '@asseco/common';
+import {noop} from '@ng/common';
 
-import {SimpleModule} from './module';
-import {SimpleComponent} from './component';
+import {StackModule} from './module';
+import {StackComponent} from './component';
 import {NgModuleFactoryPromise} from '../../../ngDynamic-core';
 
 declare var isAot: boolean;
 
 export const moduleFactory: Promise<NgModuleFactoryPromise> = import(`./module/index${isAot ? '.aot' : ''}`).catch(noop);
-export {SimpleComponent as component};
-export {SimpleModule as module};
+export {StackComponent as component};
+export {StackModule as module};

@@ -1,0 +1,4 @@
+<div [class.inline-block]="options?.inline"
+     *ngFor="let child of options?.children">
+    <ng-container *componentRenderer="child"></ng-container>
+</div>

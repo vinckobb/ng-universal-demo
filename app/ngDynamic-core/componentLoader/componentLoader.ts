@@ -1,7 +1,7 @@
 import {Injectable, ComponentFactory, Injector, NgModuleRef, NgModuleFactory, Compiler} from "@angular/core";
 import {isString} from "@asseco/common";
 
-import {DynamicComponentMetadata} from "../interfaces/metadata/dynamicComponent.metadata";
+import {DynamicComponentMetadata} from "../interfaces";
 import {DynamicModule} from "./componentLoader.interface";
 
 declare var isAot: boolean;
@@ -24,7 +24,7 @@ export class ComponentLoader
      * @param componentMetadata Metadata that are going to be used for resolving component factory
      * @param parentInjector Injector from view parent
      */
-    public async resolveComponentFactory<TComponent>(componentMetadata: DynamicComponentMetadata, parentInjector: Injector): Promise<{factory: ComponentFactory<TComponent>, module: NgModuleRef<any>}>
+    public async resolveComponentFactory<TComponent>(componentMetadata: DynamicComponentMetadata<any>, parentInjector: Injector): Promise<{factory: ComponentFactory<TComponent>, module: NgModuleRef<any>}>
     {
         this._validate(componentMetadata);
 
@@ -77,7 +77,7 @@ export class ComponentLoader
      * Validates component`s metadata
      * @param componentMetadata Metadata to be validated
      */
-    private _validate(componentMetadata: DynamicComponentMetadata)
+    private _validate(componentMetadata: DynamicComponentMetadata<any>)
     {
         if(!componentMetadata.id || !isString(componentMetadata.id))
         {

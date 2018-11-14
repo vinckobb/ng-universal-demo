@@ -10,7 +10,8 @@ import {map} from 'rxjs/operators';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
-import {DynamicComponentMetadata} from '../../ngDynamic-core/interfaces/metadata/dynamicComponent.metadata';
+import {DynamicComponentMetadata} from '../../ngDynamic-core';
+import {StackComponentOptions} from '../../dynamicPackage/layout';
 
 /**
  * Home component
@@ -54,12 +55,31 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     public show: boolean = false;
     public counter = 0;
 
-    public metadata: DynamicComponentMetadata =
+    public metadata: DynamicComponentMetadata<StackComponentOptions> =
     {
-        id: 'simple',
-        options: 'funguje',
-        componentPackage: 'more',
-        componentName: 'simple'
+        id: 'first-stack',
+        options: 
+        {
+            children:
+            [
+                <DynamicComponentMetadata<string>>
+                {
+                    id: 'simple-1',
+                    options: 'first simple',
+                    componentPackage: 'more',
+                    componentName: 'simple'
+                },
+                <DynamicComponentMetadata<string>>
+                {
+                    id: 'simple-2',
+                    options: 'another simple',
+                    componentPackage: 'more',
+                    componentName: 'simple'
+                }
+            ]
+        },
+        componentPackage: 'layout',
+        componentName: 'stack'
     };
 
     public treeOptions: Fancytree.FancytreeOptions =

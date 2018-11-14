@@ -11,7 +11,7 @@ import {AuthorizationModule} from '@ng/authentication';
 import {FancyTreeModule} from '@ng/treeview';
 import {NgSelectModule} from '@ng/select';
 import {TranslateModule} from '@ngx-translate/core';
-import {NgDynamicCoreModule} from '../ngDynamic-core/modules/ngDynamicCore.module';
+import {NgDynamicCoreModule} from '../ngDynamic-core';
 
 /**
  * Common module for all other modules

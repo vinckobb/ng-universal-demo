@@ -1,7 +1,7 @@
 /**
  * Metadata used for rendering dynamic components
  */
-export interface DynamicComponentMetadata
+export interface DynamicComponentMetadata<TOptions>
 {
     /**
      * Unique id identifying component in current view
@@ -21,13 +21,13 @@ export interface DynamicComponentMetadata
     /**
      * Options passed to component
      */
-    options: any;
+    options: TOptions;
 }
 
 /**
  * Metadata containing instance of dynamic component
  */
-export interface DynamicComponentMetadataInstance<TComponent> extends DynamicComponentMetadata
+export interface DynamicComponentMetadataInstance<TComponent, TOptions> extends DynamicComponentMetadata<TOptions>
 {
     /**
      * Instance of created component

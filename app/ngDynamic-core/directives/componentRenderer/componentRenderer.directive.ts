@@ -1,8 +1,7 @@
 import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef} from '@angular/core';
 
-import {DynamicComponentMetadata} from '../../interfaces/metadata/dynamicComponent.metadata';
 import {ComponentLoader} from '../../componentLoader';
-import {DynamicComponent} from '../../interfaces/dynamicComponent/dynamicComponent.interface';
+import {DynamicComponent, DynamicComponentMetadata} from '../../interfaces';
 
 /**
 * Creates dynamically instance of component by its metadata
@@ -32,7 +31,7 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
      * Type that should be dynamically created into current container
      */
     @Input('componentRenderer')
-    public componentMetadata: DynamicComponentMetadata;
+    public componentMetadata: DynamicComponentMetadata<any>;
 
     //######################### private properties #########################
 
@@ -67,8 +66,6 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
             this._moduleRef = null;
         }
 
-        console.log(this.component);
-
         let resolved = await this._componentLoader.resolveComponentFactory<TComponent>(this.componentMetadata, this._viewContainerRef.parentInjector);
 
         if(!resolved)
@@ -80,7 +77,8 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
 
         this._moduleRef = resolved.module;
         this._componentRef = this._viewContainerRef.createComponent<TComponent>(resolved.factory, this._viewContainerRef.length, this._viewContainerRef.parentInjector);
-        this._componentRef.instance.options = this.componentMetadata.options;
+        this.component.options = this.componentMetadata.options;
+        this.component.invalidateVisuals();
     }
 
     //######################### public methods - implementation of OnDestroy #########################

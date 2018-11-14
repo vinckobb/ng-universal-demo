@@ -1,6 +1,6 @@
-import {Component, ChangeDetectionStrategy} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
-import {DynamicComponent} from "../../../../../ngDynamic-core/interfaces/dynamicComponent/dynamicComponent.interface";
+import {DynamicComponent} from "../../../../ngDynamic-core";
 
 /**
  * Simple component
@@ -18,7 +18,12 @@ export class SimpleComponent implements DynamicComponent<string>
     /**
      * Options used for rendering this component
      */
-    options: string;
+    public options: string = 'default';
+
+    //######################### constructor #########################
+    constructor(private _changeDetector: ChangeDetectorRef)
+    {
+    }
 
     //######################### public methods #########################
 
@@ -27,5 +32,6 @@ export class SimpleComponent implements DynamicComponent<string>
      */
     public invalidateVisuals(): void
     {
+        this._changeDetector.detectChanges();
     }
 }
