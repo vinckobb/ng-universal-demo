@@ -55,6 +55,10 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
     }
 
     //######################### public methods - implementation of OnChanges #########################
+    
+    /**
+     * Called when input value changes
+     */
     public async ngOnChanges(changes: SimpleChanges)
     {
         this._viewContainerRef.clear();
@@ -82,6 +86,10 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
     }
 
     //######################### public methods - implementation of OnDestroy #########################
+
+    /**
+     * Called when component is destroyed
+     */
     public ngOnDestroy()
     {
         if (this._moduleRef)
