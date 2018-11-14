@@ -255,7 +255,8 @@ module.exports = function(options, args)
             {
                 isProduction: prod,
                 isNgsw: ngsw,
-                isAot: aot
+                isAot: aot,
+                localPackage: "@localDynamic/"
             }),
             // new webpack.IgnorePlugin(/\.\/locale$/),
             new HardSourceWebpackPlugin(),

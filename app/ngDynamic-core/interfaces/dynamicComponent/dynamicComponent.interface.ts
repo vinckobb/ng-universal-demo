@@ -1,4 +1,3 @@
-
 /**
  * Description of dynamic component
  */

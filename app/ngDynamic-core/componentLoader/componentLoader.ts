@@ -5,6 +5,8 @@ import {DynamicComponentMetadata} from "../interfaces";
 import {DynamicModule} from "./componentLoader.interface";
 
 declare var isAot: boolean;
+declare var localPackage: string;
+var localPackage = localPackage || null;
 
 /**
  * Loader used for obtaining ComponentFactory from component`s metadata

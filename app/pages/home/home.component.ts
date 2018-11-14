@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, Injector, ValueProvider, StaticProvider} from '@angular/core';
 import {trigger, animate, style, query, transition, group} from '@angular/animations';
 import {FormBuilder, FormControl} from '@angular/forms';
 import {ComponentRoute} from "@ng/common";
@@ -10,7 +10,7 @@ import {map} from 'rxjs/operators';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
-import {DynamicComponentMetadata} from '../../ngDynamic-core';
+import {DynamicComponentMetadata, ComponentRelationManager, ComponentManager} from '../../ngDynamic-core';
 import {StackComponentOptions} from '../../dynamicPackage/layout';
 
 /**
@@ -82,6 +82,8 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
         componentName: 'stack'
     };
 
+    public customInjector: Injector;
+
     public treeOptions: Fancytree.FancytreeOptions =
     {
         icon: (val, val2: Fancytree.EventData) =>
@@ -135,9 +137,50 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
 
     //######################### constructor #########################
     constructor(private dataSvc: DataService,
-                formBuilder: FormBuilder)
+                formBuilder: FormBuilder,
+                injector: Injector)
     {
         super();
+
+        this.customInjector = Injector.create(
+        {
+            parent: injector,
+            providers:
+            [
+                <ValueProvider>
+                {
+                    provide: ComponentRelationManager,
+                    useValue: new ComponentRelationManager(
+                    {
+                        relations: 
+                        {
+                            "simple-1":
+                            {
+                                outputs: 
+                                [
+                                    {
+                                        outputName: 'simpleOutput',
+                                        inputs:
+                                        [
+                                            {
+                                                inputName: 'simpleInput',
+                                                nodeId: 'simple-2'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    })
+                },
+                <StaticProvider>
+                {
+                    useClass: ComponentManager,
+                    provide: ComponentManager,
+                    deps: [ComponentRelationManager]
+                }
+            ]
+        });
 
         this.ngSelect = formBuilder.control('third');
     }

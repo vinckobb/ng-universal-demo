@@ -1,7 +1,8 @@
-import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef, Injector} from '@angular/core';
 
 import {ComponentLoader} from '../../componentLoader';
 import {DynamicComponent, DynamicComponentMetadata} from '../../interfaces';
+import {ComponentManager} from '../../componentManager';
 
 /**
 * Creates dynamically instance of component by its metadata
@@ -33,6 +34,12 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
     @Input('componentRenderer')
     public componentMetadata: DynamicComponentMetadata<any>;
 
+    /**
+     * Custom injector used as parent for dynamic components tree
+     */
+    @Input('componentRendererInjector')
+    public customInjector: Injector;
+
     //######################### private properties #########################
 
     /**
@@ -55,7 +62,7 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
     }
 
     //######################### public methods - implementation of OnChanges #########################
-    
+
     /**
      * Called when input value changes
      */
@@ -64,25 +71,34 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
         this._viewContainerRef.clear();
         this._componentRef = null;
 
-        if (this._moduleRef)
+        if(this.componentMetadata)
         {
-            this._moduleRef.destroy();
-            this._moduleRef = null;
+            let injector = this.customInjector || this._viewContainerRef.parentInjector;
+            let componentManager = injector.get(ComponentManager);
+
+            if (this._moduleRef)
+            {
+                this._moduleRef.destroy();
+                this._moduleRef = null;
+            }
+
+            let resolved = await this._componentLoader.resolveComponentFactory<TComponent>(this.componentMetadata, injector);
+
+            if(!resolved)
+            {
+                this._componentRef = null;
+
+                return;
+            }
+
+            this._moduleRef = resolved.module;
+            this._componentRef = this._viewContainerRef.createComponent<TComponent>(resolved.factory, this._viewContainerRef.length, injector);
+            
+            this.component.options = this.componentMetadata.options;
+            this.component.invalidateVisuals();
+            
+            componentManager.registerComponent(this.componentMetadata.id, this.component);
         }
-
-        let resolved = await this._componentLoader.resolveComponentFactory<TComponent>(this.componentMetadata, this._viewContainerRef.parentInjector);
-
-        if(!resolved)
-        {
-            this._componentRef = null;
-
-            return;
-        }
-
-        this._moduleRef = resolved.module;
-        this._componentRef = this._viewContainerRef.createComponent<TComponent>(resolved.factory, this._viewContainerRef.length, this._viewContainerRef.parentInjector);
-        this.component.options = this.componentMetadata.options;
-        this.component.invalidateVisuals();
     }
 
     //######################### public methods - implementation of OnDestroy #########################
