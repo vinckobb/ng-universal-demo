@@ -1,4 +1,5 @@
 import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef, Injector} from '@angular/core';
+import {nameof} from '@asseco/common';
 
 import {ComponentLoader} from '../../componentLoader';
 import {DynamicComponent, DynamicComponentMetadata} from '../../interfaces';
@@ -68,36 +69,52 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
      */
     public async ngOnChanges(changes: SimpleChanges)
     {
-        this._viewContainerRef.clear();
-        this._componentRef = null;
-
-        if(this.componentMetadata)
+        if(nameof<ComponentRendererDirective<TComponent>>('componentMetadata') in changes)
         {
+            let componentMetadataChange = changes[nameof<ComponentRendererDirective<TComponent>>('componentMetadata')];
             let injector = this.customInjector || this._viewContainerRef.parentInjector;
             let componentManager = injector.get(ComponentManager);
 
-            if (this._moduleRef)
+            //nothing bound yet
+            if(!componentMetadataChange.currentValue && !componentMetadataChange.previousValue)
             {
-                this._moduleRef.destroy();
-                this._moduleRef = null;
-            }
-
-            let resolved = await this._componentLoader.resolveComponentFactory<TComponent>(this.componentMetadata, injector);
-
-            if(!resolved)
-            {
-                this._componentRef = null;
-
                 return;
             }
 
-            this._moduleRef = resolved.module;
-            this._componentRef = this._viewContainerRef.createComponent<TComponent>(resolved.factory, this._viewContainerRef.length, injector);
-            
-            this.component.options = this.componentMetadata.options;
-            this.component.invalidateVisuals();
-            
-            componentManager.registerComponent(this.componentMetadata.id, this.component);
+            //new value is null, or there is change of value
+            if(!componentMetadataChange.currentValue || (componentMetadataChange.previousValue && componentMetadataChange.currentValue != componentMetadataChange.previousValue))
+            {
+                //componentManager.unregister();
+
+                this._viewContainerRef.clear();
+                this._componentRef = null;
+            }
+
+            if(this.componentMetadata)
+            {
+                if (this._moduleRef)
+                {
+                    this._moduleRef.destroy();
+                    this._moduleRef = null;
+                }
+    
+                let resolved = await this._componentLoader.resolveComponentFactory<TComponent>(this.componentMetadata, injector);
+    
+                if(!resolved)
+                {
+                    this._componentRef = null;
+    
+                    return;
+                }
+    
+                this._moduleRef = resolved.module;
+                this._componentRef = this._viewContainerRef.createComponent<TComponent>(resolved.factory, this._viewContainerRef.length, injector);
+                
+                this.component.options = this.componentMetadata.options;
+                this.component.invalidateVisuals();
+                
+                componentManager.registerComponent(this.componentMetadata.id, this.component);
+            }
         }
     }
 
