@@ -37,6 +37,21 @@ export class ComponentManager
     }
 
     /**
+     * Unregisters component and destroys all relations
+     * @param id Id of component to be unregistered
+     */
+    public unregisterComponent(id: string)
+    {
+        if(!this._components[id])
+        {
+            throw new Error(`Component '${id}' is not registered.`)
+        }
+
+        this._relationManager.destroyComponent(id);
+        delete this._components[id];
+    }
+
+    /**
      * Gets component instance or null
      * @param id Unique identification of component
      */

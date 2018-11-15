@@ -98,6 +98,31 @@ export class ComponentRelationManager
             });
         }
     }
+    
+    /**
+     * Method used for destroying component
+     */
+    public destroyComponent(id: string)
+    {
+        let metadata: DynamicComponentRelationManagerMetadata = this._relations[id];
+        let backwardMetadata = this._backwardRelations[id];
+
+        //destroy backward relations
+        if(backwardMetadata && backwardMetadata.length)
+        {
+            backwardMetadata.forEach(inputoutput =>
+            {
+                inputoutput.inputInstance = null;
+            });
+        }
+
+        //destroy relations
+        if(metadata)
+        {
+            metadata.outputsChangeSubscriptions.forEach(subscription => subscription.unsubscribe());
+            metadata.outputsChangeSubscriptions = [];
+        }
+    }
 
     //######################### private methods #########################
 
