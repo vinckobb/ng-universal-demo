@@ -17,4 +17,9 @@ export interface NodeDefinition
      * Destroys everything that should be destroyed and frees memory
      */
     destroy(): void;
+
+    /**
+     * Explicitly runs invalidation of content (change detection)
+     */
+    invalidateVisuals(): void;
 }

@@ -38,6 +38,13 @@ export class ActivatedRouteNode implements NodeDefinition
     }
 
     //######################### public methods #########################
+    
+    /**
+     * Explicitly runs invalidation of content (change detection)
+     */
+    public invalidateVisuals(): void
+    {
+    }
 
     /**
      * Destroys everything that should be destroyed and frees memory

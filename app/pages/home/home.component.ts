@@ -221,6 +221,23 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                                     inputs:
                                     [
                                         {
+                                            inputName: 'input',
+                                            id: 'route-transform'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            id: 'route-transform',
+                            nodeType: 'Script',
+                            outputs:
+                            [
+                                {
+                                    outputName: 'output',
+                                    inputs:
+                                    [
+                                        {
                                             inputName: 'query',
                                             id: 'simple-2'
                                         }
