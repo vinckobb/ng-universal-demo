@@ -62,6 +62,33 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
         {
             children:
             [
+                <DynamicComponentMetadata<StackComponentOptions>>
+                {
+                    id: 'nested-stack',
+                    options:
+                    {
+                        inline: true,
+                        children:
+                        [
+                            <DynamicComponentMetadata<string>>
+                            {
+                                id: 'simple-nested-1',
+                                options: 'first nested',
+                                componentPackage: 'more',
+                                componentName: 'simple'
+                            },
+                            <DynamicComponentMetadata<string>>
+                            {
+                                id: 'simple-nested-2',
+                                options: 'another nested',
+                                componentPackage: 'more',
+                                componentName: 'simple'
+                            }
+                        ]
+                    },
+                    componentPackage: 'layout',
+                    componentName: 'stack'
+                },
                 <DynamicComponentMetadata<string>>
                 {
                     id: 'simple-1',
