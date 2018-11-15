@@ -35,7 +35,7 @@ export class SimpleComponent implements DynamicComponent<string>
      * Simple output property
      */
     @DynamicOutput()
-    public simpleOutput: string;
+    public simpleOutput: string = 'default';
 
     //######################### public properties #########################
 

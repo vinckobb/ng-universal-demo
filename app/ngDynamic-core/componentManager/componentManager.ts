@@ -16,7 +16,6 @@ export class ComponentManager<TComponent extends DynamicComponent<any>>
     //######################### constructor #########################
     constructor(private _relationManager: ComponentRelationManager<TComponent>)
     {
-        _relationManager.registerComponentManager(this);
     }
 
     //######################### public methods #########################
@@ -34,7 +33,7 @@ export class ComponentManager<TComponent extends DynamicComponent<any>>
         }
 
         this._components[id] = component;
-        this._relationManager.updateRelations(id);
+        this._relationManager.updateRelations(id, component);
     }
 
     /**

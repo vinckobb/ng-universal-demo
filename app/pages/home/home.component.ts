@@ -10,7 +10,7 @@ import {map} from 'rxjs/operators';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
-import {DynamicComponentMetadata, ComponentRelationManager, ComponentManager} from '../../ngDynamic-core';
+import {DynamicComponentMetadata, ComponentRelationManager, ComponentManager, DYNAMIC_RELATIONS_METADATA, DynamicComponentRelationMetadata} from '../../ngDynamic-core';
 import {StackComponentOptions} from '../../dynamicPackage/layout';
 
 /**
@@ -176,45 +176,48 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
             [
                 <ValueProvider>
                 {
-                    provide: ComponentRelationManager,
-                    useValue: new ComponentRelationManager(
-                    {
-                        relations:
+                    provide: DYNAMIC_RELATIONS_METADATA,
+                    useValue: <DynamicComponentRelationMetadata[]>
+                    [
                         {
-                            "simple-1":
-                            {
-                                outputs:
-                                [
-                                    {
-                                        outputName: 'simpleOutput',
-                                        inputs:
-                                        [
-                                            {
-                                                inputName: 'simpleInput',
-                                                nodeId: 'simple-2'
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
-                            "simple-2":
-                            {
-                                outputs:
-                                [
-                                    {
-                                        outputName: 'simpleOutput',
-                                        inputs:
-                                        [
-                                            {
-                                                inputName: 'simpleInput',
-                                                nodeId: 'simple-1'
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
+                            id: 'simple-1',
+                            outputs:
+                            [
+                                {
+                                    outputName: 'simpleOutput',
+                                    inputs:
+                                    [
+                                        {
+                                            inputName: 'simpleInput',
+                                            id: 'simple-2'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            id: 'simple-2',
+                            outputs:
+                            [
+                                {
+                                    outputName: 'simpleOutput',
+                                    inputs:
+                                    [
+                                        {
+                                            inputName: 'simpleInput',
+                                            id: 'simple-1'
+                                        }
+                                    ]
+                                }
+                            ]
                         }
-                    })
+                    ]
+                },
+                <StaticProvider>
+                {
+                    useClass: ComponentRelationManager,
+                    provide: ComponentRelationManager,
+                    deps: [DYNAMIC_RELATIONS_METADATA, Injector]
                 },
                 <StaticProvider>
                 {

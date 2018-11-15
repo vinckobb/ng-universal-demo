@@ -1,64 +1,7 @@
+import {Subscription} from "rxjs";
+
 /**
  * Metadata for single component`s input
- */
-export interface DynamicComponentInputMetadata
-{
-    /**
-     * Name of input be mapped
-     */
-    inputName?: string;
-
-    /**
-     * Id of node which contains this input
-     */
-    nodeId?: string;
-}
-
-/**
- * Metadata for single component`s output
- */
-export interface DynamicComponentOutputMetadata
-{
-    /**
-     * Name of output to be mapped
-     */
-    outputName?: string;
-
-    /**
-     * Inputs which are connected to this output
-     */
-    inputs?: DynamicComponentInputMetadata[];
-}
-
-/**
- * Metadata for single component relations
- */
-export interface DynamicComponentRelationMetadata
-{
-    /**
-     * Indication that relation is for component or non component node
-     */
-    isClassNode?: boolean;
-
-    /**
-     * Definition of all outputs and their connections
-     */
-    outputs?: DynamicComponentOutputMetadata[];
-}
-
-/**
- * Metadata used for creating relations between dynamic components
- */
-export interface DynamicComponentRelationsMetadata
-{
-    /**
-     * Dictionary with components, or non component nodes which have connections
-     */
-    relations?: {[id: string]: DynamicComponentRelationMetadata};
-}
-
-/**
- * Metadata for single component`s input with information about output connected to it
  */
 export interface DynamicComponentRelationInputMetadata
 {
@@ -70,16 +13,11 @@ export interface DynamicComponentRelationInputMetadata
     /**
      * Id of node which contains this input
      */
-    nodeId?: string;
-
-    /**
-     * Id of output component which is attached to this input
-     */
-    outputComponentId?: string;
+    id?: string;
 }
 
 /**
- * Metadata for single component`s output for relation manager
+ * Metadata for single component`s output
  */
 export interface DynamicComponentRelationOutputMetadata
 {
@@ -97,8 +35,13 @@ export interface DynamicComponentRelationOutputMetadata
 /**
  * Metadata for single component relations
  */
-export interface DynamicComponentRelationManagerMetadata
+export interface DynamicComponentRelationMetadata
 {
+    /**
+     * Unique id of component which outputs will be connected
+     */
+    id?: string;
+
     /**
      * Indication that relation is for component or non component node
      */
@@ -108,4 +51,56 @@ export interface DynamicComponentRelationManagerMetadata
      * Definition of all outputs and their connections
      */
     outputs?: DynamicComponentRelationOutputMetadata[];
+}
+
+/**
+ * Metadata for single component`s output for relation manager
+ */
+export interface DynamicComponentRelationManagerInputOutputMetadata
+{
+    /**
+     * Name of output to be mapped
+     */
+    outputName?: string;
+
+    /**
+     * Name of input be mapped
+     */
+    inputName?: string;
+
+    /**
+     * Id of node which contains this input
+     */
+    inputId?: string;
+
+    /**
+     * Id of output component which is attached to this input
+     */
+    outputNodeId?: string;
+
+    /**
+     * Instance of node containing this input
+     */
+    inputInstance?: any;
+}
+
+/**
+ * Metadata for single component relations
+ */
+export interface DynamicComponentRelationManagerMetadata
+{
+    /**
+     * Indication that relation is for component or non component node
+     */
+    isClassNode?: boolean;
+
+    /**
+     * Definition of all outputs and their connections to inputs
+     */
+    inputOutputs?: DynamicComponentRelationManagerInputOutputMetadata[];
+
+    /**
+     * Array of subscriptions for changes of outputs for component
+     */
+    outputsChangeSubscriptions?: Subscription[];
 }

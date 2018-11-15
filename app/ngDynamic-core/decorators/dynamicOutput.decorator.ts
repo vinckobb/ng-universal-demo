@@ -13,14 +13,14 @@ export function DynamicOutput(): PropertyDecorator
                               propertyKey,
                               {
                                   get: function()
-                                  { 
-                                      return this[`__${propertyKey}`]; 
+                                  {
+                                      return this[`ɵ${propertyKey}`];
                                   },
                                   set: function(value:any)
                                   {
-                                      this[`__${propertyKey}`] = value;
+                                      this[`ɵ${propertyKey}`] = value;
                                       this[`${propertyKey}Change`].emit();
-                                  },
+                                  }
                               });
     };
 }
