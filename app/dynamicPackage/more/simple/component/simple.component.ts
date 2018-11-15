@@ -1,5 +1,6 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 import {FormBuilder, FormControl} from "@angular/forms";
+import {StringDictionary} from "@asseco/common";
 import {Subscription} from "rxjs";
 
 import {DynamicComponent, DynamicOutput} from "../../../../ngDynamic-core";
@@ -28,6 +29,11 @@ export class SimpleComponent implements DynamicComponent<string>
      * Simple input property
      */
     public simpleInput: string;
+
+    /**
+     * Query string
+     */
+    public query: StringDictionary = {};
 
     //######################### public properties - outputs #########################
 

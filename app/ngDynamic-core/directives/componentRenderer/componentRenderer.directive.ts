@@ -69,6 +69,9 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
      */
     public async ngOnChanges(changes: SimpleChanges)
     {
+        this._viewContainerRef.clear();
+        this._componentRef = null;
+
         if(nameof<ComponentRendererDirective<TComponent>>('componentMetadata') in changes)
         {
             let componentMetadataChange = changes[nameof<ComponentRendererDirective<TComponent>>('componentMetadata')];
@@ -85,9 +88,6 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
             if(!componentMetadataChange.currentValue || (componentMetadataChange.previousValue && componentMetadataChange.currentValue != componentMetadataChange.previousValue))
             {
                 //componentManager.unregister();
-
-                this._viewContainerRef.clear();
-                this._componentRef = null;
             }
 
             if(this.componentMetadata)

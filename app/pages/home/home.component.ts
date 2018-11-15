@@ -210,6 +210,23 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                                     ]
                                 }
                             ]
+                        },
+                        {
+                            id: 'route-data',
+                            nodeType: 'ActivatedRoute',
+                            outputs:
+                            [
+                                {
+                                    outputName: 'query',
+                                    inputs:
+                                    [
+                                        {
+                                            inputName: 'query',
+                                            id: 'simple-2'
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 },

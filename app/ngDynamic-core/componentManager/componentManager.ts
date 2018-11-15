@@ -4,17 +4,17 @@ import {DynamicComponent} from "../interfaces";
 /**
  * Manager used for handling instances of components
  */
-export class ComponentManager<TComponent extends DynamicComponent<any>>
+export class ComponentManager
 {
     //######################### private fields #########################
 
     /**
      * Registered components
      */
-    private _components: {[id: string]: TComponent} = {};
+    private _components: {[id: string]: DynamicComponent<any>} = {};
 
     //######################### constructor #########################
-    constructor(private _relationManager: ComponentRelationManager<TComponent>)
+    constructor(private _relationManager: ComponentRelationManager)
     {
     }
 
@@ -25,7 +25,7 @@ export class ComponentManager<TComponent extends DynamicComponent<any>>
      * @param id Id of component to be registered
      * @param component Component metadata with instance of component
      */
-    public registerComponent(id: string, component: TComponent)
+    public registerComponent(id: string, component: DynamicComponent<any>)
     {
         if(this._components[id])
         {
@@ -40,7 +40,7 @@ export class ComponentManager<TComponent extends DynamicComponent<any>>
      * Gets component instance or null
      * @param id Unique identification of component
      */
-    public get(id: string): TComponent
+    public get(id: string): DynamicComponent<any>
     {
         return this._components[id];
     }

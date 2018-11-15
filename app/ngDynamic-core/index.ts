@@ -1,6 +1,7 @@
 export * from './componentLoader';
 export * from './componentRelationManager';
 export * from './componentManager';
+export * from './componentScriptLoader';
 export * from './decorators';
 export * from './directives';
 export * from './interfaces';

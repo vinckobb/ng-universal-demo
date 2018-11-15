@@ -3,11 +3,18 @@ import {isBlank} from "@asseco/common";
 
 import {DynamicComponent, DynamicComponentRelationManagerMetadata, DynamicComponentRelationMetadata, DynamicComponentRelationManagerInputOutputMetadata} from "../interfaces";
 import {ComponentManager} from "../componentManager";
+import {NodeDefinitionConstructor, NodeDefinition} from "../nodeDefinitions";
+import * as defs from '../nodeDefinitions';
+
+/**
+ * Object storing node definitions
+ */
+let nodeDefinitions: {[name: string]: NodeDefinitionConstructor} = defs;
 
 /**
  * Manager used for handling relations between components
  */
-export class ComponentRelationManager<TComponent extends DynamicComponent<any>>
+export class ComponentRelationManager
 {
     //######################### private fields #########################
 
@@ -24,18 +31,18 @@ export class ComponentRelationManager<TComponent extends DynamicComponent<any>>
     /**
      * Component manager
      */
-    private _componentManager: ComponentManager<TComponent>;
+    private _componentManager: ComponentManager;
 
     //######################### private properties #########################
 
     /**
      * Gets instance of component manager
      */
-    private get componentManager(): ComponentManager<TComponent>
+    private get componentManager(): ComponentManager
     {
         if(!this._componentManager)
         {
-            this._componentManager = this._injector.get<ComponentManager<TComponent>>(ComponentManager);
+            this._componentManager = this._injector.get<ComponentManager>(ComponentManager);
         }
 
         return this._componentManager;
@@ -52,9 +59,10 @@ export class ComponentRelationManager<TComponent extends DynamicComponent<any>>
     /**
      * Registers newly created component
      * @param id Id of component to be registered
-     * @param component Component metadata with instance of component
+     * @param component Component instance
+     * @param nodeInstance Instance of node
      */
-    public updateRelations(id: string, component: TComponent)
+    public updateRelations(id: string, component: DynamicComponent<any>, nodeInstance?: NodeDefinition)
     {
         let metadata: DynamicComponentRelationManagerMetadata = this._relations[id];
         let backwardMetadata = this._backwardRelations[id];
@@ -65,12 +73,14 @@ export class ComponentRelationManager<TComponent extends DynamicComponent<any>>
             return;
         }
 
+        let instance = component || nodeInstance;
+
         //initialize default value from connection to this
         if(backwardMetadata && backwardMetadata.length)
         {
             backwardMetadata.forEach(inputOutput =>
             {
-                inputOutput.inputInstance = component;
+                inputOutput.inputInstance = instance;
 
                 this._initBackwardRelation(inputOutput.outputNodeId, inputOutput);
             });
@@ -81,12 +91,12 @@ export class ComponentRelationManager<TComponent extends DynamicComponent<any>>
             metadata.inputOutputs.forEach(inputOutput =>
             {
                 //initialize default value from this to its connections
-                this._transferData(component, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName);
+                this._transferData(instance, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName);
 
                 //set listening for output changes
-                metadata.outputsChangeSubscriptions.push(component[`${inputOutput.outputName}Change`].subscribe(() =>
+                metadata.outputsChangeSubscriptions.push(instance[`${inputOutput.outputName}Change`].subscribe(() =>
                 {
-                    this._transferData(component, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName);
+                    this._transferData(instance, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName);
                 }));
             });
         }
@@ -137,12 +147,29 @@ export class ComponentRelationManager<TComponent extends DynamicComponent<any>>
                 });
             });
 
+            let nodeInstance: NodeDefinition = null;
+
+            if(meta.nodeType)
+            {
+                if(!nodeDefinitions[`${meta.nodeType}Node`])
+                {
+                    throw new Error(`Unable to find node type '${meta.nodeType}'!`);
+                }
+
+                nodeInstance = new nodeDefinitions[`${meta.nodeType}Node`](this._injector);
+            }
+
             this._relations[meta.id] =
             {
-                isClassNode: meta.isClassNode,
+                nodeInstance: nodeInstance,
                 inputOutputs: outputs,
                 outputsChangeSubscriptions: []
             };
+
+            if(nodeInstance)
+            {
+                this.updateRelations(meta.id, null, nodeInstance);
+            }
         });
     }
 
@@ -153,7 +180,10 @@ export class ComponentRelationManager<TComponent extends DynamicComponent<any>>
      */
     private _initBackwardRelation(id: string, inputOutputMetadata: DynamicComponentRelationManagerInputOutputMetadata)
     {
-        this._transferData(this.componentManager.get(id), inputOutputMetadata.outputName, inputOutputMetadata.inputInstance, inputOutputMetadata.inputName);
+        let relation = this._relations[id];
+        let nodeInstance = relation && relation.nodeInstance;
+
+        this._transferData(nodeInstance || this.componentManager.get(id), inputOutputMetadata.outputName, inputOutputMetadata.inputInstance, inputOutputMetadata.inputName);
     }
 
     /**
@@ -163,7 +193,7 @@ export class ComponentRelationManager<TComponent extends DynamicComponent<any>>
      * @param target Instance of target object containing target property for data
      * @param targetProperty Name of target property which will be filled with data
      */
-    private _transferData(source: TComponent, sourceProperty: string, target: TComponent, targetProperty: string)
+    private _transferData(source: any, sourceProperty: string, target: any, targetProperty: string)
     {
         if(!source || !target)
         {

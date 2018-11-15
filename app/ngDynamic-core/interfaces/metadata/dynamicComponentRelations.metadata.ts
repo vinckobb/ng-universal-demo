@@ -1,5 +1,7 @@
 import {Subscription} from "rxjs";
 
+import {NodeDefinition} from "../../nodeDefinitions";
+
 /**
  * Metadata for single component`s input
  */
@@ -43,9 +45,9 @@ export interface DynamicComponentRelationMetadata
     id?: string;
 
     /**
-     * Indication that relation is for component or non component node
+     * Name of node type, that should be constructed instead of component
      */
-    isClassNode?: boolean;
+    nodeType?: string;
 
     /**
      * Definition of all outputs and their connections
@@ -90,9 +92,9 @@ export interface DynamicComponentRelationManagerInputOutputMetadata
 export interface DynamicComponentRelationManagerMetadata
 {
     /**
-     * Indication that relation is for component or non component node
+     * Instance of node
      */
-    isClassNode?: boolean;
+    nodeInstance?: NodeDefinition;
 
     /**
      * Definition of all outputs and their connections to inputs
