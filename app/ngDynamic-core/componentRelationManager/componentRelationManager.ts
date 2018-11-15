@@ -1,7 +1,7 @@
 import {Injector} from "@angular/core";
 import {isBlank} from "@asseco/common";
 
-import {DynamicComponent, DynamicComponentRelationManagerMetadata, DynamicComponentRelationMetadata, DynamicComponentRelationManagerInputOutputMetadata} from "../interfaces";
+import {DynamicComponentRelationManagerMetadata, DynamicComponentRelationMetadata, DynamicComponentRelationManagerInputOutputMetadata, DynamicNode} from "../interfaces";
 import {ComponentManager} from "../componentManager";
 import {NodeDefinitionConstructor, NodeDefinition} from "../nodeDefinitions";
 import * as defs from '../nodeDefinitions';
@@ -60,9 +60,8 @@ export class ComponentRelationManager
      * Registers newly created component
      * @param id Id of component to be registered
      * @param component Component instance
-     * @param nodeInstance Instance of node
      */
-    public updateRelations(id: string, component: DynamicComponent<any>, nodeInstance?: NodeDefinition)
+    public updateRelations(id: string, component: DynamicNode)
     {
         let metadata: DynamicComponentRelationManagerMetadata = this._relations[id];
         let backwardMetadata = this._backwardRelations[id];
@@ -73,14 +72,12 @@ export class ComponentRelationManager
             return;
         }
 
-        let instance = component || nodeInstance;
-
         //initialize default value from connection to this
         if(backwardMetadata && backwardMetadata.length)
         {
             backwardMetadata.forEach(inputOutput =>
             {
-                inputOutput.inputInstance = instance;
+                inputOutput.inputInstance = component;
 
                 this._initBackwardRelation(inputOutput.outputNodeId, inputOutput);
             });
@@ -91,12 +88,12 @@ export class ComponentRelationManager
             metadata.inputOutputs.forEach(inputOutput =>
             {
                 //initialize default value from this to its connections
-                this._transferData(instance, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName);
+                this._transferData(component, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName);
 
                 //set listening for output changes
-                metadata.outputsChangeSubscriptions.push(instance[`${inputOutput.outputName}Change`].subscribe(() =>
+                metadata.outputsChangeSubscriptions.push(component[`${inputOutput.outputName}Change`].subscribe(() =>
                 {
-                    this._transferData(instance, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName);
+                    this._transferData(component, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName);
                 }));
             });
         }
@@ -168,7 +165,7 @@ export class ComponentRelationManager
 
             if(nodeInstance)
             {
-                this.updateRelations(meta.id, null, nodeInstance);
+                this.updateRelations(meta.id, nodeInstance);
             }
         });
     }
@@ -193,7 +190,7 @@ export class ComponentRelationManager
      * @param target Instance of target object containing target property for data
      * @param targetProperty Name of target property which will be filled with data
      */
-    private _transferData(source: any, sourceProperty: string, target: any, targetProperty: string)
+    private _transferData(source: DynamicNode, sourceProperty: string, target: DynamicNode, targetProperty: string)
     {
         if(!source || !target)
         {
@@ -201,10 +198,6 @@ export class ComponentRelationManager
         }
 
         target[targetProperty] = source[sourceProperty];
-
-        if(target.invalidateVisuals)
-        {
-            target.invalidateVisuals();
-        }
+        target.invalidateVisuals();
     }
 }

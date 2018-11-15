@@ -1,5 +1,7 @@
 import {Injector} from "@angular/core";
 
+import {DynamicNode} from "../interfaces";
+
 /**
  * Definition of node constructor
  */
@@ -11,15 +13,10 @@ export interface NodeDefinitionConstructor
 /**
  * Definition of node instance
  */
-export interface NodeDefinition
+export interface NodeDefinition extends DynamicNode
 {
     /**
      * Destroys everything that should be destroyed and frees memory
      */
     destroy(): void;
-
-    /**
-     * Explicitly runs invalidation of content (change detection)
-     */
-    invalidateVisuals(): void;
 }
