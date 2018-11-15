@@ -1,8 +1,8 @@
-import {Component, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 import {FormBuilder, FormControl} from "@angular/forms";
 import {Subscription} from "rxjs";
 
-import {DynamicComponent} from "../../../../ngDynamic-core";
+import {DynamicComponent, DynamicOutput} from "../../../../ngDynamic-core";
 
 /**
  * Simple component
@@ -34,12 +34,8 @@ export class SimpleComponent implements DynamicComponent<string>
     /**
      * Simple output property
      */
+    @DynamicOutput()
     public simpleOutput: string;
-
-    /**
-     * Simple output change property
-     */
-    public simpleOutputChange: EventEmitter<void> = new EventEmitter<void>();
 
     //######################### public properties #########################
 
@@ -64,7 +60,6 @@ export class SimpleComponent implements DynamicComponent<string>
         this._outputChangeSubscription = this.outputControl.valueChanges.subscribe((val) =>
         {
             this.simpleOutput = val;
-            this.simpleOutputChange.emit();
         });
     }
 
