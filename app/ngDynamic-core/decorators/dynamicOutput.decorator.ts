@@ -1,4 +1,4 @@
-import {EventEmitter} from "@angular/core";
+import {Subject} from "rxjs";
 
 /**
  * Creates dynamic output for property
@@ -7,7 +7,7 @@ export function DynamicOutput(): PropertyDecorator
 {
     return function(target: any, propertyKey: string)
     {
-        target[`${propertyKey}Change`] = new EventEmitter<void>();
+        target[`${propertyKey}Change`] = new Subject<void>();
 
         Object.defineProperty(target,
                               propertyKey,
@@ -19,7 +19,7 @@ export function DynamicOutput(): PropertyDecorator
                                   set: function(value:any)
                                   {
                                       this[`ɵ${propertyKey}`] = value;
-                                      this[`${propertyKey}Change`].emit();
+                                      this[`${propertyKey}Change`].next();
                                   }
                               });
     };

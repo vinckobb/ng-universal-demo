@@ -70,34 +70,15 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
     public async ngOnChanges(changes: SimpleChanges)
     {
         this._viewContainerRef.clear();
-        this._componentRef = null;
+        this.ngOnDestroy();
 
         if(nameof<ComponentRendererDirective<TComponent>>('componentMetadata') in changes)
         {
-            let componentMetadataChange = changes[nameof<ComponentRendererDirective<TComponent>>('componentMetadata')];
             let injector = this.customInjector || this._viewContainerRef.parentInjector;
             let componentManager = injector.get(ComponentManager);
 
-            //nothing bound yet
-            if(!componentMetadataChange.currentValue && !componentMetadataChange.previousValue)
-            {
-                return;
-            }
-
-            //new value is null, or there is change of value
-            if(!componentMetadataChange.currentValue || (componentMetadataChange.previousValue && componentMetadataChange.currentValue != componentMetadataChange.previousValue))
-            {
-                //componentManager.unregister();
-            }
-
             if(this.componentMetadata)
             {
-                if (this._moduleRef)
-                {
-                    this._moduleRef.destroy();
-                    this._moduleRef = null;
-                }
-    
                 let resolved = await this._componentLoader.resolveComponentFactory<TComponent>(this.componentMetadata, injector);
     
                 if(!resolved)
@@ -125,9 +106,19 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
      */
     public ngOnDestroy()
     {
+        if(this.componentMetadata && this.component)
+        {
+            let injector = this.customInjector || this._viewContainerRef.parentInjector;
+            let componentManager = injector.get(ComponentManager);
+
+            componentManager.unregisterComponent(this.componentMetadata.id);
+            this._componentRef = null;
+        }
+
         if (this._moduleRef)
         {
             this._moduleRef.destroy();
+            this._moduleRef = null;
         }
     }
 }

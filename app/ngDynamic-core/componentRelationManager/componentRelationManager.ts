@@ -121,6 +121,11 @@ export class ComponentRelationManager
         {
             metadata.outputsChangeSubscriptions.forEach(subscription => subscription.unsubscribe());
             metadata.outputsChangeSubscriptions = [];
+
+            if(metadata.nodeInstance)
+            {
+                metadata.nodeInstance.destroy();
+            }
         }
     }
 

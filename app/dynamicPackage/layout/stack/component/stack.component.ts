@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
 import {DynamicComponent} from "../../../../ngDynamic-core";
 import {StackComponentOptions} from "./stack.interface";
@@ -21,6 +21,11 @@ export class StackComponent implements DynamicComponent<StackComponentOptions>
      */
     public options: StackComponentOptions;
 
+    //######################### constructor #########################
+    constructor(private _changeDetector: ChangeDetectorRef)
+    {
+    }
+
     //######################### public methods #########################
 
     /**
@@ -28,5 +33,6 @@ export class StackComponent implements DynamicComponent<StackComponentOptions>
      */
     public invalidateVisuals(): void
     {
+        this._changeDetector.detectChanges();
     }
 }
