@@ -7,7 +7,19 @@ export function DynamicOutput(): PropertyDecorator
 {
     return function(target: any, propertyKey: string)
     {
-        target[`${propertyKey}Change`] = new Subject<void>();
+        Object.defineProperty(target,
+                              `${propertyKey}Change`,
+                              {
+                                  get: function()
+                                  {
+                                      if(!this[`ɵ${propertyKey}Change`])
+                                      {
+                                          this[`ɵ${propertyKey}Change`] = new Subject<void>();
+                                      }
+
+                                      return this[`ɵ${propertyKey}Change`];
+                                  }
+                              });
 
         Object.defineProperty(target,
                               propertyKey,

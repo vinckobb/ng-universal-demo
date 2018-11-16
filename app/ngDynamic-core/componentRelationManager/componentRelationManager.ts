@@ -201,6 +201,11 @@ export class ComponentRelationManager
                 }
 
                 nodeInstance = new nodeDefinitions[`${meta.nodeType}Node`](this._injector);
+
+                if(meta.nodeOptions)
+                {
+                    nodeInstance.options = meta.nodeOptions;
+                }
             }
 
             this._relations[meta.id] =

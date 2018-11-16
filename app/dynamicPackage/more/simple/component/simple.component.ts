@@ -1,9 +1,10 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 import {FormBuilder, FormControl} from "@angular/forms";
 import {StringDictionary} from "@asseco/common";
-import {Subscription} from "rxjs";
+import {Subscription, Observable} from "rxjs";
 
 import {DynamicComponent, DynamicOutput} from "../../../../ngDynamic-core";
+import {Data} from "../../../../services/api/data/data.interface";
 
 /**
  * Simple component
@@ -29,6 +30,19 @@ export class SimpleComponent implements DynamicComponent<string>
      * Simple input property
      */
     public simpleInput: string;
+
+    /**
+     * Observable input
+     */
+    public set observableInput(result: Observable<Data>)
+    {
+        result.subscribe(result =>
+        {
+            this.result = result;
+
+            this._changeDetector.detectChanges();
+        });
+    }
 
     /**
      * Query string
@@ -62,6 +76,11 @@ export class SimpleComponent implements DynamicComponent<string>
      * Output bound to control
      */
     public outputControl: FormControl;
+
+    /**
+     * Result data to be displayed
+     */
+    public result: Data;
 
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef,

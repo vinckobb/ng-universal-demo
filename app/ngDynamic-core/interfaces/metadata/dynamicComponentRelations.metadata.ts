@@ -50,6 +50,11 @@ export interface DynamicComponentRelationMetadata
     nodeType?: string;
 
     /**
+     * Options for node type
+     */
+    nodeOptions?: any;
+
+    /**
      * Definition of all outputs and their connections
      */
     outputs?: DynamicComponentRelationOutputMetadata[];

@@ -10,7 +10,7 @@ import {map} from 'rxjs/operators';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
-import {DynamicComponentMetadata, ComponentRelationManager, ComponentManager, DYNAMIC_RELATIONS_METADATA, DynamicComponentRelationMetadata} from '../../ngDynamic-core';
+import {DynamicComponentMetadata, ComponentRelationManager, ComponentManager, DYNAMIC_RELATIONS_METADATA, DynamicComponentRelationMetadata, RestClientNodeOptions, RestClientMethodType, RestClientParamType} from '../../ngDynamic-core';
 import {StackComponentOptions, ConditionalComponentOptions} from '../../dynamicPackage/layout';
 
 /**
@@ -198,6 +198,40 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                                     [
                                         {
                                             inputName: 'simpleInput',
+                                            id: 'simple-2'
+                                        },
+                                        {
+                                            inputName: 'test',
+                                            id: 'simple-rest-1'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            id: 'simple-rest-1',
+                            nodeType: 'RestClient',
+                            nodeOptions: <RestClientNodeOptions>
+                            {
+                                url: 'api/data',
+                                method: RestClientMethodType.GET,
+                                parameters:
+                                [
+                                    {
+                                        inputName: 'test',
+                                        name: 'search',
+                                        type: RestClientParamType.Query
+                                    }
+                                ]
+                            },
+                            outputs:
+                            [
+                                {
+                                    outputName: 'result',
+                                    inputs:
+                                    [
+                                        {
+                                            inputName: 'observableInput',
                                             id: 'simple-2'
                                         }
                                     ]

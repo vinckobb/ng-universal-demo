@@ -16,7 +16,20 @@ export interface NodeDefinitionConstructor
 export interface NodeDefinition extends DynamicNode
 {
     /**
+     * Options for node
+     */
+    options?: any;
+
+    /**
      * Destroys everything that should be destroyed and frees memory
      */
     destroy(): void;
+}
+
+export interface NodeDefinitionGeneric<TOptions> extends NodeDefinition
+{
+    /**
+     * Options for node
+     */
+    options: TOptions;
 }
