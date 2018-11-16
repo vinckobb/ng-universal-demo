@@ -43,6 +43,12 @@ export class SimpleComponent implements DynamicComponent<string>
     @DynamicOutput()
     public simpleOutput: string = 'default';
 
+    /**
+     * Condtion that is changed by button
+     */
+    @DynamicOutput()
+    public condition: boolean = true;
+
     //######################### public properties #########################
 
     /**

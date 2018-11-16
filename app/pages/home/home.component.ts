@@ -11,7 +11,7 @@ import {map} from 'rxjs/operators';
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 import {DynamicComponentMetadata, ComponentRelationManager, ComponentManager, DYNAMIC_RELATIONS_METADATA, DynamicComponentRelationMetadata} from '../../ngDynamic-core';
-import {StackComponentOptions} from '../../dynamicPackage/layout';
+import {StackComponentOptions, IfComponentOptions} from '../../dynamicPackage/layout';
 
 /**
  * Home component
@@ -70,12 +70,21 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                         inline: true,
                         children:
                         [
-                            <DynamicComponentMetadata<string>>
+                            <DynamicComponentMetadata<IfComponentOptions>>
                             {
-                                id: 'simple-nested-1',
-                                options: 'first nested',
-                                componentPackage: 'more',
-                                componentName: 'simple'
+                                id: 'if-component',
+                                options:
+                                {
+                                    content: <DynamicComponentMetadata<string>>
+                                    {
+                                        id: 'simple-nested-1',
+                                        options: 'first nested',
+                                        componentPackage: 'more',
+                                        componentName: 'simple'
+                                    }
+                                },
+                                componentPackage: 'layout',
+                                componentName: 'if'
                             },
                             <DynamicComponentMetadata<string>>
                             {
@@ -206,6 +215,16 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                                         {
                                             inputName: 'simpleInput',
                                             id: 'simple-1'
+                                        }
+                                    ]
+                                },
+                                {
+                                    outputName: 'condition',
+                                    inputs:
+                                    [
+                                        {
+                                            inputName: 'condition',
+                                            id: 'if-component'
                                         }
                                     ]
                                 }
