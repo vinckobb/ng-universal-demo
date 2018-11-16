@@ -1,18 +1,18 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
 import {DynamicComponent} from "../../../../ngDynamic-core";
-import {IfComponentOptions} from "./if.interface";
+import {ConditionalComponentOptions} from "./conditional.interface";
 
 /**
- * If component used for conditionaly displaing component
+ * Conditional layout component used for conditionaly displaing component
  */
 @Component(
 {
-    selector: 'if-layout-component',
-    templateUrl: 'if.component.html',
+    selector: 'conditional-layout-component',
+    templateUrl: 'conditional.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IfComponent implements DynamicComponent<IfComponentOptions>
+export class ConditionalComponent implements DynamicComponent<ConditionalComponentOptions>
 {
     //######################### public properties #########################
 
@@ -24,7 +24,7 @@ export class IfComponent implements DynamicComponent<IfComponentOptions>
     /**
      * Options used for rendering this component
      */
-    public options: IfComponentOptions;
+    public options: ConditionalComponentOptions;
 
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef)

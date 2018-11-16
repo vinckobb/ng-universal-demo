@@ -1,11 +1,11 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 
-import {IfComponent} from "../component";
+import {ConditionalComponent} from "../component";
 import {NgDynamicCoreModule} from "../../../../ngDynamic-core";
 
 /**
- * Module for if layout component
+ * Module for conditional layout component
  */
 @NgModule(
 {
@@ -16,13 +16,13 @@ import {NgDynamicCoreModule} from "../../../../ngDynamic-core";
     ],
     declarations: 
     [
-        IfComponent
+        ConditionalComponent
     ],
     entryComponents: 
     [
-        IfComponent
+        ConditionalComponent
     ]
 })
-export class IfModule
+export class ConditionalModule
 {
 }

@@ -11,7 +11,7 @@ import {map} from 'rxjs/operators';
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 import {DynamicComponentMetadata, ComponentRelationManager, ComponentManager, DYNAMIC_RELATIONS_METADATA, DynamicComponentRelationMetadata} from '../../ngDynamic-core';
-import {StackComponentOptions, IfComponentOptions} from '../../dynamicPackage/layout';
+import {StackComponentOptions, ConditionalComponentOptions} from '../../dynamicPackage/layout';
 
 /**
  * Home component
@@ -70,7 +70,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                         inline: true,
                         children:
                         [
-                            <DynamicComponentMetadata<IfComponentOptions>>
+                            <DynamicComponentMetadata<ConditionalComponentOptions>>
                             {
                                 id: 'if-component',
                                 options:
@@ -84,7 +84,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                                     }
                                 },
                                 componentPackage: 'layout',
-                                componentName: 'if'
+                                componentName: 'conditional'
                             },
                             <DynamicComponentMetadata<string>>
                             {
@@ -220,6 +220,23 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                                 },
                                 {
                                     outputName: 'condition',
+                                    inputs:
+                                    [
+                                        {
+                                            inputName: 'input',
+                                            id: 'negate-toggle'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            id: 'negate-toggle',
+                            nodeType: 'Negate',
+                            outputs:
+                            [
+                                {
+                                    outputName: 'value',
                                     inputs:
                                     [
                                         {

@@ -33,6 +33,11 @@ export class ComponentRelationManager
      */
     private _componentManager: ComponentManager;
 
+    /**
+     * Indication whether is this instance of relation manager initialized
+     */
+    private _initialized: boolean = false;
+
     //######################### private properties #########################
 
     /**
@@ -49,12 +54,24 @@ export class ComponentRelationManager
     }
 
     //######################### constructor #########################
-    constructor(metadata: DynamicComponentRelationMetadata[], private _injector: Injector)
+    constructor(private _metadata: DynamicComponentRelationMetadata[], private _injector: Injector)
     {
-        this._initializeRelations(metadata);
     }
-
+    
     //######################### public methods #########################
+
+    /**
+     * Initialize relations manager
+     */
+    public initialize()
+    {
+        if(!this._initialized)
+        {
+            this._initializeRelations(this._metadata);
+            
+            this._initialized = true;
+        }
+    }
 
     /**
      * Registers newly created component

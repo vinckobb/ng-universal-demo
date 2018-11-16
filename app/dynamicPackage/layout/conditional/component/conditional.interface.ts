@@ -1,9 +1,9 @@
 import {DynamicComponentMetadata} from "../../../../ngDynamic-core";
 
 /**
- * If component options
+ * Conditional layout component options
  */
-export interface IfComponentOptions
+export interface ConditionalComponentOptions
 {
     /**
      * Content component

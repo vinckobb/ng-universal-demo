@@ -4,6 +4,7 @@ import {nameof} from '@asseco/common';
 import {ComponentLoader} from '../../componentLoader';
 import {DynamicComponent, DynamicComponentMetadata} from '../../interfaces';
 import {ComponentManager} from '../../componentManager';
+import {ComponentRelationManager} from '../../componentRelationManager';
 
 /**
 * Creates dynamically instance of component by its metadata
@@ -76,6 +77,9 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
         {
             let injector = this.customInjector || this._viewContainerRef.parentInjector;
             let componentManager = injector.get(ComponentManager);
+            let componentRelationsManager = injector.get(ComponentRelationManager);
+
+            componentRelationsManager.initialize();
 
             if(this.componentMetadata)
             {

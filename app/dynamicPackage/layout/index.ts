@@ -1,8 +1,8 @@
 import * as stack from './stack/importIndex';
-import * as ifComponent from './if/importIndex';
+import * as conditional from './conditional/importIndex';
 
 export {stack};
-export {ifComponent};
+export {conditional};
 
 export {StackComponentOptions} from './stack/component';
-export {IfComponentOptions} from './if/component';
+export {ConditionalComponentOptions} from './conditional/component';

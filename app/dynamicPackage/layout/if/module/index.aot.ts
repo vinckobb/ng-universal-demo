@@ -1,1 +1,0 @@
-export {IfModuleNgFactory as ngModuleFactory} from './if.module.ngfactory';
