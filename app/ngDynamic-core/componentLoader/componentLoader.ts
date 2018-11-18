@@ -8,6 +8,9 @@ declare var isAot: boolean;
 declare var localPackage: string;
 var localPackage = localPackage || null;
 
+//TODO - store loaded types in cache
+//TODO - try to make localPackage working
+
 /**
  * Loader used for obtaining ComponentFactory from component`s metadata
  */
