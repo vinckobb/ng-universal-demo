@@ -11,7 +11,7 @@ export class ComponentManager
     /**
      * Registered components
      */
-    private _components: {[id: string]: DynamicComponent<any>} = {};
+    private _components: {[id: string]: DynamicComponent} = {};
 
     //######################### constructor #########################
     constructor(private _relationManager: ComponentRelationManager)
@@ -25,7 +25,7 @@ export class ComponentManager
      * @param id Id of component to be registered
      * @param component Component metadata with instance of component
      */
-    public registerComponent(id: string, component: DynamicComponent<any>)
+    public registerComponent(id: string, component: DynamicComponent)
     {
         if(this._components[id])
         {
@@ -55,7 +55,7 @@ export class ComponentManager
      * Gets component instance or null
      * @param id Unique identification of component
      */
-    public get(id: string): DynamicComponent<any>
+    public get(id: string): DynamicComponent
     {
         return this._components[id];
     }

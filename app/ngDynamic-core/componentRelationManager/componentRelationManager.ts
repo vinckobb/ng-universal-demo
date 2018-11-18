@@ -146,6 +146,17 @@ export class ComponentRelationManager
         }
     }
 
+    /**
+     * Method destroys component relation manager instance
+     */
+    public destroy()
+    {
+        Object.keys(this._relations).forEach(id => this.destroyComponent(id));
+
+        this._relations = null;
+        this._backwardRelations = null;
+    }
+
     //######################### private methods #########################
 
     /**

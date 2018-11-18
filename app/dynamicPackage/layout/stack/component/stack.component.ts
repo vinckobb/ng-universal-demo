@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
-import {DynamicComponent} from "../../../../ngDynamic-core";
+import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
 import {StackComponentOptions} from "./stack.interface";
 
 /**
@@ -12,7 +12,7 @@ import {StackComponentOptions} from "./stack.interface";
     templateUrl: 'stack.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StackComponent implements DynamicComponent<StackComponentOptions>
+export class StackComponent implements DynamicComponentGeneric<StackComponentOptions>
 {
     //######################### public properties #########################
 

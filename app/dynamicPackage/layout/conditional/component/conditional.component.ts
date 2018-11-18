@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
-import {DynamicComponent} from "../../../../ngDynamic-core";
+import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
 import {ConditionalComponentOptions} from "./conditional.interface";
 
 /**
@@ -12,7 +12,7 @@ import {ConditionalComponentOptions} from "./conditional.interface";
     templateUrl: 'conditional.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConditionalComponent implements DynamicComponent<ConditionalComponentOptions>
+export class ConditionalComponent implements DynamicComponentGeneric<ConditionalComponentOptions>
 {
     //######################### public properties #########################
 

@@ -10,7 +10,7 @@ import {map} from 'rxjs/operators';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
-import {DynamicComponentMetadata, ComponentRelationManager, ComponentManager, DYNAMIC_RELATIONS_METADATA, DynamicComponentRelationMetadata, RestClientNodeOptions, RestClientMethodType, RestClientParamType} from '../../ngDynamic-core';
+import {DynamicComponentMetadataGeneric, ComponentRelationManager, ComponentManager, DYNAMIC_RELATIONS_METADATA, DynamicComponentRelationMetadata, RestClientNodeOptions, RestClientMethodType, RestClientParamType} from '../../ngDynamic-core';
 import {StackComponentOptions, ConditionalComponentOptions} from '../../dynamicPackage/layout';
 
 /**
@@ -55,27 +55,35 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     public show: boolean = false;
     public counter = 0;
 
-    public metadata: DynamicComponentMetadata<StackComponentOptions> =
+    public metadata: DynamicComponentMetadataGeneric<StackComponentOptions> =
     {
         id: 'first-stack',
         options:
         {
+            padding:
+            {
+                top: 10
+            },
             children:
             [
-                <DynamicComponentMetadata<StackComponentOptions>>
+                <DynamicComponentMetadataGeneric<StackComponentOptions>>
                 {
                     id: 'nested-stack',
                     options:
                     {
                         inline: true,
+                        margin:
+                        {
+                            right: 20
+                        },
                         children:
                         [
-                            <DynamicComponentMetadata<ConditionalComponentOptions>>
+                            <DynamicComponentMetadataGeneric<ConditionalComponentOptions>>
                             {
                                 id: 'if-component',
                                 options:
                                 {
-                                    content: <DynamicComponentMetadata<string>>
+                                    content: <DynamicComponentMetadataGeneric<string>>
                                     {
                                         id: 'simple-nested-1',
                                         options: 'first nested',
@@ -86,7 +94,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                                 componentPackage: 'layout',
                                 componentName: 'conditional'
                             },
-                            <DynamicComponentMetadata<string>>
+                            <DynamicComponentMetadataGeneric<string>>
                             {
                                 id: 'simple-nested-2',
                                 options: 'another nested',
@@ -98,14 +106,14 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                     componentPackage: 'layout',
                     componentName: 'stack'
                 },
-                <DynamicComponentMetadata<string>>
+                <DynamicComponentMetadataGeneric<string>>
                 {
                     id: 'simple-1',
                     options: 'first simple',
                     componentPackage: 'more',
                     componentName: 'simple'
                 },
-                <DynamicComponentMetadata<string>>
+                <DynamicComponentMetadataGeneric<string>>
                 {
                     id: 'simple-2',
                     options: 'another simple',

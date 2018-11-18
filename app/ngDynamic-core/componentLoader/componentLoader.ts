@@ -26,7 +26,7 @@ export class ComponentLoader
      * @param componentMetadata Metadata that are going to be used for resolving component factory
      * @param parentInjector Injector from view parent
      */
-    public async resolveComponentFactory<TComponent>(componentMetadata: DynamicComponentMetadata<any>, parentInjector: Injector): Promise<{factory: ComponentFactory<TComponent>, module: NgModuleRef<any>}>
+    public async resolveComponentFactory<TComponent>(componentMetadata: DynamicComponentMetadata, parentInjector: Injector): Promise<{factory: ComponentFactory<TComponent>, module: NgModuleRef<any>}>
     {
         this._validate(componentMetadata);
 
@@ -79,7 +79,7 @@ export class ComponentLoader
      * Validates component`s metadata
      * @param componentMetadata Metadata to be validated
      */
-    private _validate(componentMetadata: DynamicComponentMetadata<any>)
+    private _validate(componentMetadata: DynamicComponentMetadata)
     {
         if(!componentMetadata.id || !isString(componentMetadata.id))
         {

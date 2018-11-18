@@ -3,7 +3,7 @@ import {FormBuilder, FormControl} from "@angular/forms";
 import {StringDictionary} from "@asseco/common";
 import {Subscription, Observable} from "rxjs";
 
-import {DynamicComponent, DynamicOutput} from "../../../../ngDynamic-core";
+import {DynamicComponentGeneric, DynamicOutput} from "../../../../ngDynamic-core";
 import {Data} from "../../../../services/api/data/data.interface";
 
 /**
@@ -15,7 +15,7 @@ import {Data} from "../../../../services/api/data/data.interface";
     templateUrl: 'simple.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SimpleComponent implements DynamicComponent<string>
+export class SimpleComponent implements DynamicComponentGeneric<string>
 {
     //######################### private fields #########################
 

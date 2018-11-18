@@ -14,7 +14,7 @@ import {ComponentRelationManager} from '../../componentRelationManager';
     selector: '[componentRenderer]',
     exportAs: 'componentRenderer'
 })
-export class ComponentRendererDirective<TComponent extends DynamicComponent<any>> implements OnChanges, OnDestroy
+export class ComponentRendererDirective<TComponent extends DynamicComponent> implements OnChanges, OnDestroy
 {
     //######################### private fields #########################
 
@@ -34,7 +34,7 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent<any>
      * Type that should be dynamically created into current container
      */
     @Input('componentRenderer')
-    public componentMetadata: DynamicComponentMetadata<any>;
+    public componentMetadata: DynamicComponentMetadata;
 
     /**
      * Custom injector used as parent for dynamic components tree

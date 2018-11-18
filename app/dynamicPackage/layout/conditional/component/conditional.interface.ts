@@ -8,5 +8,5 @@ export interface ConditionalComponentOptions
     /**
      * Content component
      */
-    content?: DynamicComponentMetadata<any>;
+    content?: DynamicComponentMetadata;
 }
