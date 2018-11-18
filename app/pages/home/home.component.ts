@@ -11,7 +11,7 @@ import {map} from 'rxjs/operators';
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 import {DynamicComponentMetadataGeneric, ComponentRelationManager, ComponentManager, DYNAMIC_RELATIONS_METADATA, DynamicComponentRelationMetadata, RestClientNodeOptions, RestClientMethodType, RestClientParamType} from '../../ngDynamic-core';
-import {StackComponentOptions, ConditionalComponentOptions} from '../../dynamicPackage/layout';
+import {StackComponentOptions, ConditionalComponentOptions, GridComponentOptions} from '../../dynamicPackage/layout';
 
 /**
  * Home component
@@ -119,6 +119,30 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                     options: 'another simple',
                     componentPackage: 'more',
                     componentName: 'simple'
+                },
+                <DynamicComponentMetadataGeneric<GridComponentOptions>>
+                {
+                    id: 'css-grid',
+                    options:
+                    {
+                        rows: '50px 150px',
+                        columns: '80px 1fr 12%',
+                        children:
+                        [
+                            {
+                                content: <DynamicComponentMetadataGeneric<string>>
+                                {
+                                    id: 'simple-grid-1',
+                                    options: 'first in grid',
+                                    componentPackage: 'more',
+                                    componentName: 'simple'
+                                },
+                                area: '2/2/3/4'
+                            }
+                        ]
+                    },
+                    componentPackage: 'layout',
+                    componentName: 'grid'
                 }
             ]
         },

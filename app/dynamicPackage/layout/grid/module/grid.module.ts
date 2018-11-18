@@ -3,6 +3,7 @@ import {CommonModule} from "@angular/common";
 
 import {GridComponent} from "../component";
 import {NgDynamicCoreModule} from "../../../../ngDynamic-core";
+import {SanitizeCssPipe} from "../pipes";
 
 /**
  * Module for grid layout component
@@ -16,7 +17,8 @@ import {NgDynamicCoreModule} from "../../../../ngDynamic-core";
     ],
     declarations: 
     [
-        GridComponent
+        GridComponent,
+        SanitizeCssPipe
     ],
     entryComponents: 
     [
