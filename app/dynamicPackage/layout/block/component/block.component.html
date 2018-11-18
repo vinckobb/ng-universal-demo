@@ -1,0 +1,12 @@
+<div [style.paddingTop.px]="options?.padding?.top"
+     [style.paddingLeft.px]="options?.padding?.left"
+     [style.paddingRight.px]="options?.padding?.right"
+     [style.paddingBottom.px]="options?.padding?.bottom"
+     [style.marginTop.px]="options?.margin?.top"
+     [style.marginLeft.px]="options?.margin?.left"
+     [style.marginRight.px]="options?.margin?.right"
+     [style.marginBottom.px]="options?.margin?.bottom"
+     [style.fontSize.px]="options?.fontSize"
+     [style.backgroundColor]="options?.background">
+    <ng-container *componentRenderer="options?.content"></ng-container>
+</div>

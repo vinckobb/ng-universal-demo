@@ -1,0 +1,5 @@
+<div>
+    <div *ngFor="let child of options?.children">
+        <ng-container *componentRenderer="child"></ng-container>
+    </div>
+</div>
