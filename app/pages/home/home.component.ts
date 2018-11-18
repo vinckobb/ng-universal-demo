@@ -11,7 +11,7 @@ import {map} from 'rxjs/operators';
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
 import {DynamicComponentMetadataGeneric, ComponentRelationManager, ComponentManager, DYNAMIC_RELATIONS_METADATA, DynamicComponentRelationMetadata, RestClientNodeOptions, RestClientMethodType, RestClientParamType} from '../../ngDynamic-core';
-import {StackComponentOptions, ConditionalComponentOptions, GridComponentOptions} from '../../dynamicPackage/layout';
+import {StackComponentOptions, ConditionalComponentOptions, GridComponentOptions, BlockComponentOptions} from '../../dynamicPackage/layout';
 
 /**
  * Home component
@@ -130,12 +130,29 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                         children:
                         [
                             {
-                                content: <DynamicComponentMetadataGeneric<string>>
+                                content: <DynamicComponentMetadataGeneric<BlockComponentOptions>>
                                 {
-                                    id: 'simple-grid-1',
-                                    options: 'first in grid',
-                                    componentPackage: 'more',
-                                    componentName: 'simple'
+                                    id: 'block-1',
+                                    options:
+                                    {
+                                        content: <DynamicComponentMetadataGeneric<string>>
+                                        {
+                                            id: 'simple-grid-1',
+                                            options: 'first in grid',
+                                            componentPackage: 'more',
+                                            componentName: 'simple'
+                                        },
+                                        margin:
+                                        {
+                                            bottom: 10,
+                                            top: 10,
+                                            left: 10,
+                                            right: 10
+                                        },
+                                        background: '#FFFF00'
+                                    },
+                                    componentPackage: 'layout',
+                                    componentName: 'block'
                                 },
                                 area: '2/2/3/4'
                             }
