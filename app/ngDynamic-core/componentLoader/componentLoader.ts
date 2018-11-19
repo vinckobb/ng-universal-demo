@@ -13,6 +13,11 @@ declare var localPackage: string;
 @Injectable({providedIn: 'root'})
 export class ComponentLoader
 {
+    /**
+     * Already resolved cached npm packages
+     */
+    private _cachedNpmPackage: {[componentPackageName: string]: DynamicModule<any>} = {};
+
     //######################### constructor #########################
     constructor(private _injector: Injector)
     {
@@ -29,23 +34,29 @@ export class ComponentLoader
     {
         this._validate(componentMetadata);
 
-        let npmPackage: DynamicModule<TComponent>;
-
-        //loads custom npm packages dynamicaly
-        npmPackage = await import(`${localPackage}${componentMetadata.componentPackage}/${componentMetadata.componentName}/importIndex`)
-            .catch(_error =>
-            {
-                return null;
-            });
+        let componentPackageName = `${componentMetadata.componentPackage}-${componentMetadata.componentName}`;
+        let npmPackage: DynamicModule<TComponent> = this._cachedNpmPackage[componentPackageName];
 
         if(!npmPackage)
         {
-            //loads npm package dynamicaly
-            npmPackage = await import(`@ngDynamic/${componentMetadata.componentPackage}/${componentMetadata.componentName}/importIndex`)
-                .catch(error =>
+            //loads custom npm packages dynamicaly
+            npmPackage = await import(`${localPackage}${componentMetadata.componentPackage}/${componentMetadata.componentName}/importIndex`)
+                .catch(_error =>
                 {
-                    throw new Error(`Unable to obtain '${componentMetadata.componentPackage}' component\`s package, error '${error}'.`);
+                    return null;
                 });
+
+            if(!npmPackage)
+            {
+                //loads npm package dynamicaly
+                npmPackage = await import(`@ngDynamic/${componentMetadata.componentPackage}/${componentMetadata.componentName}/importIndex`)
+                    .catch(error =>
+                    {
+                        throw new Error(`Unable to obtain '${componentMetadata.componentPackage}' component\`s package, error '${error}'.`);
+                    });
+            }
+
+            this._cachedNpmPackage[componentPackageName] = npmPackage;
         }
 
         let moduleFactoryPromise = await npmPackage.moduleFactory;
