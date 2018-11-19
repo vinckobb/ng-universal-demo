@@ -153,8 +153,8 @@ export class ComponentRelationManager
     {
         Object.keys(this._relations).forEach(id => this.destroyComponent(id));
 
-        this._relations = null;
-        this._backwardRelations = null;
+        this._relations = {};
+        this._backwardRelations = {};
     }
 
     //######################### private methods #########################

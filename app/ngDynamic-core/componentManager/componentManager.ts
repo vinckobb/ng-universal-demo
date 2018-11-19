@@ -59,4 +59,15 @@ export class ComponentManager
     {
         return this._components[id];
     }
+
+    /**
+     * Destroys all components registered in manager
+     */
+    public destroy()
+    {
+        Object.keys(this._components).forEach(id =>
+        {
+            this.unregisterComponent(id);
+        });
+    }
 }

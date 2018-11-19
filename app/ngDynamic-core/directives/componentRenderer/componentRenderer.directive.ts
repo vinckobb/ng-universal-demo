@@ -73,7 +73,7 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent> imp
         this._viewContainerRef.clear();
         this.ngOnDestroy();
 
-        if(nameof<ComponentRendererDirective<TComponent>>('componentMetadata') in changes)
+        if(nameof<ComponentRendererDirective<TComponent>>('componentMetadata') in changes && changes[nameof<ComponentRendererDirective<TComponent>>('componentMetadata')].currentValue)
         {
             let injector = this.customInjector || this._viewContainerRef.parentInjector;
             let componentManager = injector.get(ComponentManager);
@@ -115,7 +115,11 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent> imp
             let injector = this.customInjector || this._viewContainerRef.parentInjector;
             let componentManager = injector.get(ComponentManager);
 
-            componentManager.unregisterComponent(this.componentMetadata.id);
+            if(componentManager.get(this.componentMetadata.id))
+            {
+                componentManager.unregisterComponent(this.componentMetadata.id);
+            }
+            
             this._componentRef = null;
         }
 

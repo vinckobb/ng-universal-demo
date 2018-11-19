@@ -1,0 +1,237 @@
+{
+    "layout":
+    {
+        "id": "first-stack",
+        "options":
+        {
+            "padding":
+            {
+                "top": 10
+            },
+            "children":
+            [
+                {
+                    "id": "nested-stack",
+                    "options":
+                    {
+                        "inline": true,
+                        "margin":
+                        {
+                            "right": 20
+                        },
+                        "children":
+                        [
+                            {
+                                "id": "if-component",
+                                "options":
+                                {
+                                    "content":
+                                    {
+                                        "id": "simple-nested-1",
+                                        "options": "first nested",
+                                        "componentPackage": "more",
+                                        "componentName": "simple"
+                                    }
+                                },
+                                "componentPackage": "layout",
+                                "componentName": "conditional"
+                            },
+                            {
+                                "id": "simple-nested-2",
+                                "options": "another nested",
+                                "componentPackage": "more",
+                                "componentName": "simple"
+                            }
+                        ]
+                    },
+                    "componentPackage": "layout",
+                    "componentName": "stack"
+                },
+                {
+                    "id": "simple-1",
+                    "options": "first simple",
+                    "componentPackage": "more",
+                    "componentName": "simple"
+                },
+                {
+                    "id": "simple-2",
+                    "options": "another simple",
+                    "componentPackage": "more",
+                    "componentName": "simple"
+                },
+                {
+                    "id": "css-grid",
+                    "options":
+                    {
+                        "rows": "50px 150px",
+                        "columns": "80px 1fr 12%",
+                        "children":
+                        [
+                            {
+                                "content":
+                                {
+                                    "id": "block-1",
+                                    "options":
+                                    {
+                                        "content":
+                                        {
+                                            "id": "simple-grid-1",
+                                            "options": "first in grid",
+                                            "componentPackage": "more",
+                                            "componentName": "simple"
+                                        },
+                                        "margin":
+                                        {
+                                            "bottom": 10,
+                                            "top": 10,
+                                            "left": 10,
+                                            "right": 10
+                                        },
+                                        "background": "#FFFF00"
+                                    },
+                                    "componentPackage": "layout",
+                                    "componentName": "block"
+                                },
+                                "area": "2/2/3/4"
+                            }
+                        ]
+                    },
+                    "componentPackage": "layout",
+                    "componentName": "grid"
+                }
+            ]
+        },
+        "componentPackage": "layout",
+        "componentName": "stack"
+    },
+    "relations":
+    [
+        {
+            "id": "simple-1",
+            "outputs":
+            [
+                {
+                    "outputName": "simpleOutput",
+                    "inputs":
+                    [
+                        {
+                            "inputName": "simpleInput",
+                            "id": "simple-2"
+                        },
+                        {
+                            "inputName": "test",
+                            "id": "simple-rest-1"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "simple-rest-1",
+            "nodeType": "RestClient",
+            "nodeOptions":
+            {
+                "url": "api/data",
+                "method": 0,
+                "parameters":
+                [
+                    {
+                        "inputName": "test",
+                        "name": "search",
+                        "type": 0
+                    }
+                ]
+            },
+            "outputs":
+            [
+                {
+                    "outputName": "result",
+                    "inputs":
+                    [
+                        {
+                            "inputName": "observableInput",
+                            "id": "simple-2"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "simple-2",
+            "outputs":
+            [
+                {
+                    "outputName": "simpleOutput",
+                    "inputs":
+                    [
+                        {
+                            "inputName": "simpleInput",
+                            "id": "simple-1"
+                        }
+                    ]
+                },
+                {
+                    "outputName": "condition",
+                    "inputs":
+                    [
+                        {
+                            "inputName": "input",
+                            "id": "negate-toggle"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "negate-toggle",
+            "nodeType": "Negate",
+            "outputs":
+            [
+                {
+                    "outputName": "value",
+                    "inputs":
+                    [
+                        {
+                            "inputName": "condition",
+                            "id": "if-component"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "route-data",
+            "nodeType": "ActivatedRoute",
+            "outputs":
+            [
+                {
+                    "outputName": "query",
+                    "inputs":
+                    [
+                        {
+                            "inputName": "input",
+                            "id": "route-transform"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "route-transform",
+            "nodeType": "Script",
+            "outputs":
+            [
+                {
+                    "outputName": "output",
+                    "inputs":
+                    [
+                        {
+                            "inputName": "query",
+                            "id": "simple-2"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
