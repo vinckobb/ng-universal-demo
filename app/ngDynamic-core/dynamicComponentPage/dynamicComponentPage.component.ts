@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, Injector, ValueProvider, StaticProvider, OnInit, OnDestroy, ChangeDetectorRef} from "@angular/core";
+import {Component, ChangeDetectionStrategy, Injector, ValueProvider, StaticProvider, OnInit, OnDestroy, ChangeDetectorRef, Inject} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {Subscription} from "rxjs";
@@ -8,6 +8,7 @@ import {DYNAMIC_RELATIONS_METADATA} from "../tokens";
 import {ComponentRelationManager} from "../componentRelationManager";
 import {ComponentManager} from "../componentManager";
 import {DynamicContentResponse} from "./dynamicComponentPage.interface";
+import {DYNAMIC_COMPONENT_PAGE_METADATA_URL} from "./dynamicComponentPage.token";
 
 /**
  * Component used for displaying dynamic content pages
@@ -44,7 +45,8 @@ export class DynamicComponentPageComponent implements OnInit, OnDestroy
                 private _route: ActivatedRoute,
                 private _router: Router,
                 private _http: HttpClient,
-                private _changeDetector: ChangeDetectorRef)
+                private _changeDetector: ChangeDetectorRef,
+                @Inject(DYNAMIC_COMPONENT_PAGE_METADATA_URL) private _urlPrefix: string)
     {
     }
 
@@ -68,7 +70,7 @@ export class DynamicComponentPageComponent implements OnInit, OnDestroy
 
             let dynamicContentId = urlChanges[0];
 
-            let metadata = await this._http.get<DynamicContentResponse>(`api/dynamic/${dynamicContentId}`).toPromise();
+            let metadata = await this._http.get<DynamicContentResponse>(`${this._urlPrefix}/${dynamicContentId}`).toPromise();
             this.metadata = metadata.layout;
 
             this.customInjector = Injector.create(

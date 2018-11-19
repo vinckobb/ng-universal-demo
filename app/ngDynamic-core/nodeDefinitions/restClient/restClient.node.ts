@@ -7,8 +7,6 @@ import {NodeDefinition, NodeDefinitionGeneric} from "../nodeDefinitions.interfac
 import {DynamicOutput} from "../../decorators";
 import {RestClientNodeOptions, RestClientNodeParameterValue, RestClientMethodType, RestClientParamType} from "./restClient.interface";
 
-//TODO - updated proxy usage
-
 /**
  * Node used for RestClient http calls real one
  */
