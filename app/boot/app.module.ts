@@ -14,6 +14,7 @@ import {appComponents, appRoutesModule} from './app.component.routes';
 import {CommonSharedModule} from './commonShared.module';
 import {APP_TRANSFER_ID} from '../misc/constants';
 import {providers} from './app.config';
+import {NgDynamicCoreModule} from '../ngDynamic-core';
 
 /**
  * Factory method that is used for creating external translation loader
@@ -55,6 +56,7 @@ export function externalTranslationLoaderFactory(http: HttpClient, injector: Inj
         ProgressIndicatorModule,
         ServiceWorkerModule.register('/ngsw-worker.js', {enabled: false}),
         PrebootModule.withConfig({ appRoot: 'app' }),
+        NgDynamicCoreModule,
         CommonSharedModule,
         appRoutesModule
     ],

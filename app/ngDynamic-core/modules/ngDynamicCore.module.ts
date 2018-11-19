@@ -1,6 +1,7 @@
 import {NgModule} from "@angular/core";
 
 import {ComponentRendererDirective} from "../directives";
+import {DynamicComponentPageComponent} from "../dynamicComponentPage";
 
 /**
  * Module for ng dynamic core 
@@ -12,7 +13,8 @@ import {ComponentRendererDirective} from "../directives";
     ],
     declarations: 
     [
-        ComponentRendererDirective
+        ComponentRendererDirective,
+        DynamicComponentPageComponent
     ],
     exports:
     [
