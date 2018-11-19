@@ -163,7 +163,8 @@ module.exports = function(options, args)
                 "config/global": path.join(__dirname, prod ? "config/global.json" : "config/global.development.json"),
                 "config/version": path.join(__dirname, "config/version.json"),
                 "app": path.join(__dirname, "app"),
-                "@ngDynamic": path.join(__dirname, (aot ? "app.aot" : "app") + "/dynamicPackage")
+                "@ngDynamic": path.join(__dirname, (aot ? "app.aot" : "app") + "/dynamicPackage"),
+                "@localDynamic": path.join(__dirname, (aot ? "app.aot" : "app") + "/customPackage")
             })
         },
         module:
@@ -256,7 +257,7 @@ module.exports = function(options, args)
                 isProduction: prod,
                 isNgsw: ngsw,
                 isAot: aot,
-                localPackage: "@localDynamic/"
+                localPackage: JSON.stringify("@localDynamic/")
             }),
             // new webpack.IgnorePlugin(/\.\/locale$/),
             new HardSourceWebpackPlugin(),

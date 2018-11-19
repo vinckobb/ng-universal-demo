@@ -6,10 +6,6 @@ import {DynamicModule} from "./componentLoader.interface";
 
 declare var isAot: boolean;
 declare var localPackage: string;
-var localPackage = localPackage || null;
-
-//TODO - store loaded types in cache
-//TODO - try to make localPackage working
 
 /**
  * Loader used for obtaining ComponentFactory from component`s metadata
@@ -33,16 +29,23 @@ export class ComponentLoader
     {
         this._validate(componentMetadata);
 
-        //loads npm package dynamicaly
-        let npmPackage: DynamicModule<TComponent> = await import(`@ngDynamic/${componentMetadata.componentPackage}/${componentMetadata.componentName}/importIndex`)
-            .catch(error =>
+        let npmPackage: DynamicModule<TComponent>;
+
+        //loads custom npm packages dynamicaly
+        npmPackage = await import(`${localPackage}${componentMetadata.componentPackage}/${componentMetadata.componentName}/importIndex`)
+            .catch(_error =>
             {
-                throw new Error(`Unable to obtain '${componentMetadata.componentPackage}' component\`s package, error '${error}'.`);
+                return null;
             });
 
         if(!npmPackage)
         {
-            return null;
+            //loads npm package dynamicaly
+            npmPackage = await import(`@ngDynamic/${componentMetadata.componentPackage}/${componentMetadata.componentName}/importIndex`)
+                .catch(error =>
+                {
+                    throw new Error(`Unable to obtain '${componentMetadata.componentPackage}' component\`s package, error '${error}'.`);
+                });
         }
 
         let moduleFactoryPromise = await npmPackage.moduleFactory;
