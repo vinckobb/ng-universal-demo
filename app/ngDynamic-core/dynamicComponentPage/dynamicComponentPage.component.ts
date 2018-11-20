@@ -17,6 +17,14 @@ import {DYNAMIC_COMPONENT_PAGE_METADATA_URL} from "./dynamicComponentPage.token"
 {
     selector: 'dynamic-component-page',
     templateUrl: 'dynamicComponentPage.component.html',
+    styles:
+    [
+        `:host
+        {
+            display: block;
+            min-height: 100%;
+        }`
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicComponentPageComponent implements OnInit, OnDestroy
