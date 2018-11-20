@@ -1,0 +1,11 @@
+{
+    "layout":
+    {
+        "id": "node-designer",
+        "componentPackage": "designer",
+        "componentName": "node"
+    },
+    "relations":
+    [
+    ]
+}

@@ -9,6 +9,10 @@ module.exports = function(app)
             {
                 return 'mocks/dynamic/simple-metadata.json';
             }
+            case 'node':
+            {
+                return 'mocks/dynamic/node-metadata.json';
+            }
             default:
             {
                 return 'mocks/dynamic/other-metadata.json';
