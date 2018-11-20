@@ -19,6 +19,10 @@ var routes =
         path: 'samples', 
         loadChildren: '../pages/+samples/samples.module#SamplesModule'
     },
+    {
+        path: 'designer',
+        loadChildren: '../ngDynamic-designer/modules/ngDynamicDesigner.module#NgDynamicDesignerModule'
+    },
     dynamicComponentPageRoute,
     ...componentRoutes
 ];

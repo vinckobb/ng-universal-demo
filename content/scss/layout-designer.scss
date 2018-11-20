@@ -1,0 +1,45 @@
+.layout-designer
+{
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    grid-template-rows: 50px auto;
+    min-height: calc(100vh - 72px);
+
+    header
+    {
+        grid-column: 1 / 4;
+        background-color: #222;
+        color: #fff;
+        padding: 1em;
+    }
+
+    aside.left
+    {
+        display: grid;
+        padding: 0;
+
+        .tree
+        {
+            background-color: #66EEFF;
+            padding: 1em;
+        }
+
+        .palette
+        {
+            background-color: #11CC00;
+            padding: 1em;
+        }
+    }
+    aside.right
+    {
+        background-color: #550000;
+        color: #FFFFFF;
+        padding: 1em;
+    }
+
+    main
+    {
+        background: #EAEAEA;
+        padding: 1em;
+    }
+}
