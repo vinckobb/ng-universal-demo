@@ -12,5 +12,6 @@ export * from './tokens';
 export * from './modules';
 
 export {RestClientNodeOptions, RestClientParamType, RestClientMethodType, RestClientNodeParameter} from './nodeDefinitions/restClient/restClient.interface';
+export {ActionDescription} from './nodeDefinitions/componentAction/componentAction.interface';
 
 export const nodeDefinitions = _nodeDefinitions;

@@ -1,6 +1,7 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
+import {isBlank, isPresent} from "@asseco/common";
 
-import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
+import {DynamicComponentGeneric, ActionDescription, DynamicOutput} from "../../../../ngDynamic-core";
 import {ButtonComponentOptions} from "./button.interface";
 
 /**
@@ -21,18 +22,60 @@ export class ButtonComponent implements DynamicComponentGeneric<ButtonComponentO
      */
     public options: ButtonComponentOptions;
 
+    /**
+     * Value that can be set for button, which is then passed to calling method
+     */
+    public value?: any|any[];
+
+    /**
+     * Trigger value, this is describes actions that will be called
+     */
+    @DynamicOutput()
+    public trigger: ActionDescription[] = [];
+
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef)
     {
+    }
+
+    //######################### public methods - template bindings #########################
+
+    /**
+     * Handles button click
+     */
+    public handleClick()
+    {
+        if(isPresent(this.value))
+        {
+            this.trigger.forEach((trigger, index) =>
+            {
+                if(Array.isArray(this.value))
+                {
+                    trigger.value = this.value[index];
+                }
+                else
+                {
+                    trigger.value = this.value;
+                }
+            });
+        }
+
+        this.trigger = this.trigger;
     }
 
     //######################### public methods #########################
 
     /**
      * Explicitly runs invalidation of content (change detection)
+     * @param propertyName Name of property that has changed
      */
-    public invalidateVisuals(): void
+    public invalidateVisuals(propertyName?: string): void
     {
-        this._changeDetector.detectChanges();
+        if(isBlank(propertyName))
+        {
+            this.trigger = this.options.actions || [];
+
+            this._changeDetector.detectChanges();
+        }
     }
 }

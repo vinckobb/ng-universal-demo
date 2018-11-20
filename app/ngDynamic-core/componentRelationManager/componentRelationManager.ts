@@ -105,12 +105,12 @@ export class ComponentRelationManager
             metadata.inputOutputs.forEach(inputOutput =>
             {
                 //initialize default value from this to its connections
-                this._transferData(component, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName);
+                this._transferData(component, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName, true);
 
                 //set listening for output changes
                 metadata.outputsChangeSubscriptions.push(component[`${inputOutput.outputName}Change`].subscribe(() =>
                 {
-                    this._transferData(component, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName);
+                    this._transferData(component, inputOutput.outputName, inputOutput.inputInstance, inputOutput.inputName, false);
                 }));
             });
         }
@@ -243,7 +243,7 @@ export class ComponentRelationManager
         let relation = this._relations[id];
         let nodeInstance = relation && relation.nodeInstance;
 
-        this._transferData(nodeInstance || this.componentManager.get(id), inputOutputMetadata.outputName, inputOutputMetadata.inputInstance, inputOutputMetadata.inputName);
+        this._transferData(nodeInstance || this.componentManager.get(id), inputOutputMetadata.outputName, inputOutputMetadata.inputInstance, inputOutputMetadata.inputName, true);
     }
 
     /**
@@ -252,8 +252,9 @@ export class ComponentRelationManager
      * @param sourceProperty Name of source property with data that are transfered
      * @param target Instance of target object containing target property for data
      * @param targetProperty Name of target property which will be filled with data
+     * @param initial Indication whether is transfer of data initial, or on event
      */
-    private _transferData(source: DynamicNode, sourceProperty: string, target: DynamicNode, targetProperty: string)
+    private _transferData(source: DynamicNode, sourceProperty: string, target: DynamicNode, targetProperty: string, initial: boolean)
     {
         if(!source || !target)
         {
@@ -261,6 +262,6 @@ export class ComponentRelationManager
         }
 
         target[targetProperty] = source[sourceProperty];
-        target.invalidateVisuals();
+        target.invalidateVisuals(targetProperty, initial);
     }
 }

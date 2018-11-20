@@ -93,6 +93,28 @@
                                     "componentName": "block"
                                 },
                                 "area": "2/2/3/4"
+                            },
+                            {
+                                "content":
+                                {
+                                    "id": "simple-button",
+                                    "options":
+                                    {
+                                        "cssClass": "btn btn-primary",
+                                        "text": "show alert",
+                                        "actions":
+                                        [
+                                            {
+                                                "componentId": "simple-grid-1",
+                                                "actionName": "testAction",
+                                                "value": "ahoj"
+                                            }
+                                        ]
+                                    },
+                                    "componentPackage": "basic",
+                                    "componentName": "button"
+                                },
+                                "area": "1/1/2/2"
                             }
                         ]
                     },
@@ -231,6 +253,29 @@
                         }
                     ]
                 }
+            ]
+        },
+        {
+            "id": "simple-button",
+            "outputs":
+            [
+                {
+                    "outputName": "trigger",
+                    "inputs":
+                    [
+                        {
+                            "inputName": "trigger",
+                            "id": "simple-button-action"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "simple-button-action",
+            "nodeType": "ComponentAction",
+            "outputs":
+            [
             ]
         }
     ]

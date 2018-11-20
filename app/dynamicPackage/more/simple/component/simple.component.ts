@@ -117,4 +117,13 @@ export class SimpleComponent implements DynamicComponentGeneric<string>
     {
         this._changeDetector.detectChanges();
     }
+
+    /**
+     * Shows alert with message
+     * @param value Value passed to this method
+     */
+    public testAction(value?: any)
+    {
+        alert(`test action called on '${this.options}' with value '${value}'`);
+    }
 }

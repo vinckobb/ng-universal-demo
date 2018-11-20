@@ -1,3 +1,5 @@
+import {ActionDescription} from "../../../../ngDynamic-core";
+
 /**
  * Options for button component
  */
@@ -12,4 +14,9 @@ export interface ButtonComponentOptions
      * Test displayed for button
      */
     text?: string;
+
+    /**
+     * Description of actions to be called on click
+     */
+    actions?: ActionDescription[];
 }
