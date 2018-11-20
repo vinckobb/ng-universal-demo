@@ -65,7 +65,7 @@
         "@ng/md-help": "5.0.2",
         "@ng/notifications": "5.0.0",
         "@ng/rest": "5.0.0",
-        "@ng/select": "^6.0.0-beta",
+        "@ng/select": "next",
         "@ng/server-stuff": "5.0.0",
         "@ng/translate-extensions": "5.0.0",
         "@ng/treeview": "5.0.0",
