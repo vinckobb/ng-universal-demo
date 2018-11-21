@@ -1,4 +1,4 @@
-import {DesignerMetadata, DesignerDynamicComponent} from "../interfaces";
+import {ComponentDesignerMetadata, DesignerDynamicComponent} from "../interfaces";
 
 declare var designerMetadata: boolean;
 
@@ -6,7 +6,7 @@ declare var designerMetadata: boolean;
  * Sets designer metadata to component on which is this decorator applied
  * @returns ClassDecorator
  */
-export function DynamicComponentDesignerMetadata(templateMetadata: DesignerMetadata): ClassDecorator
+export function DynamicComponentDesignerMetadata(templateMetadata: ComponentDesignerMetadata): ClassDecorator
 {
     if(designerMetadata)
     {

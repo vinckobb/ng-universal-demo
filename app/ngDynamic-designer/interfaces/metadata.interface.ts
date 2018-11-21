@@ -1,9 +1,9 @@
 import {DynamicModule} from "../../ngDynamic-core";
 
 /**
- * Metadata used for designer of dynamic content
+ * Metadata used for designer of dynamic component
  */
-export interface DesignerMetadata
+export interface ComponentDesignerMetadata
 {
     /**
      * Javascript module containing dynamic component module definition
@@ -29,5 +29,5 @@ export interface DesignerDynamicComponent
     /**
      * Metadata used for designer
      */
-    ɵMetadata: DesignerMetadata;
+    ɵMetadata: ComponentDesignerMetadata;
 }
