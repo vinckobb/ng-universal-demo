@@ -32,6 +32,9 @@ export interface DesignerDynamicComponentClass
     ɵMetadata: ComponentDesignerMetadata;
 }
 
+/**
+ * Description of dynamic component for designer
+ */
 export interface DesignerDynamicComponent extends DynamicComponent
 {
     /**
@@ -40,6 +43,9 @@ export interface DesignerDynamicComponent extends DynamicComponent
     metadata: DynamicComponentMetadata;
 }
 
+/**
+ * Description of dynamic component for designer
+ */
 export interface DesignerDynamicComponentGeneric<TOptions, TMetadataOptions> extends DesignerDynamicComponent
 {
     /**
@@ -51,4 +57,25 @@ export interface DesignerDynamicComponentGeneric<TOptions, TMetadataOptions> ext
      * Layout metadata that will be used for rendering
      */
     metadata: DynamicComponentMetadataGeneric<TMetadataOptions>;
+}
+
+/**
+ * Description of data passed to designer component renderer
+ */
+export interface DesignerComponentRendererData
+{
+    /**
+     * Name of package that contains this component
+     */
+    packageName: string;
+
+    /**
+     * Name of component which placeholder is rendered
+     */
+    componentName: string;
+
+    /**
+     * Metadata for dynamic component designer
+     */
+    componentMetadata: ComponentDesignerMetadata;
 }

@@ -1,7 +1,8 @@
-import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef, Injector, Output, EventEmitter} from '@angular/core';
-import {nameof} from '@asseco/common';
+import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef, Injector} from '@angular/core';
+import {nameof, generateId} from '@asseco/common';
 
-import {DynamicModule, ComponentLoader} from '../../../ngDynamic-core';
+import {ComponentLoader} from '../../../ngDynamic-core';
+import {DesignerDynamicComponent, DesignerComponentRendererData} from '../../interfaces';
 
 /**
 * Creates dynamically instance of component by its dynamicModule used for layout designer
@@ -11,7 +12,7 @@ import {DynamicModule, ComponentLoader} from '../../../ngDynamic-core';
     selector: '[designerComponentRenderer]',
     exportAs: 'designerComponentRenderer'
 })
-export class DesignerComponentRendererDirective<TComponent> implements OnChanges, OnDestroy
+export class DesignerComponentRendererDirective<TComponent extends DesignerDynamicComponent> implements OnChanges, OnDestroy
 {
     //######################### private fields #########################
 
@@ -31,21 +32,13 @@ export class DesignerComponentRendererDirective<TComponent> implements OnChanges
      * Loaded module that should be rendered
      */
     @Input('designerComponentRenderer')
-    public dynamicModule: DynamicModule;
+    public componentMetadata: DesignerComponentRendererData;
 
     /**
      * Custom injector used as parent for dynamic components tree
      */
     @Input('designerComponentRendererInjector')
     public customInjector: Injector;
-
-    //######################### public properties - outputs #########################
-
-    /**
-     * Occurs when component is created or destroyed, it can send instance of component, or null
-     */
-    @Output()
-    public designerComponentRendererCreated: EventEmitter<TComponent|null> = new EventEmitter<TComponent|null>();
 
     //######################### public properties #########################
 
@@ -77,28 +70,36 @@ export class DesignerComponentRendererDirective<TComponent> implements OnChanges
         this._viewContainerRef.clear();
         this.ngOnDestroy();
 
-        if(nameof<DesignerComponentRendererDirective<TComponent>>('dynamicModule') in changes && changes[nameof<DesignerComponentRendererDirective<TComponent>>('dynamicModule')].currentValue)
+        if(nameof<DesignerComponentRendererDirective<TComponent>>('componentMetadata') in changes && changes[nameof<DesignerComponentRendererDirective<TComponent>>('componentMetadata')].currentValue)
         {
             let injector = this.customInjector || this._viewContainerRef.parentInjector;
-            let resolved = await ComponentLoader.resolveComponentFactory(this.dynamicModule, injector, 'for-designer');
+            let resolved = await ComponentLoader.resolveComponentFactory(this.componentMetadata.componentMetadata.placeholderModule, injector, 'for-designer');
 
             if(!resolved)
             {
                 this._componentRef = null;
-                this.designerComponentRendererCreated.emit(null);        
 
                 return;
             }
 
             this._moduleRef = resolved.module;
             this._componentRef = this._viewContainerRef.createComponent(resolved.factory, this._viewContainerRef.length, injector) as any;
-            this.designerComponentRendererCreated.emit(this.component);
+
+            this.component.options = this.componentMetadata.componentMetadata.layoutMetadata;
+            this.component.metadata = 
+            {
+                id: generateId(12),
+                options: {},
+                componentName: this.componentMetadata.componentName,
+                componentPackage: this.componentMetadata.packageName
+            };
+
+            this.component.invalidateVisuals();
             
             return;
         }
         
         this._componentRef = null;
-        this.designerComponentRendererCreated.emit(null);
     }
 
     //######################### public methods - implementation of OnDestroy #########################

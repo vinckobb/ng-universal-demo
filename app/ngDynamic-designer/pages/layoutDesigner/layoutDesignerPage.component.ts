@@ -4,9 +4,8 @@ import { ComponentRoute } from "@ng/common";
 import {Subscription} from "rxjs";
 
 import {PackageLoader} from "../../packageLoader";
-import {DynamicModule} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
-import {DesignerDynamicComponent} from "../../interfaces";
+import {DesignerDynamicComponent, DesignerComponentRendererData} from "../../interfaces";
 
 /**
  * Component used for displaying layout designer
@@ -32,7 +31,7 @@ export class LayoutDesignerPageComponent implements OnInit, OnDestroy
     /**
      * TODO ukazka len
      */
-    public dynamicModule: DynamicModule;
+    public metadata: DesignerComponentRendererData;
 
     //######################### public properties - children #########################
 
@@ -54,8 +53,12 @@ export class LayoutDesignerPageComponent implements OnInit, OnDestroy
     public async ngOnInit()
     {
         //TODO - toto je len ukazka treba to samozrejme urobit inak
-        let metadata = await this._packageLoader.getComponentsMetadata('layout', 'stack');
-        this.dynamicModule = metadata.placeholderModule;
+        this.metadata =
+        {
+            packageName: 'layout',
+            componentName: 'stack',
+            componentMetadata: await this._packageLoader.getComponentsMetadata('layout', 'stack')
+        };
 
         this._changeDetector.detectChanges();
 
