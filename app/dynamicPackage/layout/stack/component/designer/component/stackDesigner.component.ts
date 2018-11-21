@@ -1,33 +1,24 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
-import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
-import {DynamicComponentDesignerMetadata} from "../../../../ngDynamic-designer";
-import {StackComponentOptions} from "./stack.interface";
-import {placeholderModule, layoutMetadata, relationsMetadata} from './designer';
+import {DynamicComponentGeneric} from "../../../../../../ngDynamic-core";
 
 /**
- * Stack layout component used for rendering components
+ * Stack designer layout component used for designing components
  */
 @Component(
 {
-    selector: 'stack-layout-component',
-    templateUrl: 'stack.component.html',
+    selector: 'stack-layout-designer-component',
+    templateUrl: 'stackDesigner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-@DynamicComponentDesignerMetadata(
-{
-    placeholderModule,
-    layoutMetadata,
-    relationsMetadata
-})
-export class StackComponent implements DynamicComponentGeneric<StackComponentOptions>
+export class StackDesignerComponent implements DynamicComponentGeneric<any>
 {
     //######################### public properties #########################
 
     /**
      * Options used for rendering this component
      */
-    public options: StackComponentOptions;
+    public options: any;
 
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef)

@@ -1,7 +1,6 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
 import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
-import {DynamicComponentDesignerMetadata} from "../../../../ngDynamic-designer";
 import {ConditionalComponentOptions} from "./conditional.interface";
 
 /**
@@ -12,9 +11,6 @@ import {ConditionalComponentOptions} from "./conditional.interface";
     selector: 'conditional-layout-component',
     templateUrl: 'conditional.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
-})
-@DynamicComponentDesignerMetadata(
-{
 })
 export class ConditionalComponent implements DynamicComponentGeneric<ConditionalComponentOptions>
 {

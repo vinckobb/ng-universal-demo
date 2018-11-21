@@ -83,7 +83,7 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent> imp
 
             if(this.componentMetadata)
             {
-                let resolved = await this._componentLoader.resolveComponentFactory<TComponent>(this.componentMetadata, injector);
+                let resolved = await this._componentLoader.resolveComponentFactory(this.componentMetadata, injector);
     
                 if(!resolved)
                 {
@@ -93,7 +93,7 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent> imp
                 }
     
                 this._moduleRef = resolved.module;
-                this._componentRef = this._viewContainerRef.createComponent<TComponent>(resolved.factory, this._viewContainerRef.length, injector);
+                this._componentRef = this._viewContainerRef.createComponent(resolved.factory, this._viewContainerRef.length, injector) as any;
                 
                 this.component.options = this.componentMetadata.options;
                 this.component.invalidateVisuals();

@@ -20,3 +20,14 @@ export interface DesignerMetadata
      */
     layoutMetadata?: any;
 }
+
+/**
+ * Static description of 
+ */
+export interface DesignerDynamicComponent
+{
+    /**
+     * Metadata used for designer
+     */
+    ɵMetadata: DesignerMetadata;
+}

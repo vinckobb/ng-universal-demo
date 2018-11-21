@@ -18,11 +18,6 @@ export class ComponentLoader
      */
     private _cachedNpmPackage: {[componentPackageName: string]: DynamicModule} = {};
 
-    //######################### constructor #########################
-    constructor(private _injector: Injector)
-    {
-    }
-
     //######################### public methods #########################
 
     /**
@@ -30,7 +25,7 @@ export class ComponentLoader
      * @param componentMetadata Metadata that are going to be used for resolving component factory
      * @param parentInjector Injector from view parent
      */
-    public async resolveComponentFactory<TComponent extends DynamicComponent>(componentMetadata: DynamicComponentMetadata, parentInjector: Injector): Promise<{factory: ComponentFactory<TComponent>, module: NgModuleRef<any>}>
+    public async resolveComponentFactory(componentMetadata: DynamicComponentMetadata, parentInjector: Injector): Promise<{factory: ComponentFactory<DynamicComponent>, module: NgModuleRef<any>}>
     {
         this._validate(componentMetadata);
 
@@ -59,33 +54,42 @@ export class ComponentLoader
             this._cachedNpmPackage[componentPackageName] = npmPackage;
         }
 
-        let moduleFactoryPromise = await npmPackage.moduleFactory;
+        return ComponentLoader.resolveComponentFactory(npmPackage, parentInjector, componentMetadata.componentName);
+    }
+
+    /**
+     * Resolves component factory and its ngModule from dynamic module
+     * @param dynamicModule Dynamic module to be resolved as component factory with its ngModule
+     */
+    public static async resolveComponentFactory(dynamicModule: DynamicModule, parentInjector: Injector, componentName: string): Promise<{factory: ComponentFactory<DynamicComponent>, module: NgModuleRef<any>}>
+    {
+        let moduleFactoryPromise = await dynamicModule.moduleFactory;
         let moduleFactory: NgModuleFactory<any> = moduleFactoryPromise && moduleFactoryPromise.ngModuleFactory;
 
         //not aot build
-        if(!isAot && !moduleFactory && npmPackage.module)
+        if(!isAot && !moduleFactory && dynamicModule.module)
         {
-            let compiler: Compiler = this._injector.get(Compiler);
-            moduleFactory = compiler.compileModuleSync(npmPackage.module);
+            let compiler: Compiler = parentInjector.get(Compiler);
+            moduleFactory = compiler.compileModuleSync(dynamicModule.module);
         }
 
         //module not found
         if(!moduleFactory)
         {
-            throw new Error(`Unable to obtain component\`s module for '${componentMetadata.componentName}'!`);
+            throw new Error(`Unable to obtain component\`s module for '${componentName}'!`);
         }
 
-        if(!npmPackage.component)
+        if(!dynamicModule.component)
         {
-            throw new Error(`Unable to obtain '${componentMetadata.componentName}' component!`);
+            throw new Error(`Unable to obtain '${componentName}' component!`);
         }
 
         let parentModule = parentInjector.get(NgModuleRef);
         let moduleRef = moduleFactory.create(parentModule.injector);
-        let componentFactory = moduleRef.componentFactoryResolver.resolveComponentFactory(npmPackage.component);
+        let componentFactory = moduleRef.componentFactoryResolver.resolveComponentFactory(dynamicModule.component);
 
         return {
-            factory: componentFactory as ComponentFactory<TComponent>,
+            factory: componentFactory,
             module: moduleRef
         };
     }
