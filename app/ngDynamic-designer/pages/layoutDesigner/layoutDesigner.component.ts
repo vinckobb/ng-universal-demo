@@ -1,6 +1,5 @@
-import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, ViewChildren, QueryList} from "@angular/core";
+import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, ViewChildren, QueryList, HostBinding} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
-import { ComponentRoute } from "@ng/common";
 import {Subscription} from "rxjs";
 
 import {PackageLoader} from "../../packageLoader";
@@ -12,12 +11,11 @@ import {DesignerDynamicComponent, DesignerComponentRendererData} from "../../int
  */
 @Component(
 {
-    selector: 'layout-designer-page',
-    templateUrl: 'layoutDesignerPage.component.html',
+    selector: 'layout-designer',
+    templateUrl: 'layoutDesigner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-@ComponentRoute({path: 'layout/:id'})
-export class LayoutDesignerPageComponent implements OnInit, OnDestroy
+export class LayoutDesignerComponent implements OnInit, OnDestroy
 {
     //######################### private fields #########################
 
@@ -32,6 +30,11 @@ export class LayoutDesignerPageComponent implements OnInit, OnDestroy
      * TODO ukazka len
      */
     public metadata: DesignerComponentRendererData;
+
+    //######################### public properties - host bindings #########################
+
+    @HostBinding('style.display')
+    public componentStyleDisplay: string = "contents";
 
     //######################### public properties - children #########################
 

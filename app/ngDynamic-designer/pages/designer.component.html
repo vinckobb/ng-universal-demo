@@ -1,0 +1,12 @@
+<div class="layout-designer">
+    <header>
+        <button type="button" class="btn btn-primary" [class.active]="isMode(designerModes.LAYOUT)" (click)="setMode(designerModes.LAYOUT)">
+            Layout
+        </button>
+        <button type="button" class="btn btn-primary" [class.active]="isMode(designerModes.NODE)" (click)="setMode(designerModes.NODE)">
+            Node
+        </button>
+    </header>
+    <layout-designer *ngIf="isMode(designerModes.LAYOUT)"></layout-designer>
+    <node-designer *ngIf="isMode(designerModes.NODE)"></node-designer>
+</div>
