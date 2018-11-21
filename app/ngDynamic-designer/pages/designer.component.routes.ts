@@ -1,3 +1,4 @@
+//@ts-ignore
 import {Utils} from "@ng/common";
 import {LayoutDesignerPageComponent} from "./layoutDesigner/layoutDesignerPage.component";
 

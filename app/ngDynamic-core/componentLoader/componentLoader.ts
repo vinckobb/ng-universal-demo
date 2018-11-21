@@ -1,7 +1,7 @@
 import {Injectable, ComponentFactory, Injector, NgModuleRef, NgModuleFactory, Compiler} from "@angular/core";
 import {isString} from "@asseco/common";
 
-import {DynamicComponentMetadata} from "../interfaces";
+import {DynamicComponentMetadata, DynamicComponent} from "../interfaces";
 import {DynamicModule} from "./componentLoader.interface";
 
 declare var isAot: boolean;
@@ -16,7 +16,7 @@ export class ComponentLoader
     /**
      * Already resolved cached npm packages
      */
-    private _cachedNpmPackage: {[componentPackageName: string]: DynamicModule<any>} = {};
+    private _cachedNpmPackage: {[componentPackageName: string]: DynamicModule} = {};
 
     //######################### constructor #########################
     constructor(private _injector: Injector)
@@ -30,12 +30,12 @@ export class ComponentLoader
      * @param componentMetadata Metadata that are going to be used for resolving component factory
      * @param parentInjector Injector from view parent
      */
-    public async resolveComponentFactory<TComponent>(componentMetadata: DynamicComponentMetadata, parentInjector: Injector): Promise<{factory: ComponentFactory<TComponent>, module: NgModuleRef<any>}>
+    public async resolveComponentFactory<TComponent extends DynamicComponent>(componentMetadata: DynamicComponentMetadata, parentInjector: Injector): Promise<{factory: ComponentFactory<TComponent>, module: NgModuleRef<any>}>
     {
         this._validate(componentMetadata);
 
         let componentPackageName = `${componentMetadata.componentPackage}-${componentMetadata.componentName}`;
-        let npmPackage: DynamicModule<TComponent> = this._cachedNpmPackage[componentPackageName];
+        let npmPackage: DynamicModule = this._cachedNpmPackage[componentPackageName];
 
         if(!npmPackage)
         {
@@ -85,7 +85,7 @@ export class ComponentLoader
         let componentFactory = moduleRef.componentFactoryResolver.resolveComponentFactory(npmPackage.component);
 
         return {
-            factory: componentFactory,
+            factory: componentFactory as ComponentFactory<TComponent>,
             module: moduleRef
         };
     }

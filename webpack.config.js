@@ -257,16 +257,10 @@ module.exports = function(options, args)
                 isProduction: prod,
                 isNgsw: ngsw,
                 isAot: aot,
+                designerMetadata: true,
                 localPackage: JSON.stringify("@localDynamic/")
-            }),
+            })
             // new webpack.IgnorePlugin(/\.\/locale$/),
-            new HardSourceWebpackPlugin(),
-            new HardSourceWebpackPlugin.ExcludeModulePlugin(
-            [
-                {
-                    test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
-                }
-            ])
         ]
     };
 
@@ -370,6 +364,16 @@ module.exports = function(options, args)
         }));
 
         config.plugins.push(new CompressionPlugin({test: /\.js$|\.css$/}));
+    }
+    else
+    {
+        config.plugins.push(new HardSourceWebpackPlugin());
+        config.plugins.push(new HardSourceWebpackPlugin.ExcludeModulePlugin(
+        [
+            {
+                test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
+            }
+        ]));
     }
 
     //this is used for debugging speed of compilation

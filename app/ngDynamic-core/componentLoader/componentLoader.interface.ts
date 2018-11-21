@@ -1,4 +1,5 @@
 import {Type, NgModuleFactory} from "@angular/core";
+import {DynamicComponent} from "../interfaces";
 
 /**
  * Ng module factory promise data
@@ -14,12 +15,12 @@ export interface NgModuleFactoryPromise
 /**
  * Dynamic module description
  */
-export interface DynamicModule<TComponent>
+export interface DynamicModule
 {
     /**
      * Dynamic component to be rendered
      */
-    component: Type<TComponent>;
+    component: Type<DynamicComponent>;
 
     /**
      * Dynamic component`s module
