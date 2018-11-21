@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 
 import {PackageComponents} from "./packageLoader.interface";
 import {DynamicModule} from "../../ngDynamic-core";
-import {ComponentDesignerMetadata, DesignerDynamicComponent} from "../interfaces";
+import {ComponentDesignerMetadata, DesignerDynamicComponentClass} from "../interfaces";
 
 declare var localPackage: string;
 
@@ -71,7 +71,7 @@ export class PackageLoader
             throw new Error('Wrong module, unable to get component for designer');
         }
 
-        let component: DesignerDynamicComponent = dynamicModule.component as any;
+        let component: DesignerDynamicComponentClass = dynamicModule.component as any;
 
         if(!component.ɵMetadata)
         {

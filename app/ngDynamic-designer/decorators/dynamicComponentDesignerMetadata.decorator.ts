@@ -1,4 +1,4 @@
-import {ComponentDesignerMetadata, DesignerDynamicComponent} from "../interfaces";
+import {ComponentDesignerMetadata, DesignerDynamicComponentClass} from "../interfaces";
 
 declare var designerMetadata: boolean;
 
@@ -12,7 +12,7 @@ export function DynamicComponentDesignerMetadata(templateMetadata: ComponentDesi
     {
         return function <TFunction extends Function> (target: TFunction): TFunction
         {
-            let metadataTarget: DesignerDynamicComponent = target as any;
+            let metadataTarget: DesignerDynamicComponentClass = target as any;
             metadataTarget.ɵMetadata = templateMetadata;
 
             return target;

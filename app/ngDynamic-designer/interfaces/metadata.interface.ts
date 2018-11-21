@@ -1,4 +1,4 @@
-import {DynamicModule} from "../../ngDynamic-core";
+import {DynamicModule, DynamicComponent, DynamicComponentMetadata, DynamicComponentMetadataGeneric} from "../../ngDynamic-core";
 
 /**
  * Metadata used for designer of dynamic component
@@ -24,10 +24,31 @@ export interface ComponentDesignerMetadata
 /**
  * Static description of 
  */
-export interface DesignerDynamicComponent
+export interface DesignerDynamicComponentClass
 {
     /**
      * Metadata used for designer
      */
     ɵMetadata: ComponentDesignerMetadata;
+}
+
+export interface DesignerDynamicComponent extends DynamicComponent
+{
+    /**
+     * Layout metadata that will be used for rendering
+     */
+    metadata: DynamicComponentMetadata;
+}
+
+export interface DesignerDynamicComponentGeneric<TOptions, TMetadataOptions> extends DesignerDynamicComponent
+{
+    /**
+     * Options used for rendering this component
+     */
+    options: TOptions;
+
+    /**
+     * Layout metadata that will be used for rendering
+     */
+    metadata: DynamicComponentMetadataGeneric<TMetadataOptions>;
 }

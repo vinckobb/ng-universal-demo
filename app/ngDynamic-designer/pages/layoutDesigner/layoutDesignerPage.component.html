@@ -10,6 +10,10 @@
     </aside>
     <main>
         content
+        <ng-template [designerComponentRenderer]="dynamicModule" #layoutComponents="designerComponentRenderer"></ng-template>
+        <ng-template [designerComponentRenderer]="dynamicModule" #layoutComponents="designerComponentRenderer"></ng-template>
+
+        <button (click)="save()">SAVE</button>
     </main>
     <aside class="right">
         option

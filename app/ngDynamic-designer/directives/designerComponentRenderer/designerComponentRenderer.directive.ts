@@ -1,7 +1,7 @@
 import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef, Injector, Output, EventEmitter} from '@angular/core';
 import {nameof} from '@asseco/common';
 
-import {DynamicModule, ComponentLoader, DynamicComponent} from '../../../ngDynamic-core';
+import {DynamicModule, ComponentLoader} from '../../../ngDynamic-core';
 
 /**
 * Creates dynamically instance of component by its dynamicModule used for layout designer
@@ -11,7 +11,7 @@ import {DynamicModule, ComponentLoader, DynamicComponent} from '../../../ngDynam
     selector: '[designerComponentRenderer]',
     exportAs: 'designerComponentRenderer'
 })
-export class DesignerComponentRendererDirective<TComponent extends DynamicComponent> implements OnChanges, OnDestroy
+export class DesignerComponentRendererDirective<TComponent> implements OnChanges, OnDestroy
 {
     //######################### private fields #########################
 
@@ -47,12 +47,12 @@ export class DesignerComponentRendererDirective<TComponent extends DynamicCompon
     @Output()
     public designerComponentRendererCreated: EventEmitter<TComponent|null> = new EventEmitter<TComponent|null>();
 
-    //######################### private properties #########################
+    //######################### public properties #########################
 
     /**
      * Instance of dynamically created component
      */
-    private get component(): TComponent|null
+    public get component(): TComponent|null
     {
         if(!this._componentRef)
         {
