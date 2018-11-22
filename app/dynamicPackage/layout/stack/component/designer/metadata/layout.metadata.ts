@@ -25,7 +25,7 @@ export const layoutMetadata: LayoutMetadata =
             name: 'left padding',
             description: 'Inset offset from left of each child of stack panel',
             type: OptionType.Number,
-            defaultValue: null
+            defaultValue: 10
         }
     ]
 };

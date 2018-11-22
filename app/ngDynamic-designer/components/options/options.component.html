@@ -1,0 +1,13 @@
+<div [formGroup]="optionsForm">
+    <!-- TOTO je len ukazka -->
+    <div *ngFor="let option of layoutMetadata?.options" style="margin-bottom: 20px;">
+        <label [attr.for]="option.id">
+            {{option.name}}
+        </label>
+        <div *ngIf="option.description">
+            {{option?.description}}
+        </div>
+
+        <input [formControlName]="option.id" [id]="option.id" type="text" class="form-control">
+    </div>
+</div>

@@ -3,6 +3,7 @@ import {Subscription} from "rxjs";
 
 import {DesignerMode} from "./designer.interface";
 import {ComponentsService, OptionsService} from "../services";
+import {PackageLoader} from "../packageLoader";
 
 /**
  * Component used for displaying designer
@@ -45,7 +46,9 @@ export class DesignerPageComponent implements OnInit, OnDestroy
     public designerPackageNames: string[] = ["layout"];
 
     //######################### constructor #########################
-    constructor(private _changeDetector: ChangeDetectorRef)
+    constructor(private _changeDetector: ChangeDetectorRef,
+                private _packageLoader: PackageLoader,
+                private _optionsSvc: OptionsService)
     {
     }
 
@@ -54,9 +57,13 @@ export class DesignerPageComponent implements OnInit, OnDestroy
     /**
      * Initialize component
      */
-    public ngOnInit()
+    public async ngOnInit()
     {
         this.setMode(DesignerMode.LAYOUT);
+        //TODO toto je len ukazka
+        let metadata = await this._packageLoader.getComponentsMetadata('layout', 'stack');
+
+        this._optionsSvc.showProperties(metadata.layoutMetadata);
     }
 
     //######################### public methods - implementation of OnDestroy #########################

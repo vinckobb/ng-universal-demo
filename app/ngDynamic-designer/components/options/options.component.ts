@@ -11,7 +11,7 @@ import {LayoutMetadata} from "../../interfaces";
 @Component(
 {
     selector: 'options',
-    template: '',
+    templateUrl: 'options.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OptionsComponent implements OnDestroy
@@ -50,6 +50,14 @@ export class OptionsComponent implements OnDestroy
      */
     public optionsForm: FormGroup;
 
+    /**
+     * Returns layout metadata of component
+     */
+    public get layoutMetadata(): LayoutMetadata
+    {
+        return this._layoutMetadata;
+    }
+
     //######################### constructor #########################
     constructor(private _optionsSvc: OptionsService,
                 private _changeDetector: ChangeDetectorRef)
@@ -67,8 +75,9 @@ export class OptionsComponent implements OnDestroy
 
         this._optionsValueChangeSubscription = this.optionsForm.valueChanges.subscribe(options =>
         {
-            this._layoutMetadata.options = options;
-            this._layoutMetadata.optionsComponent.invalidateVisuals("options");
+            //TODO docasne zakomentovane lebo to robi neplechu. Prepisuje mi to metadata, ktore na zaciatku pridu
+            //this._layoutMetadata.options = options;
+            //this._layoutMetadata.optionsComponent.invalidateVisuals("options");
         });
 
         this._optionsChangeSubscription = this._optionsSvc.loadProperties.subscribe(options =>
@@ -131,7 +140,10 @@ export class OptionsComponent implements OnDestroy
                 this.optionsForm.addControl(option.id, new FormControl(option.defaultValue, option.validators || []));
             });
 
-            this.optionsForm.patchValue(this._layoutMetadata.value, {emitEvent: false});
+            if (this._layoutMetadata.value)
+            {
+                this.optionsForm.patchValue(this._layoutMetadata.value, {emitEvent: false});
+            }
         }
     }
 }
