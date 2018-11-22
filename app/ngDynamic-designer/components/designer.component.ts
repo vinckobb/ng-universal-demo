@@ -27,11 +27,22 @@ export class DesignerPageComponent implements OnInit, OnDestroy
      */
     private _urlChangeSubscription: Subscription;
 
+    /**
+     * Actual view mode for designer
+     */
     private _mode: DesignerMode;
 
     //######################### public fields - template bindings #########################
 
+    /**
+     * Designer view modes enum
+     */
     public designerModes = DesignerMode;
+
+    /**
+     * List of components packages that are available in designer
+     */
+    public designerPackageNames: string[] = ["layout"];
 
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef)
@@ -64,6 +75,10 @@ export class DesignerPageComponent implements OnInit, OnDestroy
 
     //######################### public methods #########################
 
+    /**
+     * Sets view mode for designer
+     * @param mode view mode
+     */
     public setMode(mode: DesignerMode)
     {
         this._mode = mode;
@@ -71,6 +86,10 @@ export class DesignerPageComponent implements OnInit, OnDestroy
         this._changeDetector.detectChanges();
     }
 
+    /**
+     * Checks if designer is in specific mode
+     * @param mode view mode
+     */
     public isMode(mode: DesignerMode)
     {
         return this._mode == mode;

@@ -1,11 +1,11 @@
 import {NgModule} from "@angular/core";
 import {RouterModule} from "@angular/router";
 import {ReactiveFormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
 
-import {LayoutDesignerComponent, NodeDesignerComponent, designerComponentRoutes, designerComponents, OptionsComponent} from "../components";
+import {LayoutDesignerComponent, NodeDesignerComponent, designerComponentRoutes, designerComponents, OptionsComponent, ComponentPaletteComponent, ComponentPaletteItemComponent} from "../components";
 import {DesignerComponentRendererDirective} from "../directives";
 import {NodeDesignerComponent as D3NodeDesignerComponent} from "../../customPackage/designer/node/component";
-import {CommonModule} from "@angular/common";
 
 /**
  * Module for ng dynamic designer 
@@ -22,6 +22,8 @@ import {CommonModule} from "@angular/common";
     [
         designerComponents,
         LayoutDesignerComponent,
+        ComponentPaletteComponent,
+        ComponentPaletteItemComponent,
         NodeDesignerComponent,
         OptionsComponent,
         D3NodeDesignerComponent,

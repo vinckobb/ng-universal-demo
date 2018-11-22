@@ -1,7 +1,9 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
 import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
+import {DynamicComponentDesignerMetadata} from "../../../../ngDynamic-designer";
 import {BlockComponentOptions} from "./block.interface";
+import {placeholderModule, layoutMetadata, relationsMetadata} from "./designer";
 
 /**
  * Layout component used for formatting block content
@@ -11,6 +13,12 @@ import {BlockComponentOptions} from "./block.interface";
     selector: 'block-layout-component',
     templateUrl: 'block.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
+})
+@DynamicComponentDesignerMetadata(
+{
+    placeholderModule,
+    layoutMetadata,
+    relationsMetadata
 })
 export class BlockComponent implements DynamicComponentGeneric<BlockComponentOptions>
 {

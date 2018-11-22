@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, ViewChildren, QueryList, HostBinding} from "@angular/core";
+import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, ViewChildren, QueryList, HostBinding, Input} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs";
 
@@ -30,6 +30,11 @@ export class LayoutDesignerComponent implements OnInit, OnDestroy
      * TODO ukazka len
      */
     public metadata: DesignerComponentRendererData;
+
+    //######################### public properties - inputs #########################
+
+    @Input()
+    public packageNames: string[];
 
     //######################### public properties - host bindings #########################
 
