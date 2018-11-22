@@ -1,8 +1,19 @@
-//@ts-ignore
-import {Utils} from "@ng/common";
+import {Route} from "@angular/router";
 
 import {DesignerPageComponent} from "./designer.component";
 
-export var designerComponentRoutes = Utils.routerHelper.extractRoutes([DesignerPageComponent]);
+/**
+ * Definition of route for designer components
+ */
+export const designerComponentRoutes: Route[] = 
+[
+    {
+        path: ':id',
+        component: DesignerPageComponent
+    }
+];
 
+/**
+ * Definition of route components for designer
+ */
 export var designerComponents = [DesignerPageComponent];

@@ -1,5 +1,4 @@
 import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef} from "@angular/core";
-import {ComponentRoute} from "@ng/common";
 import {Subscription} from "rxjs";
 
 import {DesignerMode} from "./designer.interface";
@@ -19,7 +18,6 @@ import {ComponentsService, OptionsService} from "../services";
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-@ComponentRoute({path: ':id'})
 export class DesignerPageComponent implements OnInit, OnDestroy
 {
     //######################### private fields #########################
