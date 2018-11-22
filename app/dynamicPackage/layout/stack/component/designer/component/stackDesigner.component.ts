@@ -13,7 +13,7 @@ import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core"
     templateUrl: 'stackDesigner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StackDesignerComponent extends PlaceholderBaseComponent<any, StackComponentOptions>
+export class StackDesignerComponent extends PlaceholderBaseComponent<StackComponentOptions>
 {
     //######################### public properties #########################
 
@@ -34,5 +34,15 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<any, StackC
         super(changeDetector, optionsSvc);
 
         this._isContainer = true;
+    }
+
+    //######################### public methods #########################
+
+    /**
+     * Explicitly runs invalidation of content (change detection)
+     */
+    public invalidateVisuals(): void
+    {
+        super.invalidateVisuals();
     }
 }

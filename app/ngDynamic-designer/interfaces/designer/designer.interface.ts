@@ -60,6 +60,11 @@ export interface DesignerOptionsMetadata
     type?: OptionType;
 
     /**
+     * Default value that is set when creating empty control
+     */
+    defaultValue?: any;
+
+    /**
      * Description of option displayed for user
      */
     description?: string;

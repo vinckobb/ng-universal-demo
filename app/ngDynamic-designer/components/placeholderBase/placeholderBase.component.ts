@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, ViewChildren, QueryList} from "@angular/core";
 
-import {DesignerComponentRendererData, DesignerDynamicComponentGeneric, DesignerDynamicComponent} from "../../interfaces";
+import {DesignerComponentRendererData, DesignerDynamicComponentGeneric, DesignerDynamicComponent, LayoutMetadata} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
 import {OptionsService} from "../../services";
@@ -8,7 +8,7 @@ import {OptionsService} from "../../services";
 /**
  * Base class for all placeholder components
  */
-export abstract class PlaceholderBaseComponent<TOptions, TMetadataOptions> implements DesignerDynamicComponentGeneric<TOptions, TMetadataOptions>
+export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDynamicComponentGeneric<TOptions>
 {
     //######################### protected fields #########################
 
@@ -20,7 +20,7 @@ export abstract class PlaceholderBaseComponent<TOptions, TMetadataOptions> imple
     /**
      * Metadata for current component
      */
-    protected _metadata: DynamicComponentMetadataGeneric<TMetadataOptions>;
+    protected _metadata: DynamicComponentMetadataGeneric<TOptions>;
 
     //######################### public properties - template bindings #########################
 
@@ -42,12 +42,12 @@ export abstract class PlaceholderBaseComponent<TOptions, TMetadataOptions> imple
     /**
      * Options used for rendering this component
      */
-    public options: TOptions;
+    public options: LayoutMetadata;
 
     /**
      * Layout metadata that will be used for rendering
      */
-    public abstract get metadata(): DynamicComponentMetadataGeneric<TMetadataOptions>;
+    public abstract get metadata(): DynamicComponentMetadataGeneric<TOptions>;
 
     /**
      * Array of child components
@@ -105,5 +105,32 @@ export abstract class PlaceholderBaseComponent<TOptions, TMetadataOptions> imple
      */
     protected showProperties()
     {
+        this.options.id = this._metadata.id;
+        this.options.optionsComponent = this;
+        this.options.value = this._transformOptionsToProperties();
+        
+        this._optionsSvc.showProperties(this.options);
+    }
+
+    //######################### private methods #########################
+
+    /**
+     * Transforms component options to properties options
+     */
+    private _transformOptionsToProperties()
+    {
+        let propertiesOptions = {};
+
+        //TODO - add logic for collection types
+
+        if(this.options && this.options.options && this.options.options.length)
+        {
+            this.options.options.forEach(option =>
+            {
+                propertiesOptions[option.id] = this.options.id.split('.').reduce((o,i)=>o[i], this.metadata.options);
+            });
+        }
+
+        return propertiesOptions;
     }
 }

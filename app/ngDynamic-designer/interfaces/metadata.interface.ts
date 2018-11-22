@@ -1,4 +1,5 @@
 import {DynamicModule, DynamicComponent, DynamicComponentMetadata, DynamicComponentMetadataGeneric} from "../../ngDynamic-core";
+import {LayoutMetadata} from "./designer";
 
 /**
  * Metadata used for designer of dynamic component
@@ -18,7 +19,7 @@ export interface ComponentDesignerMetadata
     /**
      * Metadata for layout (layout designer)
      */
-    layoutMetadata?: any;
+    layoutMetadata?: LayoutMetadata;
 }
 
 /**
@@ -57,17 +58,17 @@ export interface DesignerDynamicComponent extends DynamicComponent
 /**
  * Description of dynamic component for designer
  */
-export interface DesignerDynamicComponentGeneric<TOptions, TMetadataOptions> extends DesignerDynamicComponent
+export interface DesignerDynamicComponentGeneric<TOptions> extends DesignerDynamicComponent
 {
     /**
      * Options used for rendering this component
      */
-    options: TOptions;
+    options: LayoutMetadata;
 
     /**
      * Layout metadata that will be used for rendering
      */
-    readonly metadata: DynamicComponentMetadataGeneric<TMetadataOptions>;
+    readonly metadata: DynamicComponentMetadataGeneric<TOptions>;
 }
 
 /**
