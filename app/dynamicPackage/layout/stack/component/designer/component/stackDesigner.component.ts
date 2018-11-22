@@ -22,6 +22,7 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
      */
     public get metadata(): DynamicComponentMetadataGeneric<StackComponentOptions>
     {
+        this._metadata.options = this.transformPropertiesToOptions();
         this._metadata.options.children = this.children.map(child => child.metadata);
 
         return this._metadata;

@@ -127,7 +127,6 @@ export class OptionsComponent implements OnDestroy
             this._layoutMetadata.options.forEach(option =>
             {
                 //TODO - add collection controlos (FormArray)
-                //TODO - think how to use defaultValue since its overriden
 
                 this.optionsForm.addControl(option.id, new FormControl(option.defaultValue, option.validators || []));
             });

@@ -1,4 +1,5 @@
 import {ChangeDetectorRef, ViewChildren, QueryList} from "@angular/core";
+import {isPresent} from "@asseco/common";
 
 import {DesignerComponentRendererData, DesignerDynamicComponentGeneric, DesignerDynamicComponent, LayoutMetadata} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
@@ -107,9 +108,45 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
     {
         this.options.id = this._metadata.id;
         this.options.optionsComponent = this;
-        this.options.value = this._transformOptionsToProperties();
+        this.options.value = this.options.value || this._transformOptionsToProperties();
         
         this._optionsSvc.showProperties(this.options);
+    }
+
+    /**
+     * Transforms properties used in designer into component options
+     */
+    protected transformPropertiesToOptions(): TOptions
+    {
+        let options = {} as TOptions;
+
+        if(this.options && this.options.options && this.options.options.length)
+        {
+            this.options.options.forEach(option =>
+            {
+                let parts = option.id.split('.');
+
+                let tmpOptions = options;
+
+                parts.forEach((part, index) =>
+                {
+                    //last item value is assigned
+                    if(index == parts.length - 1)
+                    {
+                        if(isPresent(this.options.value) && isPresent(this.options.value[option.id]))
+                        {
+                            tmpOptions[part] = this.options.value[option.id];
+                        }
+
+                        return;
+                    }
+
+                    tmpOptions = tmpOptions[part] = tmpOptions[part] || {};
+                });
+            });
+        }
+
+        return options;
     }
 
     //######################### private methods #########################
@@ -127,7 +164,20 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
         {
             this.options.options.forEach(option =>
             {
-                propertiesOptions[option.id] = this.options.id.split('.').reduce((o,i)=>o[i], this.metadata.options);
+                let value = option.id.split('.').reduce((o,i) =>
+                                                        {
+                                                            if(o)
+                                                            {
+                                                                return o[i];
+                                                            }
+
+                                                            return null;
+                                                        }, this.metadata.options);
+
+                if(isPresent(value))
+                {
+                    propertiesOptions[option.id] = value;
+                }
             });
         }
 
