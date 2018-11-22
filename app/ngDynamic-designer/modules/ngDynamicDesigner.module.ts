@@ -1,10 +1,8 @@
 import {NgModule} from "@angular/core";
 import {RouterModule} from "@angular/router";
 
-import {designerComponentRoutes, designerComponents} from "../pages";
-import {LayoutDesignerComponent} from "../pages/layoutDesigner/layoutDesigner.component";
+import {LayoutDesignerComponent, NodeDesignerComponent, designerComponentRoutes, designerComponents} from "../components";
 import {DesignerComponentRendererDirective} from "../directives";
-import {NodeDesignerComponent} from "../pages/nodeDesigner/nodeDesigner.component";
 import {NodeDesignerComponent as D3NodeDesignerComponent} from "../../customPackage/designer/node/component";
 import {CommonModule} from "@angular/common";
 

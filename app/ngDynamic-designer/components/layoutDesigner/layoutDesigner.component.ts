@@ -60,7 +60,8 @@ export class LayoutDesignerComponent implements OnInit, OnDestroy
         {
             packageName: 'layout',
             componentName: 'stack',
-            componentMetadata: await this._packageLoader.getComponentsMetadata('layout', 'stack')
+            designerMetadata: await this._packageLoader.getComponentsMetadata('layout', 'stack'),
+            componentMetadata: null
         };
 
         this._changeDetector.detectChanges();

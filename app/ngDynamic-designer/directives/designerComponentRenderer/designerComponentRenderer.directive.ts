@@ -73,7 +73,7 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerDynam
         if(nameof<DesignerComponentRendererDirective<TComponent>>('componentMetadata') in changes && changes[nameof<DesignerComponentRendererDirective<TComponent>>('componentMetadata')].currentValue)
         {
             let injector = this.customInjector || this._viewContainerRef.parentInjector;
-            let resolved = await ComponentLoader.resolveComponentFactory(this.componentMetadata.componentMetadata.placeholderModule, injector, 'for-designer');
+            let resolved = await ComponentLoader.resolveComponentFactory(this.componentMetadata.designerMetadata.placeholderModule, injector, this.componentMetadata.componentName);
 
             if(!resolved)
             {
@@ -85,7 +85,7 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerDynam
             this._moduleRef = resolved.module;
             this._componentRef = this._viewContainerRef.createComponent(resolved.factory, this._viewContainerRef.length, injector) as any;
 
-            this.component.options = this.componentMetadata.componentMetadata.layoutMetadata;
+            this.component.options = this.componentMetadata.designerMetadata.layoutMetadata;
             this.component.metadata = 
             {
                 id: generateId(12),

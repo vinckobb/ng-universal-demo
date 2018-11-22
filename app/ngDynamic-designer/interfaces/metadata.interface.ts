@@ -77,5 +77,10 @@ export interface DesignerComponentRendererData
     /**
      * Metadata for dynamic component designer
      */
-    componentMetadata: ComponentDesignerMetadata;
+    designerMetadata: ComponentDesignerMetadata;
+
+    /**
+     * Existing metadata for dynamic component (for rendering)
+     */
+    componentMetadata: DynamicComponentMetadata;
 }

@@ -1,6 +1,7 @@
 //@ts-ignore
 import {Utils} from "@ng/common";
-import { DesignerPageComponent } from "./designer.component";
+
+import {DesignerPageComponent} from "./designer.component";
 
 export var designerComponentRoutes = Utils.routerHelper.extractRoutes([DesignerPageComponent]);
 
