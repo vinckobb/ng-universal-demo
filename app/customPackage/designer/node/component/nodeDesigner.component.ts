@@ -16,6 +16,7 @@ import {SvgNode} from "./misc";
         `:host
         {
             display: block;
+            height: 100%;
         }`
     ],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -3,6 +3,7 @@ import {ChangeDetectorRef, ViewChildren, QueryList} from "@angular/core";
 import {DesignerComponentRendererData, DesignerDynamicComponentGeneric, DesignerDynamicComponent} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
+import {OptionsService} from "../../services";
 
 /**
  * Base class for all placeholder components
@@ -64,7 +65,8 @@ export abstract class PlaceholderBaseComponent<TOptions, TMetadataOptions> imple
     }
 
     //######################### constructor #########################
-    constructor(protected _changeDetector: ChangeDetectorRef)
+    constructor(protected _changeDetector: ChangeDetectorRef,
+                protected _optionsSvc: OptionsService)
     {
     }
 

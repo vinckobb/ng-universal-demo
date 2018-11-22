@@ -3,6 +3,7 @@ import {nameof, generateId} from '@asseco/common';
 
 import {ComponentLoader} from '../../../ngDynamic-core';
 import {DesignerDynamicComponent, DesignerComponentRendererData} from '../../interfaces';
+import {ComponentsService} from '../../services';
 
 /**
 * Creates dynamically instance of component by its dynamicModule used for layout designer
@@ -56,7 +57,8 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerDynam
     }
 
     //######################### constructor #########################
-    constructor(private _viewContainerRef: ViewContainerRef)
+    constructor(private _viewContainerRef: ViewContainerRef,
+                private _componentsSvc: ComponentsService)
     {
     }
 
@@ -67,8 +69,8 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerDynam
      */
     public async ngOnChanges(changes: SimpleChanges)
     {
-        this._viewContainerRef.clear();
         this.ngOnDestroy();
+        this._viewContainerRef.clear();
 
         if(nameof<DesignerComponentRendererDirective<TComponent>>('componentMetadata') in changes && changes[nameof<DesignerComponentRendererDirective<TComponent>>('componentMetadata')].currentValue)
         {
@@ -95,6 +97,7 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerDynam
             });
 
             this.component.invalidateVisuals();
+            this._componentsSvc.addComponent(this.component);
 
             return;
         }
@@ -109,6 +112,8 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerDynam
      */
     public ngOnDestroy()
     {
+        this._componentsSvc.removeComponent(this.component);
+
         if (this._moduleRef)
         {
             this._moduleRef.destroy();

@@ -1,7 +1,9 @@
 import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef} from "@angular/core";
 import {ComponentRoute} from "@ng/common";
 import {Subscription} from "rxjs";
+
 import {DesignerMode} from "./designer.interface";
+import {ComponentsService, OptionsService} from "../services";
 
 /**
  * Component used for displaying designer
@@ -10,6 +12,11 @@ import {DesignerMode} from "./designer.interface";
 {
     selector: 'dynamic-designer',
     templateUrl: 'designer.component.html',
+    providers: 
+    [
+        ComponentsService,
+        OptionsService
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 @ComponentRoute({path: ':id'})

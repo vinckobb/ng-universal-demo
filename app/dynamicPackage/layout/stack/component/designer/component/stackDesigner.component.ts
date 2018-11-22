@@ -1,7 +1,7 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
 import {StackComponentOptions} from "../../stack.interface";
-import {PlaceholderBaseComponent} from "../../../../../../ngDynamic-designer";
+import {PlaceholderBaseComponent, OptionsService} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 
 /**
@@ -28,9 +28,10 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<any, StackC
     }
 
     //######################### constructor #########################
-    constructor(changeDetector: ChangeDetectorRef)
+    constructor(changeDetector: ChangeDetectorRef,
+                optionsSvc: OptionsService)
     {
-        super(changeDetector);
+        super(changeDetector, optionsSvc);
 
         this._isContainer = true;
     }

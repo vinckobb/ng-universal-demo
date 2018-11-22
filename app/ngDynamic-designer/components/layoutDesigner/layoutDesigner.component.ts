@@ -71,29 +71,6 @@ export class LayoutDesignerComponent implements OnInit, OnDestroy
         });
     }
 
-    //######################### public methods - implementation of AfterViewInit #########################
-    
-    /**
-     * Called when view was initialized
-     */
-    public ngAfterViewInit()
-    {
-
-        console.log(this.children.toArray());
-
-        this.children.changes.subscribe(() =>
-        {
-            console.log('changed', this.children.toArray());
-        });
-
-        let first = this.children.first;
-
-        if(first)
-        {
-            console.log(first.component);
-        }
-    }
-
     //######################### public methods - implementation of OnDestroy #########################
     
     /**
