@@ -59,12 +59,12 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
         //     .on("zoom", zoomed);
 
         let selfObj = select(this._element.nativeElement),
-            svgWidth = this._element.nativeElement.parentElement.offsetWidth,
-            svgHeight = this._element.nativeElement.parentElement.clientHeight,
+            svgWidth = '100%',
+            svgHeight = '100%',
             svg = selfObj.append("svg")
                 .attr("width", svgWidth)
                 .attr("height", svgHeight)
-                .attr("style", "margin: -2px; background-color: #1e1e1e;");
+                .attr("style", "background-color: #1e1e1e;");
 
         this._svgData.parentGroup = svg.append("g");
         this._svgData.relationsGroup = this._svgData.parentGroup.append("g");

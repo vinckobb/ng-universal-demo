@@ -14,7 +14,6 @@ import {DesignerComponentRendererData} from "../../interfaces";
         {
             grid-column: 1/3;
             padding: 0;
-            margin: 2px;
         }
     `]
 })
