@@ -1,8 +1,8 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
-import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
-import {DesignerDynamicComponentGeneric} from "../../../../../../ngDynamic-designer";
 import {StackComponentOptions} from "../../stack.interface";
+import {PlaceholderBaseComponent} from "../../../../../../ngDynamic-designer";
+import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 
 /**
  * Stack designer layout component used for designing components
@@ -13,32 +13,25 @@ import {StackComponentOptions} from "../../stack.interface";
     templateUrl: 'stackDesigner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StackDesignerComponent implements DesignerDynamicComponentGeneric<StackComponentOptions, any>
+export class StackDesignerComponent extends PlaceholderBaseComponent<any, StackComponentOptions>
 {
     //######################### public properties #########################
 
     /**
-     * Options used for rendering this component
-     */
-    public options: StackComponentOptions;
-
-    /**
      * Layout metadata that will be used for rendering
      */
-    public metadata: DynamicComponentMetadataGeneric<any>;
-
-    //######################### constructor #########################
-    constructor(private _changeDetector: ChangeDetectorRef)
+    public get metadata(): DynamicComponentMetadataGeneric<StackComponentOptions>
     {
+        this._metadata.options.children = this.children.map(child => child.metadata);
+
+        return this._metadata;
     }
 
-    //######################### public methods #########################
-
-    /**
-     * Explicitly runs invalidation of content (change detection)
-     */
-    public invalidateVisuals(): void
+    //######################### constructor #########################
+    constructor(changeDetector: ChangeDetectorRef)
     {
-        this._changeDetector.detectChanges();
+        super(changeDetector);
+
+        this._isContainer = true;
     }
 }

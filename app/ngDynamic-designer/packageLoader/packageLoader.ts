@@ -27,7 +27,9 @@ export class PackageLoader
     {
         await this._loadPackage(packageName);
 
-        return Object.keys(this._cachedNpmPackage[packageName]).map(componentName => this._extractMetadata(this._cachedNpmPackage[packageName][componentName]));
+        return Object.keys(this._cachedNpmPackage[packageName])
+            .map(componentName => this._extractMetadata(this._cachedNpmPackage[packageName][componentName]))
+            .filter(meta => !!meta);
     }
     
     /**
@@ -75,7 +77,7 @@ export class PackageLoader
 
         if(!component.ɵMetadata)
         {
-            throw new Error('Missing metadata for component!');
+            return null;
         }
 
         return component.ɵMetadata;

@@ -40,7 +40,18 @@ export interface DesignerDynamicComponent extends DynamicComponent
     /**
      * Layout metadata that will be used for rendering
      */
-    metadata: DynamicComponentMetadata;
+    readonly metadata: DynamicComponentMetadata;
+
+    /**
+     * Array of child components
+     */
+    readonly children: DesignerDynamicComponent[];
+
+    /**
+     * Sets metadata for designer component
+     * @param metadata Metadata to be set for designer component
+     */
+    setMetadata(metadata: DynamicComponentMetadata);
 }
 
 /**
@@ -56,7 +67,7 @@ export interface DesignerDynamicComponentGeneric<TOptions, TMetadataOptions> ext
     /**
      * Layout metadata that will be used for rendering
      */
-    metadata: DynamicComponentMetadataGeneric<TMetadataOptions>;
+    readonly metadata: DynamicComponentMetadataGeneric<TMetadataOptions>;
 }
 
 /**
