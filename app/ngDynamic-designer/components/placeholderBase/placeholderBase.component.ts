@@ -5,6 +5,7 @@ import {DesignerComponentRendererData, DesignerDynamicComponentGeneric, Designer
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
 import {OptionsService} from "../../services";
+import {PackageLoader} from "../../packageLoader";
 
 /**
  * Base class for all placeholder components
@@ -42,7 +43,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
     /**
      * Data for rendering children designer components
      */
-    public ɵChildrenData: DesignerComponentRendererData[] = [];
+    public childrenData: DesignerComponentRendererData[] = [];
 
     //######################### public properties - children #########################
 
@@ -81,6 +82,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
 
     //######################### constructor #########################
     constructor(protected _changeDetector: ChangeDetectorRef,
+                protected _packageLoader: PackageLoader,
                 protected _optionsSvc: OptionsService)
     {
     }
@@ -99,9 +101,10 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
      * Sets metadata for designer component
      * @param metadata Metadata to be set for designer component
      */
-    public setMetadata(metadata: DynamicComponentMetadata)
+    public async setMetadata(metadata: DynamicComponentMetadata): Promise<void>
     {
         this._metadata = metadata;
+        await this.afterMetadataSet();
     }
 
     //######################### protected methods #########################
@@ -112,8 +115,32 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
      */
     protected addChildMetadata(data: DesignerComponentRendererData)
     {
-        this.ɵChildrenData.push(data);
+        this.childrenData.push(data);
     }
+
+    /**
+     * Adds child metadata used for rendering
+     * @param data Data used for rendering designer component
+     */
+    protected async addChild(data: DynamicComponentMetadata)
+    {
+        let designerMetadata = await this._packageLoader.getComponentsMetadata(data.componentPackage, data.componentName);
+        this.childrenData.push(
+        {
+            packageName: data.componentPackage,
+            componentName: data.componentName,
+            designerMetadata: designerMetadata,
+            componentMetadata: data
+        });
+    }
+
+    /**
+     * Callback after metadata was set
+     */
+    protected afterMetadataSet(): Promise<void>
+    {
+        return Promise.resolve();
+    };
 
     /**
      * Shows properties in properties window

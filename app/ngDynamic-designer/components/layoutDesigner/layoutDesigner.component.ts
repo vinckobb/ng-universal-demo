@@ -73,7 +73,32 @@ export class LayoutDesignerComponent implements OnInit, OnDestroy
             packageName: 'layout',
             componentName: 'stack',
             designerMetadata: designerMetadata,
-            componentMetadata: null
+            componentMetadata: 
+            {
+                id: "nieco",
+                componentPackage: 'layout',
+                componentName: 'stack',
+                options:
+                {
+                    children:
+                    [
+                        {
+                            id: 'nieco ine',
+                            componentPackage: 'layout',
+                            componentName: 'block',
+                            options:
+                            {}
+                        },
+                        {
+                            id: 'nieco ine 2',
+                            componentPackage: 'layout',
+                            componentName: 'block',
+                            options:
+                            {}
+                        }
+                    ]
+                }
+            }
         };
 
         this._changeDetector.detectChanges();

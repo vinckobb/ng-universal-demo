@@ -89,7 +89,7 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerDynam
             this._componentRef = this._viewContainerRef.createComponent(resolved.factory, this._viewContainerRef.length, injector) as any;
 
             this.component.options = this.componentMetadata.designerMetadata.layoutMetadata;
-            this.component.setMetadata(this.componentMetadata.componentMetadata ||
+            await this.component.setMetadata(this.componentMetadata.componentMetadata ||
             {
                 id: generateId(12),
                 options: {},

@@ -3,6 +3,7 @@ import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/co
 import {StackComponentOptions} from "../../stack.interface";
 import {PlaceholderBaseComponent, OptionsService} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
+import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
 
 /**
  * Stack designer layout component used for designing components
@@ -30,9 +31,10 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
 
     //######################### constructor #########################
     constructor(changeDetector: ChangeDetectorRef,
+                packageLoader: PackageLoader,
                 optionsSvc: OptionsService)
     {
-        super(changeDetector, optionsSvc);
+        super(changeDetector, packageLoader, optionsSvc);
 
         this._isContainer = true;
     }
@@ -45,5 +47,21 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
     public invalidateVisuals(): void
     {
         super.invalidateVisuals();
+    }
+
+    /**
+     * Callback after metadata was set
+     */
+    protected async afterMetadataSet(): Promise<void> 
+    {
+        if (this._metadata &&
+            this._metadata.options &&
+            this._metadata.options.children)
+        {
+            for (let child of this._metadata.options.children)
+            {
+                await this.addChild(child);
+            }
+        }
     }
 }
