@@ -33,17 +33,6 @@ export class PackageLoader
     }
     
     /**
-     * Gets package component names
-     * @param packageName Name of package
-     */
-    public async getPackageComponentNames(packageName: string): Promise<string[]>
-    {
-        await this._loadPackage(packageName);
-
-        return Object.keys(this._cachedNpmPackage[packageName]);
-    }
-
-    /**
      * Gets metadata for designer from component
      * @param packageName Name of package
      * @param componentName Name of component which metadata are going to be extracted
@@ -80,7 +69,11 @@ export class PackageLoader
             return null;
         }
 
-        return component.ɵMetadata;
+        return {
+            placeholderModule: component.ɵMetadata.placeholderModule,
+            layoutMetadata: component.ɵMetadata.layoutMetadata && JSON.parse(JSON.stringify(component.ɵMetadata.layoutMetadata)),
+            relationsMetadata: component.ɵMetadata.relationsMetadata && JSON.parse(JSON.stringify(component.ɵMetadata.relationsMetadata)),
+        };
     }
 
     /**

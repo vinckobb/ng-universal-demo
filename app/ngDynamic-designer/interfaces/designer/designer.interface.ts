@@ -1,7 +1,7 @@
 import {ValueNamePair} from '@asseco/common';
 import {ValidatorFn} from '@angular/forms';
 
-import {DesignerDynamicComponent} from '../metadata.interface';
+import {DynamicNode} from '../../../ngDynamic-core';
 
 /**
  * Metadata used for designer
@@ -36,7 +36,7 @@ export interface LayoutMetadata
     /**
      * Component instance which options are currently edited
      */
-    optionsComponent?: DesignerDynamicComponent;
+    optionsComponent?: DynamicNode;
 }
 
 /**

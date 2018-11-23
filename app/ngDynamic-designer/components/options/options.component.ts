@@ -80,6 +80,7 @@ export class OptionsComponent implements OnDestroy
             if(this._layoutMetadata)
             {
                 this._layoutMetadata.id = value;
+                this._layoutMetadata.optionsComponent.invalidateVisuals("id");
             }
         });
 
