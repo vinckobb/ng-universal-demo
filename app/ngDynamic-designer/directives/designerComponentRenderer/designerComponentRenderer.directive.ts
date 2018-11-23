@@ -1,4 +1,4 @@
-import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef, Injector} from '@angular/core';
+import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef, Injector, SkipSelf, ChangeDetectorRef} from '@angular/core';
 import {nameof, generateId} from '@asseco/common';
 
 import {ComponentLoader} from '../../../ngDynamic-core';
@@ -58,7 +58,8 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerDynam
 
     //######################### constructor #########################
     constructor(private _viewContainerRef: ViewContainerRef,
-                private _componentsSvc: ComponentsService)
+                private _componentsSvc: ComponentsService,
+                @SkipSelf() private _parentChangeDetector: ChangeDetectorRef)
     {
     }
 
@@ -95,8 +96,9 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerDynam
                 componentName: this.componentMetadata.componentName,
                 componentPackage: this.componentMetadata.packageName
             });
-
+            
             this.component.invalidateVisuals();
+            this._parentChangeDetector.detectChanges();
             this._componentsSvc.addComponent(this.component);
 
             return;

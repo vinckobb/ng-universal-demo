@@ -2,7 +2,7 @@ import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 
 import {StackDesignerComponent} from "../component";
-import {NgDynamicCoreModule} from "../../../../../../ngDynamic-core";
+import {NgDynamicDesignerModule} from "../../../../../../ngDynamic-designer";
 
 /**
  * Module for stack designer layout component
@@ -12,7 +12,7 @@ import {NgDynamicCoreModule} from "../../../../../../ngDynamic-core";
     imports:
     [
         CommonModule,
-        NgDynamicCoreModule
+        NgDynamicDesignerModule
     ],
     declarations: 
     [

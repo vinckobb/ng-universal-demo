@@ -17,6 +17,7 @@ import {SvgNode} from "./misc";
         {
             display: block;
             height: 100%;
+            overflow: hidden;
         }`
     ],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -71,8 +71,6 @@ export class ComponentPaletteComponent
             this.packages[packageNames[i]] = await this._packageLoader.getPackageComponentsMetadata(packageNames[i]);
         }
 
-        console.log(this.packages);
-
         this._changeDetector.detectChanges();
     }
 }

@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, ViewChildren, QueryList} from "@angular/core";
+import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding} from "@angular/core";
 import {isPresent} from "@asseco/common";
 
 import {DesignerComponentRendererData, DesignerDynamicComponentGeneric, DesignerDynamicComponent, LayoutMetadata} from "../../interfaces";
@@ -22,6 +22,20 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
      * Metadata for current component
      */
     protected _metadata: DynamicComponentMetadataGeneric<TOptions>;
+
+    //######################### public properties - host bindings #########################
+
+    /**
+     * Border style property
+     */
+    @HostBinding('style.border')
+    public styleBorder: string = "2px dashed green";
+
+    /**
+     * Display style property
+     */
+    @HostBinding('style.display')
+    public styleDisplay: string = "block";
 
     //######################### public properties - template bindings #########################
 

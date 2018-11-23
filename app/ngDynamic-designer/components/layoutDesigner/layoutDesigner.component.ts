@@ -61,11 +61,18 @@ export class LayoutDesignerComponent implements OnInit, OnDestroy
     public async ngOnInit()
     {
         //TODO - toto je len ukazka treba to samozrejme urobit inak
+        let designerMetadata = await this._packageLoader.getComponentsMetadata('layout', 'stack');
+        designerMetadata.layoutMetadata.value = 
+        {
+            'padding.left': 50,
+            'padding.top': 25,
+            'inline': false
+        };
         this.metadata =
         {
             packageName: 'layout',
             componentName: 'stack',
-            designerMetadata: await this._packageLoader.getComponentsMetadata('layout', 'stack'),
+            designerMetadata: designerMetadata,
             componentMetadata: null
         };
 

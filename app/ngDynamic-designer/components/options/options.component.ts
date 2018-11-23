@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 
 import {OptionsService} from "../../services";
-import {LayoutMetadata} from "../../interfaces";
+import {LayoutMetadata, OptionType} from "../../interfaces";
 
 /**
  * Component used for rendering and editing components options
@@ -38,6 +38,11 @@ export class OptionsComponent implements OnDestroy
      */
     private _layoutMetadata: LayoutMetadata;
 
+    /**
+     * Indicates whether options are being loaded
+     */
+    private _isLoadingOptions: boolean;
+
     //######################### public properties - template bindings #########################
 
     /**
@@ -49,6 +54,11 @@ export class OptionsComponent implements OnDestroy
      * Control used for editing options of component
      */
     public optionsForm: FormGroup;
+
+    /**
+     * OptionType enum
+     */
+    public optionTypes = OptionType;
 
     /**
      * Returns layout metadata of component
@@ -75,9 +85,13 @@ export class OptionsComponent implements OnDestroy
 
         this._optionsValueChangeSubscription = this.optionsForm.valueChanges.subscribe(options =>
         {
-            //TODO docasne zakomentovane lebo to robi neplechu. Prepisuje mi to metadata, ktore na zaciatku pridu
+            if (this._isLoadingOptions)
+            {
+                return;
+            }
+
             this._layoutMetadata.value = options;
-            // this._layoutMetadata.optionsComponent.invalidateVisuals("options");
+            this._layoutMetadata.optionsComponent.invalidateVisuals("options");
         });
 
         this._optionsChangeSubscription = this._optionsSvc.loadProperties.subscribe(options =>
@@ -122,6 +136,8 @@ export class OptionsComponent implements OnDestroy
      */
     private _loadOptions()
     {
+        this._isLoadingOptions = true;
+        
         //clear all previous controls
         if(this.optionsForm.controls)
         {
@@ -145,5 +161,7 @@ export class OptionsComponent implements OnDestroy
                 this.optionsForm.patchValue(this._layoutMetadata.value, {emitEvent: false});
             }
         }
+        
+        this._isLoadingOptions = false;
     }
 }
