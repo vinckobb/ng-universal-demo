@@ -76,8 +76,8 @@ export class OptionsComponent implements OnDestroy
         this._optionsValueChangeSubscription = this.optionsForm.valueChanges.subscribe(options =>
         {
             //TODO docasne zakomentovane lebo to robi neplechu. Prepisuje mi to metadata, ktore na zaciatku pridu
-            //this._layoutMetadata.options = options;
-            //this._layoutMetadata.optionsComponent.invalidateVisuals("options");
+            this._layoutMetadata.value = options;
+            // this._layoutMetadata.optionsComponent.invalidateVisuals("options");
         });
 
         this._optionsChangeSubscription = this._optionsSvc.loadProperties.subscribe(options =>
