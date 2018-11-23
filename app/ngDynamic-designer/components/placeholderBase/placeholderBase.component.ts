@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding} from "@angular/core";
+import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding, HostListener} from "@angular/core";
 import {isPresent} from "@asseco/common";
 
 import {DesignerComponentRendererData, DesignerDynamicComponentGeneric, DesignerDynamicComponent, LayoutMetadata} from "../../interfaces";
@@ -37,6 +37,14 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
      */
     @HostBinding('style.display')
     public styleDisplay: string = "block";
+
+    @HostListener('click', ['$event'])
+    public onClick(event: MouseEvent)
+    {
+        event.stopPropagation();
+
+        this.showProperties();
+    }
 
     //######################### public properties - template bindings #########################
 

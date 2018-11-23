@@ -3,6 +3,7 @@ import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/co
 import {PlaceholderBaseComponent, OptionsService} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 import {BlockComponentOptions} from "../../block.interface";
+import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
 
 /**
  * Block designer layout component used for designing components
@@ -29,9 +30,10 @@ export class BlockDesignerComponent extends PlaceholderBaseComponent<BlockCompon
 
     //######################### constructor #########################
     constructor(changeDetector: ChangeDetectorRef,
+                packageLoader: PackageLoader,
                 optionsSvc: OptionsService)
     {
-        super(changeDetector, optionsSvc);
+        super(changeDetector, packageLoader, optionsSvc);
 
         this._isContainer = true;
     }
