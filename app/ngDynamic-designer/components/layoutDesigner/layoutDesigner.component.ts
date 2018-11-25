@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, ViewChildren, QueryList, HostBinding, Input} from "@angular/core";
+import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, ViewChildren, QueryList, Input} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs";
 
@@ -13,6 +13,9 @@ import {DesignerDynamicComponent, DesignerComponentRendererData} from "../../int
 {
     selector: 'layout-designer',
     templateUrl: 'layoutDesigner.component.html',
+    host: {
+        '[style.display]': '"contents"'
+    },
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LayoutDesignerComponent implements OnInit, OnDestroy
@@ -33,13 +36,11 @@ export class LayoutDesignerComponent implements OnInit, OnDestroy
 
     //######################### public properties - inputs #########################
 
+    /**
+     * Packages that should be available in component palette
+     */
     @Input()
     public packageNames: string[];
-
-    //######################### public properties - host bindings #########################
-
-    @HostBinding('style.display')
-    public componentStyleDisplay: string = "contents";
 
     //######################### public properties - children #########################
 

@@ -1,4 +1,5 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 import {StackComponentOptions} from "../../stack.interface";
 import {PlaceholderBaseComponent, OptionsService} from "../../../../../../ngDynamic-designer";
@@ -63,5 +64,35 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
                 await this.addChild(child);
             }
         }
+    }
+    
+    /**
+     * Drops item on desired position
+     * @param drag drag data with component information
+     */
+    public async drop(drag: CdkDragDrop<any, any>)
+    {
+        if (drag &&
+            drag.previousContainer == drag.container)
+        {
+            if (drag.previousIndex == drag.currentIndex)
+            {
+                return;
+            }
+
+            moveItemInArray(this.childrenData, drag.previousIndex, drag.currentIndex);
+            this.invalidateVisuals();
+            return;
+        }
+
+        //TODO potrebujem si preniest aj udaje packageName, componentName. Zaroven chcem vlozit novy komponent na specificke miesto v zozname
+        this.addChildMetadata(
+            {
+                packageName: 'layout',
+                componentName: 'block',
+                designerMetadata: await this._packageLoader.getComponentsMetadata('layout', 'block'),
+                componentMetadata: null
+            }
+        );   
     }
 }
