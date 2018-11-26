@@ -26,6 +26,37 @@ app
     flex-direction: column;
 }
 
+.no-ie, .no-grid
+{
+    display: none;
+}
+
+.no-arrow
+{
+    .no-ie
+    {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.7em;
+    }
+
+    app
+    {
+        display: none;
+    }
+}
+
+.no-cssgrid.arrow
+{
+    .no-grid
+    {
+        display: block;
+    }
+}
+
 // ---------------------- APP STARTING ----------------------
 
 .loading-indicator

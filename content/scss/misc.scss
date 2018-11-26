@@ -22,15 +22,41 @@
     flex-direction: row;
 }
 
+.flex-row-wrap
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 .flex-column
 {
     display: flex;
     flex-direction: column;
 }
 
+.flex-column-wrap
+{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
 .flex-1
 {
     flex: 1;
+    min-width: 0;
+}
+
+.flex-2
+{
+    flex: 2;
+    min-width: 0;
+}
+
+.flex-3
+{
+    flex: 3;
     min-width: 0;
 }
 
@@ -51,6 +77,11 @@
 .align-self-center
 {
     align-self: center;
+}
+
+.justify-self-center
+{
+    justify-self: center;
 }
 
 .relative
@@ -307,11 +338,21 @@
     font-style: italic;    
 }
 
+.text-uppercase
+{
+    text-transform: uppercase;
+}
+
 .text-ellipsis
 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.line-height-1em
+{
+    line-height: 1em;
 }
 
 .font-1em

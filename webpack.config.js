@@ -155,6 +155,7 @@ module.exports = function(options, args)
             extensions: ['.ts', '.js'],
             alias: extend(rxPaths(),
             {
+                "modernizr": path.join(__dirname, "content/external/scripts/modernizr-custom.js"),
                 "numeral-languages": path.join(__dirname, "node_modules/numeral/locales.js"),
                 "handlebars": path.join(__dirname, "node_modules/handlebars/dist/handlebars.js"),
                 "typeahead": path.join(__dirname, "node_modules/typeahead.js/dist/typeahead.jquery.js"),
