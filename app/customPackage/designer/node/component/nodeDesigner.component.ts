@@ -1,8 +1,8 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnInit} from "@angular/core";
-import {select, Selection, drag, line, curveBundle, event, zoom} from 'd3';
+import {select, Selection, event, zoom} from 'd3';
 
 import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
-import {SvgNode} from "./misc";
+import {SvgNode, SvgRelation} from "./misc";
 
 /**
  * Component used for designing relation nodes
@@ -31,8 +31,19 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
      */
     private _svgData:
     {
-        parentGroup?: Selection<SVGGElement, {}, null, undefined>
+        parentGroup?: Selection<SVGGElement, {}, null, undefined>,
+        relationsGroup?: Selection<SVGGElement, {}, null, undefined>
     } = {};
+
+    /**
+     * Indication whether is currently valid drop active
+     */
+    private _isValidDrop: boolean = false;
+
+    /**
+     * Getter for isValidDrop
+     */
+    private _isValidDropFn = () => this._isValidDrop;
 
     //######################### public properties #########################
 
@@ -77,67 +88,80 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
 
         //creates groups that are used for rendering contents
         this._svgData.parentGroup = svg.append("g");
+        this._svgData.relationsGroup = this._svgData.parentGroup.append("g");
         this._createDefs(svg);
 
-        //line generator for generating relations lines
-        let lineGenerator = line()
-            .curve(curveBundle.beta(0.75));
-
-        let path = this._svgData.parentGroup.append('path')
-                .attr('fill', 'transparent')
-                .attr('stroke', '#F8F8F8');
-
-        this._svgData.parentGroup
-            .append('circle')
-                .attr("r", 5)
-                .attr('cx', 250)
-                .attr('cy', 200)
-                .attr('fill', '#F8F8F8')
-            .call(drag().on('drag', function()
-            {
-                let points;
-
-                //path from right to left
-                if(event.x <= event.subject.x)
-                {
-                    let width = event.subject.x - event.x;
-                    let half = (event.y - event.subject.y) / 2;
-                    
-                    if(width < 12)
+        new SvgNode(this._svgData.parentGroup,
                     {
-                        width = 12;
-                    }
+                        x: 150,
+                        y: 250,
+                        inputs:
+                        [
+                            {
+                                id: 'simpleInput',
+                                name: 'input',
+                                type: 'string'
+                            },
+                            {
+                                id: 'query',
+                                name: 'query',
+                                type: 'StringDictionary'
+                            }
+                        ],
+                        outputs:
+                        [
+                            {
+                                id: 'simpleOutput',
+                                name: 'out',
+                                type: 'string'
+                            },
+                            {
+                                id: 'condition',
+                                name: 'cond',
+                                type: 'boolean'
+                            }
+                        ],
+                        id: 'simple-component',
+                        name: 'Simple component'
+                    }, 
+                    () => {},
+                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._isValidDropFn));
 
-                    width *= 1.3;
-
-                    points = 
-                    [
-                        [event.subject.x, event.subject.y],
-                        [event.subject.x + width, event.subject.y + half],
-                        [event.x - width, event.subject.y + half],
-                        [event.x, event.y]
-                    ];
-                }
-                else
-                {
-                    let width = event.x - event.subject.x;
-                    let third = width / 3;
-                    points = 
-                    [
-                        [event.subject.x, event.subject.y],
-                        [event.subject.x + third, event.subject.y],
-                        [event.x - third, event.y],
-                        [event.x, event.y]
-                    ];
-                }
-
-                path.datum(points)
-                    .attr('d', lineGenerator);
-            }));
-
-        
-
-        new SvgNode(this._svgData.parentGroup);
+        new SvgNode(this._svgData.parentGroup,
+                    {
+                        x: 450,
+                        y: 180,
+                        inputs:
+                        [
+                            {
+                                id: 'simpleInput',
+                                name: 'input',
+                                type: 'string'
+                            },
+                            {
+                                id: 'query',
+                                name: 'query',
+                                type: 'StringDictionary'
+                            }
+                        ],
+                        outputs:
+                        [
+                            {
+                                id: 'simpleOutput',
+                                name: 'out',
+                                type: 'string'
+                            },
+                            {
+                                id: 'condition',
+                                name: 'cond',
+                                type: 'boolean'
+                            }
+                        ],
+                        id: 'simple-component #2',
+                        name: 'Simple component'
+                    }, 
+                    () => {},
+                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._isValidDropFn));
     }
 
     //######################### public methods #########################
@@ -158,15 +182,27 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
      */
     private _createDefs(svg: Selection<SVGSVGElement, {}, null, undefined>)
     {
-        let radialGradient = svg.append("defs")
+        let inputGradient = svg.append("defs")
             .append("radialGradient")
                 .attr("id", "input-hover");
 
-        radialGradient.append("stop")
+        inputGradient.append("stop")
             .attr("offset", "50%")
             .attr("stop-color", "#569cd6");
 
-        radialGradient.append("stop")
+        inputGradient.append("stop")
+            .attr("offset", "100%")
+            .attr("stop-color", "transparent");
+
+        let outputGradient = svg.append("defs")
+            .append("radialGradient")
+                .attr("id", "output-hover");
+
+        outputGradient.append("stop")
+            .attr("offset", "50%")
+            .attr("stop-color", "#e99d2c");
+
+        outputGradient.append("stop")
             .attr("offset", "100%")
             .attr("stop-color", "transparent");
     }

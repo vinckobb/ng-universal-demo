@@ -1,28 +1,18 @@
-import {ValueNamePair} from '@asseco/common';
 import {ValidatorFn} from '@angular/forms';
+import {ValueNamePair} from '@asseco/common';
 
 import {DynamicNode} from '../../../ngDynamic-core';
+import {DesignerMetadata} from '../metadata.interface';
+
+//TODO: Rename LayoutMetadata to more appropriate OptionsMetadata or PropertiesMetadata
+
+
 
 /**
  * Metadata used for designer
  */
-export interface LayoutMetadata
+export interface LayoutMetadata extends DesignerMetadata
 {
-    /**
-     * Unique id of component instance in designer page
-     */
-    id?: string;
-
-    /**
-     * Name that is displayed for user for better identification of component type
-     */
-    name?: string;
-
-    /**
-     * Description of component type, can be longer
-     */
-    description?: string;
-
     /**
      * Metadata for options that can be used for designing
      */

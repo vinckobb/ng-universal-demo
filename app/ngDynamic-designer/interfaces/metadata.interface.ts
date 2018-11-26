@@ -1,5 +1,6 @@
 import {DynamicModule, DynamicComponent, DynamicComponentMetadata, DynamicComponentMetadataGeneric} from "../../ngDynamic-core";
 import {LayoutMetadata} from "./designer";
+import {RelationsMetadata} from "./relations";
 
 /**
  * Metadata used for designer of dynamic component
@@ -14,7 +15,7 @@ export interface ComponentDesignerMetadata
     /**
      * Metadata for relations (node designer)
      */
-    relationsMetadata?: any;
+    relationsMetadata?: RelationsMetadata;
 
     /**
      * Metadata for layout (layout designer)
@@ -95,4 +96,25 @@ export interface DesignerComponentRendererData
      * Existing metadata for dynamic component (for rendering)
      */
     componentMetadata: DynamicComponentMetadata;
+}
+
+/**
+ * Base metadata description for layout and node designer
+ */
+export interface DesignerMetadata
+{
+    /**
+     * Unique id of component instance in dynamic page
+     */
+    id?: string;
+
+    /**
+     * Name that is displayed for user for better identification of component|node type
+     */
+    name?: string;
+
+    /**
+     * Description of component|node type, can be longer
+     */
+    description?: string;
 }
