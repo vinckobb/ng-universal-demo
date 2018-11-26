@@ -1,5 +1,5 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnInit} from "@angular/core";
-import {select, Selection, BaseType, drag, line, curveBundle, event, zoom} from 'd3';
+import {select, Selection, drag, line, curveBundle, event, zoom} from 'd3';
 
 import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
 import {SvgNode} from "./misc";
@@ -31,9 +31,7 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
      */
     private _svgData:
     {
-        parentGroup?: Selection<SVGGElement, {}, null, undefined>,
-        relationsGroup?: Selection<BaseType, {}, null, undefined>,
-        nodesGroup?: Selection<SVGGElement, {}, null, undefined>
+        parentGroup?: Selection<SVGGElement, {}, null, undefined>
     } = {};
 
     //######################### public properties #########################
@@ -56,6 +54,7 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
      */
     public ngOnInit()
     {
+        //creates scale and drag behavior
         let $zoom = zoom()
             .scaleExtent([1/4, 2])
             .on("zoom", () =>
@@ -66,6 +65,7 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
             }
         });
 
+        //creates svg element
         let selfObj = select(this._element.nativeElement),
             svgWidth = '100%',
             svgHeight = '100%',
@@ -75,10 +75,11 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
                 .attr("style", "background-color: #1e1e1e;")
             .call($zoom);
 
+        //creates groups that are used for rendering contents
         this._svgData.parentGroup = svg.append("g");
-        this._svgData.relationsGroup = this._svgData.parentGroup.append("g");
-        this._svgData.nodesGroup = this._svgData.parentGroup.append("g");
+        this._createDefs(svg);
 
+        //line generator for generating relations lines
         let lineGenerator = line()
             .curve(curveBundle.beta(0.75));
 
@@ -136,7 +137,7 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
 
         
 
-        new SvgNode(this._svgData.nodesGroup);
+        new SvgNode(this._svgData.parentGroup);
     }
 
     //######################### public methods #########################
@@ -148,5 +149,25 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
     {
         this.ngOnInit();
         this._changeDetector.detectChanges();
+    }
+
+    //######################### private methods #########################
+
+    /**
+     * Creates reusable definitions
+     */
+    private _createDefs(svg: Selection<SVGSVGElement, {}, null, undefined>)
+    {
+        let radialGradient = svg.append("defs")
+            .append("radialGradient")
+                .attr("id", "input-hover");
+
+        radialGradient.append("stop")
+            .attr("offset", "50%")
+            .attr("stop-color", "#569cd6");
+
+        radialGradient.append("stop")
+            .attr("offset", "100%")
+            .attr("stop-color", "transparent");
     }
 }

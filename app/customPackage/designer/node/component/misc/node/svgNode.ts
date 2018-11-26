@@ -125,14 +125,13 @@ export class SvgNode
 
                 x.append('circle')
                         .attr('cx', 0)
-                        .attr('r', 8)
+                        .attr('r', 10)
                         .attr('fill', 'transparent')
-                        .attr('opacity', 0.5)
                         .attr('cy', d => d)
                     .on('mouseenter', (datum, index, groups) =>
                     {
                         select(groups[index])
-                            .attr('fill', '#569cd6');
+                            .attr('fill', 'url(#input-hover)');
                     })
                     .on('mouseleave', (datum, index, groups) =>
                     {
