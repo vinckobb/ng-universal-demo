@@ -112,6 +112,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
     public async setMetadata(metadata: DynamicComponentMetadata): Promise<void>
     {
         this._metadata = metadata;
+        this._updateOptions();
         await this.afterMetadataSet();
     }
 
@@ -162,9 +163,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
      */
     protected showProperties()
     {
-        this.options.id = this._metadata.id;
-        this.options.optionsComponent = this;
-        this.options.value = this.options.value || this._transformOptionsToProperties();
+        this._updateOptions();
         
         this._optionsSvc.showProperties(this.options);
     }
@@ -238,5 +237,12 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
         }
 
         return propertiesOptions;
+    }
+
+    private _updateOptions()
+    {
+        this.options.id = this._metadata.id;
+        this.options.optionsComponent = this;
+        this.options.value = this.options.value || this._transformOptionsToProperties();
     }
 }

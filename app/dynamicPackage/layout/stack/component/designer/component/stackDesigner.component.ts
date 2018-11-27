@@ -74,13 +74,11 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
      */
     public async drop(dragDrop: CdkDragDrop<any, any>)
     {
-        if (!dragDrop ||
-            !dragDrop.item ||
-            !dragDrop.item.data)
+        if (!dragDrop)
         {
             return;
         }
-
+        
         if (dragDrop &&
             dragDrop.previousContainer == dragDrop.container)
         {
@@ -94,9 +92,13 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
             return;
         }
 
-        let componentMetadata: ComponentMetadata = dragDrop.item.data;
+        if (!dragDrop.item ||
+            !dragDrop.item.data)
+        {
+            return;
+        }
 
-        console.log(dragDrop.currentIndex);
+        let componentMetadata: ComponentMetadata = dragDrop.item.data;
 
         this.addChildMetadata(
             {
