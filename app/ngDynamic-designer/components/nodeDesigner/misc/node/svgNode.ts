@@ -1,7 +1,7 @@
 import {isPresent} from '@asseco/common';
 import {Selection, BaseType, drag, event, select} from 'd3';
 
-import {RelationsMetadata, Coordinates, InputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea} from '../../../../../../ngDynamic-designer';
+import {RelationsMetadata, Coordinates, InputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea} from '../../../../interfaces';
 
 /**
  * Offset of first peer in node

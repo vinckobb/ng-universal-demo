@@ -1,7 +1,7 @@
 import {Selection, BaseType, Line, line, curveBundle} from 'd3';
 import {Subject, Observable, Subscription} from 'rxjs';
 
-import {Coordinates, SvgRelationDynamicNode, SvgPeerDropArea} from '../../../../../../ngDynamic-designer';
+import {Coordinates, SvgRelationDynamicNode, SvgPeerDropArea} from '../../../../interfaces';
 
 /**
  * Class that represents SVG relation and interaction with it

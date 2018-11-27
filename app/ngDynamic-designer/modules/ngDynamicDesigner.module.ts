@@ -4,9 +4,8 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 
-import {LayoutDesignerComponent, NodeDesignerComponent, designerComponentRoutes, designerComponents, OptionsComponent, ComponentPaletteComponent, ComponentPaletteItemComponent} from "../components";
+import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, OptionsComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeDesignerComponent} from "../components";
 import {DesignerComponentRendererDirective} from "../directives";
-import {NodeDesignerComponent as D3NodeDesignerComponent} from "../../customPackage/designer/node/component";
 
 /**
  * Module for ng dynamic designer 
@@ -26,9 +25,9 @@ import {NodeDesignerComponent as D3NodeDesignerComponent} from "../../customPack
         LayoutDesignerComponent,
         ComponentPaletteComponent,
         ComponentPaletteItemComponent,
-        NodeDesignerComponent,
+        NodeDesignerModeComponent,
         OptionsComponent,
-        D3NodeDesignerComponent,
+        NodeDesignerComponent,
         DesignerComponentRendererDirective
     ],
     exports:

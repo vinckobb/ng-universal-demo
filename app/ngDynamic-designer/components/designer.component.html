@@ -8,5 +8,5 @@
         </button>
     </header>
     <layout-designer *ngIf="isMode(designerModes.LAYOUT)" [packageNames]="designerPackageNames"></layout-designer>
-    <node-designer *ngIf="isMode(designerModes.NODE)"></node-designer>
+    <node-designer-mode *ngIf="isMode(designerModes.NODE)"></node-designer-mode>
 </div>

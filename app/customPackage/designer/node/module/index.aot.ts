@@ -1,1 +1,0 @@
-export {NodeDesignerModuleNgFactory as ngModuleFactory} from './nodeDesigner.module.ngfactory';
