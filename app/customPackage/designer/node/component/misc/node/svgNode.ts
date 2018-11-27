@@ -1,8 +1,7 @@
 import {isPresent} from '@asseco/common';
 import {Selection, BaseType, drag, event, select} from 'd3';
 
-import {RelationsMetadata, Coordinates, SvgDynamicNode, InputOutputMetadata} from '../../../../../../ngDynamic-designer';
-import {SvgRelation} from '../relation/svgRelation';
+import {RelationsMetadata, Coordinates, InputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea} from '../../../../../../ngDynamic-designer';
 
 /**
  * Offset of first peer in node
@@ -25,25 +24,9 @@ const peerStep: number = 25;
 export const nodeWidth: number = 180;
 
 /**
- * Information about currenctly active drop peer
- */
-export interface SvgPeerDropArea
-{
-    /**
-     * Svg node that has active drop area
-     */
-    svgNode: SvgNode;
-
-    /**
-     * Name of input which has active drop area
-     */
-    inputId: string;
-}
-
-/**
  * Class that represents SVG node and interaction with it
  */
-export class SvgNode implements SvgDynamicNode
+export class SvgNode implements SvgNodeDynamicNode
 {
     //######################### private fields #########################
 
@@ -77,11 +60,37 @@ export class SvgNode implements SvgDynamicNode
      */
     private _nodeY: number;
 
+    //######################### public properties #########################
+
+    /**
+     * Unique id of component which outputs will be connected
+     */
+    public get id(): string
+    {
+        return null;
+    }
+
+    /**
+     * Name of node type, that should be constructed instead of component
+     */
+    public get nodeType(): string
+    {
+        return null;
+    }
+
+    /**
+     * Options for node type
+     */
+    public nodeOptions(): any
+    {
+        return null;
+    }
+
     //######################### constructor #########################
     constructor(private _parentGroup: Selection<BaseType, {}, null, undefined>,
                 private _metadata: RelationsMetadata,
                 private _validDropToggle: (dropArea: SvgPeerDropArea) => void,
-                private _createRelation: () => SvgRelation)
+                private _createRelation: () => SvgRelationDynamicNode)
     {
         this._nodeX = isPresent(this._metadata.x) ? this._metadata.x : 0;
         this._nodeY = isPresent(this._metadata.y) ? this._metadata.y : 0;
@@ -140,11 +149,22 @@ export class SvgNode implements SvgDynamicNode
      * @param relation Relation to be added to specified output
      * @param outputName Output name which will register relation
      */
-    public addOutputRelation(relation: SvgRelation, outputName: string)
+    public addOutputRelation(relation: SvgRelationDynamicNode, outputName: string)
     {
         let outputPeer = this._metadata.outputs.find(itm => itm.id == outputName);
 
         outputPeer.relations = outputPeer.relations || [];
+
+        relation.startDestroyingSubscription = relation.destroying.subscribe(relation =>
+        {
+            let index = outputPeer.relations.indexOf(relation);
+
+            if(index >= 0)
+            {
+                outputPeer.relations.splice(index, 1);
+            }
+        });
+
         outputPeer.relations.push(relation);
     }
 
@@ -153,12 +173,30 @@ export class SvgNode implements SvgDynamicNode
      * @param relation Relation to be added to specified input
      * @param inputName Input name which will register relation
      */
-    public addInputRelation(relation: SvgRelation, inputName: string)
+    public addInputRelation(relation: SvgRelationDynamicNode, inputName: string): boolean
     {
         let inputPeer = this._metadata.inputs.find(itm => itm.id == inputName);
 
         inputPeer.relations = inputPeer.relations || [];
+
+        if(inputPeer.relations.length > 0)
+        {
+            return false;
+        }
+
+        relation.endDestroyingSubscription = relation.destroying.subscribe(relation =>
+        {
+            let index = inputPeer.relations.indexOf(relation);
+
+            if(index >= 0)
+            {
+                inputPeer.relations.splice(index, 1);
+            }
+        });
+
         inputPeer.relations.push(relation);
+
+        return true;
     }
 
     //######################### private methods #########################
@@ -172,12 +210,16 @@ export class SvgNode implements SvgDynamicNode
             .attr('transform', `translate(${this._nodeX}, ${this._nodeY})`);
 
         this._nodeGroup.append('rect')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', nodeWidth)
-            .attr('height', this._getHeight())
-            .attr('fill', '#1e1e1e')
-            .attr('stroke', '#d4d4d4');
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', nodeWidth)
+                .attr('height', this._getHeight())
+                .attr('fill', '#1e1e1e')
+                .attr('stroke', '#d4d4d4')
+            .on('click', () =>
+            {
+                console.log('click');
+            });
 
         this._miscGroup = this._nodeGroup.append('g');
         this._inputsGroup = this._nodeGroup.append('g');
@@ -221,6 +263,7 @@ export class SvgNode implements SvgDynamicNode
      */
     private _addInputs()
     {
+        let relation: SvgRelationDynamicNode;
         this._metadata.inputs = this._metadata.inputs || [];
 
         this._metadata.inputs.forEach((input, index) => input.y = peerOffset + (index * peerStep));
@@ -264,7 +307,43 @@ export class SvgNode implements SvgDynamicNode
                             .attr('fill', 'transparent');
 
                         this._validDropToggle(null);
-                    });
+                    })
+                    .call(drag<SVGCircleElement, InputOutputMetadata>()
+                        .on('start', datum =>
+                        {
+                            relation = datum.relations && datum.relations.length && datum.relations[0];
+
+                            if(!relation)
+                            {
+                                return;
+                            }
+
+                            datum.relations.splice(0, 1);
+                        })
+                        .on('drag', () =>
+                        {
+                            if(!relation)
+                            {
+                                return;
+                            }
+
+                            relation.end =
+                            {
+                                x: event.x + this._nodeX,
+                                y: event.y + this._nodeY
+                            };
+
+                            relation.invalidateVisuals();
+                        })
+                        .on('end', () =>
+                        {
+                            if(!relation)
+                            {
+                                return;
+                            }
+
+                            relation.invalidateVisuals('drop');
+                        }));
             });
 
     }
@@ -274,7 +353,7 @@ export class SvgNode implements SvgDynamicNode
      */
     private _addOutputs()
     {
-        let relation: SvgRelation;
+        let relation: SvgRelationDynamicNode;
         this._metadata.outputs = this._metadata.outputs || [];
 
         this._metadata.outputs.forEach((output, index) => output.y = peerOffset + (index * peerStep));
@@ -318,6 +397,17 @@ export class SvgNode implements SvgDynamicNode
                             datum.relations = datum.relations || [];
 
                             relation = this._createRelation();
+
+                            relation.startDestroyingSubscription = relation.destroying.subscribe(relation =>
+                            {
+                                let index = datum.relations.indexOf(relation);
+
+                                if(index >= 0)
+                                {
+                                    datum.relations.splice(index, 1);
+                                }
+                            });
+
                             relation.start = this.getOutputCoordinates(datum.id);
 
                             datum.relations.push(relation);
@@ -335,6 +425,7 @@ export class SvgNode implements SvgDynamicNode
                         .on('end', () =>
                         {
                             relation.invalidateVisuals('drop');
+                            relation = null;
                         }));
             });
 

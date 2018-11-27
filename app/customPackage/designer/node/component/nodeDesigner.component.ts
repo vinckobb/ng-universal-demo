@@ -1,8 +1,8 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnInit} from "@angular/core";
 import {select, Selection, event, zoom} from 'd3';
 
-import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
-import {SvgNode, SvgRelation, SvgPeerDropArea} from "./misc";
+import {SvgNode, SvgRelation} from "./misc";
+import {SvgPeerDropArea} from "../../../../ngDynamic-designer";
 
 /**
  * Component used for designing relation nodes
@@ -22,7 +22,7 @@ import {SvgNode, SvgRelation, SvgPeerDropArea} from "./misc";
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnInit
+export class NodeDesignerComponent implements OnInit
 {
     //######################### private fields #########################
 
@@ -49,13 +49,6 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
      * Setter for activeDropArea
      */
     private _setDropAreaFn = (dropArea: SvgPeerDropArea) => this._activeDropArea = dropArea;
-
-    //######################### public properties #########################
-
-    /**
-     * Options used for rendering this component
-     */
-    public options: any;
 
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef,
@@ -176,7 +169,6 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
      */
     public invalidateVisuals(): void
     {
-        this.ngOnInit();
         this._changeDetector.detectChanges();
     }
 

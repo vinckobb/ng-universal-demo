@@ -1,5 +1,5 @@
 import {LayoutMetadata} from "../designer";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 
 import {DesignerMetadata} from "../metadata.interface";
 import {DynamicNode} from "../../../ngDynamic-core";
@@ -81,6 +81,53 @@ export interface SvgDynamicNode extends DynamicNode
 }
 
 /**
+ * Represents svg node 
+ */
+export interface SvgNodeDynamicNode extends SvgDynamicNode
+{
+    /**
+     * Unique id of component which outputs will be connected
+     */
+    readonly id: string;
+
+    /**
+     * Name of node type, that should be constructed instead of component
+     */
+    readonly nodeType: string;
+
+    /**
+     * Options for node type
+     */
+    readonly nodeOptions: any;
+
+    /**
+     * Gets input coordinates of specified input
+     * @param inputName Name of input which coordinates will be get
+     */
+    getInputCoordinates(inputName: string): Coordinates;
+
+    /**
+     * Gets output coordinates of specified output
+     * @param outputName Name of output which coordinates will be get
+     */
+    getOutputCoordinates(outputName: string): Coordinates;
+
+    /**
+     * Adds relation to specified output
+     * @param relation Relation to be added to specified output
+     * @param outputName Output name which will register relation
+     */
+    addOutputRelation(relation: SvgRelationDynamicNode, outputName: string);
+
+    /**
+     * Adds relation to specified input
+     * @param relation Relation to be added to specified input
+     * @param inputName Input name which will register relation
+     */
+    addInputRelation(relation: SvgRelationDynamicNode, inputName: string): boolean;
+}
+
+/**
  * Represents svg relations between two nodes
  */
 export interface SvgRelationDynamicNode extends SvgDynamicNode
@@ -93,12 +140,43 @@ export interface SvgRelationDynamicNode extends SvgDynamicNode
     /**
      * Start coordinate of relation path
      */
-    start?: Coordinates;
+    start: Coordinates;
 
     /**
      * End coordinate of relation path
      */
-    end?: Coordinates;
+    end: Coordinates;
+
+    /**
+     * Subscription for start destroying of this relation
+     */
+    startDestroyingSubscription: Subscription;
+
+    /**
+     * Subscription for end destroying of this relation
+     */
+    endDestroyingSubscription: Subscription;
+
+    /**
+     * Information about connected peer at the end
+     */
+    endPeer: SvgPeerDropArea;
+}
+
+/**
+ * Information about currenctly active drop peer
+ */
+export interface SvgPeerDropArea
+{
+    /**
+     * Svg node that has active drop area
+     */
+    svgNode: SvgNodeDynamicNode;
+
+    /**
+     * Name of input which has active drop area
+     */
+    inputId: string;
 }
 
 /**

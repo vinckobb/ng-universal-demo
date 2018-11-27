@@ -1,8 +1,7 @@
 import {Selection, BaseType, Line, line, curveBundle} from 'd3';
-import {Subject, Observable} from 'rxjs';
+import {Subject, Observable, Subscription} from 'rxjs';
 
-import {Coordinates, SvgRelationDynamicNode} from '../../../../../../ngDynamic-designer';
-import {SvgPeerDropArea} from '../node/svgNode';
+import {Coordinates, SvgRelationDynamicNode, SvgPeerDropArea} from '../../../../../../ngDynamic-designer';
 
 /**
  * Class that represents SVG relation and interaction with it
@@ -36,6 +35,21 @@ export class SvgRelation implements SvgRelationDynamicNode
         return this._destroyingSubject.asObservable();
     }
 
+    /**
+     * Subscription for start destroying of this relation
+     */
+    public startDestroyingSubscription: Subscription;
+
+    /**
+     * Subscription for end destroying of this relation
+     */
+    public endDestroyingSubscription: Subscription;
+
+    /**
+     * Information about connected peer at the end
+     */
+    public endPeer: SvgPeerDropArea;
+
     //######################### constructor #########################
     constructor(private _parentGroup: Selection<BaseType, {}, null, undefined>,
                 public start: Coordinates,
@@ -62,6 +76,18 @@ export class SvgRelation implements SvgRelationDynamicNode
         this._lineGenerator = null;
 
         this._destroyingSubject.next(this);
+
+        if(this.startDestroyingSubscription)
+        {
+            this.startDestroyingSubscription.unsubscribe();
+            this.startDestroyingSubscription = null;
+        }
+
+        if(this.endDestroyingSubscription)
+        {
+            this.endDestroyingSubscription.unsubscribe();
+            this.endDestroyingSubscription = null;
+        }
     }
 
     /**
@@ -84,8 +110,18 @@ export class SvgRelation implements SvgRelationDynamicNode
             //drop on input peer
             else
             {
-                this.end = dropArea.svgNode.getInputCoordinates(dropArea.inputId);
-                dropArea.svgNode.addInputRelation(this, dropArea.inputId);
+                //can add input relation
+                if(dropArea.svgNode.addInputRelation(this, dropArea.inputId))
+                {
+                    this.end = dropArea.svgNode.getInputCoordinates(dropArea.inputId);
+                    this.endPeer = dropArea;
+                }
+                else
+                {
+                    this.destroy();
+                    this.start = null;
+                    this.end = null;
+                }
             }
         }
 
