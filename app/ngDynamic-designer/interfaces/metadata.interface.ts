@@ -75,18 +75,8 @@ export interface DesignerDynamicComponentGeneric<TOptions> extends DesignerDynam
 /**
  * Description of data passed to designer component renderer
  */
-export interface DesignerComponentRendererData
+export interface DesignerComponentRendererData extends ComponentMetadata
 {
-    /**
-     * Name of package that contains this component
-     */
-    packageName: string;
-
-    /**
-     * Name of component which placeholder is rendered
-     */
-    componentName: string;
-
     /**
      * Metadata for dynamic component designer
      */
@@ -96,6 +86,22 @@ export interface DesignerComponentRendererData
      * Existing metadata for dynamic component (for rendering)
      */
     componentMetadata: DynamicComponentMetadata;
+}
+
+/**
+ * Name of package and component to be displayed
+ */
+export interface ComponentMetadata
+{
+    /**
+     * Name of package that contains this component
+     */
+    packageName: string;
+
+    /**
+     * Name of component to be rendered
+     */
+    componentName: string;
 }
 
 /**

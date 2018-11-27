@@ -1,4 +1,4 @@
 <div *ngFor="let packageName of packagesArray">
     <h3>{{packageName}}</h3>
-    <component-palette-item *ngFor="let componentMetadata of packages[packageName]" [componentMetadata]="componentMetadata"></component-palette-item>
+    <component-palette-item *ngFor="let componentName of getPackageComponents(packageName)" [componentMetadata]="packages[packageName][componentName]" [packageName]="packageName" [componentName]="componentName"></component-palette-item>
 </div>

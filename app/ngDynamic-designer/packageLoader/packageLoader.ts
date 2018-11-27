@@ -23,13 +23,23 @@ export class PackageLoader
      * Gets package components
      * @param packageName Name of package
      */
-    public async getPackageComponentsMetadata(packageName: string): Promise<ComponentDesignerMetadata[]>
+    public async getPackageComponentsMetadata(packageName: string): Promise<{[packageName: string]: ComponentDesignerMetadata}>
     {
         await this._loadPackage(packageName);
 
-        return Object.keys(this._cachedNpmPackage[packageName])
-            .map(componentName => this._extractMetadata(this._cachedNpmPackage[packageName][componentName]))
-            .filter(meta => !!meta);
+        let components: {[packageName: string]: ComponentDesignerMetadata} = {};
+
+        Object.keys(this._cachedNpmPackage[packageName]).forEach(componentName =>
+        {
+            components[componentName] = this._extractMetadata(this._cachedNpmPackage[packageName][componentName]);
+
+            if (!components[componentName])
+            {
+                delete components[componentName];
+            }
+        })
+
+        return components;
     }
     
     /**

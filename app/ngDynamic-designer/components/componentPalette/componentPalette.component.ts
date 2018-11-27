@@ -34,7 +34,7 @@ export class ComponentPaletteComponent
     /**
      * Available component packages for designer
      */
-    public packages: {[key: string]: ComponentDesignerMetadata[]};
+    public packages: {[key: string]: {[packageName: string]: ComponentDesignerMetadata}};
     
     /**
      * Array representation of `packages` property
@@ -49,6 +49,19 @@ export class ComponentPaletteComponent
                 private _changeDetector: ChangeDetectorRef)
     {
     }
+
+    //######################### public methods #########################
+
+    /**
+     * Returns array of component names for specified package
+     * @param packageName 
+     */
+    public getPackageComponents(packageName): string[]
+    {
+        return Object.keys(this.packages[packageName]);
+    }
+
+    //######################### private methods #########################
 
     /**
      * Loads specified components packages
