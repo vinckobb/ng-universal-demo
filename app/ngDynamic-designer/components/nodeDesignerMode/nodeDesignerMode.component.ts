@@ -9,14 +9,7 @@ import {NodeDesignerComponent} from "../nodeDesigner/nodeDesigner.component";
     selector: 'node-designer-mode',
     templateUrl: 'nodeDesignerMode.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    styles: 
-    [`
-        main
-        {
-            padding: 0;
-            height: 100%;
-        }
-    `]
+    styleUrls: ['nodeDesignerMode.component.scss']
 })
 export class NodeDesignerModeComponent
 {

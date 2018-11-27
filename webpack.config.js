@@ -218,12 +218,24 @@ module.exports = function(options, args)
                     loader: 'raw-loader'
                 },
                 {
+                    test: /\.component\.scss$/,
+                    use: ['raw-loader', 'sass-loader'],
+                    include:
+                    [
+                        path.join(__dirname, "app")
+                    ]
+                },
+                {
                     test: /\.css$/,
                     use: getExternalStyleLoaders(prod)
                 },
                 {
                     test: /\.scss$/,
-                    use: getStyleLoaders(prod)
+                    use: getStyleLoaders(prod),
+                    exclude:
+                    [
+                        path.join(__dirname, "app")
+                    ]
                 },
                 {
                     test: /\.(ttf|woff|woff2|eot|svg|png|jpeg|jpg|bmp|gif|icon|ico)$/,
