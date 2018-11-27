@@ -3,8 +3,9 @@ import {RouterModule} from "@angular/router";
 import {ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import {CdkTreeModule} from "@angular/cdk/tree";
 
-import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, OptionsComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeDesignerComponent, NodeComponentPaletteComponent} from "../components";
+import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, OptionsComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeDesignerComponent, NodeComponentPaletteComponent, LayoutDesignerTreeComponent} from "../components";
 import {DesignerComponentRendererDirective} from "../directives";
 
 /**
@@ -17,12 +18,14 @@ import {DesignerComponentRendererDirective} from "../directives";
         CommonModule,
         ReactiveFormsModule,
         DragDropModule,
+        CdkTreeModule,
         RouterModule.forChild(designerComponentRoutes)
     ],
     declarations: 
     [
         designerComponents,
         LayoutDesignerComponent,
+        LayoutDesignerTreeComponent,
         ComponentPaletteComponent,
         ComponentPaletteItemComponent,
         NodeDesignerModeComponent,

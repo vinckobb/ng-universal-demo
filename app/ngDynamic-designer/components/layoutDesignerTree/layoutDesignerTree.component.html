@@ -1,0 +1,9 @@
+<cdk-tree [treeControl]="treeControl" [dataSource]="treeDataSource">
+    <cdk-tree-node *cdkTreeNodeDef="let node">
+        <div cdkTreeNodePadding cdkTreeNodePaddingIndent="25">
+            <span cdkTreeNodeToggle class="fa" *ngIf="!!node.children" [ngClass]="treeControl.isExpanded(node) ? 'fa-chevron-down' : 'fa-chevron-right'">
+            </span>
+            {{node?.name}}
+        </div>
+    </cdk-tree-node>
+</cdk-tree>

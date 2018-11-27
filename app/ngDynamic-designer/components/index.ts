@@ -1,5 +1,6 @@
 export * from './designer.component.routes';
 export * from './layoutDesigner/layoutDesigner.component';
+export * from './layoutDesignerTree/layoutDesignerTree.component';
 export * from './nodeDesignerMode/nodeDesignerMode.component';
 export * from './nodeDesigner/nodeDesigner.component';
 export * from './componentPalette';
