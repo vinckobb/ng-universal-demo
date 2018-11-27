@@ -2,7 +2,7 @@ import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnIni
 import {select, Selection, event, zoom} from 'd3';
 
 import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
-import {SvgNode, SvgRelation} from "./misc";
+import {SvgNode, SvgRelation, SvgPeerDropArea} from "./misc";
 
 /**
  * Component used for designing relation nodes
@@ -36,14 +36,19 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
     } = {};
 
     /**
-     * Indication whether is currently valid drop active
+     * Information about active drop area
      */
-    private _isValidDrop: boolean = false;
+    private _activeDropArea: SvgPeerDropArea = null;
 
     /**
-     * Getter for isValidDrop
+     * Getter for activeDropArea
      */
-    private _isValidDropFn = () => this._isValidDrop;
+    private _getDropAreaFn = () => this._activeDropArea;
+
+    /**
+     * Setter for activeDropArea
+     */
+    private _setDropAreaFn = (dropArea: SvgPeerDropArea) => this._activeDropArea = dropArea;
 
     //######################### public properties #########################
 
@@ -124,8 +129,8 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
                         id: 'simple-component',
                         name: 'Simple component'
                     }, 
-                    () => {},
-                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._isValidDropFn));
+                    this._setDropAreaFn,
+                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn));
 
         new SvgNode(this._svgData.parentGroup,
                     {
@@ -160,8 +165,8 @@ export class NodeDesignerComponent implements DynamicComponentGeneric<any>, OnIn
                         id: 'simple-component #2',
                         name: 'Simple component'
                     }, 
-                    () => {},
-                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._isValidDropFn));
+                    this._setDropAreaFn,
+                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn));
     }
 
     //######################### public methods #########################

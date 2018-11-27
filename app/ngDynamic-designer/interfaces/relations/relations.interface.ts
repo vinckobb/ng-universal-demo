@@ -89,6 +89,16 @@ export interface SvgRelationDynamicNode extends SvgDynamicNode
      * Occurs when this relations is being destroyed
      */
     readonly destroying: Observable<SvgRelationDynamicNode>;
+
+    /**
+     * Start coordinate of relation path
+     */
+    start?: Coordinates;
+
+    /**
+     * End coordinate of relation path
+     */
+    end?: Coordinates;
 }
 
 /**

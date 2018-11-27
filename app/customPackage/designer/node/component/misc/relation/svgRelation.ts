@@ -2,6 +2,7 @@ import {Selection, BaseType, Line, line, curveBundle} from 'd3';
 import {Subject, Observable} from 'rxjs';
 
 import {Coordinates, SvgRelationDynamicNode} from '../../../../../../ngDynamic-designer';
+import {SvgPeerDropArea} from '../node/svgNode';
 
 /**
  * Class that represents SVG relation and interaction with it
@@ -39,7 +40,7 @@ export class SvgRelation implements SvgRelationDynamicNode
     constructor(private _parentGroup: Selection<BaseType, {}, null, undefined>,
                 public start: Coordinates,
                 public end: Coordinates,
-                private _isValidDrop: () => boolean)
+                private _getDropArea: () => SvgPeerDropArea)
     {
         this._path = this._parentGroup.append('path')
             .attr('fill', 'transparent')
@@ -69,9 +70,23 @@ export class SvgRelation implements SvgRelationDynamicNode
      */
     public invalidateVisuals(propertyName?: string): void
     {
-        if(propertyName == "drop" && !this._isValidDrop())
+        if(propertyName == "drop")
         {
-            this.destroy();
+            let dropArea = this._getDropArea();
+
+            //drop not on input peer
+            if(!dropArea)
+            {
+                this.destroy();
+                this.start = null;
+                this.end = null;
+            }
+            //drop on input peer
+            else
+            {
+                this.end = dropArea.svgNode.getInputCoordinates(dropArea.inputId);
+                dropArea.svgNode.addInputRelation(this, dropArea.inputId);
+            }
         }
 
         if(!this.start || !this.end)
