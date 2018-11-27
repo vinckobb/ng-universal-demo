@@ -6,3 +6,4 @@ export * from './componentPalette';
 export * from './designer.component';
 export * from './placeholderBase/placeholderBase.component';
 export * from './options/options.component';
+export * from './nodeComponentPalette/nodeComponentPalette.component';

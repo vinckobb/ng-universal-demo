@@ -1,4 +1,5 @@
-import {Component, ChangeDetectionStrategy, HostBinding} from "@angular/core";
+import {Component, ChangeDetectionStrategy, HostBinding, ViewChild} from "@angular/core";
+import {NodeDesignerComponent} from "../nodeDesigner/nodeDesigner.component";
 
 /**
  * Component used for displaying node designer mode
@@ -12,13 +13,28 @@ import {Component, ChangeDetectionStrategy, HostBinding} from "@angular/core";
     [`
         main
         {
-            grid-column: 1/3;
             padding: 0;
+            height: 100%;
         }
     `]
 })
 export class NodeDesignerModeComponent
 {
+    //######################### public properties - template bindings #########################
+
+    /**
+     * Indication whether is drop zone visible
+     */
+    public dropZoneVisible: boolean = false;
+
+    //######################### public properties - children #########################
+
+    /**
+     * Node designer instance
+     */
+    @ViewChild(NodeDesignerComponent)
+    public nodeDesigner: NodeDesignerComponent;
+
     //######################### public properties - host bindings #########################
 
     /**
@@ -26,4 +42,28 @@ export class NodeDesignerModeComponent
      */
     @HostBinding('style.display')
     public componentStyleDisplay: string = "contents";
+
+    //######################### public methods - template bidings #########################
+
+    public drop(event: DragEvent)
+    {
+        event.preventDefault();
+
+        if(event.dataTransfer.getData('text/plain') != 'mojasomarina')
+        {
+            return;
+        }
+
+        this.nodeDesigner.addComponent(
+        {
+            x: event.layerX,
+            y: event.layerY
+        });
+    }
+
+    public dragOverSplit(event: DragEvent)
+    {
+        event.preventDefault();
+        event.stopPropagation();
+    }
 }

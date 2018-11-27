@@ -1,8 +1,8 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnInit} from "@angular/core";
-import {select, Selection, event, zoom} from 'd3';
+import {select, Selection, event, zoom, zoomTransform} from 'd3';
 
 import {SvgNode, SvgRelation} from "./misc";
-import {SvgPeerDropArea} from "../../interfaces";
+import {SvgPeerDropArea, Coordinates} from "../../interfaces";
 
 /**
  * Component used for designing relation nodes
@@ -31,6 +31,7 @@ export class NodeDesignerComponent implements OnInit
      */
     private _svgData:
     {
+        svg?: Selection<SVGSVGElement, {}, null, undefined>,
         parentGroup?: Selection<SVGGElement, {}, null, undefined>,
         relationsGroup?: Selection<SVGGElement, {}, null, undefined>
     } = {};
@@ -77,89 +78,17 @@ export class NodeDesignerComponent implements OnInit
         //creates svg element
         let selfObj = select(this._element.nativeElement),
             svgWidth = '100%',
-            svgHeight = '100%',
-            svg = selfObj.append("svg")
+            svgHeight = '100%';
+        this._svgData.svg = selfObj.append("svg")
                 .attr("width", svgWidth)
                 .attr("height", svgHeight)
                 .attr("style", "background-color: #1e1e1e;")
             .call($zoom);
 
         //creates groups that are used for rendering contents
-        this._svgData.parentGroup = svg.append("g");
+        this._svgData.parentGroup = this._svgData.svg.append("g");
         this._svgData.relationsGroup = this._svgData.parentGroup.append("g");
-        this._createDefs(svg);
-
-        new SvgNode(this._svgData.parentGroup,
-                    {
-                        x: 150,
-                        y: 250,
-                        inputs:
-                        [
-                            {
-                                id: 'simpleInput',
-                                name: 'input',
-                                type: 'string'
-                            },
-                            {
-                                id: 'query',
-                                name: 'query',
-                                type: 'StringDictionary'
-                            }
-                        ],
-                        outputs:
-                        [
-                            {
-                                id: 'simpleOutput',
-                                name: 'out',
-                                type: 'string'
-                            },
-                            {
-                                id: 'condition',
-                                name: 'cond',
-                                type: 'boolean'
-                            }
-                        ],
-                        id: 'simple-component',
-                        name: 'Simple component'
-                    }, 
-                    this._setDropAreaFn,
-                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn));
-
-        new SvgNode(this._svgData.parentGroup,
-                    {
-                        x: 450,
-                        y: 180,
-                        inputs:
-                        [
-                            {
-                                id: 'simpleInput',
-                                name: 'input',
-                                type: 'string'
-                            },
-                            {
-                                id: 'query',
-                                name: 'query',
-                                type: 'StringDictionary'
-                            }
-                        ],
-                        outputs:
-                        [
-                            {
-                                id: 'simpleOutput',
-                                name: 'out',
-                                type: 'string'
-                            },
-                            {
-                                id: 'condition',
-                                name: 'cond',
-                                type: 'boolean'
-                            }
-                        ],
-                        id: 'simple-component #2',
-                        name: 'Simple component'
-                    }, 
-                    this._setDropAreaFn,
-                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn));
+        this._createDefs();
     }
 
     //######################### public methods #########################
@@ -172,14 +101,55 @@ export class NodeDesignerComponent implements OnInit
         this._changeDetector.detectChanges();
     }
 
+    public addComponent(coordinates: Coordinates)
+    {
+        let currentZoom = zoomTransform(this._svgData.svg.node());
+
+        new SvgNode(this._svgData.parentGroup,
+        {
+            x: currentZoom.invertX(coordinates.x),
+            y: currentZoom.invertY(coordinates.y),
+            inputs:
+            [
+                {
+                    id: 'simpleInput',
+                    name: 'input',
+                    type: 'string'
+                },
+                {
+                    id: 'query',
+                    name: 'query',
+                    type: 'StringDictionary'
+                }
+            ],
+            outputs:
+            [
+                {
+                    id: 'simpleOutput',
+                    name: 'out',
+                    type: 'string'
+                },
+                {
+                    id: 'condition',
+                    name: 'cond',
+                    type: 'boolean'
+                }
+            ],
+            id: 'simple-component',
+            name: 'Simple component'
+        }, 
+        this._setDropAreaFn,
+        () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn));
+    }
+
     //######################### private methods #########################
 
     /**
      * Creates reusable definitions
      */
-    private _createDefs(svg: Selection<SVGSVGElement, {}, null, undefined>)
+    private _createDefs()
     {
-        let inputGradient = svg.append("defs")
+        let inputGradient = this._svgData.svg.append("defs")
             .append("radialGradient")
                 .attr("id", "input-hover");
 
@@ -191,7 +161,7 @@ export class NodeDesignerComponent implements OnInit
             .attr("offset", "100%")
             .attr("stop-color", "transparent");
 
-        let outputGradient = svg.append("defs")
+        let outputGradient = this._svgData.svg.append("defs")
             .append("radialGradient")
                 .attr("id", "output-hover");
 

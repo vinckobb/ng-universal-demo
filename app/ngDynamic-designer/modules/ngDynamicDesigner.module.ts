@@ -4,7 +4,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 
-import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, OptionsComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeDesignerComponent} from "../components";
+import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, OptionsComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeDesignerComponent, NodeComponentPaletteComponent} from "../components";
 import {DesignerComponentRendererDirective} from "../directives";
 
 /**
@@ -28,6 +28,7 @@ import {DesignerComponentRendererDirective} from "../directives";
         NodeDesignerModeComponent,
         OptionsComponent,
         NodeDesignerComponent,
+        NodeComponentPaletteComponent,
         DesignerComponentRendererDirective
     ],
     exports:
