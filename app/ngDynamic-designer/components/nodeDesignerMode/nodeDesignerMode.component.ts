@@ -1,5 +1,8 @@
-import {Component, ChangeDetectionStrategy, HostBinding, ViewChild} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ViewChild} from "@angular/core";
+
 import {NodeDesignerComponent} from "../nodeDesigner/nodeDesigner.component";
+import {NodeComponentPaletteComponent, COMPONENT_DRAG} from "../nodeComponentPalette/nodeComponentPalette.component";
+import {PackageLoader} from "../../packageLoader";
 
 /**
  * Component used for displaying node designer mode
@@ -28,35 +31,45 @@ export class NodeDesignerModeComponent
     @ViewChild(NodeDesignerComponent)
     public nodeDesigner: NodeDesignerComponent;
 
-    //######################### public properties - host bindings #########################
-
     /**
-     * Display css property for this component
+     * Node component palette instance
      */
-    @HostBinding('style.display')
-    public componentStyleDisplay: string = "contents";
+    @ViewChild(NodeComponentPaletteComponent)
+    public nodeComponentPallete: NodeComponentPaletteComponent;
+
+    //######################### constructor #########################
+    constructor(private _packageLoader: PackageLoader)
+    {
+    }
 
     //######################### public methods - template bidings #########################
 
-    public drop(event: DragEvent)
+    /**
+     * Handles drop event for adding new node into designer
+     * @param event Event with drag n drop data
+     */
+    public async drop(event: DragEvent)
     {
         event.preventDefault();
 
-        if(event.dataTransfer.getData('text/plain') != 'mojasomarina')
+        let type = event.dataTransfer.getData('text/plain');
+
+        //handle component drag
+        if(type == COMPONENT_DRAG)
         {
-            return;
+            let component = this.nodeComponentPallete.availableComponents.find(itm => itm.id == event.dataTransfer.getData('text/id'));
+            let metadata = await this._packageLoader.getComponentsMetadata(component.packageName, component.componentName);
+
+            //metadata exists
+            if(metadata.relationsMetadata)
+            {
+                this.nodeDesigner.addComponent({
+                                                   x: event.layerX,
+                                                   y: event.layerY
+                                               },
+                                               component,
+                                               metadata.relationsMetadata);
+            }
         }
-
-        this.nodeDesigner.addComponent(
-        {
-            x: event.layerX,
-            y: event.layerY
-        });
-    }
-
-    public dragOverSplit(event: DragEvent)
-    {
-        event.preventDefault();
-        event.stopPropagation();
     }
 }

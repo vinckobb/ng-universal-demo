@@ -1,3 +1,18 @@
-<div draggable="true"
-     (dragstart)="dragStart($event)"
-     (dragend)="dragEnd()">sample</div>
+<div class="title">Toolbar</div>
+
+<section class="section">
+    <div class="title">Components</div>
+    
+    <div class="component-item"
+         draggable="true"
+         (dragstart)="componentDragStart($event, component.id)"
+         (dragend)="componentDragEnd()"
+         *ngFor="let component of availableComponents">
+        <span class="uppercase"> {{component.packageName}}/{{component.componentName}}</span>
+        <span> #{{component.id}}</span>
+    </div>
+</section>
+
+<section class="section">
+    <div class="title">Nodes</div>
+</section>

@@ -2,7 +2,7 @@ import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnIni
 import {select, Selection, event, zoom, zoomTransform} from 'd3';
 
 import {SvgNode, SvgRelation} from "./misc";
-import {SvgPeerDropArea, Coordinates} from "../../interfaces";
+import {SvgPeerDropArea, Coordinates, DesignerDynamicComponent, RelationsMetadata} from "../../interfaces";
 
 /**
  * Component used for designing relation nodes
@@ -35,6 +35,15 @@ export class NodeDesignerComponent implements OnInit
         parentGroup?: Selection<SVGGElement, {}, null, undefined>,
         relationsGroup?: Selection<SVGGElement, {}, null, undefined>
     } = {};
+
+    /**
+     * Array of added compnents into node designer
+     */
+    private _addedComponents:
+    {
+        component: DesignerDynamicComponent;
+        svgNode: SvgNode;
+    }[] = [];
 
     /**
      * Information about active drop area
@@ -101,45 +110,29 @@ export class NodeDesignerComponent implements OnInit
         this._changeDetector.detectChanges();
     }
 
-    public addComponent(coordinates: Coordinates)
+    /**
+     * Adds component into node designer
+     * @param coordinates Coordinates of newly added node
+     * @param component Component to be added
+     * @param metadata Metadata for component that is added
+     */
+    public addComponent(coordinates: Coordinates, component: DesignerDynamicComponent, metadata: RelationsMetadata)
     {
         let currentZoom = zoomTransform(this._svgData.svg.node());
 
-        new SvgNode(this._svgData.parentGroup,
+        metadata.x = currentZoom.invertX(coordinates.x);
+        metadata.y = currentZoom.invertY(coordinates.y);
+        metadata.id = component.id,
+        metadata.name = `${component.packageName} ${component.componentName}`;
+
+        this._addedComponents.push(
         {
-            x: currentZoom.invertX(coordinates.x),
-            y: currentZoom.invertY(coordinates.y),
-            inputs:
-            [
-                {
-                    id: 'simpleInput',
-                    name: 'input',
-                    type: 'string'
-                },
-                {
-                    id: 'query',
-                    name: 'query',
-                    type: 'StringDictionary'
-                }
-            ],
-            outputs:
-            [
-                {
-                    id: 'simpleOutput',
-                    name: 'out',
-                    type: 'string'
-                },
-                {
-                    id: 'condition',
-                    name: 'cond',
-                    type: 'boolean'
-                }
-            ],
-            id: 'simple-component',
-            name: 'Simple component'
-        }, 
-        this._setDropAreaFn,
-        () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn));
+            component: component,
+            svgNode: new SvgNode(this._svgData.parentGroup, 
+                                 metadata, 
+                                 this._setDropAreaFn,
+                                 () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn))
+        })
     }
 
     //######################### private methods #########################

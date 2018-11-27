@@ -50,6 +50,21 @@ export interface DesignerDynamicComponent extends DynamicComponent
     readonly children: DesignerDynamicComponent[];
 
     /**
+     * Current id of component
+     */
+    readonly id: string;
+
+    /**
+     * Name of package owning this component
+     */
+    readonly packageName: string;
+
+    /**
+     * Name of component
+     */
+    readonly componentName: string;
+
+    /**
      * Sets metadata for designer component
      * @param metadata Metadata to be set for designer component
      */

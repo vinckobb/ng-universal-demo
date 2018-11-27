@@ -69,6 +69,30 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
     public options: LayoutMetadata;
 
     /**
+     * Current id of component
+     */
+    public get id(): string
+    {
+        return this._metadata.id;
+    }
+
+    /**
+     * Name of package owning this component
+     */
+    public get packageName(): string
+    {
+        return this._metadata.componentPackage;
+    }
+
+    /**
+     * Name of component
+     */
+    public get componentName(): string
+    {
+        return this._metadata.componentName;
+    }
+
+    /**
      * Layout metadata that will be used for rendering
      */
     public abstract get metadata(): DynamicComponentMetadataGeneric<TOptions>;

@@ -13,9 +13,6 @@ import {DesignerDynamicComponent, DesignerComponentRendererData} from "../../int
 {
     selector: 'layout-designer',
     templateUrl: 'layoutDesigner.component.html',
-    host: {
-        '[style.display]': '"contents"'
-    },
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LayoutDesignerComponent implements OnInit, OnDestroy

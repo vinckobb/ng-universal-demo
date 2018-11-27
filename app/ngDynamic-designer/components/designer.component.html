@@ -7,6 +7,6 @@
             Node
         </button>
     </header>
-    <layout-designer *ngIf="isMode(designerModes.LAYOUT)" [packageNames]="designerPackageNames"></layout-designer>
-    <node-designer-mode *ngIf="isMode(designerModes.NODE)"></node-designer-mode>
+    <layout-designer [style.display]="isMode(designerModes.LAYOUT) ? 'contents': 'none'" [packageNames]="designerPackageNames"></layout-designer>
+    <node-designer-mode [style.display]="isMode(designerModes.NODE) ? 'contents': 'none'"></node-designer-mode>
 </div>
