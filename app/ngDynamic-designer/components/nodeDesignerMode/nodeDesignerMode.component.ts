@@ -2,7 +2,6 @@ import {Component, ChangeDetectionStrategy, ViewChild} from "@angular/core";
 
 import {NodeDesignerComponent} from "../nodeDesigner/nodeDesigner.component";
 import {NodeComponentPaletteComponent, COMPONENT_DRAG} from "../nodeComponentPalette/nodeComponentPalette.component";
-import {PackageLoader} from "../../packageLoader";
 
 /**
  * Component used for displaying node designer mode
@@ -37,18 +36,13 @@ export class NodeDesignerModeComponent
     @ViewChild(NodeComponentPaletteComponent)
     public nodeComponentPallete: NodeComponentPaletteComponent;
 
-    //######################### constructor #########################
-    constructor(private _packageLoader: PackageLoader)
-    {
-    }
-
     //######################### public methods - template bidings #########################
 
     /**
      * Handles drop event for adding new node into designer
      * @param event Event with drag n drop data
      */
-    public async drop(event: DragEvent)
+    public drop(event: DragEvent)
     {
         event.preventDefault();
 
@@ -57,19 +51,18 @@ export class NodeDesignerModeComponent
         //handle component drag
         if(type == COMPONENT_DRAG)
         {
-            let component = this.nodeComponentPallete.availableComponents.find(itm => itm.id == event.dataTransfer.getData('text/id'));
-            let metadata = await this._packageLoader.getComponentsMetadata(component.packageName, component.componentName);
+            let component = this.nodeComponentPallete.availableComponents.find(itm => itm.component.id == event.dataTransfer.getData('text/id'));
 
-            //metadata exists
-            if(metadata.relationsMetadata)
-            {
-                this.nodeDesigner.addComponent({
-                                                   x: event.layerX,
-                                                   y: event.layerY
-                                               },
-                                               component,
-                                               metadata.relationsMetadata);
-            }
+            this.nodeDesigner.addComponent({
+                                                x: event.layerX,
+                                                y: event.layerY
+                                            },
+                                            component.component,
+                                            component.metadata);
+
+            let index = this.nodeComponentPallete.availableComponents.indexOf(component);
+            this.nodeComponentPallete.availableComponents.splice(index, 1);
+            this.nodeComponentPallete.usedComponents.push(component);
         }
     }
 }

@@ -6,7 +6,7 @@ import {RelationsMetadata, Coordinates, InputOutputMetadata, SvgRelationDynamicN
 /**
  * Offset of first peer in node
  */
-const peerOffset: number = 50;
+const peerOffset: number = 55;
 
 /**
  * Minimal height of node
@@ -255,6 +255,12 @@ export class SvgNode implements SvgNodeDynamicNode
             .text(this._metadata.name)
                 .attr("x", 4)
                 .attr("y", 14)
+                .attr('fill', '#F8F8F8');
+
+        this._miscGroup.append("text")
+            .text(`# ${this._metadata.id}`)
+                .attr("x", 8)
+                .attr("y", 36)
                 .attr('fill', '#F8F8F8');
     }
 

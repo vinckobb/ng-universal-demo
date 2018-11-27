@@ -5,11 +5,11 @@
     
     <div class="component-item"
          draggable="true"
-         (dragstart)="componentDragStart($event, component.id)"
+         (dragstart)="componentDragStart($event, component.component.id)"
          (dragend)="componentDragEnd()"
          *ngFor="let component of availableComponents">
-        <span class="uppercase"> {{component.packageName}}/{{component.componentName}}</span>
-        <span> #{{component.id}}</span>
+        <span class="uppercase"> {{component.metadata.name}}</span>
+        <span> #{{component.component.id}}</span>
     </div>
 </section>
 

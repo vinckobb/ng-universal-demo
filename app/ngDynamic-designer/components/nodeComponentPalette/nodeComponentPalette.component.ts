@@ -2,7 +2,8 @@ import {Component, ChangeDetectionStrategy, EventEmitter, Output, OnDestroy, Ite
 import {Subscription} from "rxjs";
 
 import {ComponentsService} from "../../services";
-import {DesignerDynamicComponent} from "../../interfaces";
+import {DesignerDynamicComponent, RelationsMetadata} from "../../interfaces";
+import {PackageLoader} from "../../packageLoader";
 
 /**
  * Name of transfer data for component drag
@@ -38,7 +39,22 @@ export class NodeComponentPaletteComponent implements OnDestroy
     /**
      * Array of components that are available for adding to node designer
      */
-    public availableComponents: DesignerDynamicComponent[] = [];
+    public availableComponents: 
+    {
+        component: DesignerDynamicComponent;
+        metadata: RelationsMetadata;
+    }[] = [];
+
+    //######################### public properties #########################
+
+    /**
+     * Array of used components in node designer
+     */
+    public usedComponents:
+    {
+        component: DesignerDynamicComponent;
+        metadata: RelationsMetadata;
+    }[] = [];
 
     //######################### public properties - outputs #########################
 
@@ -51,6 +67,7 @@ export class NodeComponentPaletteComponent implements OnDestroy
     //######################### constructor #########################
     constructor(private _componentSvc: ComponentsService,
                 private _changeDetector: ChangeDetectorRef,
+                private _packageLoader: PackageLoader,
                 iterableDiffers: IterableDiffers)
     {
         this._componentsChangeSubscription = this._componentSvc.componentsChange.subscribe(() => this._handleComponents());
@@ -95,6 +112,16 @@ export class NodeComponentPaletteComponent implements OnDestroy
         this.dragging.emit(false);
     }
 
+    //######################### public methods #########################
+
+    /**
+     * Explicitly runs invalidation of content (change detection)
+     */
+    public invalidateVisuals(): void
+    {
+        this._changeDetector.detectChanges();
+    }
+
     //######################### private methods #########################
 
     /**
@@ -112,10 +139,23 @@ export class NodeComponentPaletteComponent implements OnDestroy
         else
         {
             // changes.forEachRemovedItem(removed => console.log('removed', removed));
-            changes.forEachAddedItem(added => this.availableComponents.push(added.item));
-            // changes.forEachIdentityChange(changed => console.log('changes', changed));
+            changes.forEachAddedItem(async added => 
+            {
+                let component = added.item;
+                let metadata = await this._packageLoader.getComponentsMetadata(component.packageName, component.componentName);
 
-            this._changeDetector.detectChanges();
+                if(metadata.relationsMetadata)
+                {
+                    this.availableComponents.push(
+                    {
+                        component,
+                        metadata: metadata.relationsMetadata
+                    });
+                    
+                    this._changeDetector.detectChanges();
+                }
+            });
+            // changes.forEachIdentityChange(changed => console.log('changes', changed));
         }
     }
 }

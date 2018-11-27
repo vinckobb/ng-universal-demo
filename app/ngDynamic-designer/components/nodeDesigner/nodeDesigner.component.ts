@@ -123,7 +123,6 @@ export class NodeDesignerComponent implements OnInit
         metadata.x = currentZoom.invertX(coordinates.x);
         metadata.y = currentZoom.invertY(coordinates.y);
         metadata.id = component.id,
-        metadata.name = `${component.packageName} ${component.componentName}`;
 
         this._addedComponents.push(
         {

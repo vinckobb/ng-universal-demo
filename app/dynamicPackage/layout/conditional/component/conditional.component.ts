@@ -2,6 +2,8 @@ import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/co
 
 import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
 import {ConditionalComponentOptions} from "./conditional.interface";
+import {DynamicComponentDesignerMetadata} from "../../../../ngDynamic-designer";
+import {placeholderModule, layoutMetadata, relationsMetadata} from "./designer";
 
 /**
  * Conditional layout component used for conditionaly displaing component
@@ -11,6 +13,12 @@ import {ConditionalComponentOptions} from "./conditional.interface";
     selector: 'conditional-layout-component',
     templateUrl: 'conditional.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
+})
+@DynamicComponentDesignerMetadata(
+{
+    placeholderModule,
+    layoutMetadata,
+    relationsMetadata
 })
 export class ConditionalComponent implements DynamicComponentGeneric<ConditionalComponentOptions>
 {
