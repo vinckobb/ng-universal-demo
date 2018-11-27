@@ -2,9 +2,11 @@ import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/co
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 import {StackComponentOptions} from "../../stack.interface";
-import {PlaceholderBaseComponent, OptionsService} from "../../../../../../ngDynamic-designer";
+import {PlaceholderBaseComponent, OptionsService, ComponentMetadata} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
+
+//TODO drop metodu by bolo vhodne prehodit do PlaceholderBaseComponent
 
 /**
  * Stack designer layout component used for designing components
@@ -68,31 +70,42 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
     
     /**
      * Drops item on desired position
-     * @param drag drag data with component information
+     * @param dragDrop drag data with component information
      */
-    public async drop(drag: CdkDragDrop<any, any>)
+    public async drop(dragDrop: CdkDragDrop<any, any>)
     {
-        if (drag &&
-            drag.previousContainer == drag.container)
+        if (!dragDrop ||
+            !dragDrop.item ||
+            !dragDrop.item.data)
         {
-            if (drag.previousIndex == drag.currentIndex)
+            return;
+        }
+
+        if (dragDrop &&
+            dragDrop.previousContainer == dragDrop.container)
+        {
+            if (dragDrop.previousIndex == dragDrop.currentIndex)
             {
                 return;
             }
 
-            moveItemInArray(this.childrenData, drag.previousIndex, drag.currentIndex);
+            moveItemInArray(this.childrenData, dragDrop.previousIndex, dragDrop.currentIndex);
             this.invalidateVisuals();
             return;
         }
 
-        //TODO potrebujem si preniest aj udaje packageName, componentName. Zaroven chcem vlozit novy komponent na specificke miesto v zozname
+        let componentMetadata: ComponentMetadata = dragDrop.item.data;
+
+        console.log(dragDrop.currentIndex);
+
         this.addChildMetadata(
             {
-                packageName: 'layout',
-                componentName: 'block',
-                designerMetadata: await this._packageLoader.getComponentsMetadata('layout', 'block'),
+                packageName: componentMetadata.packageName,
+                componentName: componentMetadata.componentName,
+                designerMetadata: await this._packageLoader.getComponentsMetadata(componentMetadata.packageName, componentMetadata.componentName),
                 componentMetadata: null
-            }
+            },
+            dragDrop.currentIndex
         );   
     }
 }

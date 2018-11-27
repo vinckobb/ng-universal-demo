@@ -120,10 +120,17 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
     /**
      * Adds child metadata used for rendering
      * @param data Data used for rendering designer component
+     * @param index Index at which to add child
      */
-    protected addChildMetadata(data: DesignerComponentRendererData)
+    protected addChildMetadata(data: DesignerComponentRendererData, index?: number)
     {
-        this.childrenData.push(data);
+        if (index == null)
+        {
+            this.childrenData.push(data);
+            return;
+        }
+        
+        this.childrenData.splice(index, 0, data);
     }
 
     /**
