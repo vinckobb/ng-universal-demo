@@ -1,7 +1,9 @@
-import {Component, ChangeDetectionStrategy, Input, AfterViewInit, ChangeDetectorRef} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy} from "@angular/core";
 import {FlatTreeControl} from "@angular/cdk/tree";
+import {Subscription} from "rxjs";
 
 import {TreeFlattener, TreeFlatDataSource} from "./dataSource/flatDataSource";
+import {ComponentsService, PropertiesService} from "../../services";
 
 //TODO doplnit interface pre tree
 
@@ -12,8 +14,18 @@ import {TreeFlattener, TreeFlatDataSource} from "./dataSource/flatDataSource";
         changeDetection: ChangeDetectionStrategy.OnPush
     }
 )
-export class LayoutDesignerTreeComponent implements AfterViewInit
+export class LayoutDesignerTreeComponent implements OnDestroy
 {
+    //######################### private properties #########################
+
+    /**
+     * Subscription for changes of registered components
+     */
+    private _componentsChangeSubscription: Subscription;
+
+    /**
+     * Tree flattening implementation class
+     */
     private _treeFlatener: TreeFlattener<any, any>;
 
     //######################### public properties - template bindings #########################
@@ -22,64 +34,35 @@ export class LayoutDesignerTreeComponent implements AfterViewInit
 
     public treeDataSource: TreeFlatDataSource<any, any>;
 
-    //######################### public properties - inputs #########################
-
-    @Input()
-    public data: any[] = [
-        {
-            name: "test1",
-            children: 
-            [
-                {
-                    'name': 'test1-1'
-                }
-            ]
-        },
-        {
-            name: "test2",
-            children: 
-            [
-                {
-                    'name': 'test2-1',
-                    children: 
-                    [
-                        {
-                            'name': 'test2-1-1'
-                        },
-                        {
-                            'name': 'test2-1-2'
-                        }
-                    ]
-                },
-                {
-                    'name': 'test2-2'
-                }
-            ]
-        },
-        {
-            name: "test3",
-            children: 
-            [
-                {
-                    'name': 'test3-1'
-                }
-            ]
-        }
-    ];
-
     //######################### constructor #########################
-    constructor(private _changeDetector: ChangeDetectorRef)
+    constructor(private _componentSvc: ComponentsService,
+                private _propertiesSvc: PropertiesService,
+                private _changeDetector: ChangeDetectorRef)
     {
-        this.treeControl = new FlatTreeControl(this._getLevel, this._isExpandable);
-        this._treeFlatener = new TreeFlattener(this._transform, this._getLevel, this._isExpandable, this._getChildren);
+        this.treeControl = new FlatTreeControl(this._getLevel, this.isExpandable);
+        this._treeFlatener = new TreeFlattener(this._transform, this._getLevel, this.isExpandable, this._getChildren);
         this.treeDataSource = new TreeFlatDataSource(this.treeControl, this._treeFlatener);
+
+        this._componentsChangeSubscription = this._componentSvc.componentsChange.subscribe(() => this._handleComponents());
     }
 
-    public ngAfterViewInit()
+    public ngOnDestroy()
     {
-        this.treeDataSource.data = this.data;
+        if (this._componentsChangeSubscription)
+        {
+            this._componentsChangeSubscription.unsubscribe();
+            this._componentsChangeSubscription = null;
+        }
+    }
 
-        this._changeDetector.detectChanges();
+    public showProperties(options: any)
+    {
+        if (!options)
+        {
+            return;
+        }
+
+        this._propertiesSvc.showProperties(options);
     }
 
     private _transform(node: any, level: number): any
@@ -93,13 +76,27 @@ export class LayoutDesignerTreeComponent implements AfterViewInit
         return node.level;
     }
 
-    private _isExpandable(node: any): boolean
+    public isExpandable(node: any): boolean
     {
-        return !!node.children;
+        return false;
+        //return !!node.children && node.children.length > 0;
     }
 
     private _getChildren(node: any): any[]
     {
-        return node.children;
+        return [];
+        //return node.children;
+    }
+
+    private _handleComponents()
+    {
+        //TODO potrebne vyriesit ziskavanie children, zadefinovat interface
+        this.treeDataSource.data = [
+            {
+                options: this._componentSvc.components[0].options
+            }
+        ];
+        
+        this._changeDetector.detectChanges();
     }
 }

@@ -1,8 +1,8 @@
 import {Component, ChangeDetectionStrategy, Input, ChangeDetectorRef, OnDestroy} from "@angular/core";
+import {Subscription} from "rxjs";
 
 import {DesignerLayoutMetadata} from "../../interfaces";
 import {PackageLoader} from "../../packageLoader";
-import {Subscription} from "rxjs";
 import {ComponentsService} from "../../services";
 
 /**
