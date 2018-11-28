@@ -1,4 +1,4 @@
-<div cdkDropList cdkDropListConnectedTo="test"><!--TODO potrebujeme vyriesit cdkDropListConnectedTo aby sme mohli vlozit novy komponent kdekolvek-->
+<div cdkDropList [cdkDropListConnectedTo]="droplistIds">
     <div style="background: #999; margin-bottom: 5px;" cdkDrag [cdkDragData]="componentData">
         {{componentMetadata?.layoutMetadata?.name}}
     </div>

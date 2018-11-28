@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding, HostListener} from "@angular/core";
-import {isPresent} from "@asseco/common";
+import {isPresent, generateId} from "@asseco/common";
 
 import {DesignerComponentRendererData, DesignerDynamicComponentGeneric, DesignerDynamicComponent, LayoutMetadata} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
@@ -69,6 +69,11 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
     public options: LayoutMetadata;
 
     /**
+     * Id of components droplist
+     */
+    public dropzoneId: string;
+
+    /**
      * Current id of component
      */
     public get id(): string
@@ -117,6 +122,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
                 protected _packageLoader: PackageLoader,
                 protected _optionsSvc: OptionsService)
     {
+        this.dropzoneId = generateId(12);
     }
 
     //######################### public methods #########################

@@ -1,7 +1,9 @@
-import {Component, ChangeDetectionStrategy, Input, ChangeDetectorRef} from "@angular/core";
+import {Component, ChangeDetectionStrategy, Input, ChangeDetectorRef, OnDestroy} from "@angular/core";
 
 import {ComponentDesignerMetadata} from "../..";
 import {PackageLoader} from "../../packageLoader";
+import {Subscription} from "rxjs";
+import {ComponentsService} from "../../services";
 
 /**
  * Component used for displaying component palette in designer
@@ -12,11 +14,14 @@ import {PackageLoader} from "../../packageLoader";
     templateUrl: 'componentPalette.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ComponentPaletteComponent
+export class ComponentPaletteComponent implements OnDestroy
 {
     //######################### private properties #########################
 
-    //private _packageNames: string[];
+    /**
+     * Subscription for changes of registered components
+     */
+    private _componentsChangeSubscription: Subscription;
 
     //######################### public properties - inputs #########################
 
@@ -30,6 +35,8 @@ export class ComponentPaletteComponent
     };
 
     //######################### public properties - template bindings #########################
+
+    public droplistIds: string[] = [];
 
     /**
      * Available component packages for designer
@@ -46,8 +53,24 @@ export class ComponentPaletteComponent
 
     //######################### constructor #########################
     constructor(private _packageLoader: PackageLoader,
+                private _componentSvc: ComponentsService,
                 private _changeDetector: ChangeDetectorRef)
     {
+        this._componentsChangeSubscription = this._componentSvc.componentsChange.subscribe(() => {this._handleComponents()});
+    }
+
+    //######################### public methods - implementation of OnDestroy #########################
+    
+    /**
+     * Called when component is destroyed
+     */
+    public ngOnDestroy()
+    {
+        if (this._componentsChangeSubscription)
+        {
+            this._componentsChangeSubscription.unsubscribe();
+            this._componentsChangeSubscription = null;
+        }
     }
 
     //######################### public methods #########################
@@ -59,6 +82,14 @@ export class ComponentPaletteComponent
     public getPackageComponents(packageName): string[]
     {
         return Object.keys(this.packages[packageName]);
+    }
+
+    /**
+     * Explicitly runs invalidation of content (change detection)
+     */
+    public invalidateVisuals()
+    {
+        this._changeDetector.detectChanges();
     }
 
     //######################### private methods #########################
@@ -85,5 +116,20 @@ export class ComponentPaletteComponent
         }
 
         this._changeDetector.detectChanges();
+    }
+
+    /**
+     * Gets droplist ids from component service
+     */
+    private _handleComponents()
+    {
+        if (!this._componentSvc.components)
+        {
+            return;
+        }
+
+        this.droplistIds = this._componentSvc.components.map(component => component.dropzoneId);
+
+        this.invalidateVisuals();
     }
 }

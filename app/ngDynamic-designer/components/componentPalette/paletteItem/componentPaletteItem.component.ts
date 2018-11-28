@@ -16,6 +16,12 @@ export class ComponentPaletteItemComponent
     //######################### public properties - inputs #########################
 
     /**
+     * List of available droplists
+     */
+    @Input()
+    public droplistIds: string[];
+
+    /**
      * Name of package that contains this component
      */
     @Input()

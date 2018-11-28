@@ -55,6 +55,11 @@ export interface DesignerDynamicComponent extends DynamicComponent
     readonly id: string;
 
     /**
+     * Id of components droplist
+     */
+    readonly dropzoneId: string;
+
+    /**
      * Name of package owning this component
      */
     readonly packageName: string;
