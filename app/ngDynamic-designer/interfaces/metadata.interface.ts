@@ -1,5 +1,5 @@
 import {DynamicModule, DynamicComponent, DynamicComponentMetadata, DynamicComponentMetadataGeneric} from "../../ngDynamic-core";
-import {LayoutMetadata} from "./designer";
+import {LayoutMetadata} from "./layout";
 import {RelationsMetadata} from "./relations";
 
 /**

@@ -54,11 +54,11 @@ export class NodeDesignerModeComponent
             let component = this.nodeComponentPallete.availableComponents.find(itm => itm.component.id == event.dataTransfer.getData('text/id'));
 
             this.nodeDesigner.addComponent({
-                                                x: event.layerX,
-                                                y: event.layerY
-                                            },
-                                            component.component,
-                                            component.metadata);
+                                               x: event.layerX,
+                                               y: event.layerY
+                                           },
+                                           component.component,
+                                           component.metadata);
 
             let index = this.nodeComponentPallete.availableComponents.indexOf(component);
             this.nodeComponentPallete.availableComponents.splice(index, 1);

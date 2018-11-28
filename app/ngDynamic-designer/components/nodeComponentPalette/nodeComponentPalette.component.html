@@ -8,8 +8,8 @@
          (dragstart)="componentDragStart($event, component.component.id)"
          (dragend)="componentDragEnd()"
          *ngFor="let component of availableComponents">
-        <span class="uppercase"> {{component.metadata.name}}</span>
-        <span> #{{component.component.id}}</span>
+        <div class="uppercase">{{component.metadata.name}}</div>
+        <div>ID: {{component.component.id}}</div>
     </div>
 </section>
 

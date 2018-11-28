@@ -258,7 +258,7 @@ export class SvgNode implements SvgNodeDynamicNode
                 .attr('fill', '#F8F8F8');
 
         this._miscGroup.append("text")
-            .text(`# ${this._metadata.id}`)
+            .text(`ID: ${this._metadata.id}`)
                 .attr("x", 8)
                 .attr("y", 36)
                 .attr('fill', '#F8F8F8');
