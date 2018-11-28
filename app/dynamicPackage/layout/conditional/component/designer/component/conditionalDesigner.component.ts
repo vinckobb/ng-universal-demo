@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
-import {PlaceholderBaseComponent, OptionsService} from "../../../../../../ngDynamic-designer";
+import {PlaceholderBaseComponent, PropertiesService} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
 import {ConditionalComponentOptions} from "../../conditional.interface";
@@ -32,7 +32,7 @@ export class ConditionalDesignerComponent extends PlaceholderBaseComponent<Condi
     //######################### constructor #########################
     constructor(changeDetector: ChangeDetectorRef,
                 packageLoader: PackageLoader,
-                optionsSvc: OptionsService)
+                optionsSvc: PropertiesService)
     {
         super(changeDetector, packageLoader, optionsSvc);
 

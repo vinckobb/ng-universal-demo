@@ -1,0 +1,21 @@
+<!-- TOTO je len ukazka -->
+<div *ngIf="propertiesMetadata">
+    <h3>{{propertiesMetadata?.name}}</h3>
+    <div>{{propertiesMetadata?.description}}</div>
+</div>
+
+<div [formGroup]="propertiesForm" style="margin-top: 20px;">
+    <div *ngFor="let property of propertiesMetadata?.properties" style="margin-bottom: 20px;">
+        <label [attr.for]="property.id">
+            {{property.name}}
+        </label>
+        <div *ngIf="property.description">
+            {{property?.description}}
+        </div>
+
+        <div [ngSwitch]="property.type">
+            <input *ngSwitchCase="propertyTypes.Boolean" [formControlName]="property.id" [id]="property.id" type="checkbox" class="form-control">
+            <input *ngSwitchDefault [formControlName]="property.id" [id]="property.id" type="text" class="form-control">
+        </div>
+    </div>
+</div>

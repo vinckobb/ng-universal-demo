@@ -2,7 +2,7 @@ import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/co
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 import {StackComponentOptions} from "../../stack.interface";
-import {PlaceholderBaseComponent, OptionsService, DesignerItemId} from "../../../../../../ngDynamic-designer";
+import {PlaceholderBaseComponent, PropertiesService, DesignerItemId} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
 
@@ -35,7 +35,7 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
     //######################### constructor #########################
     constructor(changeDetector: ChangeDetectorRef,
                 packageLoader: PackageLoader,
-                optionsSvc: OptionsService)
+                optionsSvc: PropertiesService)
     {
         super(changeDetector, packageLoader, optionsSvc);
 

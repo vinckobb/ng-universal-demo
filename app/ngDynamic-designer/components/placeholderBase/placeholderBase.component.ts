@@ -4,7 +4,7 @@ import {isPresent, generateId} from "@asseco/common";
 import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
-import {OptionsService} from "../../services";
+import {PropertiesService} from "../../services";
 import {PackageLoader} from "../../packageLoader";
 
 /**
@@ -120,7 +120,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
     //######################### constructor #########################
     constructor(protected _changeDetector: ChangeDetectorRef,
                 protected _packageLoader: PackageLoader,
-                protected _optionsSvc: OptionsService)
+                protected _optionsSvc: PropertiesService)
     {
         this.dropzoneId = generateId(12);
     }

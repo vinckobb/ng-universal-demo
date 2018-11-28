@@ -5,7 +5,7 @@ import {CommonModule} from "@angular/common";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {CdkTreeModule} from "@angular/cdk/tree";
 
-import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, OptionsComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeDesignerComponent, NodeComponentPaletteComponent, LayoutDesignerTreeComponent} from "../components";
+import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, PropertiesComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeDesignerComponent, NodeComponentPaletteComponent, LayoutDesignerTreeComponent} from "../components";
 import {DesignerComponentRendererDirective} from "../directives";
 
 /**
@@ -29,7 +29,7 @@ import {DesignerComponentRendererDirective} from "../directives";
         ComponentPaletteComponent,
         ComponentPaletteItemComponent,
         NodeDesignerModeComponent,
-        OptionsComponent,
+        PropertiesComponent,
         NodeDesignerComponent,
         NodeComponentPaletteComponent,
         DesignerComponentRendererDirective
