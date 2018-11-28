@@ -3,7 +3,7 @@ import * as _nodeDefinitions from './nodeDefinitions';
 export * from './componentLoader';
 export * from './componentRelationManager';
 export * from './componentManager';
-export * from './componentScriptLoader';
+export * from './scriptLoader';
 export * from './dynamicComponentPage';
 export * from './decorators';
 export * from './directives';

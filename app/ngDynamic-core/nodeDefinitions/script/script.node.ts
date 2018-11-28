@@ -1,5 +1,5 @@
 import {Injector} from "@angular/core";
-import {ComponentScriptLoader} from "../../componentScriptLoader";
+import {ScriptLoader} from "../../scriptLoader";
 
 import {NodeDefinition} from "../nodeDefinitions.interface";
 import {DynamicOutput} from "../../decorators";
@@ -14,7 +14,7 @@ export class ScriptNode implements NodeDefinition
     /**
      * Script loader used for loading types and scripts
      */
-    private _scriptLoader: ComponentScriptLoader;
+    private _scriptLoader: ScriptLoader;
 
     //######################### public properties #########################
 
@@ -32,7 +32,7 @@ export class ScriptNode implements NodeDefinition
     //######################### constructor #########################
     constructor(injector: Injector)
     {
-        this._scriptLoader = injector.get(ComponentScriptLoader);
+        this._scriptLoader = injector.get(ScriptLoader);
     }
 
     //######################### public methods #########################

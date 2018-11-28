@@ -1,9 +1,10 @@
 import {Injector} from "@angular/core";
 import {isBlank} from "@asseco/common";
 
-import {DynamicComponentRelationManagerMetadata, DynamicComponentRelationMetadata, DynamicComponentRelationManagerInputOutputMetadata, DynamicNode} from "../interfaces";
+import {DynamicComponentRelationMetadata, DynamicNode} from "../interfaces";
 import {ComponentManager} from "../componentManager";
 import {NodeDefinitionConstructor, NodeDefinition} from "../nodeDefinitions";
+import {DynamicComponentRelationManagerMetadata, DynamicComponentRelationManagerInputOutputMetadata} from "./componentRelationManager.interface";
 import * as defs from '../nodeDefinitions';
 
 /**

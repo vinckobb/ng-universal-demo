@@ -7,7 +7,7 @@ import {generateId} from '@asseco/common';
  * Class used for loading external scripts
  */
 @Injectable({providedIn: 'root'})
-export class ComponentScriptLoader
+export class ScriptLoader
 {
     //######################### private fields #########################
 
