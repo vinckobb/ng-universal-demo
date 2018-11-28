@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, Input, ChangeDetectorRef, OnDestroy} from "@angular/core";
 
-import {ComponentDesignerMetadata} from "../..";
+import {DesignerLayoutMetadata} from "../../interfaces";
 import {PackageLoader} from "../../packageLoader";
 import {Subscription} from "rxjs";
 import {ComponentsService} from "../../services";
@@ -41,7 +41,7 @@ export class ComponentPaletteComponent implements OnDestroy
     /**
      * Available component packages for designer
      */
-    public packages: {[key: string]: {[packageName: string]: ComponentDesignerMetadata}};
+    public packages: {[key: string]: {[packageName: string]: DesignerLayoutMetadata}};
     
     /**
      * Array representation of `packages` property

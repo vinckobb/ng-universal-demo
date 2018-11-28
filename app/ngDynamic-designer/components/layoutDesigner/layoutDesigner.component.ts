@@ -4,7 +4,7 @@ import {Subscription} from "rxjs";
 
 import {PackageLoader} from "../../packageLoader";
 import {DesignerComponentRendererDirective} from "../../directives";
-import {DesignerDynamicComponent, DesignerComponentRendererData} from "../../interfaces";
+import {DesignerLayoutPlaceholderComponent, DesignerLayoutComponentRendererData} from "../../interfaces";
 
 /**
  * Component used for displaying layout designer
@@ -29,7 +29,7 @@ export class LayoutDesignerComponent implements OnInit, OnDestroy
     /**
      * TODO ukazka len
      */
-    public metadata: DesignerComponentRendererData;
+    public metadata: DesignerLayoutComponentRendererData;
 
     //######################### public properties - inputs #########################
 
@@ -42,7 +42,7 @@ export class LayoutDesignerComponent implements OnInit, OnDestroy
     //######################### public properties - children #########################
 
     @ViewChildren('layoutComponents')
-    public children: QueryList<DesignerComponentRendererDirective<DesignerDynamicComponent>>;
+    public children: QueryList<DesignerComponentRendererDirective<DesignerLayoutPlaceholderComponent>>;
 
     //######################### constructor #########################
     constructor(private _route: ActivatedRoute,

@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding, HostListener} from "@angular/core";
 import {isPresent, generateId} from "@asseco/common";
 
-import {DesignerComponentRendererData, DesignerDynamicComponentGeneric, DesignerDynamicComponent, LayoutMetadata} from "../../interfaces";
+import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
 import {OptionsService} from "../../services";
@@ -10,7 +10,7 @@ import {PackageLoader} from "../../packageLoader";
 /**
  * Base class for all placeholder components
  */
-export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDynamicComponentGeneric<TOptions>
+export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayoutPlaceholderComponentGeneric<TOptions>
 {
     //######################### protected fields #########################
 
@@ -51,7 +51,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
     /**
      * Data for rendering children designer components
      */
-    public childrenData: DesignerComponentRendererData[] = [];
+    public childrenData: DesignerLayoutComponentRendererData[] = [];
 
     //######################### public properties - children #########################
 
@@ -59,7 +59,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
      * View children renderers
      */
     @ViewChildren('layoutComponents')
-    public ɵChildren: QueryList<DesignerComponentRendererDirective<DesignerDynamicComponent>>;
+    public ɵChildren: QueryList<DesignerComponentRendererDirective<DesignerLayoutPlaceholderComponent>>;
 
     //######################### public properties #########################
 
@@ -105,7 +105,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
     /**
      * Array of child components
      */
-    public get children(): DesignerDynamicComponent[]
+    public get children(): DesignerLayoutPlaceholderComponent[]
     {
         if(this._isContainer)
         {
@@ -153,7 +153,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
      * @param data Data used for rendering designer component
      * @param index Index at which to add child
      */
-    protected addChildMetadata(data: DesignerComponentRendererData, index?: number)
+    protected addChildMetadata(data: DesignerLayoutComponentRendererData, index?: number)
     {
         if (index == null)
         {
@@ -205,9 +205,9 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
     {
         let options = {} as TOptions;
 
-        if(this.options && this.options.options && this.options.options.length)
+        if(this.options && this.options.properties && this.options.properties.length)
         {
-            this.options.options.forEach(option =>
+            this.options.properties.forEach(option =>
             {
                 let parts = option.id.split('.');
 
@@ -245,9 +245,9 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
 
         //TODO - add logic for collection types
 
-        if(this.options && this.options.options && this.options.options.length)
+        if(this.options && this.options.properties && this.options.properties.length)
         {
-            this.options.options.forEach(option =>
+            this.options.properties.forEach(option =>
             {
                 let value = option.id.split('.').reduce((o,i) =>
                                                         {
@@ -272,7 +272,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerDyna
     private _updateOptions()
     {
         this.options.id = this._metadata.id;
-        this.options.optionsComponent = this;
+        this.options.dynamicNodeInstance = this;
         this.options.value = this.options.value || this._transformOptionsToProperties();
     }
 }

@@ -1,23 +1,23 @@
-import {LayoutMetadata} from "../designer";
 import {Observable, Subscription} from "rxjs";
 
-import {DesignerMetadata} from "../metadata.interface";
+import {DesignerCommonMetadata} from "../metadata.interface";
 import {DynamicNode} from "../../../ngDynamic-core";
+import {PropertiesMetadata} from "../properties/properties.interface";
 
 /**
- * Metadata used for node relatiosn designer
+ * Metadata used for node relations designer
  */
-export interface RelationsMetadata extends DesignerMetadata
+export interface RelationsMetadata extends DesignerCommonMetadata
 {
     /**
      * Array of inputs definitions
      */
-    inputs?: InputOutputMetadata[];
+    inputs?: RelationsInputOutputMetadata[];
 
     /**
      * Array of output definitions
      */
-    outputs?: InputOutputMetadata[];
+    outputs?: RelationsInputOutputMetadata[];
 
 
     dynamicInputs?: any;
@@ -25,7 +25,7 @@ export interface RelationsMetadata extends DesignerMetadata
     /**
      * Node options that can be changed
      */
-    nodeOptions?: LayoutMetadata;
+    nodeOptions?: PropertiesMetadata;
 
     /**
      * X coordinates of node
@@ -39,9 +39,9 @@ export interface RelationsMetadata extends DesignerMetadata
 }
 
 /**
- * Definition of input or output node peer
+ * Definition of input or output relation metadata
  */
-export interface InputOutputMetadata
+export interface RelationsInputOutputMetadata
 {
     /**
      * Id of input or output used in metadata for identification
@@ -49,22 +49,22 @@ export interface InputOutputMetadata
     id?: string;
 
     /**
-     * Name of peer in node designer
+     * Displayed name of input or output in node designer
      */
     name?: string;
 
     /**
-     * Data type of peer in node designer
+     * Displayed data type of input or output in node designer
      */
     type?: string;
 
     /**
-     * Computed Y coordinate
+     * Computed Y coordinate, set by designer, do not set
      */
     y?: number;
 
     /**
-     * Relations that are connected to this peer
+     * Relations that are connected to this peer, set by designer, do not set
      */
     relations?: SvgRelationDynamicNode[];
 }

@@ -2,7 +2,7 @@ import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/co
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 import {StackComponentOptions} from "../../stack.interface";
-import {PlaceholderBaseComponent, OptionsService, ComponentMetadata} from "../../../../../../ngDynamic-designer";
+import {PlaceholderBaseComponent, OptionsService, DesignerItemId} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
 
@@ -98,7 +98,7 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
             return;
         }
 
-        let componentMetadata: ComponentMetadata = dragDrop.item.data;
+        let componentMetadata: DesignerItemId = dragDrop.item.data;
 
         this.addChildMetadata(
             {

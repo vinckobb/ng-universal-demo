@@ -2,7 +2,7 @@ import {Component, ChangeDetectionStrategy, EventEmitter, Output, OnDestroy, Ite
 import {Subscription} from "rxjs";
 
 import {ComponentsService} from "../../services";
-import {DesignerDynamicComponent, RelationsMetadata} from "../../interfaces";
+import {DesignerLayoutPlaceholderComponent, RelationsMetadata} from "../../interfaces";
 import {PackageLoader} from "../../packageLoader";
 
 /**
@@ -32,7 +32,7 @@ export class NodeComponentPaletteComponent implements OnDestroy
     /**
      * Iterale differs used for finding changes in components array
      */
-    private _iterableDiffer: IterableDiffer<DesignerDynamicComponent>;
+    private _iterableDiffer: IterableDiffer<DesignerLayoutPlaceholderComponent>;
 
     //######################### public properties - template bindings #########################
 
@@ -41,7 +41,7 @@ export class NodeComponentPaletteComponent implements OnDestroy
      */
     public availableComponents: 
     {
-        component: DesignerDynamicComponent;
+        component: DesignerLayoutPlaceholderComponent;
         metadata: RelationsMetadata;
     }[] = [];
 
@@ -52,7 +52,7 @@ export class NodeComponentPaletteComponent implements OnDestroy
      */
     public usedComponents:
     {
-        component: DesignerDynamicComponent;
+        component: DesignerLayoutPlaceholderComponent;
         metadata: RelationsMetadata;
     }[] = [];
 

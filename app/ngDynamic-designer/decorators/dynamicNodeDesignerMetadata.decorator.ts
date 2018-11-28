@@ -3,10 +3,10 @@ import {DesignerLayoutMetadata, DesignerMetadataClass} from "../interfaces";
 declare var designerMetadata: boolean;
 
 /**
- * Sets designer metadata to component on which is this decorator applied
+ * Sets designer metadata to node on which is this decorator applied
  * @returns ClassDecorator
  */
-export function DynamicComponentDesignerMetadata(templateMetadata: DesignerLayoutMetadata): ClassDecorator
+export function DynamicNodeDesignerMetadata(templateMetadata: DesignerLayoutMetadata): ClassDecorator
 {
     if(designerMetadata)
     {

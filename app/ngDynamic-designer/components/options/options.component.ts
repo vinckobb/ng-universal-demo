@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 
 import {OptionsService} from "../../services";
-import {LayoutMetadata, OptionType} from "../../interfaces";
+import {LayoutMetadata, PropertyType} from "../../interfaces";
 
 /**
  * Component used for rendering and editing components options
@@ -58,7 +58,7 @@ export class OptionsComponent implements OnDestroy
     /**
      * OptionType enum
      */
-    public optionTypes = OptionType;
+    public optionTypes = PropertyType;
 
     /**
      * Returns layout metadata of component
@@ -80,7 +80,7 @@ export class OptionsComponent implements OnDestroy
             if(this._layoutMetadata)
             {
                 this._layoutMetadata.id = value;
-                this._layoutMetadata.optionsComponent.invalidateVisuals("id");
+                this._layoutMetadata.dynamicNodeInstance.invalidateVisuals("id");
             }
         });
 
@@ -92,7 +92,7 @@ export class OptionsComponent implements OnDestroy
             }
 
             this._layoutMetadata.value = options;
-            this._layoutMetadata.optionsComponent.invalidateVisuals("options");
+            this._layoutMetadata.dynamicNodeInstance.invalidateVisuals("options");
         });
 
         this._optionsChangeSubscription = this._optionsSvc.loadProperties.subscribe(options =>
@@ -148,9 +148,9 @@ export class OptionsComponent implements OnDestroy
             });
         }
 
-        if(this._layoutMetadata && this._layoutMetadata.options && this._layoutMetadata.options.length)
+        if(this._layoutMetadata && this._layoutMetadata.properties && this._layoutMetadata.properties.length)
         {
-            this._layoutMetadata.options.forEach(option =>
+            this._layoutMetadata.properties.forEach(option =>
             {
                 //TODO - add collection controlos (FormArray)
 

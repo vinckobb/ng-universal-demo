@@ -4,5 +4,5 @@ export const layoutMetadata: LayoutMetadata =
 {
     name: 'conditional block',
     description: 'Block that allows to display its content using condition',
-    options: []
+    properties: []
 };

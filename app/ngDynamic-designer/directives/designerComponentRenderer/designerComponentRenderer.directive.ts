@@ -2,7 +2,7 @@ import {ComponentRef, Directive, Input, NgModuleRef, OnChanges, OnDestroy, Simpl
 import {nameof, generateId} from '@asseco/common';
 
 import {ComponentLoader} from '../../../ngDynamic-core';
-import {DesignerDynamicComponent, DesignerComponentRendererData} from '../../interfaces';
+import {DesignerLayoutPlaceholderComponent, DesignerLayoutComponentRendererData} from '../../interfaces';
 import {ComponentsService} from '../../services';
 
 /**
@@ -13,7 +13,7 @@ import {ComponentsService} from '../../services';
     selector: '[designerComponentRenderer]',
     exportAs: 'designerComponentRenderer'
 })
-export class DesignerComponentRendererDirective<TComponent extends DesignerDynamicComponent> implements OnChanges, OnDestroy
+export class DesignerComponentRendererDirective<TComponent extends DesignerLayoutPlaceholderComponent> implements OnChanges, OnDestroy
 {
     //######################### private fields #########################
 
@@ -33,7 +33,7 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerDynam
      * Loaded module that should be rendered
      */
     @Input('designerComponentRenderer')
-    public componentMetadata: DesignerComponentRendererData;
+    public componentMetadata: DesignerLayoutComponentRendererData;
 
     /**
      * Custom injector used as parent for dynamic components tree

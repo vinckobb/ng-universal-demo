@@ -2,7 +2,7 @@ import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnIni
 import {select, Selection, event, zoom, zoomTransform} from 'd3';
 
 import {SvgNode, SvgRelation} from "./misc";
-import {SvgPeerDropArea, Coordinates, DesignerDynamicComponent, RelationsMetadata} from "../../interfaces";
+import {SvgPeerDropArea, Coordinates, DesignerLayoutPlaceholderComponent, RelationsMetadata} from "../../interfaces";
 
 /**
  * Component used for designing relation nodes
@@ -41,7 +41,7 @@ export class NodeDesignerComponent implements OnInit
      */
     private _addedComponents:
     {
-        component: DesignerDynamicComponent;
+        component: DesignerLayoutPlaceholderComponent;
         svgNode: SvgNode;
     }[] = [];
 
@@ -116,7 +116,7 @@ export class NodeDesignerComponent implements OnInit
      * @param component Component to be added
      * @param metadata Metadata for component that is added
      */
-    public addComponent(coordinates: Coordinates, component: DesignerDynamicComponent, metadata: RelationsMetadata)
+    public addComponent(coordinates: Coordinates, component: DesignerLayoutPlaceholderComponent, metadata: RelationsMetadata)
     {
         let currentZoom = zoomTransform(this._svgData.svg.node());
 

@@ -1,7 +1,7 @@
 import {isPresent} from '@asseco/common';
 import {Selection, BaseType, drag, event, select} from 'd3';
 
-import {RelationsMetadata, Coordinates, InputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea} from '../../../../interfaces';
+import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea} from '../../../../interfaces';
 
 /**
  * Offset of first peer in node
@@ -314,7 +314,7 @@ export class SvgNode implements SvgNodeDynamicNode
 
                         this._validDropToggle(null);
                     })
-                    .call(drag<SVGCircleElement, InputOutputMetadata>()
+                    .call(drag<SVGCircleElement, RelationsInputOutputMetadata>()
                         .on('start', datum =>
                         {
                             relation = datum.relations && datum.relations.length && datum.relations[0];
@@ -397,7 +397,7 @@ export class SvgNode implements SvgNodeDynamicNode
                         select(groups[index])
                             .attr('fill', 'transparent');
                     })
-                    .call(drag<SVGCircleElement, InputOutputMetadata>()
+                    .call(drag<SVGCircleElement, RelationsInputOutputMetadata>()
                         .on('start', datum =>
                         {
                             datum.relations = datum.relations || [];

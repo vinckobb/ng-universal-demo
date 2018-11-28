@@ -1,7 +1,7 @@
 import {Component, ChangeDetectionStrategy, Input} from "@angular/core";
 
-import {ComponentDesignerMetadata} from "../../..";
-import {ComponentMetadata} from "../../../interfaces";
+import {DesignerLayoutMetadata} from "../../../interfaces";
+import {DesignerItemId} from "../../../interfaces";
 /**
  * Component used for displaying component palette in designer
  */
@@ -37,12 +37,12 @@ export class ComponentPaletteItemComponent
      * Designer component metadata
      */
     @Input()
-    public componentMetadata: ComponentDesignerMetadata
+    public componentMetadata: DesignerLayoutMetadata
 
     /**
      * Component metadata
      */
-    public get componentData(): ComponentMetadata
+    public get componentData(): DesignerItemId
     {
         return {
             packageName: this.packageName,

@@ -3,19 +3,25 @@ import {LayoutMetadata} from "./designer";
 import {RelationsMetadata} from "./relations";
 
 /**
- * Metadata used for designer of dynamic component
+ * Common metadata used for designer of dynamic component or node
  */
-export interface ComponentDesignerMetadata
+export interface DesignerMetadata
+{
+    /**
+     * Metadata for relations (node designer)
+     */
+    relationsMetadata?: RelationsMetadata;
+}
+
+/**
+ * Metadata used for layout designer of dynamic component
+ */
+export interface DesignerLayoutMetadata extends DesignerMetadata
 {
     /**
      * Javascript module containing dynamic component module definition
      */
     placeholderModule?: DynamicModule;
-
-    /**
-     * Metadata for relations (node designer)
-     */
-    relationsMetadata?: RelationsMetadata;
 
     /**
      * Metadata for layout (layout designer)
@@ -24,20 +30,27 @@ export interface ComponentDesignerMetadata
 }
 
 /**
- * Static description of 
+ * Metadata used for node designer of dynamic relation
  */
-export interface DesignerDynamicComponentClass
+export interface DesignerNodeMetadata extends DesignerMetadata
+{
+}
+
+/**
+ * Static description of class containing metadata for designer
+ */
+export interface DesignerMetadataClass
 {
     /**
      * Metadata used for designer
      */
-    ɵMetadata: ComponentDesignerMetadata;
+    ɵMetadata: DesignerLayoutMetadata;
 }
 
 /**
- * Description of dynamic component for designer
+ * Description of placeholder component for layout designer
  */
-export interface DesignerDynamicComponent extends DynamicComponent
+export interface DesignerLayoutPlaceholderComponent extends DynamicComponent
 {
     /**
      * Layout metadata that will be used for rendering
@@ -47,7 +60,7 @@ export interface DesignerDynamicComponent extends DynamicComponent
     /**
      * Array of child components
      */
-    readonly children: DesignerDynamicComponent[];
+    readonly children: DesignerLayoutPlaceholderComponent[];
 
     /**
      * Current id of component
@@ -77,9 +90,9 @@ export interface DesignerDynamicComponent extends DynamicComponent
 }
 
 /**
- * Description of dynamic component for designer
+ * Description of placeholder component for layout designer generic
  */
-export interface DesignerDynamicComponentGeneric<TOptions> extends DesignerDynamicComponent
+export interface DesignerLayoutPlaceholderComponentGeneric<TOptions> extends DesignerLayoutPlaceholderComponent
 {
     /**
      * Options used for rendering this component
@@ -95,12 +108,12 @@ export interface DesignerDynamicComponentGeneric<TOptions> extends DesignerDynam
 /**
  * Description of data passed to designer component renderer
  */
-export interface DesignerComponentRendererData extends ComponentMetadata
+export interface DesignerLayoutComponentRendererData extends DesignerItemId
 {
     /**
      * Metadata for dynamic component designer
      */
-    designerMetadata: ComponentDesignerMetadata;
+    designerMetadata: DesignerLayoutMetadata;
 
     /**
      * Existing metadata for dynamic component (for rendering)
@@ -109,9 +122,9 @@ export interface DesignerComponentRendererData extends ComponentMetadata
 }
 
 /**
- * Name of package and component to be displayed
+ * Exact identification of item package name and component name
  */
-export interface ComponentMetadata
+export interface DesignerItemId
 {
     /**
      * Name of package that contains this component
@@ -125,22 +138,22 @@ export interface ComponentMetadata
 }
 
 /**
- * Base metadata description for layout and node designer
+ * Common metadata description for layout and node designer
  */
-export interface DesignerMetadata
+export interface DesignerCommonMetadata
 {
     /**
-     * Unique id of component instance in dynamic page
+     * Unique id of component or node instance in dynamic page
      */
     id?: string;
 
     /**
-     * Name that is displayed for user for better identification of component|node type
+     * Name that is displayed for user for better identification of component or node type
      */
     name?: string;
 
     /**
-     * Description of component|node type, can be longer
+     * Description of component or node type, can be longer
      */
     description?: string;
 }

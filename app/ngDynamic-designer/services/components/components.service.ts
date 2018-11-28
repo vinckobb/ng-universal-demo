@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Subject, Observable} from "rxjs";
 
-import {DesignerDynamicComponent} from "../../interfaces";
+import {DesignerLayoutPlaceholderComponent} from "../../interfaces";
 
 /**
  * Service storing all existing compoents and notifying when components change
@@ -14,7 +14,7 @@ export class ComponentsService
     /**
      * Currently all registered components
      */
-    private _components: DesignerDynamicComponent[] = [];
+    private _components: DesignerLayoutPlaceholderComponent[] = [];
 
     /**
      * Subject used for emitting changes in components array
@@ -26,7 +26,7 @@ export class ComponentsService
     /**
      * Returns all registered components
      */
-    public get components(): DesignerDynamicComponent[]
+    public get components(): DesignerLayoutPlaceholderComponent[]
     {
         return this._components;
     }
@@ -45,7 +45,7 @@ export class ComponentsService
      * Adds component to this service
      * @param component Component to be added
      */
-    public addComponent(component: DesignerDynamicComponent)
+    public addComponent(component: DesignerLayoutPlaceholderComponent)
     {
         this._components.push(component);
         this._componentsChange.next();
@@ -55,7 +55,7 @@ export class ComponentsService
      * Removes component from this service
      * @param component Component to be removed
      */
-    public removeComponent(component: DesignerDynamicComponent)
+    public removeComponent(component: DesignerLayoutPlaceholderComponent)
     {
         if(!component)
         {

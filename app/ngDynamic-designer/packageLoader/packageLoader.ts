@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 
 import {PackageComponents} from "./packageLoader.interface";
 import {DynamicModule} from "../../ngDynamic-core";
-import {ComponentDesignerMetadata, DesignerDynamicComponentClass} from "../interfaces";
+import {DesignerLayoutMetadata, DesignerMetadataClass} from "../interfaces";
 
 declare var localPackage: string;
 
@@ -23,11 +23,11 @@ export class PackageLoader
      * Gets package components
      * @param packageName Name of package
      */
-    public async getPackageComponentsMetadata(packageName: string): Promise<{[packageName: string]: ComponentDesignerMetadata}>
+    public async getPackageComponentsMetadata(packageName: string): Promise<{[packageName: string]: DesignerLayoutMetadata}>
     {
         await this._loadPackage(packageName);
 
-        let components: {[packageName: string]: ComponentDesignerMetadata} = {};
+        let components: {[packageName: string]: DesignerLayoutMetadata} = {};
 
         Object.keys(this._cachedNpmPackage[packageName]).forEach(componentName =>
         {
@@ -47,7 +47,7 @@ export class PackageLoader
      * @param packageName Name of package
      * @param componentName Name of component which metadata are going to be extracted
      */
-    public async getComponentsMetadata(packageName: string, componentName: string): Promise<ComponentDesignerMetadata>
+    public async getComponentsMetadata(packageName: string, componentName: string): Promise<DesignerLayoutMetadata>
     {
         await this._loadPackage(packageName);
 
@@ -65,14 +65,14 @@ export class PackageLoader
      * Extracts metadata from modules component
      * @param dynamicModule Module to be checked for component and metadata
      */
-    private _extractMetadata(dynamicModule: DynamicModule): ComponentDesignerMetadata
+    private _extractMetadata(dynamicModule: DynamicModule): DesignerLayoutMetadata
     {
         if(!dynamicModule.component)
         {
             throw new Error('Wrong module, unable to get component for designer');
         }
 
-        let component: DesignerDynamicComponentClass = dynamicModule.component as any;
+        let component: DesignerMetadataClass = dynamicModule.component as any;
 
         if(!component.ɵMetadata)
         {
