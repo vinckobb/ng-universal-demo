@@ -19,8 +19,10 @@ export interface RelationsMetadata extends DesignerCommonMetadata
      */
     outputs?: RelationsInputOutputMetadata[];
 
-
-    dynamicInputs?: any;
+    /**
+     * Method that converts node options into inputs
+     */
+    dynamicInputs?: (nodeOptions: PropertiesMetadata) => RelationsInputOutputMetadata[];
 
     /**
      * Node options that can be changed

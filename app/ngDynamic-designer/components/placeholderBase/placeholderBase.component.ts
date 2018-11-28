@@ -1,11 +1,56 @@
 import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding, HostListener} from "@angular/core";
 import {isPresent, generateId} from "@asseco/common";
 
-import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata} from "../../interfaces";
+import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata, PropertiesPropertyMetadata} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
 import {PropertiesService} from "../../services";
 import {PackageLoader} from "../../packageLoader";
+
+/**
+ * Safely returns value from object property using string expression
+ * @param object Object which property value will be obtained
+ * @param expression Expression for obtaining value
+ */
+function getValue(object: any, expression: string): any
+{
+    return expression.split('.').reduce((o,i) =>
+    {
+        if(o)
+        {
+            return o[i];
+        }
+
+        return null;
+    }, object);
+}
+
+/**
+ * Sets value to objects property using string expression
+ * @param object Object which property value will be set
+ * @param value Value that will be set
+ * @param expression Expression for setting value
+ */
+function setValue(object: any, value: any, expression: string): void
+{
+    let parts = expression.split('.');
+
+    parts.forEach((part, index) =>
+    {
+        //last item value is assigned
+        if(index == parts.length - 1)
+        {
+            if(isPresent(value))
+            {
+                object[part] = value;
+            }
+
+            return;
+        }
+
+        object = object[part] = object[part] || {};
+    });
+}
 
 /**
  * Base class for all placeholder components
@@ -207,27 +252,9 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
 
         if(this.options && this.options.properties && this.options.properties.length)
         {
-            this.options.properties.forEach(option =>
+            this.options.properties.forEach(property =>
             {
-                let parts = option.id.split('.');
-
-                let tmpOptions = options;
-
-                parts.forEach((part, index) =>
-                {
-                    //last item value is assigned
-                    if(index == parts.length - 1)
-                    {
-                        if(isPresent(this.options.value) && isPresent(this.options.value[option.id]))
-                        {
-                            tmpOptions[part] = this.options.value[option.id];
-                        }
-
-                        return;
-                    }
-
-                    tmpOptions = tmpOptions[part] = tmpOptions[part] || {};
-                });
+                setValue(options, isPresent(this.options.value) && isPresent(this.options.value[property.id]) && this.options.value[property.id], property.id);
             });
         }
 
@@ -237,34 +264,25 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
     //######################### private methods #########################
 
     /**
-     * Transforms component options to properties options
+     * Transforms component options to properties
+     * @param properties Properties descriptors
+     * @param options Options instance
      */
-    private _transformOptionsToProperties()
+    private _transformOptionsToProperties(properties: PropertiesPropertyMetadata[], options: any)
     {
         let propertiesOptions = {};
 
         //TODO - add logic for collection types
 
-        if(this.options && this.options.properties && this.options.properties.length)
+        properties.forEach(option =>
         {
-            this.options.properties.forEach(option =>
+            let value = getValue(options, option.id);
+
+            if(isPresent(value))
             {
-                let value = option.id.split('.').reduce((o,i) =>
-                                                        {
-                                                            if(o)
-                                                            {
-                                                                return o[i];
-                                                            }
-
-                                                            return null;
-                                                        }, this.metadata.options);
-
-                if(isPresent(value))
-                {
-                    propertiesOptions[option.id] = value;
-                }
-            });
-        }
+                propertiesOptions[option.id] = value;
+            }
+        });
 
         return propertiesOptions;
     }
@@ -273,6 +291,6 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
     {
         this.options.id = this._metadata.id;
         this.options.dynamicNodeInstance = this;
-        this.options.value = this.options.value || this._transformOptionsToProperties();
+        this.options.value = this.options.value || this._transformOptionsToProperties(this.options && this.options.properties, this._metadata.options);
     }
 }
