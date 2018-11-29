@@ -22,7 +22,7 @@ export interface RelationsMetadata extends DesignerCommonMetadata
     /**
      * Method that converts node options into inputs
      */
-    dynamicInputs?: (nodeOptions: PropertiesPropertyMetadata) => RelationsInputOutputMetadata[];
+    dynamicInputs?: (nodeOptions: any) => RelationsInputOutputMetadata[];
 
     /**
      * Node options that can be changed, do not set id, name and description
@@ -43,6 +43,17 @@ export interface RelationsMetadata extends DesignerCommonMetadata
      * Y coordinates of node, set by designer, do not set
      */
     y?: number;
+}
+
+/**
+ * Metadata used for node relations designer generic
+ */
+export interface RelationsMetadataGeneric<TNodeOptions> extends RelationsMetadata
+{
+    /**
+     * Method that converts node options into inputs
+     */
+    dynamicInputs: (nodeOptions: TNodeOptions) => RelationsInputOutputMetadata[];
 }
 
 /**
@@ -110,8 +121,9 @@ export interface SvgNodeDynamicNode extends SvgDynamicNode
     /**
      * Gets input coordinates of specified input
      * @param inputName Name of input which coordinates will be get
+     * @param dynamic Indication whether is input dynamic
      */
-    getInputCoordinates(inputName: string): Coordinates;
+    getInputCoordinates(inputName: string, dynamic: boolean): Coordinates;
 
     /**
      * Gets output coordinates of specified output
@@ -130,8 +142,9 @@ export interface SvgNodeDynamicNode extends SvgDynamicNode
      * Adds relation to specified input
      * @param relation Relation to be added to specified input
      * @param inputName Input name which will register relation
+     * @param dynamic Indication whether is input dynamic
      */
-    addInputRelation(relation: SvgRelationDynamicNode, inputName: string): boolean;
+    addInputRelation(relation: SvgRelationDynamicNode, inputName: string, dynamic: boolean): boolean;
 }
 
 /**
@@ -184,6 +197,11 @@ export interface SvgPeerDropArea
      * Name of input which has active drop area
      */
     inputId: string;
+
+    /**
+     * Indication whether is drop zone dynamic or not
+     */
+    dynamic: boolean;
 }
 
 /**

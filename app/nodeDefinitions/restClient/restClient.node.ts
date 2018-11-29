@@ -5,7 +5,7 @@ import {map} from "rxjs/operators";
 
 import {RestClientNodeOptions, RestClientNodeParameterValue, RestClientMethodType, RestClientParamType} from "./restClient.interface";
 import {NodeDefinitionGeneric, DynamicOutput, NodeDefinition} from "../../ngDynamic-core";
-import {DynamicNodeDesignerMetadata, PropertyType} from "../../ngDynamic-designer";
+import {DynamicNodeDesignerMetadata, PropertyType, RelationsMetadataGeneric, RelationsInputOutputMetadata} from "../../ngDynamic-designer";
 import {getEnumValues} from "@asseco/common";
 
 /**
@@ -163,7 +163,7 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
  */
 @DynamicNodeDesignerMetadata(
 {
-    relationsMetadata:
+    relationsMetadata: <RelationsMetadataGeneric<RestClientNodeOptions>>
     {
         name: 'Rest client',
         description: 'Allows you to execute http request with parameters and returns its response',
@@ -182,7 +182,8 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                 name: 'Http method',
                 description: 'Http method use for sending http request',
                 type: PropertyType.Options,
-                availableValues: getEnumValues(RestClientMethodType)
+                availableValues: getEnumValues(RestClientMethodType),
+                defaultValue: 0
             },
             {
                 id: 'url',
@@ -208,7 +209,8 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                         name: 'Parameter type',
                         description: 'Type of http parameter',
                         type: PropertyType.Options,
-                        availableValues: getEnumValues(RestClientParamType)
+                        availableValues: getEnumValues(RestClientParamType),
+                        defaultValue: 0
                     },
                     {
                         id: 'name',
@@ -218,7 +220,26 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                     },
                 ]
             }
-        ]
+        ],
+        dynamicInputs: nodeOptions =>
+        {
+            let result: RelationsInputOutputMetadata[] = [];
+
+            if(nodeOptions && nodeOptions.parameters && nodeOptions.parameters.length)
+            {
+                nodeOptions.parameters.forEach(param =>
+                {
+                    result.push(
+                    {
+                        id: param.inputName,
+                        name: param.inputName,
+                        type: RestClientParamType[+param.type]
+                    });
+                });
+            }
+
+            return result;
+        }
     }
 })
 export class RestClientNode implements NodeDefinition
