@@ -79,7 +79,7 @@ export class ComponentRendererDirective<TComponent extends DynamicComponent> imp
             let componentManager = injector.get(ComponentManager);
             let componentRelationsManager = injector.get(ComponentRelationManager);
 
-            componentRelationsManager.initialize();
+            await componentRelationsManager.initialize();
 
             if(this.componentMetadata)
             {

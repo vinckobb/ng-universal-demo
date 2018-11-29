@@ -1,5 +1,4 @@
-import {NodeDefinition} from "../nodeDefinitions.interface";
-import {DynamicOutput} from "../../decorators";
+import {NodeDefinition, DynamicOutput} from "../../ngDynamic-core";
 
 /**
  * Node used for negating input value

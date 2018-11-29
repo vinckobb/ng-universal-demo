@@ -1,6 +1,6 @@
 import {Subscription} from "rxjs";
 
-import {NodeDefinition} from "../nodeDefinitions";
+import {NodeDefinition} from "../interfaces";
 
 /**
  * Metadata for single component`s output for relation manager

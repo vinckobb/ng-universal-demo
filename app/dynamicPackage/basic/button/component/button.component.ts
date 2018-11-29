@@ -1,8 +1,9 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 import {isBlank, isPresent} from "@asseco/common";
 
-import {DynamicComponentGeneric, ActionDescription, DynamicOutput} from "../../../../ngDynamic-core";
+import {DynamicComponentGeneric, DynamicOutput} from "../../../../ngDynamic-core";
 import {ButtonComponentOptions} from "./button.interface";
+import {ActionDescription} from "../../../../nodeDefinitions";
 
 /**
  * Component used for displaying button

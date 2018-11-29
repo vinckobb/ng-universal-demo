@@ -1,8 +1,7 @@
 import {Injector} from "@angular/core";
 
-import {NodeDefinitionGeneric} from "../nodeDefinitions.interface";
-import {ComponentManager} from "../../componentManager";
 import {ActionDescription} from "./componentAction.interface";
+import {NodeDefinitionGeneric, ComponentManager} from "../../ngDynamic-core";
 
 /**
  * Node used for invoking action on some component (calling method)

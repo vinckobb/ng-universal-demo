@@ -1,4 +1,4 @@
-import {ActionDescription} from "../../../../ngDynamic-core";
+import {ActionDescription} from "../../../../nodeDefinitions";
 
 /**
  * Options for button component

@@ -78,22 +78,26 @@ export class LayoutDesignerTreeComponent implements OnDestroy
 
     public isExpandable(node: any): boolean
     {
-        return false;
-        //return !!node.children && node.children.length > 0;
+        // return false;
+        return !!node.children && node.children.length > 0;
     }
 
     private _getChildren(node: any): any[]
     {
-        return [];
-        //return node.children;
+        // return [];
+        return node.children;
     }
 
     private _handleComponents()
     {
+        console.log(this._componentSvc.components[0].children);
+
         //TODO potrebne vyriesit ziskavanie children, zadefinovat interface
-        this.treeDataSource.data = [
+        this.treeDataSource.data = 
+        [
             {
-                options: this._componentSvc.components[0].options
+                options: this._componentSvc.components[0].options,
+                children: this._componentSvc.components[0].children.filter(itm => !!itm)
             }
         ];
         

@@ -1,8 +1,6 @@
 import {Injector} from "@angular/core";
-import {ScriptLoader} from "../../scriptLoader";
 
-import {NodeDefinition} from "../nodeDefinitions.interface";
-import {DynamicOutput} from "../../decorators";
+import {NodeDefinition, ScriptLoader, DynamicOutput} from "../../ngDynamic-core";
 
 /**
  * Node used for calling custom scripts

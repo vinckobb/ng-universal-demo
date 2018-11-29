@@ -1,6 +1,6 @@
 import {Injector} from "@angular/core";
 
-import {DynamicNode} from "../interfaces";
+import {DynamicNode} from "../dynamicNode";
 
 /**
  * Definition of node constructor

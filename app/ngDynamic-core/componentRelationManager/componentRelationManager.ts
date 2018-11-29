@@ -1,16 +1,9 @@
 import {Injector} from "@angular/core";
 import {isBlank} from "@asseco/common";
 
-import {DynamicComponentRelationMetadata, DynamicNode} from "../interfaces";
+import {DynamicComponentRelationMetadata, DynamicNode, NodeDefinitionConstructor, NodeDefinition} from "../interfaces";
 import {ComponentManager} from "../componentManager";
-import {NodeDefinitionConstructor, NodeDefinition} from "../nodeDefinitions";
 import {DynamicComponentRelationManagerMetadata, DynamicComponentRelationManagerInputOutputMetadata} from "./componentRelationManager.interface";
-import * as defs from '../nodeDefinitions';
-
-/**
- * Object storing node definitions
- */
-let nodeDefinitions: {[name: string]: NodeDefinitionConstructor} = defs;
 
 /**
  * Manager used for handling relations between components
@@ -64,11 +57,11 @@ export class ComponentRelationManager
     /**
      * Initialize relations manager
      */
-    public initialize()
+    public async initialize()
     {
         if(!this._initialized)
         {
-            this._initializeRelations(this._metadata);
+            await this._initializeRelations(this._metadata);
             
             this._initialized = true;
         }
@@ -164,7 +157,7 @@ export class ComponentRelationManager
      * Initialize relations from metadata
      * @param metadata Metadata to be used for initialization of relations
      */
-    private _initializeRelations(metadata: DynamicComponentRelationMetadata[])
+    private async _initializeRelations(metadata: DynamicComponentRelationMetadata[])
     {
         if(isBlank(metadata))
         {
@@ -176,7 +169,7 @@ export class ComponentRelationManager
             throw new Error("Metadata are not an array");
         }
 
-        metadata.forEach(meta =>
+        for(let meta of metadata)
         {
             let outputs: DynamicComponentRelationManagerInputOutputMetadata[] = [];
 
@@ -207,6 +200,12 @@ export class ComponentRelationManager
 
             if(meta.nodeType)
             {
+                let nodeDefinitions: {[name: string]: NodeDefinitionConstructor} = (await import(`../../nodeDefinitions`)
+                    .catch(error =>
+                    {
+                        throw new Error(`Unable to load dynamic nodes package, missing @ngDynamic/nodeDefinitions, error '${error}'.`);
+                    })).nodeDefinitions;
+
                 if(!nodeDefinitions[`${meta.nodeType}Node`])
                 {
                     throw new Error(`Unable to find node type '${meta.nodeType}'!`);
@@ -231,7 +230,7 @@ export class ComponentRelationManager
             {
                 this.updateRelations(meta.id, nodeInstance);
             }
-        });
+        };
     }
 
     /**

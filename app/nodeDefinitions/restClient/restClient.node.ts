@@ -3,9 +3,8 @@ import {HttpClient, HttpRequest, HttpParams, HttpResponse} from "@angular/common
 import {Observable, empty} from "rxjs";
 import {map} from "rxjs/operators";
 
-import {NodeDefinition, NodeDefinitionGeneric} from "../nodeDefinitions.interface";
-import {DynamicOutput} from "../../decorators";
 import {RestClientNodeOptions, RestClientNodeParameterValue, RestClientMethodType, RestClientParamType} from "./restClient.interface";
+import {NodeDefinitionGeneric, DynamicOutput, NodeDefinition} from "../../ngDynamic-core";
 
 /**
  * Node used for RestClient http calls real one

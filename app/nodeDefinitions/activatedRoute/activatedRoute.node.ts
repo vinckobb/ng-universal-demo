@@ -3,8 +3,8 @@ import {ActivatedRoute} from "@angular/router";
 import {StringDictionary} from "@asseco/common";
 import {Subscription} from "rxjs";
 
-import {NodeDefinition} from "../nodeDefinitions.interface";
-import {DynamicOutput} from "../../decorators";
+import {DynamicOutput, NodeDefinition} from "../../ngDynamic-core";
+
 
 /**
  * Node used for obtaining information about current route
