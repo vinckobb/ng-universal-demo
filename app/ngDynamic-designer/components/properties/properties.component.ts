@@ -1,9 +1,9 @@
 import {Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef} from "@angular/core";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators, FormArray} from "@angular/forms";
 import {Subscription} from "rxjs";
 
 import {PropertiesService} from "../../services";
-import {PropertiesMetadata} from "../../interfaces";
+import {PropertiesMetadata, PropertyType, PropertiesPropertyMetadata} from "../../interfaces";
 
 /**
  * Component used for rendering and editing dynamic node properties
@@ -44,6 +44,11 @@ export class PropertiesComponent implements OnDestroy
     private _isLoadingProperties: boolean;
 
     //######################### public properties - template bindings #########################
+
+    /**
+     * PropertyType enum
+     */
+    public propertyTypes = PropertyType;
 
     /**
      * Control used for editing id of dynamic node
@@ -125,6 +130,33 @@ export class PropertiesComponent implements OnDestroy
         }
     }
 
+    //######################### public methods - template bindings #########################
+
+    /**
+     * Adds item to collection
+     * @param metadata Property metadata for obtaining subobptions
+     * @param array Form array which will have new item
+     */
+    public addCollectionItem(metadata: PropertiesPropertyMetadata, array: FormArray)
+    {
+        this._isLoadingProperties = true;
+
+        if(!metadata.arrayItemProperty)
+        {
+            throw new Error(`Unable to get array item properties for '${metadata.name}'!`);
+        }
+
+        let group = new FormGroup({});
+        array.push(group);
+
+        metadata.arrayItemProperty.forEach(property =>
+        {
+            group.addControl(property.id, new FormControl(property.defaultValue, property.validators || []));
+        });
+
+        this._isLoadingProperties = false;
+    }
+
     //######################### private methods #########################
 
     /**
@@ -147,9 +179,16 @@ export class PropertiesComponent implements OnDestroy
         {
             this._propertiesMetadata.properties.forEach(property =>
             {
-                //TODO - add collection controlos (FormArray)
-
-                this.propertiesForm.addControl(property.id, new FormControl(property.defaultValue, property.validators || []));
+                //Collection properties
+                if(property.type == PropertyType.Array)
+                {
+                    this.propertiesForm.addControl(property.id, new FormArray([], property.validators || []));
+                }
+                //single property
+                else
+                {
+                    this.propertiesForm.addControl(property.id, new FormControl(property.defaultValue, property.validators || []));
+                }
             });
 
             if (this._propertiesMetadata.value)
