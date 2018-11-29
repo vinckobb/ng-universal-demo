@@ -1,14 +1,19 @@
-import {Component, ChangeDetectionStrategy, EventEmitter, Output, OnDestroy, IterableDiffer, IterableDiffers, ChangeDetectorRef} from "@angular/core";
+import {Component, ChangeDetectionStrategy, EventEmitter, Output, OnDestroy, IterableDiffer, IterableDiffers, ChangeDetectorRef, OnInit} from "@angular/core";
 import {Subscription} from "rxjs";
 
 import {ComponentsService} from "../../services";
-import {DesignerLayoutPlaceholderComponent, RelationsMetadata} from "../../interfaces";
+import {DesignerLayoutPlaceholderComponent, RelationsMetadata, DesignerMetadataClass} from "../../interfaces";
 import {PackageLoader} from "../../packageLoader";
 
 /**
  * Name of transfer data for component drag
  */
 export const COMPONENT_DRAG = 'component-drag';
+
+/**
+ * Name of transfer data for node drag
+ */
+export const NODE_DRAG = 'node-drag';
 
 /**
  * Component used for displaying available nodes, components that can be added to node designer
@@ -20,7 +25,7 @@ export const COMPONENT_DRAG = 'component-drag';
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['nodeComponentPalette.component.scss']
 })
-export class NodeComponentPaletteComponent implements OnDestroy
+export class NodeComponentPaletteComponent implements OnInit, OnDestroy
 {
     //######################### private fields #########################
 
@@ -35,6 +40,11 @@ export class NodeComponentPaletteComponent implements OnDestroy
     private _iterableDiffer: IterableDiffer<DesignerLayoutPlaceholderComponent>;
 
     //######################### public properties - template bindings #########################
+
+    /**
+     * Array of node definitions for creating relations
+     */
+    public nodesDefinitions: RelationsMetadata[] = [];
 
     /**
      * Array of components that are available for adding to node designer
@@ -76,6 +86,32 @@ export class NodeComponentPaletteComponent implements OnDestroy
         this._handleComponents();
     }
 
+    //######################### public methods - implementation of OnInit #########################
+    
+    /**
+     * Initialize component
+     */
+    public async ngOnInit()
+    {
+        let nodeDefinitions: {[name: string]: DesignerMetadataClass} = (await import(`../../../nodeDefinitions`)
+            .catch(error =>
+            {
+                throw new Error(`Unable to load dynamic nodes package, missing @ngDynamic/nodeDefinitions, error '${error}'.`);
+            })).nodeDefinitions as any;
+
+        Object.keys(nodeDefinitions).forEach(key =>
+        {
+            let relationsMetadataClass = nodeDefinitions[key];
+
+            if(relationsMetadataClass.ɵMetadata && relationsMetadataClass.ɵMetadata.relationsMetadata)
+            {
+                this.nodesDefinitions.push(relationsMetadataClass.ɵMetadata.relationsMetadata);
+            }
+        })
+
+        this._changeDetector.detectChanges();
+    }
+
     //######################### public methods - implementation of OnDestroy #########################
     
     /**
@@ -105,9 +141,21 @@ export class NodeComponentPaletteComponent implements OnDestroy
     }
 
     /**
+     * Handles drag start for node
+     * @param event Javascript drag event
+     * @param id Id of component being dragged
+     */
+    public nodeDragStart(event: DragEvent, name: string)
+    {
+        event.dataTransfer.setData('text/plain', NODE_DRAG);
+        event.dataTransfer.setData('text/name', name);
+        this.dragging.emit(true);
+    }
+
+    /**
      * Event handler used for handling drag end for component
      */
-    public componentDragEnd()
+    public dragEnd()
     {
         this.dragging.emit(false);
     }

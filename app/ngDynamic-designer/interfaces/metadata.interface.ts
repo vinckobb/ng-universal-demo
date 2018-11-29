@@ -143,7 +143,7 @@ export interface DesignerItemId
 export interface DesignerCommonMetadata
 {
     /**
-     * Unique id of component or node instance in dynamic page
+     * Unique id of component or node instance in dynamic page, set by designer, do not set
      */
     id?: string;
 

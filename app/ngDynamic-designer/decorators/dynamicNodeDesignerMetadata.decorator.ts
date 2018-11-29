@@ -1,19 +1,19 @@
-import {DesignerLayoutMetadata, DesignerMetadataClass} from "../interfaces";
+import {DesignerMetadataClass, DesignerNodeMetadata} from "../interfaces";
 
 declare var designerMetadata: boolean;
 
 /**
- * Sets designer metadata to node on which is this decorator applied
+ * Sets node designer metadata to class on which is this decorator applied
  * @returns ClassDecorator
  */
-export function DynamicNodeDesignerMetadata(templateMetadata: DesignerLayoutMetadata): ClassDecorator
+export function DynamicNodeDesignerMetadata(metadata: DesignerNodeMetadata): ClassDecorator
 {
     if(designerMetadata)
     {
         return function <TFunction extends Function> (target: TFunction): TFunction
         {
             let metadataTarget: DesignerMetadataClass = target as any;
-            metadataTarget.ɵMetadata = templateMetadata;
+            metadataTarget.ɵMetadata = metadata;
 
             return target;
         };

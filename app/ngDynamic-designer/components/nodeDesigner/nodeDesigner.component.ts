@@ -1,4 +1,5 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnInit} from "@angular/core";
+import {generateId} from "@asseco/common";
 import {select, Selection, event, zoom, zoomTransform} from 'd3';
 
 import {SvgNode, SvgRelation} from "./misc";
@@ -132,6 +133,29 @@ export class NodeDesignerComponent implements OnInit
                                  this._setDropAreaFn,
                                  () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn))
         })
+    }
+
+    /**
+     * Adds node into node designer
+     * @param coordinates Coordinates of newly added node
+     * @param nodeDefinition Definition of node to be added
+     */
+    public addNode(coordinates: Coordinates, nodeDefinition: RelationsMetadata)
+    {
+        let currentZoom = zoomTransform(this._svgData.svg.node());
+
+        new SvgNode(this._svgData.parentGroup, 
+                    {
+                        id: generateId(12),
+                        description: nodeDefinition.description,
+                        name: nodeDefinition.name,
+                        x: currentZoom.invertX(coordinates.x),
+                        y: currentZoom.invertY(coordinates.y),
+                        inputs: JSON.parse(JSON.stringify(nodeDefinition.inputs || [])),
+                        outputs: JSON.parse(JSON.stringify(nodeDefinition.outputs || []))
+                    }, 
+                    this._setDropAreaFn,
+                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn));
     }
 
     //######################### private methods #########################

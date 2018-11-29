@@ -4,11 +4,27 @@ import {StringDictionary} from "@asseco/common";
 import {Subscription} from "rxjs";
 
 import {DynamicOutput, NodeDefinition} from "../../ngDynamic-core";
-
+import {DynamicNodeDesignerMetadata} from "../../ngDynamic-designer";
 
 /**
  * Node used for obtaining information about current route
  */
+@DynamicNodeDesignerMetadata(
+{
+    relationsMetadata:
+    {
+        name: 'Activated route',
+        description: 'Currently activated route',
+        outputs:
+        [
+            {
+                id: 'query',
+                name: 'query',
+                type: 'StringDictionary'
+            }
+        ]
+    }
+})
 export class ActivatedRouteNode implements NodeDefinition
 {
     //######################### private fields #########################

@@ -1,7 +1,7 @@
 import {Component, ChangeDetectionStrategy, ViewChild} from "@angular/core";
 
 import {NodeDesignerComponent} from "../nodeDesigner/nodeDesigner.component";
-import {NodeComponentPaletteComponent, COMPONENT_DRAG} from "../nodeComponentPalette/nodeComponentPalette.component";
+import {NodeComponentPaletteComponent, COMPONENT_DRAG, NODE_DRAG} from "../nodeComponentPalette/nodeComponentPalette.component";
 
 /**
  * Component used for displaying node designer mode
@@ -63,6 +63,18 @@ export class NodeDesignerModeComponent
             let index = this.nodeComponentPallete.availableComponents.indexOf(component);
             this.nodeComponentPallete.availableComponents.splice(index, 1);
             this.nodeComponentPallete.usedComponents.push(component);
+        }
+
+        //handle node drag
+        if(type == NODE_DRAG)
+        {
+            let node = this.nodeComponentPallete.nodesDefinitions.find(itm => itm.name == event.dataTransfer.getData('text/name'));
+
+            this.nodeDesigner.addNode({
+                                          x: event.layerX,
+                                          y: event.layerY
+                                      },
+                                      node);
         }
     }
 }

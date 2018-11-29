@@ -25,17 +25,17 @@ export interface RelationsMetadata extends DesignerCommonMetadata
     dynamicInputs?: (nodeOptions: PropertiesMetadata) => RelationsInputOutputMetadata[];
 
     /**
-     * Node options that can be changed
+     * Node options that can be changed, do not set id, name and description
      */
     nodeOptions?: PropertiesMetadata;
 
     /**
-     * X coordinates of node
+     * X coordinates of node, set by designer, do not set
      */
     x?: number;
 
     /**
-     * Y coordinates of node
+     * Y coordinates of node, set by designer, do not set
      */
     y?: number;
 }

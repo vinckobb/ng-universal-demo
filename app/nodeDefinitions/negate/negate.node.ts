@@ -1,8 +1,33 @@
 import {NodeDefinition, DynamicOutput} from "../../ngDynamic-core";
+import {DynamicNodeDesignerMetadata} from "../../ngDynamic-designer";
 
 /**
  * Node used for negating input value
  */
+@DynamicNodeDesignerMetadata(
+{
+    relationsMetadata:
+    {
+        name: 'Negate',
+        description: 'Negates input data and returns negated value',
+        inputs:
+        [
+            {
+                id: 'input',
+                name: 'input',
+                type: 'any'
+            }
+        ],
+        outputs:
+        [
+            {
+                id: 'value',
+                name: 'value',
+                type: 'boolean'
+            }
+        ]
+    }
+})
 export class NegateNode implements NodeDefinition
 {
     //######################### public properties #########################
