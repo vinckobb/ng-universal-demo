@@ -2,6 +2,10 @@ import {Component, ChangeDetectionStrategy, Input} from "@angular/core";
 
 import {DesignerLayoutMetadata} from "../../../interfaces";
 import {DesignerItemId} from "../../../interfaces";
+import {DragService} from "../../../services";
+
+export const COMPONENT_PALETTE_ITEM = "component_palette";
+
 /**
  * Component used for displaying component palette in designer
  */
@@ -51,7 +55,19 @@ export class ComponentPaletteItemComponent
     }
 
     //######################### constructor #########################
-    constructor()
+    constructor(private _dragSvc: DragService)
     {
+    }
+
+    //######################### public methods #########################
+
+    /**
+     * Prepares component for drag event
+     */
+    public dragStart(event: DragEvent)
+    {
+        event.dataTransfer.setData('text/plain', COMPONENT_PALETTE_ITEM);
+
+        this._dragSvc.dragItem = this.componentData;
     }
 }

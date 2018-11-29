@@ -1,6 +1,8 @@
 STACK {{options?.id}}
-<div [id]="dropzoneId" cdkDropList [cdkDropListOrientation]="options?.value['inline'] ? 'horizontal' : 'vertical'" (cdkDropListDropped)="drop($event)" style="padding: 25px;">
-    <div cdkDrag
+<div (drop)="drop($event)"
+     (dragover)="allowDrop($event)" style="padding: 20px;">
+    <div (dragstart)="dragStart($event, child)"
+        draggable="true" 
         [class.inline-block]="options?.value['inline']"
         [style.paddingTop.px]="options?.value['padding.top']"
         [style.paddingLeft.px]="options?.value['padding.left']"

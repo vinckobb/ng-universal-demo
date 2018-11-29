@@ -2,7 +2,7 @@ import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef
 import {Subscription} from "rxjs";
 
 import {DesignerMode} from "./designer.interface";
-import {ComponentsService, PropertiesService} from "../services";
+import {ComponentsService, PropertiesService, DragService} from "../services";
 
 /**
  * Component used for displaying designer
@@ -14,6 +14,7 @@ import {ComponentsService, PropertiesService} from "../services";
     providers: 
     [
         ComponentsService,
+        DragService,
         PropertiesService
     ],
     changeDetection: ChangeDetectionStrategy.OnPush

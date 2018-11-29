@@ -4,8 +4,12 @@ import {Subscription} from "rxjs";
 
 import {TreeFlattener, TreeFlatDataSource} from "./dataSource/flatDataSource";
 import {ComponentsService, PropertiesService} from "../../services";
+import {DesignerLayoutPlaceholderComponent} from "../../interfaces";
 
-//TODO doplnit interface pre tree
+//TODO doplnit interface pre tree, komentare
+/**
+ * - Vytvorit vlastny TreeControl na to aby sa nezavrel strom pri kazdej zmene
+ */
 
 @Component(
     {
@@ -78,26 +82,44 @@ export class LayoutDesignerTreeComponent implements OnDestroy
 
     public isExpandable(node: any): boolean
     {
-        // return false;
         return !!node.children && node.children.length > 0;
     }
 
     private _getChildren(node: any): any[]
     {
-        // return [];
         return node.children;
     }
 
+    /**
+     * Gets children from `DesignerLayoutPlaceholderComponent`
+     * @param component
+     */
+    private _getChildrenForComponent(component: DesignerLayoutPlaceholderComponent): any[]
+    {
+        if (!component)
+        {
+            return null;
+        }
+
+        return component.children.filter(item => !!item).map(item => {
+            return {
+                options: item.options,
+                children: this._getChildrenForComponent(item)
+            };
+        });
+    }
+
+    /**
+     * Transforms `DesignerLayoutPlaceholderComponent` and its children into tree structure
+     */
     private _handleComponents()
     {
-        console.log(this._componentSvc.components[0].children);
-
-        //TODO potrebne vyriesit ziskavanie children, zadefinovat interface
+        //TODO zadefinovat interface
         this.treeDataSource.data = 
         [
             {
                 options: this._componentSvc.components[0].options,
-                children: this._componentSvc.components[0].children.filter(itm => !!itm)
+                children: this._getChildrenForComponent(this._componentSvc.components[0])
             }
         ];
         

@@ -1,12 +1,14 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
-import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 import {StackComponentOptions} from "../../stack.interface";
-import {PlaceholderBaseComponent, PropertiesService, DesignerItemId} from "../../../../../../ngDynamic-designer";
+import {PlaceholderBaseComponent, PropertiesService, DragService} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
+import {COMPONENT_PALETTE_ITEM} from "../../../../../../ngDynamic-designer/components";
 
 //TODO drop metodu by bolo vhodne prehodit do PlaceholderBaseComponent
+
+export const COMPONENT_ITEM = "component";
 
 /**
  * Stack designer layout component used for designing components
@@ -35,7 +37,8 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
     //######################### constructor #########################
     constructor(changeDetector: ChangeDetectorRef,
                 packageLoader: PackageLoader,
-                optionsSvc: PropertiesService)
+                optionsSvc: PropertiesService,
+                private _dragSvc: DragService)
     {
         super(changeDetector, packageLoader, optionsSvc);
 
@@ -67,47 +70,57 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
             }
         }
     }
+
+    public allowDrop(event: DragEvent)
+    {
+        event.preventDefault();
+        event.stopPropagation();
+
+        let type = event.dataTransfer.getData('text/plain');
+
+        console.log("Type:", type);
+        if (type == COMPONENT_PALETTE_ITEM ||
+            type == COMPONENT_ITEM)
+        {
+            event.stopPropagation();
+        }
+    }
+
+    public dragStart(event: DragEvent, child: any)
+    {
+        event.dataTransfer.setData('text/plain', COMPONENT_ITEM);
+        this._dragSvc.dragItem = child;
+    }
     
     /**
      * Drops item on desired position
-     * @param dragDrop drag data with component information
+     * @param event drag event
      */
-    public async drop(dragDrop: CdkDragDrop<any, any>)
+    public async drop(event: DragEvent)
     {
-        if (!dragDrop)
+        if (event)
         {
-            return;
+            event.preventDefault();
+            event.stopPropagation();
         }
+
+        let dragItem = this._dragSvc.dragItem;
+        let type = event.dataTransfer.getData('text/plain');
         
-        if (dragDrop &&
-            dragDrop.previousContainer == dragDrop.container)
+        if (type == COMPONENT_PALETTE_ITEM)
         {
-            if (dragDrop.previousIndex == dragDrop.currentIndex)
-            {
-                return;
-            }
-
-            moveItemInArray(this.childrenData, dragDrop.previousIndex, dragDrop.currentIndex);
-            this.invalidateVisuals();
-            return;
+            this.addChildMetadata(
+                {
+                    packageName: dragItem.packageName,
+                    componentName: dragItem.componentName,
+                    designerMetadata: await this._packageLoader.getComponentsMetadata(dragItem.packageName, dragItem.componentName),
+                    componentMetadata: null
+                }
+            );  
         }
-
-        if (!dragDrop.item ||
-            !dragDrop.item.data)
+        else if (type == COMPONENT_ITEM)
         {
-            return;
+            this.addChildMetadata(dragItem);
         }
-
-        let componentMetadata: DesignerItemId = dragDrop.item.data;
-
-        this.addChildMetadata(
-            {
-                packageName: componentMetadata.packageName,
-                componentName: componentMetadata.componentName,
-                designerMetadata: await this._packageLoader.getComponentsMetadata(componentMetadata.packageName, componentMetadata.componentName),
-                componentMetadata: null
-            },
-            dragDrop.currentIndex
-        );   
     }
 }
