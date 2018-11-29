@@ -1,56 +1,11 @@
 import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding, HostListener} from "@angular/core";
-import {isPresent, generateId} from "@asseco/common";
+import {isPresent, generateId, setValue, getValue} from "@asseco/common";
 
 import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata, PropertiesPropertyMetadata} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
 import {PropertiesService} from "../../services";
 import {PackageLoader} from "../../packageLoader";
-
-/**
- * Safely returns value from object property using string expression
- * @param object Object which property value will be obtained
- * @param expression Expression for obtaining value
- */
-function getValue(object: any, expression: string): any
-{
-    return expression.split('.').reduce((o,i) =>
-    {
-        if(o)
-        {
-            return o[i];
-        }
-
-        return null;
-    }, object);
-}
-
-/**
- * Sets value to objects property using string expression
- * @param object Object which property value will be set
- * @param value Value that will be set
- * @param expression Expression for setting value
- */
-function setValue(object: any, value: any, expression: string): void
-{
-    let parts = expression.split('.');
-
-    parts.forEach((part, index) =>
-    {
-        //last item value is assigned
-        if(index == parts.length - 1)
-        {
-            if(isPresent(value))
-            {
-                object[part] = value;
-            }
-
-            return;
-        }
-
-        object = object[part] = object[part] || {};
-    });
-}
 
 /**
  * Base class for all placeholder components

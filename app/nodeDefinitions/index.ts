@@ -7,6 +7,7 @@ import {NodeDefinitionConstructor} from '../ngDynamic-core';
 
 export {RestClientNodeOptions, RestClientParamType, RestClientMethodType, RestClientNodeParameter} from './restClient/restClient.interface';
 export {ActionDescription} from './componentAction/componentAction.interface';
+export {ScriptNodeOptions} from './script/script.interface';
 
 /**
  * Definitions of nodes

@@ -1,12 +1,29 @@
 import {Injector} from "@angular/core";
 
 import {ActionDescription} from "./componentAction.interface";
-import {NodeDefinitionGeneric, ComponentManager} from "../../ngDynamic-core";
+import {NodeDefinition, ComponentManager} from "../../ngDynamic-core";
+import {DynamicNodeDesignerMetadata} from "../../ngDynamic-designer";
 
 /**
  * Node used for invoking action on some component (calling method)
  */
-export class ComponentActionNode implements NodeDefinitionGeneric<any>
+@DynamicNodeDesignerMetadata(
+{
+    relationsMetadata:
+    {
+        name: 'Component action',
+        description: 'Allows invoking of action (method) on component',
+        inputs:
+        [
+            {
+                id: 'trigger',
+                name: 'trigger',
+                type: 'ActionDescription[]'
+            }
+        ]
+    }
+})
+export class ComponentActionNode implements NodeDefinition
 {
     //######################### private fields #########################
 
@@ -16,11 +33,6 @@ export class ComponentActionNode implements NodeDefinitionGeneric<any>
     private _componentManager: ComponentManager;
 
     //######################### public properties #########################
-
-    /**
-     * Options for node
-     */
-    public options: any;
 
     /**
      * Trigger array for invoking actions on components

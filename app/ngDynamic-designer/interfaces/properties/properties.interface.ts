@@ -15,12 +15,12 @@ export interface PropertiesMetadata extends DesignerCommonMetadata
     properties?: PropertiesPropertyMetadata[];
 
     /**
-     * Value that is gathered by properties component
+     * Value that is gathered by properties component, set by designer, do not set
      */
     value?: any;
 
     /**
-     * Dynamic node instance
+     * Dynamic node instance, set by designer, do not set
      */
     dynamicNodeInstance?: DynamicNode;
 }

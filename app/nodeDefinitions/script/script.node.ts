@@ -1,11 +1,37 @@
 import {Injector} from "@angular/core";
 
-import {NodeDefinition, ScriptLoader, DynamicOutput} from "../../ngDynamic-core";
+import {ScriptLoader, DynamicOutput, NodeDefinitionGeneric} from "../../ngDynamic-core";
+import {DynamicNodeDesignerMetadata} from "../../ngDynamic-designer";
+import {ScriptNodeOptions} from "./script.interface";
 
 /**
  * Node used for calling custom scripts
  */
-export class ScriptNode implements NodeDefinition
+@DynamicNodeDesignerMetadata(
+{
+    relationsMetadata:
+    {
+        name: 'Script',
+        description: 'Allows you to create custom script to be executed',
+        inputs:
+        [
+            {
+                id: 'input',
+                name: 'input',
+                type: 'any'
+            }
+        ],
+        outputs:
+        [
+            {
+                id: 'output',
+                name: 'output',
+                type: 'any'
+            }
+        ]
+    }
+})
+export class ScriptNode implements NodeDefinitionGeneric<ScriptNodeOptions>
 {
     //######################### private fields #########################
 
@@ -15,6 +41,11 @@ export class ScriptNode implements NodeDefinition
     private _scriptLoader: ScriptLoader;
 
     //######################### public properties #########################
+
+    /**
+     * Options for node
+     */
+    public options: ScriptNodeOptions;
 
     /**
      * Input to be mapped

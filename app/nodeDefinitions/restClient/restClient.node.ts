@@ -5,6 +5,8 @@ import {map} from "rxjs/operators";
 
 import {RestClientNodeOptions, RestClientNodeParameterValue, RestClientMethodType, RestClientParamType} from "./restClient.interface";
 import {NodeDefinitionGeneric, DynamicOutput, NodeDefinition} from "../../ngDynamic-core";
+import {DynamicNodeDesignerMetadata, PropertyType} from "../../ngDynamic-designer";
+import {getEnumValues} from "@asseco/common";
 
 /**
  * Node used for RestClient http calls real one
@@ -159,6 +161,66 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
 /**
  * Node used for RestClient http calls
  */
+@DynamicNodeDesignerMetadata(
+{
+    relationsMetadata:
+    {
+        name: 'Rest client',
+        description: 'Allows you to execute http request with parameters and returns its response',
+        outputs:
+        [
+            {
+                id: 'result',
+                name: 'result',
+                type: 'Observable<any>'
+            }
+        ],
+        nodeOptions:
+        [
+            {
+                id: 'method',
+                name: 'Http method',
+                description: 'Http method use for sending http request',
+                type: PropertyType.Number,
+                availableValues: getEnumValues(RestClientMethodType)
+            },
+            {
+                id: 'url',
+                name: 'Url',
+                description: 'Url of endpoint for processing http request',
+                type: PropertyType.Number
+            },
+            {
+                id: 'parameters',
+                name: 'Inputs',
+                description: 'Collection of input parameters for http request',
+                type: PropertyType.Array,
+                arrayItemProperty:
+                [
+                    {
+                        id: 'inputName',
+                        name: 'Input name',
+                        description: 'Name of input',
+                        type: PropertyType.String
+                    },
+                    {
+                        id: 'type',
+                        name: 'Parameter type',
+                        description: 'Type of http parameter',
+                        type: PropertyType.Number,
+                        availableValues: getEnumValues(RestClientParamType)
+                    },
+                    {
+                        id: 'name',
+                        name: 'Parameter name',
+                        description: 'Name of http parameter',
+                        type: PropertyType.String
+                    },
+                ]
+            }
+        ]
+    }
+})
 export class RestClientNode implements NodeDefinition
 {
     //######################### constructor #########################

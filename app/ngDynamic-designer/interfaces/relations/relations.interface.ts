@@ -2,7 +2,7 @@ import {Observable, Subscription} from "rxjs";
 
 import {DesignerCommonMetadata} from "../metadata.interface";
 import {DynamicNode} from "../../../ngDynamic-core";
-import {PropertiesMetadata} from "../properties/properties.interface";
+import {PropertiesPropertyMetadata} from "../properties/properties.interface";
 
 /**
  * Metadata used for node relations designer
@@ -22,12 +22,12 @@ export interface RelationsMetadata extends DesignerCommonMetadata
     /**
      * Method that converts node options into inputs
      */
-    dynamicInputs?: (nodeOptions: PropertiesMetadata) => RelationsInputOutputMetadata[];
+    dynamicInputs?: (nodeOptions: PropertiesPropertyMetadata) => RelationsInputOutputMetadata[];
 
     /**
      * Node options that can be changed, do not set id, name and description
      */
-    nodeOptions?: PropertiesMetadata;
+    nodeOptions?: PropertiesPropertyMetadata[];
 
     /**
      * X coordinates of node, set by designer, do not set
