@@ -8,3 +8,4 @@ export * from './designer.component';
 export * from './placeholderBase/placeholderBase.component';
 export * from './properties/properties.component';
 export * from './nodeComponentPalette/nodeComponentPalette.component';
+export * from './properties/property/property.component';

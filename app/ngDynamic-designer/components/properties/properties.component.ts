@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 
 import {PropertiesService} from "../../services";
-import {PropertiesMetadata, PropertyType} from "../../interfaces";
+import {PropertiesMetadata} from "../../interfaces";
 
 /**
  * Component used for rendering and editing dynamic node properties
@@ -54,11 +54,6 @@ export class PropertiesComponent implements OnDestroy
      * Control used for editing properties of dynamic node
      */
     public propertiesForm: FormGroup;
-
-    /**
-     * PropertyType enum
-     */
-    public propertyTypes = PropertyType;
 
     /**
      * Returns properties metadata of dynamic node

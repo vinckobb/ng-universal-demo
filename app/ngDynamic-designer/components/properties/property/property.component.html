@@ -1,0 +1,11 @@
+<label [attr.for]="property.id">
+    {{property.name}}
+</label>
+<div *ngIf="property.description">
+    {{property?.description}}
+</div>
+
+<div [ngSwitch]="property.type">
+    <input *ngSwitchCase="propertyTypes.Boolean" [formControl]="control" [id]="property.id" type="checkbox" class="form-control">
+    <input *ngSwitchDefault [formControl]="control" [id]="property.id" type="text" class="form-control">
+</div>
