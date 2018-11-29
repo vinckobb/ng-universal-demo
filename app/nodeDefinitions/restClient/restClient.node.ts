@@ -181,7 +181,7 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                 id: 'method',
                 name: 'Http method',
                 description: 'Http method use for sending http request',
-                type: PropertyType.Number,
+                type: PropertyType.Options,
                 availableValues: getEnumValues(RestClientMethodType)
             },
             {
@@ -207,7 +207,7 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                         id: 'type',
                         name: 'Parameter type',
                         description: 'Type of http parameter',
-                        type: PropertyType.Number,
+                        type: PropertyType.Options,
                         availableValues: getEnumValues(RestClientParamType)
                     },
                     {

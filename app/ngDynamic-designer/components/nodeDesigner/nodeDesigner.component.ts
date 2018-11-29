@@ -4,6 +4,7 @@ import {select, Selection, event, zoom, zoomTransform} from 'd3';
 
 import {SvgNode, SvgRelation} from "./misc";
 import {SvgPeerDropArea, Coordinates, DesignerLayoutPlaceholderComponent, RelationsMetadata} from "../../interfaces";
+import {PropertiesService} from "../../services";
 
 /**
  * Component used for designing relation nodes
@@ -38,11 +39,11 @@ export class NodeDesignerComponent implements OnInit
     } = {};
 
     /**
-     * Array of added compnents into node designer
+     * Array of added nodes into node designer
      */
-    private _addedComponents:
+    private _addedNodes:
     {
-        component: DesignerLayoutPlaceholderComponent;
+        component?: DesignerLayoutPlaceholderComponent;
         svgNode: SvgNode;
     }[] = [];
 
@@ -63,12 +64,13 @@ export class NodeDesignerComponent implements OnInit
 
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef,
-                private _element: ElementRef<HTMLElement>)
+                private _element: ElementRef<HTMLElement>,
+                private _propertiesSvc: PropertiesService)
     {
     }
 
     //######################### public methods - implementation of OnInit #########################
-    
+
     /**
      * Initialize component
      */
@@ -125,14 +127,15 @@ export class NodeDesignerComponent implements OnInit
         metadata.y = currentZoom.invertY(coordinates.y);
         metadata.id = component.id,
 
-        this._addedComponents.push(
+        this._addedNodes.push(
         {
             component: component,
-            svgNode: new SvgNode(this._svgData.parentGroup, 
-                                 metadata, 
+            svgNode: new SvgNode(this._svgData.parentGroup,
+                                 metadata,
                                  this._setDropAreaFn,
-                                 () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn))
-        })
+                                 () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
+                                 this._propertiesSvc)
+        });
     }
 
     /**
@@ -144,18 +147,25 @@ export class NodeDesignerComponent implements OnInit
     {
         let currentZoom = zoomTransform(this._svgData.svg.node());
 
-        new SvgNode(this._svgData.parentGroup, 
-                    {
-                        id: generateId(12),
-                        description: nodeDefinition.description,
-                        name: nodeDefinition.name,
-                        x: currentZoom.invertX(coordinates.x),
-                        y: currentZoom.invertY(coordinates.y),
-                        inputs: JSON.parse(JSON.stringify(nodeDefinition.inputs || [])),
-                        outputs: JSON.parse(JSON.stringify(nodeDefinition.outputs || []))
-                    }, 
-                    this._setDropAreaFn,
-                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn));
+        this._addedNodes.push(
+        {
+            svgNode: new SvgNode(this._svgData.parentGroup,
+                                 {
+                                     id: generateId(12),
+                                     description: nodeDefinition.description,
+                                     name: nodeDefinition.name,
+                                     x: currentZoom.invertX(coordinates.x),
+                                     y: currentZoom.invertY(coordinates.y),
+                                     inputs: JSON.parse(JSON.stringify(nodeDefinition.inputs || [])),
+                                     outputs: JSON.parse(JSON.stringify(nodeDefinition.outputs || [])),
+                                     dynamicInputs: nodeDefinition.dynamicInputs,
+                                     nodeOptions: nodeDefinition.nodeOptions,
+                                     nodeType: nodeDefinition.nodeType
+                                 },
+                                 this._setDropAreaFn,
+                                 () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
+                                 this._propertiesSvc)
+        });
     }
 
     //######################### private methods #########################

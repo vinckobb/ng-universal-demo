@@ -15,6 +15,11 @@ export function DynamicNodeDesignerMetadata(metadata: DesignerNodeMetadata): Cla
             let metadataTarget: DesignerMetadataClass = target as any;
             metadataTarget.ɵMetadata = metadata;
 
+            if(metadata.relationsMetadata)
+            {
+                metadata.relationsMetadata.nodeType = target.name.replace(/Node$/, '');
+            }
+
             return target;
         };
     }

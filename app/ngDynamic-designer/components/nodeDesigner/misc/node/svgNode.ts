@@ -1,7 +1,8 @@
 import {isPresent} from '@asseco/common';
 import {Selection, BaseType, drag, event, select} from 'd3';
 
-import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea} from '../../../../interfaces';
+import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata} from '../../../../interfaces';
+import {PropertiesService} from '../../../../services';
 
 /**
  * Offset of first peer in node
@@ -51,6 +52,11 @@ export class SvgNode implements SvgNodeDynamicNode
     private _outputsGroup: Selection<BaseType, {}, null, undefined>;
 
     /**
+     * Properties metadata, used for changes node options
+     */
+    private _properties: PropertiesMetadata;
+
+    /**
      * X coordinate of node
      */
     private _nodeX: number;
@@ -75,13 +81,13 @@ export class SvgNode implements SvgNodeDynamicNode
      */
     public get nodeType(): string
     {
-        return null;
+        return this._metadata.nodeType;
     }
 
     /**
      * Options for node type
      */
-    public nodeOptions(): any
+    public get nodeOptions(): any
     {
         return null;
     }
@@ -90,10 +96,20 @@ export class SvgNode implements SvgNodeDynamicNode
     constructor(private _parentGroup: Selection<BaseType, {}, null, undefined>,
                 private _metadata: RelationsMetadata,
                 private _validDropToggle: (dropArea: SvgPeerDropArea) => void,
-                private _createRelation: () => SvgRelationDynamicNode)
+                private _createRelation: () => SvgRelationDynamicNode,
+                private _propertiesSvc: PropertiesService)
     {
         this._nodeX = isPresent(this._metadata.x) ? this._metadata.x : 0;
         this._nodeY = isPresent(this._metadata.y) ? this._metadata.y : 0;
+
+        this._properties = 
+        {
+            id: this._metadata.id,
+            name: this._metadata.name,
+            description: this._metadata.description,
+            dynamicNodeInstance: this,
+            properties: this._metadata.nodeOptions
+        };
 
         this._initialize();
     }
@@ -114,10 +130,12 @@ export class SvgNode implements SvgNodeDynamicNode
     /**
      * Explicitly runs invalidation of content (change detection)
      * @param propertyName Name of property that has changed
-     * @param initial Indication whether is invalidation initial, or on event
      */
-    public invalidateVisuals(propertyName?: string, initial?: boolean): void
+    public invalidateVisuals(propertyName?: string): void
     {
+        if(propertyName == "properties")
+        {
+        }
     }
 
     /**
@@ -218,7 +236,7 @@ export class SvgNode implements SvgNodeDynamicNode
                 .attr('stroke', '#d4d4d4')
             .on('click', () =>
             {
-                console.log('click');
+                this._propertiesSvc.showProperties(this._properties)
             });
 
         this._miscGroup = this._nodeGroup.append('g');

@@ -6,6 +6,22 @@
 </div>
 
 <div [ngSwitch]="property.type">
-    <input *ngSwitchCase="propertyTypes.Boolean" [formControl]="control" [id]="property.id" type="checkbox" class="form-control">
-    <input *ngSwitchDefault [formControl]="control" [id]="property.id" type="text" class="form-control">
+    <input *ngSwitchCase="propertyTypes.Boolean"
+           [formControl]="control"
+           [id]="property.id"
+           type="checkbox"
+           class="form-control">
+
+    <select *ngSwitchCase="propertyTypes.Options"
+            [formControl]="control"
+            [id]="property.id"
+            class="form-control">
+        <option *ngFor="let option of property.availableValues" [value]="option.value">{{option.name}}</option>
+    </select>
+
+    <input *ngSwitchDefault
+           [formControl]="control"
+           [id]="property.id"
+           type="text"
+           class="form-control">
 </div>

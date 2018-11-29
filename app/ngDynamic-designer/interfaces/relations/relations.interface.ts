@@ -30,6 +30,11 @@ export interface RelationsMetadata extends DesignerCommonMetadata
     nodeOptions?: PropertiesPropertyMetadata[];
 
     /**
+     * Type of node that is constructed, set by designer, do not set
+     */
+    nodeType?: string;
+
+    /**
      * X coordinates of node, set by designer, do not set
      */
     x?: number;

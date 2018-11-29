@@ -92,6 +92,11 @@ export enum PropertyType
     Boolean,
 
     /**
+     * Item will have string value but it will be offered from availableValues
+     */
+    Options,
+
+    /**
      * Item is array of objects, each object is described by arrayItemProperty
      */
     Array
