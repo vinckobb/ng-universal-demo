@@ -12,7 +12,7 @@ var webpack = require('webpack'),
     BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin,
     rxPaths = require('rxjs/_esm5/path-mapping'),
     extend = require('extend'),
-    HardSourceWebpackPlugin = require('hard-source-webpack-plugin'),
+    // HardSourceWebpackPlugin = require('hard-source-webpack-plugin'),
     AngularCompilerPlugin =  require('@ngtools/webpack').AngularCompilerPlugin;
 
 //array of paths for server and browser tsconfigs
@@ -52,7 +52,12 @@ function getEntries(aot, ssr, hmr, dll)
                 "jquery.fancytree/skin-lion/ui.fancytree.css",
                 "bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css",
                 "highlight.js/styles/googlecode.css"
-            ]
+            ],
+            "editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js',
+            "json.worker": 'monaco-editor/esm/vs/language/json/json.worker',
+            "css.worker": 'monaco-editor/esm/vs/language/css/css.worker',
+            "html.worker": 'monaco-editor/esm/vs/language/html/html.worker',
+            "ts.worker": 'monaco-editor/esm/vs/language/typescript/ts.worker'
         };
 
         if(dll)
@@ -142,6 +147,7 @@ module.exports = function(options, args)
         entry: getEntries(aot, ssr, hmr, dll),
         output:
         {
+            globalObject: 'self',
             path: path.join(__dirname, distPath),
             filename: '[name].js',
             publicPath: prod ? 'dist/' : '/dist/',
@@ -380,13 +386,13 @@ module.exports = function(options, args)
     }
     else
     {
-        config.plugins.push(new HardSourceWebpackPlugin());
-        config.plugins.push(new HardSourceWebpackPlugin.ExcludeModulePlugin(
-        [
-            {
-                test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
-            }
-        ]));
+        // config.plugins.push(new HardSourceWebpackPlugin());
+        // config.plugins.push(new HardSourceWebpackPlugin.ExcludeModulePlugin(
+        // [
+        //     {
+        //         test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
+        //     }
+        // ]));
     }
 
     //this is used for debugging speed of compilation

@@ -7,6 +7,7 @@ import {Authorize, AuthGuard} from '@ng/authentication';
 import {FancyTreeNodeData, FancyTreeComponent} from '@ng/treeview';
 import {GetOptionsCallback, OptionComponent} from '@ng/select';
 import {map} from 'rxjs/operators';
+import {editor} from 'monaco-editor';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
@@ -133,6 +134,43 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     public continue()
     {
         this.dataSvc.continue().subscribe(() => console.log('done'));
+    }
+
+    //######################### public methods - implementation of AfterViewInit #########################
+    
+    /**
+     * Called when view was initialized
+     */
+    public ngAfterViewInit()
+    {
+        console.log(self);
+
+        (self as any).MonacoEnvironment = {
+            getWorkerUrl: function (moduleId, label) {
+              if (label === 'json') {
+                return './dist/json.worker.js';
+              }
+              if (label === 'css') {
+                return './dist/css.worker.js';
+              }
+              if (label === 'html') {
+                return './dist/html.worker.js';
+              }
+              if (label === 'typescript' || label === 'javascript') {
+                return './dist/ts.worker.js';
+              }
+              return './dist/editor.worker.js';
+            }
+          }
+
+        editor.create(document.getElementById('mon'), 
+        {
+            value: `function x() 
+{
+    console.log("Hello world!");
+}`,
+            language: 'javascript'
+        });
     }
 
     //######################### public methods - implementation of AfterViewInit #########################

@@ -102,7 +102,8 @@
         "scrollmagic": "2.0.6",
         "highlight.js": "9.13.1",
         "sourcemapped-stacktrace": "1.1.9",
-        "positions": "1.6.2"
+        "positions": "1.6.2",
+        "monaco-editor": "0.15.6"
     },
     "devDependencies": {
         "@types/node": "10.1.0",
