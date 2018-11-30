@@ -3,6 +3,7 @@ import {Selection, BaseType, drag, event, select} from 'd3';
 
 import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata} from '../../../../interfaces';
 import {PropertiesService} from '../../../../services';
+import {transformOptionsToProperties} from '../../../../misc';
 
 /**
  * Offset of first peer in node
@@ -107,7 +108,8 @@ export class SvgNode implements SvgNodeDynamicNode
                 private _metadata: RelationsMetadata,
                 private _validDropToggle: (dropArea: SvgPeerDropArea) => void,
                 private _createRelation: () => SvgRelationDynamicNode,
-                private _propertiesSvc: PropertiesService)
+                private _propertiesSvc: PropertiesService,
+                nodeOptions: any)
     {
         this._nodeX = isPresent(this._metadata.x) ? this._metadata.x : 0;
         this._nodeY = isPresent(this._metadata.y) ? this._metadata.y : 0;
@@ -118,7 +120,8 @@ export class SvgNode implements SvgNodeDynamicNode
             name: this._metadata.name,
             description: this._metadata.description,
             dynamicNodeInstance: this,
-            properties: this._metadata.nodeOptions
+            properties: this._metadata.nodeOptionsMetadata,
+            value: transformOptionsToProperties(this._metadata && this._metadata.nodeOptionsMetadata, nodeOptions)
         };
 
         this._initialize();
@@ -145,7 +148,7 @@ export class SvgNode implements SvgNodeDynamicNode
     {
         if(propertyName == "properties")
         {
-            this._dynamicInputs = this._metadata.dynamicInputs(this._properties.value);
+            this._dynamicInputs = (this._metadata.dynamicInputs && this._metadata.dynamicInputs(this._properties.value)) || [];
 
             this._addDynamicInputs();
         }
@@ -322,6 +325,8 @@ export class SvgNode implements SvgNodeDynamicNode
     private _addDynamicInputs()
     {
         this._dynamicInputs.forEach((input, index) => input.y = (this._metadata.inputs.length ? (this._metadata.inputs[this._metadata.inputs.length - 1].y + peerStep) : peerOffset) + (index * peerStep));
+        this._nodeGroup.select('rect')
+            .attr('height', this._getHeight());
 
         this._addInputCircles(this._dynamicInputsGroup, this._dynamicInputs, true);
     }
@@ -569,6 +574,11 @@ export class SvgNode implements SvgNodeDynamicNode
         if(this._metadata.inputs && this._metadata.inputs.length)
         {
             height += (this._metadata.inputs.length * peerStep);
+        }
+
+        if(this._dynamicInputs && this._dynamicInputs.length)
+        {
+            height += (this._dynamicInputs.length * peerStep);
         }
 
         return Math.max(minHeight, height);

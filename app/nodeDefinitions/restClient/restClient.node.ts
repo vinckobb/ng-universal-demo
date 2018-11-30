@@ -175,7 +175,7 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                 type: 'Observable<any>'
             }
         ],
-        nodeOptions:
+        nodeOptionsMetadata:
         [
             {
                 id: 'method',
@@ -195,7 +195,7 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                 id: 'parameters',
                 name: 'Inputs',
                 description: 'Collection of input parameters for http request',
-                type: PropertyType.Array,
+                type: PropertyType.Collection,
                 arrayItemProperty:
                 [
                     {

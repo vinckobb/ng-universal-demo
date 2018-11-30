@@ -6,7 +6,7 @@
 
 <div style="margin-top: 20px;">
     <ng-container *ngFor="let property of propertiesMetadata?.properties">
-        <div *ngIf="property.type != propertyTypes.Array; else collection"
+        <div *ngIf="property.type != propertyTypes.Collection; else collection"
              style="margin-bottom: 20px;"
              [property]="property"
              [control]="propertiesForm?.controls[property.id]"></div>

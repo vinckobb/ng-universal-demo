@@ -118,32 +118,42 @@ export class NodeDesignerComponent implements OnInit
      * @param coordinates Coordinates of newly added node
      * @param component Component to be added
      * @param metadata Metadata for component that is added
+     * @param nodeOptions Stored node options
      */
-    public addComponent(coordinates: Coordinates, component: DesignerLayoutPlaceholderComponent, metadata: RelationsMetadata)
+    public addComponent(coordinates: Coordinates, component: DesignerLayoutPlaceholderComponent, metadata: RelationsMetadata, nodeOptions?: any)
     {
         let currentZoom = zoomTransform(this._svgData.svg.node());
-
-        metadata.x = currentZoom.invertX(coordinates.x);
-        metadata.y = currentZoom.invertY(coordinates.y);
-        metadata.id = component.id,
 
         this._addedNodes.push(
         {
             component: component,
             svgNode: new SvgNode(this._svgData.parentGroup,
-                                 metadata,
+                                 {
+                                     id: component.id,
+                                     description: metadata.description,
+                                     name: metadata.name,
+                                     x: currentZoom.invertX(coordinates.x),
+                                     y: currentZoom.invertY(coordinates.y),
+                                     inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
+                                     outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
+                                     dynamicInputs: metadata.dynamicInputs,
+                                     nodeOptionsMetadata: metadata.nodeOptionsMetadata,
+                                     nodeType: metadata.nodeType
+                                 },
                                  this._setDropAreaFn,
                                  () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
-                                 this._propertiesSvc)
+                                 this._propertiesSvc,
+                                 nodeOptions || {})
         });
     }
 
     /**
      * Adds node into node designer
      * @param coordinates Coordinates of newly added node
-     * @param nodeDefinition Definition of node to be added
+     * @param metadata Metadata for node to be added
+     * @param nodeOptions Stored node options
      */
-    public addNode(coordinates: Coordinates, nodeDefinition: RelationsMetadata)
+    public addNode(coordinates: Coordinates, metadata: RelationsMetadata, nodeOptions?: any)
     {
         let currentZoom = zoomTransform(this._svgData.svg.node());
 
@@ -152,19 +162,20 @@ export class NodeDesignerComponent implements OnInit
             svgNode: new SvgNode(this._svgData.parentGroup,
                                  {
                                      id: generateId(12),
-                                     description: nodeDefinition.description,
-                                     name: nodeDefinition.name,
+                                     description: metadata.description,
+                                     name: metadata.name,
                                      x: currentZoom.invertX(coordinates.x),
                                      y: currentZoom.invertY(coordinates.y),
-                                     inputs: JSON.parse(JSON.stringify(nodeDefinition.inputs || [])),
-                                     outputs: JSON.parse(JSON.stringify(nodeDefinition.outputs || [])),
-                                     dynamicInputs: nodeDefinition.dynamicInputs,
-                                     nodeOptions: nodeDefinition.nodeOptions,
-                                     nodeType: nodeDefinition.nodeType
+                                     inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
+                                     outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
+                                     dynamicInputs: metadata.dynamicInputs,
+                                     nodeOptionsMetadata: metadata.nodeOptionsMetadata,
+                                     nodeType: metadata.nodeType
                                  },
                                  this._setDropAreaFn,
                                  () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
-                                 this._propertiesSvc)
+                                 this._propertiesSvc,
+                                 nodeOptions || {})
         });
     }
 

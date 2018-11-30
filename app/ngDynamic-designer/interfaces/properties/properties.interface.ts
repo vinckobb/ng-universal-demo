@@ -97,7 +97,12 @@ export enum PropertyType
     Options,
 
     /**
-     * Item is array of objects, each object is described by arrayItemProperty
+     * Item is array of simple values
      */
-    Array
+    Array,
+
+    /**
+     * Item is collection of objects, each object is described by arrayItemProperty
+     */
+    Collection
 }

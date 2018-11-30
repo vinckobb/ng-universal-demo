@@ -82,7 +82,7 @@ export class PackageLoader
         return {
             placeholderModule: component.ɵMetadata.placeholderModule,
             layoutMetadata: component.ɵMetadata.layoutMetadata && JSON.parse(JSON.stringify(component.ɵMetadata.layoutMetadata)),
-            relationsMetadata: component.ɵMetadata.relationsMetadata && JSON.parse(JSON.stringify(component.ɵMetadata.relationsMetadata)),
+            relationsMetadata: component.ɵMetadata.relationsMetadata,
         };
     }
 

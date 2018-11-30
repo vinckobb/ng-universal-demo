@@ -1,11 +1,12 @@
 import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding, HostListener} from "@angular/core";
-import {isPresent, generateId, setValue, getValue} from "@asseco/common";
+import {isPresent, generateId, setValue} from "@asseco/common";
 
-import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata, PropertiesPropertyMetadata} from "../../interfaces";
+import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
 import {PropertiesService} from "../../services";
 import {PackageLoader} from "../../packageLoader";
+import {transformOptionsToProperties} from "../../misc";
 
 /**
  * Base class for all placeholder components
@@ -219,33 +220,12 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
     //######################### private methods #########################
 
     /**
-     * Transforms component options to properties
-     * @param properties Properties descriptors
-     * @param options Options instance
+     * Updates options for this component
      */
-    private _transformOptionsToProperties(properties: PropertiesPropertyMetadata[], options: any)
-    {
-        let propertiesOptions = {};
-
-        //TODO - add logic for collection types
-
-        properties.forEach(option =>
-        {
-            let value = getValue(options, option.id);
-
-            if(isPresent(value))
-            {
-                propertiesOptions[option.id] = value;
-            }
-        });
-
-        return propertiesOptions;
-    }
-
     private _updateOptions()
     {
         this.options.id = this._metadata.id;
         this.options.dynamicNodeInstance = this;
-        this.options.value = this.options.value || this._transformOptionsToProperties(this.options && this.options.properties, this._metadata.options);
+        this.options.value = this.options.value || transformOptionsToProperties(this.options && this.options.properties, this._metadata.options);
     }
 }

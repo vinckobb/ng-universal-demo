@@ -180,7 +180,7 @@ export class PropertiesComponent implements OnDestroy
             this._propertiesMetadata.properties.forEach(property =>
             {
                 //Collection properties
-                if(property.type == PropertyType.Array)
+                if(property.type == PropertyType.Collection)
                 {
                     this.propertiesForm.addControl(property.id, new FormArray([], property.validators || []));
                 }

@@ -25,9 +25,9 @@ export interface RelationsMetadata extends DesignerCommonMetadata
     dynamicInputs?: (nodeOptions: any) => RelationsInputOutputMetadata[];
 
     /**
-     * Node options that can be changed, do not set id, name and description
+     * Node options metadata used for creating nodeOptions
      */
-    nodeOptions?: PropertiesPropertyMetadata[];
+    nodeOptionsMetadata?: PropertiesPropertyMetadata[];
 
     /**
      * Type of node that is constructed, set by designer, do not set
