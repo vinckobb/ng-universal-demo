@@ -52,12 +52,7 @@ function getEntries(aot, ssr, hmr, dll)
                 "jquery.fancytree/skin-lion/ui.fancytree.css",
                 "bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css",
                 "highlight.js/styles/googlecode.css"
-            ],
-            "editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js',
-            "json.worker": 'monaco-editor/esm/vs/language/json/json.worker',
-            "css.worker": 'monaco-editor/esm/vs/language/css/css.worker',
-            "html.worker": 'monaco-editor/esm/vs/language/html/html.worker',
-            "ts.worker": 'monaco-editor/esm/vs/language/typescript/ts.worker'
+            ]
         };
 
         if(dll)
@@ -120,7 +115,9 @@ function getStyleLoaders(prod)
     return prod ? [{loader: MiniCssExtractPlugin.loader, options: {publicPath: ""}}, 'css-loader', 'sass-loader'] : ['style-loader', 'css-loader', 'sass-loader'];
 }
 
-module.exports = function(options, args)
+var distPath = "wwwroot/dist";
+
+module.exports = [function(options, args)
 {
     var prod = args && args.mode == 'production';
     var hmr = !!options && !!options.hmr;
@@ -137,7 +134,6 @@ module.exports = function(options, args)
 
     console.log(`Angular service worker enabled: ${ngsw}.`);
 
-    var distPath = "wwwroot/dist";
     options = options || {};
 
     console.log(`Running build with following configuration Production: ${prod} Hot Module Replacement: ${hmr} Ahead Of Time Compilation: ${aot} Server Side Rendering: ${ssr} Debugging compilation: ${debug}`);
@@ -406,4 +402,29 @@ module.exports = function(options, args)
     }
 
     return config;
-}
+},
+{
+    mode: 'development',
+    entry: 
+    {
+		"editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js',
+		"json.worker": 'monaco-editor/esm/vs/language/json/json.worker',
+		"css.worker": 'monaco-editor/esm/vs/language/css/css.worker',
+		"html.worker": 'monaco-editor/esm/vs/language/html/html.worker',
+		"ts.worker": 'monaco-editor/esm/vs/language/typescript/ts.worker'
+	},
+    output: 
+    {
+		globalObject: 'self',
+		path: path.join(__dirname, distPath),
+        filename: '[name].js'
+	},
+    module: 
+    {
+		rules: [
+        {
+			test: /\.css$/,
+			use: ['style-loader', 'css-loader']
+		}]
+	},
+}]

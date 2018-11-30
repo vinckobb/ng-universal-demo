@@ -7,7 +7,7 @@ import {Authorize, AuthGuard} from '@ng/authentication';
 import {FancyTreeNodeData, FancyTreeComponent} from '@ng/treeview';
 import {GetOptionsCallback, OptionComponent} from '@ng/select';
 import {map} from 'rxjs/operators';
-import {editor} from 'monaco-editor';
+import {editor, languages} from 'monaco-editor';
 
 import {DataService} from "../../services/api/data/data.service";
 import {BaseAnimatedComponent} from "../../misc/baseAnimatedComponent";
@@ -97,6 +97,8 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
 
     public ngSelect: FormControl;
 
+    public codeEditor: editor.IStandaloneCodeEditor;
+
     public optionsGetter: GetOptionsCallback<string> = (query: string, options: Array<OptionComponent<string>>) =>
     {
         return Promise.resolve(options.filter(itm => itm.text.indexOf(query) >= 0));
@@ -143,33 +145,49 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
      */
     public ngAfterViewInit()
     {
-        console.log(self);
+        let options: languages.typescript.CompilerOptions =
+        {
+            target: languages.typescript.ScriptTarget.ES5,
+            module: languages.typescript.ModuleKind.CommonJS,
+            lib: 
+            [
+                "es2016",
+                "dom"
+            ],
+            allowNonTsExtensions: true
+        };
+
+        languages.typescript.typescriptDefaults.setCompilerOptions(options);
 
         (self as any).MonacoEnvironment = {
             getWorkerUrl: function (moduleId, label) {
               if (label === 'json') {
-                return './dist/json.worker.js';
+                return 'dist/json.worker.js';
               }
               if (label === 'css') {
-                return './dist/css.worker.js';
+                return 'dist/css.worker.js';
               }
               if (label === 'html') {
-                return './dist/html.worker.js';
+                return 'dist/html.worker.js';
               }
               if (label === 'typescript' || label === 'javascript') {
-                return './dist/ts.worker.js';
+                return 'dist/ts.worker.js';
               }
-              return './dist/editor.worker.js';
+              return 'dist/editor.worker.js';
             }
           }
 
-        editor.create(document.getElementById('mon'), 
+        this.codeEditor = editor.create(document.getElementById('mon'), 
         {
-            value: `function x() 
+            value: `export class TestClass
 {
-    console.log("Hello world!");
+    public show()
+    {
+        return 'somarina';
+    }
 }`,
-            language: 'javascript'
+            language: 'typescript',
+            theme: 'vs-dark'
         });
     }
 
@@ -191,6 +209,28 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
 
     public toggle()
     {
+        // Monaco.languages.typescript.getTypeScriptWorker()
+        //     .then(function(worker) {
+        //         worker(model.uri)
+        //               .then(function(client) {
+        //                     client.getEmitOutput(model.uri.toString().then(function(r) {});
+        //               });
+        //     });
+
+        languages.typescript.getTypeScriptWorker()
+            .then(worker =>
+            {
+                worker(this.codeEditor.getModel().uri)
+                    .then(client =>
+                    {
+                        client.getEmitOutput(this.codeEditor.getModel().uri.toString())
+                            .then(result =>
+                            {
+                                console.log(result.outputFiles[0].text);
+                            });
+                    })
+            });
+
         this.show = !this.show;
     }
 }
