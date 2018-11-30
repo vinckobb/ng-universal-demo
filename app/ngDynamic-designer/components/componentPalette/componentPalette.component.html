@@ -1,9 +1,8 @@
-<div *ngFor="let packageName of packagesArray">
-    <h3>{{packageName}}</h3>
-    <component-palette-item *ngFor="let componentName of getPackageComponents(packageName)" 
-                            [componentMetadata]="packages[packageName][componentName]" 
-                            [packageName]="packageName" 
-                            [componentName]="componentName" 
-                            [droplistIds]="droplistIds">
+<div *ngFor="let package of packages">
+    <h3>{{package?.packageName}}</h3>
+    <component-palette-item *ngFor="let component of package?.components" 
+                            [componentMetadata]="component?.designerMetadata" 
+                            [packageName]="package?.packageName" 
+                            [componentName]="component?.componentName">
     </component-palette-item>
 </div>

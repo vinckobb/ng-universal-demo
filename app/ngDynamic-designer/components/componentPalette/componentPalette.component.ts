@@ -1,9 +1,8 @@
 import {Component, ChangeDetectionStrategy, Input, ChangeDetectorRef, OnDestroy} from "@angular/core";
 import {Subscription} from "rxjs";
 
-import {DesignerLayoutMetadata} from "../../interfaces";
 import {PackageLoader} from "../../packageLoader";
-import {ComponentsService} from "../../services";
+import {ComponentPalettePackage} from "./componentPalette.interface";
 
 /**
  * Component used for displaying component palette in designer
@@ -36,27 +35,15 @@ export class ComponentPaletteComponent implements OnDestroy
 
     //######################### public properties - template bindings #########################
 
-    public droplistIds: string[] = [];
-
     /**
      * Available component packages for designer
      */
-    public packages: {[key: string]: {[packageName: string]: DesignerLayoutMetadata}};
-    
-    /**
-     * Array representation of `packages` property
-     */
-    public get packagesArray(): any[]
-    {
-        return Object.keys(this.packages);
-    }
+    public packages: ComponentPalettePackage[];
 
     //######################### constructor #########################
     constructor(private _packageLoader: PackageLoader,
-                private _componentSvc: ComponentsService,
                 private _changeDetector: ChangeDetectorRef)
     {
-        this._componentsChangeSubscription = this._componentSvc.componentsChange.subscribe(() => {this._handleComponents()});
     }
 
     //######################### public methods - implementation of OnDestroy #########################
@@ -76,15 +63,6 @@ export class ComponentPaletteComponent implements OnDestroy
     //######################### public methods #########################
 
     /**
-     * Returns array of component names for specified package
-     * @param packageName 
-     */
-    public getPackageComponents(packageName): string[]
-    {
-        return Object.keys(this.packages[packageName]);
-    }
-
-    /**
      * Explicitly runs invalidation of content (change detection)
      */
     public invalidateVisuals()
@@ -100,9 +78,7 @@ export class ComponentPaletteComponent implements OnDestroy
      */
     private async _loadPackages(packageNames: string[])
     {
-        //TODO upravit. Zatial je to takto iba pre testovanie
-
-        this.packages = {};
+        this.packages = [];
 
         if (!packageNames)
         {
@@ -112,24 +88,20 @@ export class ComponentPaletteComponent implements OnDestroy
             
         for (var i = 0; i < packageNames.length; i++)
         {
-            this.packages[packageNames[i]] = await this._packageLoader.getPackageComponentsMetadata(packageNames[i]);
+            let components = await this._packageLoader.getPackageComponentsMetadata(packageNames[i]);
+            this.packages.push(
+                {
+                    packageName: packageNames[i],
+                    components: Object.keys(components).map(componentName => {
+                        return {
+                            componentName: componentName,
+                            designerMetadata: components[componentName]
+                        } 
+                    })
+                }
+            );
         }
 
         this._changeDetector.detectChanges();
-    }
-
-    /**
-     * Gets droplist ids from component service
-     */
-    private _handleComponents()
-    {
-        if (!this._componentSvc.components)
-        {
-            return;
-        }
-
-        this.droplistIds = this._componentSvc.components.map(component => component.dropzoneId);
-
-        this.invalidateVisuals();
     }
 }
