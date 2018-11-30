@@ -10,7 +10,7 @@ import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader"
  */
 @Component(
 {
-    selector: 'block-layout-designer-component',
+    selector: 'div[block-layout-designer]',
     templateUrl: 'blockDesigner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -10,9 +10,22 @@ import {placeholderModule, layoutMetadata, relationsMetadata} from "./designer";
  */
 @Component(
 {
-    selector: 'block-layout-component',
+    selector: 'div[block-layout]',
     templateUrl: 'block.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host:
+    {
+        '[style.paddingTop.px]': 'options?.padding?.top',
+        '[style.paddingLeft.px]': 'options?.padding?.left',
+        '[style.paddingRight.px]': 'options?.padding?.right',
+        '[style.paddingBottom.px]': 'options?.padding?.bottom',
+        '[style.marginTop.px]': 'options?.margin?.top',
+        '[style.marginLeft.px]': 'options?.margin?.left',
+        '[style.marginRight.px]': 'options?.margin?.right',
+        '[style.marginBottom.px]': 'options?.margin?.bottom',
+        '[style.fontSize.px]': 'options?.fontSize',
+        '[style.backgroundColor]': 'options?.background'
+    }
 })
 @DynamicComponentDesignerMetadata(
 {
@@ -41,6 +54,6 @@ export class BlockComponent implements DynamicComponentGeneric<BlockComponentOpt
      */
     public invalidateVisuals(): void
     {
-        this._changeDetector.detectChanges();
+        this._changeDetector.markForCheck();
     }
 }

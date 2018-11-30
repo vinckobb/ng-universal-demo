@@ -1,6 +1,6 @@
-import {getValue, isPresent} from "@asseco/common";
+import {getValue, isPresent, setValue} from "@asseco/common";
 
-import {PropertiesPropertyMetadata} from "../interfaces";
+import {PropertiesPropertyMetadata, PropertyType} from "../interfaces";
 
 /**
  * Transforms component or node options to properties
@@ -29,4 +29,52 @@ export function transformOptionsToProperties(properties: PropertiesPropertyMetad
     });
 
     return propertiesOptions;
+}
+
+/**
+ * Transforms properties to component or node options
+ * @param properties Properties descriptors
+ * @param value Node or component options instance
+ */
+export function transformPropertiesToOptions(properties: PropertiesPropertyMetadata[], value: any): any
+{
+    let options = {};
+
+    if(!properties || !value)
+    {
+        return options;
+    }
+
+    if(properties.length)
+    {
+        properties.forEach(property =>
+        {
+            //handles collection
+            if(property.type == PropertyType.Collection)
+            {
+                let array = [];
+                setValue(options, array, property.id);
+
+                if(!Array.isArray(value[property.id]) || !Array.isArray(property.arrayItemProperty))
+                {
+                    return;
+                }
+
+                let collection = value[property.id];
+
+                collection.forEach(colItem =>
+                {
+                    let item = transformPropertiesToOptions(property.arrayItemProperty, colItem);
+                    array.push(item);
+                });
+            }
+            //handles simple type
+            else
+            {
+                setValue(options, isPresent(value[property.id]) && value[property.id], property.id);
+            }
+        });
+    }
+
+    return options;
 }

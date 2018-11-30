@@ -1,12 +1,12 @@
 import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding, HostListener} from "@angular/core";
-import {isPresent, generateId, setValue} from "@asseco/common";
+import {generateId} from "@asseco/common";
 
 import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
 import {PropertiesService} from "../../services";
 import {PackageLoader} from "../../packageLoader";
-import {transformOptionsToProperties} from "../../misc";
+import {transformOptionsToProperties, transformPropertiesToOptions} from "../../misc";
 
 /**
  * Base class for all placeholder components
@@ -204,17 +204,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
      */
     protected transformPropertiesToOptions(): TOptions
     {
-        let options = {} as TOptions;
-
-        if(this.options && this.options.properties && this.options.properties.length)
-        {
-            this.options.properties.forEach(property =>
-            {
-                setValue(options, isPresent(this.options.value) && isPresent(this.options.value[property.id]) && this.options.value[property.id], property.id);
-            });
-        }
-
-        return options;
+        return transformPropertiesToOptions(this.options && this.options.properties, this.options && this.options.value);
     }
 
     //######################### private methods #########################

@@ -3,7 +3,7 @@ import {Selection, BaseType, drag, event, select} from 'd3';
 
 import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata} from '../../../../interfaces';
 import {PropertiesService} from '../../../../services';
-import {transformOptionsToProperties} from '../../../../misc';
+import {transformOptionsToProperties, transformPropertiesToOptions} from '../../../../misc';
 
 /**
  * Offset of first peer in node
@@ -149,6 +149,8 @@ export class SvgNode implements SvgNodeDynamicNode
         if(propertyName == "properties")
         {
             this._dynamicInputs = (this._metadata.dynamicInputs && this._metadata.dynamicInputs(this._properties.value)) || [];
+
+            console.log(transformPropertiesToOptions(this._properties && this._properties.properties, this._properties && this._properties.value));
 
             this._addDynamicInputs();
         }
