@@ -1,5 +1,6 @@
 import {Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef} from "@angular/core";
 import {FormControl, FormGroup, Validators, FormArray} from "@angular/forms";
+import {isFunction} from "@asseco/common";
 import {Subscription} from "rxjs";
 
 import {PropertiesService} from "../../services";
@@ -99,13 +100,13 @@ export class PropertiesComponent implements OnDestroy
         {
             this._propertiesMetadata = properties;
             this._loadProperties();
-            
+
             this._changeDetector.detectChanges();
         });
     }
 
     //######################### public methods - implementation of OnDestroy #########################
-    
+
     /**
      * Called when component is destroyed
      */
@@ -151,7 +152,7 @@ export class PropertiesComponent implements OnDestroy
 
         metadata.arrayItemProperty.forEach(property =>
         {
-            group.addControl(property.id, new FormControl(property.defaultValue, property.validators || []));
+            group.addControl(property.id, new FormControl(this._getDefaultValue(property), property.validators || []));
         });
 
         this._isLoadingProperties = false;
@@ -165,7 +166,7 @@ export class PropertiesComponent implements OnDestroy
     private _loadProperties()
     {
         this._isLoadingProperties = true;
-        
+
         //clear all previous controls
         if(this.propertiesForm.controls)
         {
@@ -182,12 +183,31 @@ export class PropertiesComponent implements OnDestroy
                 //Collection properties
                 if(property.type == PropertyType.Collection)
                 {
-                    this.propertiesForm.addControl(property.id, new FormArray([], property.validators || []));
+                    let array = new FormArray([], property.validators || []);
+                    this.propertiesForm.addControl(property.id, array);
+
+                    if(this._propertiesMetadata.value &&
+                       this._propertiesMetadata.value[property.id] &&
+                       this._propertiesMetadata.value[property.id].length &&
+                       property.arrayItemProperty &&
+                       property.arrayItemProperty.length)
+                    {
+                        this._propertiesMetadata.value[property.id].forEach(item =>
+                        {
+                            let group = new FormGroup({});
+                            array.push(group);
+
+                            property.arrayItemProperty.forEach(prop =>
+                            {
+                                group.addControl(prop.id, new FormControl(this._getDefaultValue(prop), prop.validators || []));
+                            });
+                        });
+                    }
                 }
                 //single property
                 else
                 {
-                    this.propertiesForm.addControl(property.id, new FormControl(property.defaultValue, property.validators || []));
+                    this.propertiesForm.addControl(property.id, new FormControl(this._getDefaultValue(property), property.validators || []));
                 }
             });
 
@@ -196,7 +216,21 @@ export class PropertiesComponent implements OnDestroy
                 this.propertiesForm.patchValue(this._propertiesMetadata.value, {emitEvent: false});
             }
         }
-        
+
         this._isLoadingProperties = false;
+    }
+
+    /**
+     * Gets default value for property
+     * @param property Property which contains default value
+     */
+    private _getDefaultValue(property: PropertiesPropertyMetadata): any
+    {
+        if(isFunction(property.defaultValue))
+        {
+            return property.defaultValue();
+        }
+
+        return property.defaultValue;
     }
 }
