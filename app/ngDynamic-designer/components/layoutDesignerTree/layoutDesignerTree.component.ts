@@ -1,16 +1,15 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy} from "@angular/core";
-import {FlatTreeControl} from "@angular/cdk/tree";
 import {Subscription} from "rxjs";
 
 import {TreeFlattener, TreeFlatDataSource} from "./dataSource/flatDataSource";
 import {ComponentsService, PropertiesService} from "../../services";
 import {DesignerLayoutPlaceholderComponent} from "../../interfaces";
+import {AdvancedFlatTreeControl} from "./treeControl/flatTreeControl";
+import {LayoutComponentTreeNode} from "./layoutDesignerTree.interface";
 
-//TODO doplnit interface pre tree, komentare
 /**
- * - Vytvorit vlastny TreeControl na to aby sa nezavrel strom pri kazdej zmene
+ * Component used for displaying layout metadata in tree structure
  */
-
 @Component(
     {
         selector: 'layout-designer-tree',
@@ -34,8 +33,14 @@ export class LayoutDesignerTreeComponent implements OnDestroy
 
     //######################### public properties - template bindings #########################
 
-    public treeControl: FlatTreeControl<any>;
+    /**
+     * Tree control
+     */
+    public treeControl: AdvancedFlatTreeControl<LayoutComponentTreeNode>;
 
+    /**
+     * Tree data source
+     */
     public treeDataSource: TreeFlatDataSource<any, any>;
 
     //######################### constructor #########################
@@ -43,12 +48,14 @@ export class LayoutDesignerTreeComponent implements OnDestroy
                 private _propertiesSvc: PropertiesService,
                 private _changeDetector: ChangeDetectorRef)
     {
-        this.treeControl = new FlatTreeControl(this._getLevel, this.isExpandable);
+        this.treeControl = new AdvancedFlatTreeControl(this._getLevel, this.isExpandable, this._getNodeId);
         this._treeFlatener = new TreeFlattener(this._transform, this._getLevel, this.isExpandable, this._getChildren);
         this.treeDataSource = new TreeFlatDataSource(this.treeControl, this._treeFlatener);
 
         this._componentsChangeSubscription = this._componentSvc.componentsChange.subscribe(() => this._handleComponents());
     }
+
+    //######################### public methods - implementation of OnDestroy #########################
 
     public ngOnDestroy()
     {
@@ -59,6 +66,12 @@ export class LayoutDesignerTreeComponent implements OnDestroy
         }
     }
 
+    //######################### public methods #########################
+
+    /**
+     * Sets options for properties component
+     * @param options 
+     */
     public showProperties(options: any)
     {
         if (!options)
@@ -69,44 +82,79 @@ export class LayoutDesignerTreeComponent implements OnDestroy
         this._propertiesSvc.showProperties(options);
     }
 
-    private _transform(node: any, level: number): any
+    /**
+     * Explicitly runs invalidation of content (change detection)
+     */
+    public invalidateVisuals()
+    {
+        this._changeDetector.detectChanges();
+    }
+
+    /**
+     * Checks if specified node is expandable
+     * @param node tree node
+     */
+    public isExpandable(node: LayoutComponentTreeNode): boolean
+    {
+        return !!node.children && node.children.length > 0;
+    }
+
+    //######################### private methods #########################
+
+    /**
+     * Flatten tree node
+     * @param node tree node
+     * @param level node depth level
+     */
+    private _transform(node: LayoutComponentTreeNode, level: number): LayoutComponentTreeNode
     {
         node.level = level;
         return node;
     }
 
-    private _getLevel(node: any): number
+    /**
+     * Gets tree node depth level
+     * @param node 
+     */
+    private _getLevel(node: LayoutComponentTreeNode): number
     {
         return node.level;
     }
 
-    public isExpandable(node: any): boolean
+    /**
+     * Gets tree node identifier
+     * @param node 
+     */
+    private _getNodeId(node: LayoutComponentTreeNode): string|number
     {
-        return !!node.children && node.children.length > 0;
+        return node.id;
     }
 
-    private _getChildren(node: any): any[]
+    /**
+     * Gets tree node children
+     * @param node 
+     */
+    private _getChildren(node: LayoutComponentTreeNode): LayoutComponentTreeNode[]
     {
         return node.children;
     }
 
     /**
-     * Gets children from `DesignerLayoutPlaceholderComponent`
-     * @param component
+     * Transforms component to tree node
+     * @param component 
      */
-    private _getChildrenForComponent(component: DesignerLayoutPlaceholderComponent): any[]
+    private _getNodeForComponent(component: DesignerLayoutPlaceholderComponent)
     {
         if (!component)
         {
             return null;
         }
 
-        return component.children.filter(item => !!item).map(item => {
-            return {
-                options: item.options,
-                children: this._getChildrenForComponent(item)
-            };
-        });
+        return {
+            id: component.id, //TODO upravit ziskavanie id z komponentu. Toto id vieme aktualne menit
+            options: component.options,
+            children: this._getChildrenForComponent(component)
+        }
     }
 
     /**
@@ -114,15 +162,35 @@ export class LayoutDesignerTreeComponent implements OnDestroy
      */
     private _handleComponents()
     {
-        //TODO zadefinovat interface
-        this.treeDataSource.data = 
-        [
-            {
-                options: this._componentSvc.components[0].options,
-                children: this._getChildrenForComponent(this._componentSvc.components[0])
-            }
-        ];
+        if (!this._componentSvc.components ||
+            this._componentSvc.components.length == 0)
+        {
+            this.treeDataSource.data = [];
+
+            this.invalidateVisuals();
+            return;
+        }
+
+        let component = this._componentSvc.components[0]
+
+        this.treeDataSource.data = [this._getNodeForComponent(component)];
         
-        this._changeDetector.detectChanges();
+        this.invalidateVisuals();
+    }
+
+    /**
+     * Gets children for specified `DesignerLayoutPlaceholderComponent`
+     * @param component 
+     */
+    private _getChildrenForComponent(component: DesignerLayoutPlaceholderComponent): LayoutComponentTreeNode[]
+    {
+        if (!component)
+        {
+            return null;
+        }
+
+        return component.children.filter(item => !!item).map(item => {
+            return this._getNodeForComponent(item);
+        });
     }
 }

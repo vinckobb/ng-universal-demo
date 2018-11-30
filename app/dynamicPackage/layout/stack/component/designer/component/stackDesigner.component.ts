@@ -71,19 +71,11 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
         }
     }
 
+    //TODO presunut do placeholderBase metody allowDrop, dragStart, drop pripadne dalsie ktore budu suvisiet s drag and drop
     public allowDrop(event: DragEvent)
     {
         event.preventDefault();
         event.stopPropagation();
-
-        let type = event.dataTransfer.getData('text/plain');
-
-        console.log("Type:", type);
-        if (type == COMPONENT_PALETTE_ITEM ||
-            type == COMPONENT_ITEM)
-        {
-            event.stopPropagation();
-        }
     }
 
     public dragStart(event: DragEvent, child: any)
