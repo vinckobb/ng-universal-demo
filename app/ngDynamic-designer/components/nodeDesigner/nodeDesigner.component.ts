@@ -3,8 +3,10 @@ import {generateId} from "@asseco/common";
 import {select, Selection, event, zoom, zoomTransform} from 'd3';
 
 import {SvgNode, SvgRelation} from "./misc";
-import {SvgPeerDropArea, Coordinates, DesignerLayoutPlaceholderComponent, RelationsMetadata} from "../../interfaces";
+import {SvgPeerDropArea, Coordinates, DesignerLayoutPlaceholderComponent, RelationsMetadata, SvgNodeDynamicNode} from "../../interfaces";
 import {PropertiesService} from "../../services";
+import {DynamicComponentRelationMetadata} from "../../../ngDynamic-core";
+import {NodeDesignerNodeState} from "./nodeDesigner.interface";
 
 /**
  * Component used for designing relation nodes
@@ -44,7 +46,7 @@ export class NodeDesignerComponent implements OnInit
     private _addedNodes:
     {
         component?: DesignerLayoutPlaceholderComponent;
-        svgNode: SvgNode;
+        svgNode: SvgNodeDynamicNode;
     }[] = [];
 
     /**
@@ -61,6 +63,29 @@ export class NodeDesignerComponent implements OnInit
      * Setter for activeDropArea
      */
     private _setDropAreaFn = (dropArea: SvgPeerDropArea) => this._activeDropArea = dropArea;
+
+    /**
+     * Gets metadata for rendering from current state of node designer
+     */
+    public get metadata(): DynamicComponentRelationMetadata[]
+    {
+        return this._addedNodes.map(itm => itm.svgNode.metadata);
+    }
+
+    /**
+     * Metadata for node designer, allows you to reconstruct current state
+     */
+    public get designerMetadata(): NodeDesignerNodeState[]
+    {
+        return this._addedNodes.map(itm =>
+        {
+            return <NodeDesignerNodeState>{
+                id: itm.svgNode.id,
+                componentNode: !!itm.component,
+                position: itm.svgNode.position
+            };
+        });
+    }
 
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef,

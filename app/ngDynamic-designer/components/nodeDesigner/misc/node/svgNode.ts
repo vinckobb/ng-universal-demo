@@ -4,6 +4,7 @@ import {Selection, BaseType, drag, event, select} from 'd3';
 import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata} from '../../../../interfaces';
 import {PropertiesService} from '../../../../services';
 import {transformOptionsToProperties, transformPropertiesToOptions} from '../../../../misc';
+import {DynamicComponentRelationMetadata, DynamicComponentRelationOutputMetadata, DynamicComponentRelationInputMetadata} from '../../../../../ngDynamic-core';
 
 /**
  * Offset of first peer in node
@@ -80,27 +81,35 @@ export class SvgNode implements SvgNodeDynamicNode
     //######################### public properties #########################
 
     /**
-     * Unique id of component which outputs will be connected
+     * Unique id of node which is connected to other nodes
      */
     public get id(): string
     {
-        return null;
+        return this._metadata.id;
     }
 
     /**
-     * Name of node type, that should be constructed instead of component
+     * X and Y coordinates of node
      */
-    public get nodeType(): string
+    public get position(): Coordinates
     {
-        return this._metadata.nodeType;
+        return {
+            x: this._nodeX,
+            y: this._nodeY
+        }
     }
 
     /**
-     * Options for node type
+     * Gets metadata of current node
      */
-    public get nodeOptions(): any
+    public get metadata(): DynamicComponentRelationMetadata
     {
-        return null;
+        return {
+            id: this._metadata.id,
+            nodeOptions: transformPropertiesToOptions(this._properties && this._properties.properties, this._properties && this._properties.value),
+            nodeType: this._metadata.nodeType,
+            outputs: this._getOutputs()
+        };
     }
 
     //######################### constructor #########################
@@ -149,8 +158,6 @@ export class SvgNode implements SvgNodeDynamicNode
         if(propertyName == "properties")
         {
             this._dynamicInputs = (this._metadata.dynamicInputs && this._metadata.dynamicInputs(this._properties.value)) || [];
-
-            console.log(transformPropertiesToOptions(this._properties && this._properties.properties, this._properties && this._properties.value));
 
             this._addDynamicInputs();
         }
@@ -584,5 +591,43 @@ export class SvgNode implements SvgNodeDynamicNode
         }
 
         return Math.max(minHeight, height);
+    }
+
+    /**
+     * Gets metadata for outputs of component
+     */
+    private _getOutputs(): DynamicComponentRelationOutputMetadata[]
+    {
+        let result: DynamicComponentRelationOutputMetadata[] = [];
+
+        if(this._metadata && this._metadata.outputs && this._metadata.outputs.length)
+        {
+            this._metadata.outputs.forEach(output =>
+            {
+                if(!output.id || !output.relations || !output.relations.length)
+                {
+                    return;
+                }
+                
+                let inputs: DynamicComponentRelationInputMetadata[] = [];
+
+                output.relations.forEach(relation =>
+                {
+                    inputs.push(
+                    {
+                        id: relation.endPeer.svgNode.id,
+                        inputName: relation.endPeer.inputId
+                    });
+                });
+
+                result.push(
+                {
+                    outputName: output.id,
+                    inputs: inputs
+                });
+            });
+        }
+
+        return result;
     }
 }

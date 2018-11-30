@@ -1,7 +1,7 @@
 import {Observable, Subscription} from "rxjs";
 
 import {DesignerCommonMetadata} from "../metadata.interface";
-import {DynamicNode} from "../../../ngDynamic-core";
+import {DynamicNode, DynamicComponentRelationMetadata} from "../../../ngDynamic-core";
 import {PropertiesPropertyMetadata} from "../properties/properties.interface";
 
 /**
@@ -104,19 +104,19 @@ export interface SvgDynamicNode extends DynamicNode
 export interface SvgNodeDynamicNode extends SvgDynamicNode
 {
     /**
-     * Unique id of component which outputs will be connected
+     * Unique id of node which is connected to other nodes
      */
     readonly id: string;
 
     /**
-     * Name of node type, that should be constructed instead of component
+     * Gets X and Y coordinates of node
      */
-    readonly nodeType: string;
+    readonly position: Coordinates;
 
     /**
-     * Options for node type
+     * Gets metadata of current node
      */
-    readonly nodeOptions: any;
+    readonly metadata: DynamicComponentRelationMetadata;
 
     /**
      * Gets input coordinates of specified input
