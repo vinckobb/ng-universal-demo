@@ -158,7 +158,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
             allowNonTsExtensions: true,
             typeRoots: ["node_modules/@types"]
         };
-        
+        //typeof window != 'undefined' && window || typeof self != 'undefined' && self || typeof global != 'undefined' && global
         languages.typescript.typescriptDefaults.setCompilerOptions(options);
 
         languages.typescript.typescriptDefaults.addExtraLib(
@@ -173,7 +173,7 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
                     transform(value: any): any;
                 }
                 export { TransformAction };
-            }`, 'file:///node_modules/@types/external2/index.d.ts'
+            }`, 'file:///external2/index.d.ts'
         )
 
         languages.typescript.typescriptDefaults.addExtraLib(

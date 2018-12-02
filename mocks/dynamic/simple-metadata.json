@@ -241,6 +241,10 @@
         {
             "id": "route-transform",
             "nodeType": "Script",
+            "nodeOptions":
+            {
+                "scriptPath": "index.js"
+            },
             "outputs":
             [
                 {

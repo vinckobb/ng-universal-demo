@@ -31,52 +31,52 @@ export const nodeWidth: number = 180;
  */
 export class SvgNode implements SvgNodeDynamicNode
 {
-    //######################### private fields #########################
+    //######################### protected fields #########################
 
     /**
      * Node group that represents this node
      */
-    private _nodeGroup: Selection<BaseType, {}, null, undefined>;
+    protected _nodeGroup: Selection<BaseType, {}, null, undefined>;
 
     /**
      * Group for misc stuff rendered for
      */
-    private _miscGroup: Selection<BaseType, {}, null, undefined>;
+    protected _miscGroup: Selection<BaseType, {}, null, undefined>;
 
     /**
      * Group of inputs circles
      */
-    private _inputsGroup: Selection<BaseType, {}, null, undefined>;
+    protected _inputsGroup: Selection<BaseType, {}, null, undefined>;
 
     /**
      * Group of dynamic inputs circles
      */
-    private _dynamicInputsGroup: Selection<BaseType, {}, null, undefined>;
+    protected _dynamicInputsGroup: Selection<BaseType, {}, null, undefined>;
 
     /**
      * Group of output circles
      */
-    private _outputsGroup: Selection<BaseType, {}, null, undefined>;
+    protected _outputsGroup: Selection<BaseType, {}, null, undefined>;
 
     /**
      * Properties metadata, used for changes node options
      */
-    private _properties: PropertiesMetadata;
+    protected _properties: PropertiesMetadata;
 
     /**
      * X coordinate of node
      */
-    private _nodeX: number;
+    protected _nodeX: number;
 
     /**
      * Y coordinate of node
      */
-    private _nodeY: number;
+    protected _nodeY: number;
 
     /**
      * Array of dynamic inputs
      */
-    private _dynamicInputs: RelationsInputOutputMetadata[] = [];
+    protected _dynamicInputs: RelationsInputOutputMetadata[] = [];
 
     //######################### public properties #########################
 
@@ -113,11 +113,11 @@ export class SvgNode implements SvgNodeDynamicNode
     }
 
     //######################### constructor #########################
-    constructor(private _parentGroup: Selection<BaseType, {}, null, undefined>,
-                private _metadata: RelationsMetadata,
-                private _validDropToggle: (dropArea: SvgPeerDropArea) => void,
-                private _createRelation: () => SvgRelationDynamicNode,
-                private _propertiesSvc: PropertiesService,
+    constructor(protected _parentGroup: Selection<BaseType, {}, null, undefined>,
+                protected _metadata: RelationsMetadata,
+                protected _validDropToggle: (dropArea: SvgPeerDropArea) => void,
+                protected _createRelation: () => SvgRelationDynamicNode,
+                protected _propertiesSvc: PropertiesService,
                 nodeOptions: any)
     {
         this._nodeX = isPresent(this._metadata.x) ? this._metadata.x : 0;
@@ -251,12 +251,12 @@ export class SvgNode implements SvgNodeDynamicNode
         return true;
     }
 
-    //######################### private methods #########################
+    //######################### protected methods #########################
 
     /**
      * Initialize node
      */
-    private _initialize()
+    protected _initialize()
     {
         this._nodeGroup = this._parentGroup.append('g')
             .attr('transform', `translate(${this._nodeX}, ${this._nodeY})`);
@@ -295,7 +295,7 @@ export class SvgNode implements SvgNodeDynamicNode
     /**
      * Renders misc visuals
      */
-    private _renderVisuals()
+    protected _renderVisuals()
     {
         this._miscGroup.append('rect')
             .attr('x', 0)
@@ -320,7 +320,7 @@ export class SvgNode implements SvgNodeDynamicNode
     /**
      * Adds inputs to this node
      */
-    private _addInputs()
+    protected _addInputs()
     {
         this._metadata.inputs = this._metadata.inputs || [];
         this._metadata.inputs.forEach((input, index) => input.y = peerOffset + (index * peerStep));
@@ -331,7 +331,7 @@ export class SvgNode implements SvgNodeDynamicNode
     /**
      * Adds dynamic inputs to node
      */
-    private _addDynamicInputs()
+    protected _addDynamicInputs()
     {
         this._dynamicInputs.forEach((input, index) => input.y = (this._metadata.inputs.length ? (this._metadata.inputs[this._metadata.inputs.length - 1].y + peerStep) : peerOffset) + (index * peerStep));
         this._nodeGroup.select('rect')
@@ -346,7 +346,7 @@ export class SvgNode implements SvgNodeDynamicNode
      * @param inputs Array of inputs to be added
      * @param dynamic Indication whether is input dynamic or not
      */
-    private _addInputCircles(group: Selection<BaseType, {}, null, undefined>, inputs: RelationsInputOutputMetadata[], dynamic: boolean)
+    protected _addInputCircles(group: Selection<BaseType, {}, null, undefined>, inputs: RelationsInputOutputMetadata[], dynamic: boolean)
     {
         let relation: SvgRelationDynamicNode;
 
@@ -448,7 +448,7 @@ export class SvgNode implements SvgNodeDynamicNode
     /**
      * Adds outputs to this node
      */
-    private _addOutputs()
+    protected _addOutputs()
     {
         let relation: SvgRelationDynamicNode;
         this._metadata.outputs = this._metadata.outputs || [];
@@ -531,7 +531,7 @@ export class SvgNode implements SvgNodeDynamicNode
     /**
      * Updates all relations position when dragging
      */
-    private _updateRelations()
+    protected _updateRelations()
     {
         if(this._metadata.inputs)
         {
@@ -576,7 +576,7 @@ export class SvgNode implements SvgNodeDynamicNode
     /**
      * Gets current height
      */
-    private _getHeight(): number
+    protected _getHeight(): number
     {
         let height = peerOffset + 30;
 
@@ -596,7 +596,7 @@ export class SvgNode implements SvgNodeDynamicNode
     /**
      * Gets metadata for outputs of component
      */
-    private _getOutputs(): DynamicComponentRelationOutputMetadata[]
+    protected _getOutputs(): DynamicComponentRelationOutputMetadata[]
     {
         let result: DynamicComponentRelationOutputMetadata[] = [];
 

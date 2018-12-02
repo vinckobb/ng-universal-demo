@@ -152,23 +152,40 @@ export class NodeDesignerComponent implements OnInit
         this._addedNodes.push(
         {
             component: component,
-            svgNode: new SvgNode(this._svgData.parentGroup,
-                                 {
-                                     id: component.id,
-                                     description: metadata.description,
-                                     name: metadata.name,
-                                     x: currentZoom.invertX(coordinates.x),
-                                     y: currentZoom.invertY(coordinates.y),
-                                     inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
-                                     outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
-                                     dynamicInputs: metadata.dynamicInputs,
-                                     nodeOptionsMetadata: metadata.nodeOptionsMetadata,
-                                     nodeType: metadata.nodeType
-                                 },
-                                 this._setDropAreaFn,
-                                 () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
-                                 this._propertiesSvc,
-                                 nodeOptions || {})
+            svgNode: metadata.customNode ? new metadata.customNode(this._svgData.parentGroup,
+                                                                   {
+                                                                       id: component.id,
+                                                                       description: metadata.description,
+                                                                       name: metadata.name,
+                                                                       x: currentZoom.invertX(coordinates.x),
+                                                                       y: currentZoom.invertY(coordinates.y),
+                                                                       inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
+                                                                       outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
+                                                                       dynamicInputs: metadata.dynamicInputs,
+                                                                       nodeOptionsMetadata: metadata.nodeOptionsMetadata,
+                                                                       nodeType: metadata.nodeType
+                                                                   },
+                                                                   this._setDropAreaFn,
+                                                                   () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
+                                                                   this._propertiesSvc,
+                                                                   nodeOptions || {}) :
+                                           new SvgNode(this._svgData.parentGroup,
+                                           {
+                                               id: component.id,
+                                               description: metadata.description,
+                                               name: metadata.name,
+                                               x: currentZoom.invertX(coordinates.x),
+                                               y: currentZoom.invertY(coordinates.y),
+                                               inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
+                                               outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
+                                               dynamicInputs: metadata.dynamicInputs,
+                                               nodeOptionsMetadata: metadata.nodeOptionsMetadata,
+                                               nodeType: metadata.nodeType
+                                           },
+                                           this._setDropAreaFn,
+                                           () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
+                                           this._propertiesSvc,
+                                           nodeOptions || {})
         });
     }
 
@@ -184,23 +201,40 @@ export class NodeDesignerComponent implements OnInit
 
         this._addedNodes.push(
         {
-            svgNode: new SvgNode(this._svgData.parentGroup,
-                                 {
-                                     id: generateId(12),
-                                     description: metadata.description,
-                                     name: metadata.name,
-                                     x: currentZoom.invertX(coordinates.x),
-                                     y: currentZoom.invertY(coordinates.y),
-                                     inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
-                                     outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
-                                     dynamicInputs: metadata.dynamicInputs,
-                                     nodeOptionsMetadata: metadata.nodeOptionsMetadata,
-                                     nodeType: metadata.nodeType
-                                 },
-                                 this._setDropAreaFn,
-                                 () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
-                                 this._propertiesSvc,
-                                 nodeOptions || {})
+            svgNode: metadata.customNode ? new metadata.customNode(this._svgData.parentGroup,
+                                                                   {
+                                                                       id: generateId(12),
+                                                                       description: metadata.description,
+                                                                       name: metadata.name,
+                                                                       x: currentZoom.invertX(coordinates.x),
+                                                                       y: currentZoom.invertY(coordinates.y),
+                                                                       inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
+                                                                       outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
+                                                                       dynamicInputs: metadata.dynamicInputs,
+                                                                       nodeOptionsMetadata: metadata.nodeOptionsMetadata,
+                                                                       nodeType: metadata.nodeType
+                                                                   },
+                                                                   this._setDropAreaFn,
+                                                                   () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
+                                                                   this._propertiesSvc,
+                                                                   nodeOptions || {}) :
+                                           new SvgNode(this._svgData.parentGroup,
+                                           {
+                                               id: generateId(12),
+                                               description: metadata.description,
+                                               name: metadata.name,
+                                               x: currentZoom.invertX(coordinates.x),
+                                               y: currentZoom.invertY(coordinates.y),
+                                               inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
+                                               outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
+                                               dynamicInputs: metadata.dynamicInputs,
+                                               nodeOptionsMetadata: metadata.nodeOptionsMetadata,
+                                               nodeType: metadata.nodeType
+                                           },
+                                           this._setDropAreaFn,
+                                           () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
+                                           this._propertiesSvc,
+                                           nodeOptions || {})
         });
     }
 

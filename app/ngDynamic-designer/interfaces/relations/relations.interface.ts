@@ -1,8 +1,10 @@
+import {Selection, BaseType} from 'd3';
 import {Observable, Subscription} from "rxjs";
 
 import {DesignerCommonMetadata} from "../metadata.interface";
 import {DynamicNode, DynamicComponentRelationMetadata} from "../../../ngDynamic-core";
 import {PropertiesPropertyMetadata} from "../properties/properties.interface";
+import {PropertiesService} from "../../services";
 
 /**
  * Metadata used for node relations designer
@@ -43,6 +45,11 @@ export interface RelationsMetadata extends DesignerCommonMetadata
      * Y coordinates of node, set by designer, do not set
      */
     y?: number;
+
+    /**
+     * Type used for creating custom node with specific functionality
+     */
+    customNode?: SvgNodeDynamicNodeConstructor;
 }
 
 /**
@@ -96,6 +103,19 @@ export interface SvgDynamicNode extends DynamicNode
      * Method used for destroying this relation node
      */
     destroy(): void;
+}
+
+/**
+ * Definition of class for SvgNode
+ */
+export interface SvgNodeDynamicNodeConstructor
+{
+    new (parentGroup: Selection<BaseType, {}, null, undefined>,
+         metadata: RelationsMetadata,
+         validDropToggle: (dropArea: SvgPeerDropArea) => void,
+         createRelation: () => SvgRelationDynamicNode,
+         propertiesSvc: PropertiesService,
+         nodeOptions: any): SvgNodeDynamicNode;
 }
 
 /**

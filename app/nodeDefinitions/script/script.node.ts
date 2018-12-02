@@ -1,8 +1,9 @@
 import {Injector} from "@angular/core";
 
 import {ScriptLoader, DynamicOutput, NodeDefinitionGeneric} from "../../ngDynamic-core";
-import {DynamicNodeDesignerMetadata} from "../../ngDynamic-designer";
+import {DynamicNodeDesignerMetadata, PropertyType} from "../../ngDynamic-designer";
 import {ScriptNodeOptions} from "./script.interface";
+import {ScriptSvgNode} from "./scriptSvgNode";
 
 /**
  * Node used for calling custom scripts
@@ -28,7 +29,17 @@ import {ScriptNodeOptions} from "./script.interface";
                 name: 'output',
                 type: 'any'
             }
-        ]
+        ],
+        nodeOptionsMetadata:
+        [
+            {
+                id: 'scriptPath',
+                name: 'Script path',
+                description: 'Path to script that is obtained and executed for this node',
+                type: PropertyType.String
+            }
+        ],
+        customNode: ScriptSvgNode
     }
 })
 export class ScriptNode implements NodeDefinitionGeneric<ScriptNodeOptions>
@@ -71,7 +82,7 @@ export class ScriptNode implements NodeDefinitionGeneric<ScriptNodeOptions>
      */
     public async invalidateVisuals()
     {
-        let type = await this._scriptLoader.loadType('index.js');
+        let type = await this._scriptLoader.loadType(this.options.scriptPath);
 
         this.output = new type().transform(this.input);
     }
