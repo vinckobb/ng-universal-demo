@@ -160,6 +160,22 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
         };
         
         languages.typescript.typescriptDefaults.setCompilerOptions(options);
+
+        languages.typescript.typescriptDefaults.addExtraLib(
+            `declare module "interface" {
+                export interface TransformAction {
+                    transform(value: any): any;
+                }
+            }
+            declare module "index" {
+                import { TransformAction } from "interfaceaaa";
+                export class TransformObjectIntoString implements TransformAction {
+                    transform(value: any): any;
+                }
+                export { TransformAction };
+            }`, 'file:///node_modules/@types/external2/index.d.ts'
+        )
+
         languages.typescript.typescriptDefaults.addExtraLib(
             `export { Observable } from './internal/Observable';
             export { ConnectableObservable } from './internal/observable/ConnectableObservable';
