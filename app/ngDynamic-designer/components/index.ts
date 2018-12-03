@@ -9,3 +9,4 @@ export * from './placeholderBase/placeholderBase.component';
 export * from './properties/properties.component';
 export * from './nodeComponentPalette/nodeComponentPalette.component';
 export * from './properties/property/property.component';
+export * from './codeEditor/codeEditor.component';

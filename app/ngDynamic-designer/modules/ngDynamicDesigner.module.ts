@@ -4,7 +4,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {CdkTreeModule} from "@angular/cdk/tree";
 
-import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, PropertiesComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeDesignerComponent, NodeComponentPaletteComponent, LayoutDesignerTreeComponent, PropertyComponent} from "../components";
+import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, PropertiesComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeDesignerComponent, NodeComponentPaletteComponent, LayoutDesignerTreeComponent, PropertyComponent, CodeEditorComponent} from "../components";
 import {DesignerComponentRendererDirective} from "../directives";
 
 /**
@@ -29,6 +29,7 @@ import {DesignerComponentRendererDirective} from "../directives";
         NodeDesignerModeComponent,
         PropertiesComponent,
         PropertyComponent,
+        CodeEditorComponent,
         NodeDesignerComponent,
         NodeComponentPaletteComponent,
         DesignerComponentRendererDirective

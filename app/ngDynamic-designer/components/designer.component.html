@@ -6,10 +6,14 @@
         <button type="button" class="btn btn-primary" [class.active]="isMode(designerModes.NODE)" (click)="setMode(designerModes.NODE)">
             Node
         </button>
+        <button type="button" class="btn btn-primary" [class.active]="isMode(designerModes.CODE)" (click)="setMode(designerModes.CODE)" *ngIf="isMode(designerModes.CODE)">
+            Code
+        </button>
     </header>
     
     <layout-designer [style.display]="isMode(designerModes.LAYOUT) ? 'contents': 'none'" [packageNames]="designerPackageNames"></layout-designer>
     <node-designer-mode [style.display]="isMode(designerModes.NODE) ? 'contents': 'none'"></node-designer-mode>
+    <div code-editor [style.display]="isMode(designerModes.CODE) ? 'block': 'none'"></div>
 
     <aside class="right">
         <properties></properties>
