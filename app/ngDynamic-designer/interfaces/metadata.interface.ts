@@ -1,4 +1,4 @@
-import {DynamicModule, DynamicComponent, DynamicComponentMetadata, DynamicComponentMetadataGeneric} from "../../ngDynamic-core";
+import {DynamicModule, DynamicComponent, DynamicComponentMetadata, DynamicComponentMetadataGeneric, DynamicNode} from "../../ngDynamic-core";
 import {LayoutMetadata} from "./layout";
 import {RelationsMetadata} from "./relations";
 
@@ -156,4 +156,20 @@ export interface DesignerCommonMetadata
      * Description of component or node type, can be longer
      */
     description?: string;
+}
+
+/**
+ * Metadata used within services like Code or Properties
+ */
+export interface DesignerServiceMetadata extends DesignerCommonMetadata
+{
+    /**
+     * Value that is gathered by service component, set by designer, do not set
+     */
+    value?: any;
+
+    /**
+     * Dynamic node instance, set by designer, do not set
+     */
+    dynamicNodeInstance?: DynamicNode;
 }

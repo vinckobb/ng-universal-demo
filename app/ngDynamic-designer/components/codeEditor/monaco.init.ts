@@ -1,3 +1,5 @@
+import {languages} from "monaco-editor";
+
 (self as any).MonacoEnvironment = 
 {
     getWorkerUrl: function(_moduleId, label)
@@ -21,3 +23,14 @@
         return 'dist/editor.worker.js';
     }
 }
+
+let options: languages.typescript.CompilerOptions =
+{
+    target: languages.typescript.ScriptTarget.ES5,
+    module: languages.typescript.ModuleKind.CommonJS,
+    moduleResolution: languages.typescript.ModuleResolutionKind.NodeJs,
+    allowNonTsExtensions: true,
+    typeRoots: ["node_modules/@types"]
+};
+
+languages.typescript.typescriptDefaults.setCompilerOptions(options);

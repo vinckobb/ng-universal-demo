@@ -1,28 +1,17 @@
 import {ValidatorFn} from "@angular/forms";
-
-import {DesignerCommonMetadata} from "../metadata.interface";
-import {DynamicNode} from "../../../ngDynamic-core";
 import {ValueNamePair} from "@asseco/common";
+
+import {DesignerServiceMetadata} from "../metadata.interface";
 
 /**
  * Metadata used for displaying properties designer
  */
-export interface PropertiesMetadata extends DesignerCommonMetadata
+export interface PropertiesMetadata extends DesignerServiceMetadata
 {
     /**
      * Array of descriptors for properties 
      */
     properties?: PropertiesPropertyMetadata[];
-
-    /**
-     * Value that is gathered by properties component, set by designer, do not set
-     */
-    value?: any;
-
-    /**
-     * Dynamic node instance, set by designer, do not set
-     */
-    dynamicNodeInstance?: DynamicNode;
 }
 
 /**

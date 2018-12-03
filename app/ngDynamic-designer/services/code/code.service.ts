@@ -6,5 +6,8 @@ import {Injectable} from "@angular/core";
 @Injectable()
 export class CodeService
 {
-    
+    //######################### public properties #########################
+
+    //######################### public methods #########################
+
 }
