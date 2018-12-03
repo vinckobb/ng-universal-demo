@@ -69,6 +69,11 @@ export interface PropertiesPropertyMetadata
      * Array of validators that can be applied to property
      */
     validators?: ValidatorFn[];
+
+    /**
+     * Indication whether this property should be visible in properties component
+     */
+    hidden?: boolean;
 }
 
 /**

@@ -53,7 +53,6 @@ console.log(x);`;
 
         this._codeEditor = editor.create(this._element.nativeElement,
         {
-            language: 'typescript',
             theme: 'vs-dark',
             model: this._openedFile
         });

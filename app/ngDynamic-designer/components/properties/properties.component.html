@@ -5,7 +5,7 @@
 </div>
 
 <div style="margin-top: 20px;">
-    <ng-container *ngFor="let property of propertiesMetadata?.properties">
+    <ng-container *ngFor="let property of propertiesMetadata?.properties | onlyVisible">
         <div *ngIf="property.type != propertyTypes.Collection; else collection"
              style="margin-bottom: 20px;"
              [property]="property"
