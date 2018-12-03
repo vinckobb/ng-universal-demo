@@ -1,10 +1,9 @@
-import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnInit} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnInit, Injector} from "@angular/core";
 import {generateId} from "@asseco/common";
 import {select, Selection, event, zoom, zoomTransform} from 'd3';
 
 import {SvgNode, SvgRelation} from "./misc";
 import {SvgPeerDropArea, Coordinates, DesignerLayoutPlaceholderComponent, RelationsMetadata, SvgNodeDynamicNode} from "../../interfaces";
-import {PropertiesService} from "../../services";
 import {DynamicComponentRelationMetadata} from "../../../ngDynamic-core";
 import {NodeDesignerNodeState} from "./nodeDesigner.interface";
 
@@ -90,7 +89,7 @@ export class NodeDesignerComponent implements OnInit
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef,
                 private _element: ElementRef<HTMLElement>,
-                private _propertiesSvc: PropertiesService)
+                private _injector: Injector)
     {
     }
 
@@ -167,7 +166,7 @@ export class NodeDesignerComponent implements OnInit
                                                                    },
                                                                    this._setDropAreaFn,
                                                                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
-                                                                   this._propertiesSvc,
+                                                                   this._injector,
                                                                    nodeOptions || {}) :
                                            new SvgNode(this._svgData.parentGroup,
                                            {
@@ -184,7 +183,7 @@ export class NodeDesignerComponent implements OnInit
                                            },
                                            this._setDropAreaFn,
                                            () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
-                                           this._propertiesSvc,
+                                           this._injector,
                                            nodeOptions || {})
         });
     }
@@ -216,7 +215,7 @@ export class NodeDesignerComponent implements OnInit
                                                                    },
                                                                    this._setDropAreaFn,
                                                                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
-                                                                   this._propertiesSvc,
+                                                                   this._injector,
                                                                    nodeOptions || {}) :
                                            new SvgNode(this._svgData.parentGroup,
                                            {
@@ -233,7 +232,7 @@ export class NodeDesignerComponent implements OnInit
                                            },
                                            this._setDropAreaFn,
                                            () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
-                                           this._propertiesSvc,
+                                           this._injector,
                                            nodeOptions || {})
         });
     }

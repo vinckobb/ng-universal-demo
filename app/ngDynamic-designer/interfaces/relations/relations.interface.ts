@@ -1,10 +1,10 @@
+import {Injector} from '@angular/core';
 import {Selection, BaseType} from 'd3';
 import {Observable, Subscription} from "rxjs";
 
 import {DesignerCommonMetadata} from "../metadata.interface";
 import {DynamicNode, DynamicComponentRelationMetadata} from "../../../ngDynamic-core";
 import {PropertiesPropertyMetadata} from "../properties/properties.interface";
-import {PropertiesService} from "../../services";
 
 /**
  * Metadata used for node relations designer
@@ -114,7 +114,7 @@ export interface SvgNodeDynamicNodeConstructor
          metadata: RelationsMetadata,
          validDropToggle: (dropArea: SvgPeerDropArea) => void,
          createRelation: () => SvgRelationDynamicNode,
-         propertiesSvc: PropertiesService,
+         injector: Injector,
          nodeOptions: any): SvgNodeDynamicNode;
 }
 

@@ -1,10 +1,11 @@
+import {Injector} from '@angular/core';
 import {isPresent} from '@asseco/common';
 import {Selection, BaseType, drag, event, select} from 'd3';
 
 import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata} from '../../../../interfaces';
-import {PropertiesService} from '../../../../services';
 import {transformOptionsToProperties, transformPropertiesToOptions} from '../../../../misc';
 import {DynamicComponentRelationMetadata, DynamicComponentRelationOutputMetadata, DynamicComponentRelationInputMetadata} from '../../../../../ngDynamic-core';
+import {PropertiesService} from '../../../../services';
 
 /**
  * Offset of first peer in node
@@ -117,7 +118,7 @@ export class SvgNode implements SvgNodeDynamicNode
                 protected _metadata: RelationsMetadata,
                 protected _validDropToggle: (dropArea: SvgPeerDropArea) => void,
                 protected _createRelation: () => SvgRelationDynamicNode,
-                protected _propertiesSvc: PropertiesService,
+                protected _injector: Injector,
                 nodeOptions: any)
     {
         this._nodeX = isPresent(this._metadata.x) ? this._metadata.x : 0;
@@ -270,7 +271,12 @@ export class SvgNode implements SvgNodeDynamicNode
                 .attr('stroke', '#d4d4d4')
             .on('click', () =>
             {
-                this._propertiesSvc.showProperties(this._properties)
+                let propertiesSvc = this._injector.get(PropertiesService);
+
+                if(propertiesSvc)
+                {
+                    propertiesSvc.showProperties(this._properties)
+                }
             });
 
         this._miscGroup = this._nodeGroup.append('g');

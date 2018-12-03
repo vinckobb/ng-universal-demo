@@ -1,5 +1,6 @@
 export enum DesignerMode
 {
     LAYOUT = 'LAYOUT',
-    NODE = 'NODE'
+    NODE = 'NODE',
+    CODE = 'CODE'
 }
