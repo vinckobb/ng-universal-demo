@@ -7,6 +7,11 @@
             Node
         </button>
     </header>
+    
     <layout-designer [style.display]="isMode(designerModes.LAYOUT) ? 'contents': 'none'" [packageNames]="designerPackageNames"></layout-designer>
     <node-designer-mode [style.display]="isMode(designerModes.NODE) ? 'contents': 'none'"></node-designer-mode>
+
+    <aside class="right">
+        <properties></properties>
+    </aside>
 </div>
