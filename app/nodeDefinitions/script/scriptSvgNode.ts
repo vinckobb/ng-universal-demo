@@ -1,4 +1,4 @@
-import {SvgNodeDynamicNode, DesignerPageComponent} from "../../ngDynamic-designer";
+import {SvgNodeDynamicNode, DesignerPageComponent, CodeService, CodeMetadata} from "../../ngDynamic-designer";
 import {SvgNode} from "../../ngDynamic-designer/components/nodeDesigner/misc";
 import {DesignerMode} from "../../ngDynamic-designer/components/designer.interface";
 
@@ -7,6 +7,36 @@ import {DesignerMode} from "../../ngDynamic-designer/components/designer.interfa
  */
 export class ScriptSvgNode extends SvgNode implements SvgNodeDynamicNode
 {
+    //######################### protected fields #########################
+
+    /**
+     * Code metadata
+     */
+    protected _codeMetadata: CodeMetadata =
+    {
+        language: 'typescript',
+        template:`
+import {TransformAction} from 'node-transform';
+
+export class TransformClass implements TransformAction
+{
+    /**
+     * Method that transforms value into any requested value
+     * @param value Value to be transformed
+     */
+    public transform(value: any): any
+    {
+        return value;
+    }
+}
+`,
+        additionalData: 
+        [
+            "node-transform"
+        ],
+        dynamicNodeInstance: this
+    };
+
     //######################### protected methods #########################
 
     /**
@@ -21,6 +51,7 @@ export class ScriptSvgNode extends SvgNode implements SvgNodeDynamicNode
             .on('click', () =>
             {
                 this._injector.get(DesignerPageComponent).setMode(DesignerMode.CODE);
+                this._injector.get(CodeService).showCode(this._codeMetadata);
             });
 
         buttonGroup.append("rect")
