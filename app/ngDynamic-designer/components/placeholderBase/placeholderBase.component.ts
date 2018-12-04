@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding, HostListener} from "@angular/core";
+import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding, HostListener, Injectable} from "@angular/core";
 import {generateId} from "@asseco/common";
 
 import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata} from "../../interfaces";
@@ -11,6 +11,7 @@ import {transformOptionsToProperties, transformPropertiesToOptions} from "../../
 /**
  * Base class for all placeholder components
  */
+@Injectable()
 export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayoutPlaceholderComponentGeneric<TOptions>
 {
     //######################### protected fields #########################

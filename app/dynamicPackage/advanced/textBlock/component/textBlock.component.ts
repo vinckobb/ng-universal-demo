@@ -2,7 +2,9 @@ import {Component, ChangeDetectionStrategy, ElementRef} from "@angular/core";
 import * as handlebars from 'handlebars';
 
 import {DynamicComponentGeneric} from "../../../../ngDynamic-core";
-import {TextBlockOptions} from "./textBlock.interface";
+import {TextBlockComponentOptions} from "./textBlock.interface";
+import {DynamicComponentDesignerMetadata} from "../../../../ngDynamic-designer";
+import {placeholderModule, layoutMetadata, relationsMetadata} from "./designer";
 
 /**
  * Component used for displaying handlebars template and rendering objects
@@ -13,7 +15,13 @@ import {TextBlockOptions} from "./textBlock.interface";
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TextBlockComponent implements DynamicComponentGeneric<TextBlockOptions>
+@DynamicComponentDesignerMetadata(
+{
+    placeholderModule,
+    layoutMetadata,
+    relationsMetadata
+})
+export class TextBlockComponent implements DynamicComponentGeneric<TextBlockComponentOptions>
 {
     //######################### private fields #########################
 
@@ -27,7 +35,7 @@ export class TextBlockComponent implements DynamicComponentGeneric<TextBlockOpti
     /**
      * Options used for rendering this component
      */
-    public options: TextBlockOptions;
+    public options: TextBlockComponentOptions;
 
     /**
      * Object that will be displayed in template

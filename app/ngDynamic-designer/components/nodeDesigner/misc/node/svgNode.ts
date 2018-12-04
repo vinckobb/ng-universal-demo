@@ -2,7 +2,7 @@ import {Injector} from '@angular/core';
 import {isPresent} from '@asseco/common';
 import {Selection, BaseType, drag, event, select} from 'd3';
 
-import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata} from '../../../../interfaces';
+import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata, DesignerLayoutPlaceholderComponent} from '../../../../interfaces';
 import {transformOptionsToProperties, transformPropertiesToOptions} from '../../../../misc';
 import {DynamicComponentRelationMetadata, DynamicComponentRelationOutputMetadata, DynamicComponentRelationInputMetadata} from '../../../../../ngDynamic-core';
 import {PropertiesService} from '../../../../services';
@@ -119,6 +119,7 @@ export class SvgNode implements SvgNodeDynamicNode
                 protected _validDropToggle: (dropArea: SvgPeerDropArea) => void,
                 protected _createRelation: () => SvgRelationDynamicNode,
                 protected _injector: Injector,
+                protected _layoutComponent: DesignerLayoutPlaceholderComponent,
                 nodeOptions: any)
     {
         this._nodeX = isPresent(this._metadata.x) ? this._metadata.x : 0;

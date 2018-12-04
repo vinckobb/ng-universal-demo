@@ -184,7 +184,7 @@ export class LayoutDesignerTreeComponent implements OnDestroy
      */
     private _getChildrenForComponent(component: DesignerLayoutPlaceholderComponent): LayoutComponentTreeNode[]
     {
-        if (!component)
+        if (!component || !component.children)
         {
             return null;
         }

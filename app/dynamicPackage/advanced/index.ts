@@ -1,1 +1,1 @@
-export {TextBlockOptions} from './textBlock/component';
+export {TextBlockComponentOptions} from './textBlock/component';

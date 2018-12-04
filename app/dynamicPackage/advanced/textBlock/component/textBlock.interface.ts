@@ -1,7 +1,7 @@
 /**
  * Options for advanced text block
  */
-export interface TextBlockOptions
+export interface TextBlockComponentOptions
 {
     /**
      * Handlebars template used for displaying content of block

@@ -12,7 +12,7 @@ import {languages} from "monaco-editor";
         {
             return 'dist/css.worker.js';
         }
-        if (label === 'html')
+        if (label === 'html' || label == 'handlebars')
         {
             return 'dist/html.worker.js';
         }

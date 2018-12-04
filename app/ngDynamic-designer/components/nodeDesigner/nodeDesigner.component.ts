@@ -167,6 +167,7 @@ export class NodeDesignerComponent implements OnInit
                                                                    this._setDropAreaFn,
                                                                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
                                                                    this._injector,
+                                                                   component,
                                                                    nodeOptions || {}) :
                                            new SvgNode(this._svgData.parentGroup,
                                            {
@@ -184,6 +185,7 @@ export class NodeDesignerComponent implements OnInit
                                            this._setDropAreaFn,
                                            () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
                                            this._injector,
+                                           component,
                                            nodeOptions || {})
         });
     }
@@ -216,6 +218,7 @@ export class NodeDesignerComponent implements OnInit
                                                                    this._setDropAreaFn,
                                                                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
                                                                    this._injector,
+                                                                   null,
                                                                    nodeOptions || {}) :
                                            new SvgNode(this._svgData.parentGroup,
                                            {
@@ -233,6 +236,7 @@ export class NodeDesignerComponent implements OnInit
                                            this._setDropAreaFn,
                                            () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
                                            this._injector,
+                                           null,
                                            nodeOptions || {})
         });
     }

@@ -44,7 +44,7 @@ export class DesignerPageComponent implements OnInit, OnDestroy
     /**
      * List of components packages that are available in designer
      */
-    public designerPackageNames: string[] = ["layout"];
+    public designerPackageNames: string[] = ["layout", "advanced"];
 
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef)
