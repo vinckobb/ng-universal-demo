@@ -3,7 +3,7 @@ import {isPresent} from '@asseco/common';
 import {Selection, BaseType, drag, event, select} from 'd3';
 import {Subject, Observable} from 'rxjs';
 
-import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata, DesignerLayoutPlaceholderComponent, INVALIDATE_PROPERTIES} from '../../../../interfaces';
+import {RelationsMetadata, Coordinates, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata, DesignerLayoutPlaceholderComponent, INVALIDATE_PROPERTIES, ɵDynamicRelationsInputMetadata} from '../../../../interfaces';
 import {transformOptionsToProperties, transformPropertiesToOptions} from '../../../../misc';
 import {DynamicComponentRelationMetadata, DynamicComponentRelationOutputMetadata, DynamicComponentRelationInputMetadata} from '../../../../../ngDynamic-core';
 import {INVALIDATE_DROP, NODE_PROPERTIES_SERVICE} from '../../nodeDesigner.interface';
@@ -83,7 +83,7 @@ export class SvgNode implements SvgNodeDynamicNode
     /**
      * Array of dynamic inputs
      */
-    protected _dynamicInputs: RelationsInputOutputMetadata[] = [];
+    protected _dynamicInputs: ɵDynamicRelationsInputMetadata[] = [];
 
     //######################### public properties #########################
 
@@ -202,10 +202,38 @@ export class SvgNode implements SvgNodeDynamicNode
     {
         if(propertyName == INVALIDATE_PROPERTIES)
         {
-            this._dynamicInputs = (this._metadata.dynamicInputs && this._metadata.dynamicInputs(this._properties.value)) || [];
+            let newDynamicInputs = (this._metadata.dynamicInputs && this._metadata.dynamicInputs(this._properties.value)) || [];
+            
+            this._dynamicInputs.forEach(input =>
+            {
+                let found = newDynamicInputs.find(itm => itm.ɵId == input.ɵId);
+
+                if(found)
+                {
+                    found.relations = input.relations;
+                }
+                else
+                {
+                    if(input.relations && input.relations.length)
+                    {
+                        input.relations.forEach(relation => relation.destroy());
+                    }
+                }
+            });
+            
+            this._dynamicInputs = newDynamicInputs;
 
             this._addDynamicInputs();
         }
+    }
+
+    /**
+     * Gets real dynamic input id 
+     * @param inputName Name of input which id will be get
+     */
+    public getDynamicInputId(inputName: string): string
+    {
+        return this._dynamicInputs.find(itm => (itm.ɵId || itm.id) == inputName).id;
     }
 
     /**
@@ -217,7 +245,7 @@ export class SvgNode implements SvgNodeDynamicNode
     {
         return {
             x: this._nodeX,
-            y: this._nodeY + (dynamic ? this._dynamicInputs : this._metadata.inputs).find(itm => itm.id == inputName).y
+            y: this._nodeY + (dynamic ? this._dynamicInputs : this._metadata.inputs).find((itm: ɵDynamicRelationsInputMetadata) => (itm.ɵId || itm.id) == inputName).y
         };
     }
 
@@ -265,7 +293,7 @@ export class SvgNode implements SvgNodeDynamicNode
      */
     public addInputRelation(relation: SvgRelationDynamicNode, inputName: string, dynamic: boolean): boolean
     {
-        let inputPeer = (dynamic ? this._dynamicInputs : this._metadata.inputs).find(itm => itm.id == inputName);
+        let inputPeer = (dynamic ? this._dynamicInputs : this._metadata.inputs).find((itm: ɵDynamicRelationsInputMetadata) => (itm.ɵId || itm.id) == inputName);
 
         inputPeer.relations = inputPeer.relations || [];
 
@@ -408,19 +436,40 @@ export class SvgNode implements SvgNodeDynamicNode
      * @param inputs Array of inputs to be added
      * @param dynamic Indication whether is input dynamic or not
      */
-    protected _addInputCircles(group: Selection<BaseType, {}, null, undefined>, inputs: RelationsInputOutputMetadata[], dynamic: boolean)
+    protected _addInputCircles(group: Selection<BaseType, {}, null, undefined>, inputs: ɵDynamicRelationsInputMetadata[], dynamic: boolean)
     {
         let relation: SvgRelationDynamicNode;
 
-        let changes = group.selectAll('g')
-            .data(inputs)
+        let changes = group.selectAll<SVGGeometryElement, ɵDynamicRelationsInputMetadata>('g')
+            .data(inputs, datum => datum.ɵId || datum.id)
             .call(sel =>
             {
                 sel.select('text')
-                    .text(itm => itm.name);
+                    .text(itm => itm.name)
+                    .attr('y', itm => itm.y + 4);
 
                 sel.select('circle.action')
-                    .datum(d => d);
+                    .datum(d => d)
+                    .attr('cy', itm => itm.y);
+
+                let actionCircle = sel.select('circle:not(.action)')
+                    .datum(d => d)
+                    .attr('cy', itm => itm.y);
+
+                if(!actionCircle.empty())
+                {
+                    let inMeta = actionCircle.datum();
+
+                    if(inMeta.relations && inMeta.relations.length)
+                    {
+                        inMeta.relations.forEach(inRelation =>
+                        {
+                            inRelation.end = this.getInputCoordinates(inMeta.ɵId || inMeta.id, true);
+
+                            inRelation.invalidateVisuals();
+                        });
+                    }
+                }
             });
 
         changes.exit().remove();
@@ -457,7 +506,7 @@ export class SvgNode implements SvgNodeDynamicNode
                         this._validDropToggle(
                         {
                             svgNode: this,
-                            inputId: datum.id,
+                            inputId: datum.ɵId || datum.id,
                             dynamic: dynamic
                         });
                     })
@@ -468,7 +517,7 @@ export class SvgNode implements SvgNodeDynamicNode
 
                         this._validDropToggle(null);
                     })
-                    .call(drag<SVGCircleElement, RelationsInputOutputMetadata>()
+                    .call(drag<SVGCircleElement, ɵDynamicRelationsInputMetadata>()
                         .on('start', datum =>
                         {
                             relation = datum.relations && datum.relations.length && datum.relations[0];
@@ -550,7 +599,7 @@ export class SvgNode implements SvgNodeDynamicNode
                         select(groups[index])
                             .attr('fill', 'transparent');
                     })
-                    .call(drag<SVGCircleElement, RelationsInputOutputMetadata>()
+                    .call(drag<SVGCircleElement, ɵDynamicRelationsInputMetadata>()
                         .on('start', datum =>
                         {
                             datum.relations = datum.relations || [];
@@ -628,7 +677,7 @@ export class SvgNode implements SvgNodeDynamicNode
             {
                 if(input.relations && input.relations.length)
                 {
-                    input.relations[0].end = this.getInputCoordinates(input.id, true);
+                    input.relations[0].end = this.getInputCoordinates(input.ɵId, true);
                     input.relations[0].invalidateVisuals();
                 }
             });
@@ -678,7 +727,7 @@ export class SvgNode implements SvgNodeDynamicNode
                     inputs.push(
                     {
                         id: relation.endPeer.svgNode.id,
-                        inputName: relation.endPeer.inputId
+                        inputName: relation.endPeer.svgNode.getDynamicInputId(relation.endPeer.inputId)
                     });
                 });
 

@@ -1,12 +1,12 @@
 import {Injector} from "@angular/core";
 import {HttpClient, HttpRequest, HttpParams, HttpResponse} from "@angular/common/http";
+import {getEnumValues, generateId} from "@asseco/common";
 import {Observable, empty} from "rxjs";
 import {map} from "rxjs/operators";
 
 import {RestClientNodeOptions, RestClientNodeParameterValue, RestClientMethodType, RestClientParamType} from "./restClient.interface";
 import {NodeDefinitionGeneric, DynamicOutput, NodeDefinition} from "../../ngDynamic-core";
-import {DynamicNodeDesignerMetadata, PropertyType, RelationsMetadataGeneric, RelationsInputOutputMetadata} from "../../ngDynamic-designer";
-import {getEnumValues} from "@asseco/common";
+import {DynamicNodeDesignerMetadata, PropertyType, RelationsMetadataGeneric, ɵDynamicRelationsInputMetadata} from "../../ngDynamic-designer";
 
 /**
  * Node used for RestClient http calls real one
@@ -201,7 +201,7 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                     {
                         id: 'inputName',
                         name: 'Input name',
-                        description: 'Name of input',
+                        description: 'Name of http parameter',
                         type: PropertyType.String
                     },
                     {
@@ -213,17 +213,16 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                         defaultValue: 0
                     },
                     {
-                        id: 'name',
-                        name: 'Parameter name',
-                        description: 'Name of http parameter',
-                        type: PropertyType.String
+                        id: 'id',
+                        hidden: true,
+                        defaultValue: () => generateId(15)
                     },
                 ]
             }
         ],
         dynamicInputs: nodeOptions =>
         {
-            let result: RelationsInputOutputMetadata[] = [];
+            let result: ɵDynamicRelationsInputMetadata[] = [];
 
             if(nodeOptions && nodeOptions.parameters && nodeOptions.parameters.length)
             {
@@ -231,6 +230,7 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                 {
                     result.push(
                     {
+                        ɵId: (param as any).id,
                         id: param.inputName,
                         name: param.inputName,
                         type: RestClientParamType[+param.type]

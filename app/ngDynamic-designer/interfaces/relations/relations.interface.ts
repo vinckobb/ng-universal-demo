@@ -24,7 +24,7 @@ export interface RelationsMetadata extends DesignerCommonMetadata
     /**
      * Method that converts node options into inputs
      */
-    dynamicInputs?: (nodeOptions: any) => RelationsInputOutputMetadata[];
+    dynamicInputs?: (nodeOptions: any) => ɵDynamicRelationsInputMetadata[];
 
     /**
      * Node options metadata used for creating nodeOptions
@@ -60,7 +60,7 @@ export interface RelationsMetadataGeneric<TNodeOptions> extends RelationsMetadat
     /**
      * Method that converts node options into inputs
      */
-    dynamicInputs: (nodeOptions: TNodeOptions) => RelationsInputOutputMetadata[];
+    dynamicInputs: (nodeOptions: TNodeOptions) => ɵDynamicRelationsInputMetadata[];
 }
 
 /**
@@ -92,6 +92,33 @@ export interface RelationsInputOutputMetadata
      * Relations that are connected to this peer, set by designer, do not set
      */
     relations?: SvgRelationDynamicNode[];
+}
+
+/**
+ * Internal defintion of input or output relation metadata
+ */
+export interface ɵRelationsInputOutputMetadata
+{
+    /**
+     * Computed Y coordinate, set by designer, do not set
+     */
+    y?: number;
+
+    /**
+     * Relations that are connected to this peer, set by designer, do not set
+     */
+    relations?: SvgRelationDynamicNode[];
+}
+
+/**
+ * Internal defintion of dynamic input relation metadata
+ */
+export interface ɵDynamicRelationsInputMetadata extends RelationsInputOutputMetadata, ɵRelationsInputOutputMetadata
+{
+    /**
+     * Special unique generated id that cant be changed, used for pairing and matching dynamic inputs with outputs
+     */
+    ɵId?: string;
 }
 
 /**
@@ -171,6 +198,12 @@ export interface SvgNodeDynamicNode extends SvgDynamicNode
      * @param dynamic Indication whether is input dynamic
      */
     addInputRelation(relation: SvgRelationDynamicNode, inputName: string, dynamic: boolean): boolean;
+
+    /**
+     * Gets real dynamic input id 
+     * @param inputName Name of input which id will be get
+     */
+    getDynamicInputId(inputName: string): string;
 }
 
 /**

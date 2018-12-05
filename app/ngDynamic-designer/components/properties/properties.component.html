@@ -21,7 +21,7 @@
                 <div *ngFor="let collectionGroup of propertiesForm?.controls[property.id]?.controls; let index=index"
                      style="border-top: 1px solid #333;">
                     <div style="float: right; font-size: 1.2em; cursor: pointer;" (click)="propertiesForm?.controls[property.id].removeAt(index)">-</div>
-                    <div *ngFor="let itemProperty of property.arrayItemProperty"
+                    <div *ngFor="let itemProperty of property.arrayItemProperty | onlyVisible"
                          style="margin-bottom: 10px;"
                          [property]="itemProperty"
                          [control]="collectionGroup.controls[itemProperty.id]"></div>
