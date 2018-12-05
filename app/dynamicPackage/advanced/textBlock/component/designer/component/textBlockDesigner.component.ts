@@ -1,9 +1,11 @@
-import {Component, ChangeDetectionStrategy} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
+import {SafeHtml, DomSanitizer} from "@angular/platform-browser";
 import * as handlebars from 'handlebars';
 
-import {PlaceholderBaseComponent} from "../../../../../../ngDynamic-designer";
+import {PlaceholderBaseComponent, PropertiesService} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 import {TextBlockComponentOptions} from "../../textBlock.interface";
+import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
 
 /**
  * Text block designer layout component used for designing components
@@ -21,7 +23,7 @@ export class TextBlockDesignerComponent extends PlaceholderBaseComponent<TextBlo
     /**
      * Html content that is displayed inside
      */
-    public htmlContent: string;
+    public htmlContent: SafeHtml;
 
     //######################### public properties #########################
 
@@ -33,16 +35,34 @@ export class TextBlockDesignerComponent extends PlaceholderBaseComponent<TextBlo
         return this._metadata;
     }
 
+    //######################### constructor #########################
+    constructor(changeDetector: ChangeDetectorRef,
+                packageLoader: PackageLoader,
+                optionsSvc: PropertiesService,
+                private _sanitizer: DomSanitizer)
+    {
+        super(changeDetector, packageLoader, optionsSvc);
+    }
+
     //######################### public methods #########################
+
+    /**
+     * Sets template to options
+     * @param template Template to be set
+     */
+    public setTemplate(template?: string)
+    {
+        this._metadata.options.template = template;
+    }
 
     /**
      * Explicitly runs invalidation of content (change detection)
      */
     public invalidateVisuals(): void
     {
-        if(!this._metadata && this._metadata.options && this._metadata.options.template)
+        if(this._metadata && this._metadata.options && this._metadata.options.template)
         {
-            this.htmlContent = handlebars.compile(this._metadata.options.template)({});
+            this.htmlContent = this._sanitizer.bypassSecurityTrustHtml(handlebars.compile(this._metadata.options.template)({}));
         }
 
         super.invalidateVisuals();

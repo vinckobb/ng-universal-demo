@@ -1,12 +1,23 @@
-import {SvgNodeDynamicNode, CodeMetadata, DesignerPageComponent, CodeService} from "../../../../../../ngDynamic-designer";
+import {Selection, BaseType} from 'd3';
+import {Injector} from '@angular/core';
+
+import {SvgNodeDynamicNode, CodeMetadata, DesignerPageComponent, CodeService, RelationsMetadata, SvgPeerDropArea, SvgRelationDynamicNode} from "../../../../../../ngDynamic-designer";
 import {SvgNode} from "../../../../../../ngDynamic-designer/components/nodeDesigner/misc";
 import {DesignerMode} from "../../../../../../ngDynamic-designer/components/designer.interface";
+import {TextBlockDesignerComponent} from "../component";
 
 /**
  * Implementation of custom SVG node for advanced text block
  */
 export class TextBlockSvgNode extends SvgNode implements SvgNodeDynamicNode
 {
+    //######################### private fields #########################
+
+    /**
+     * Component that is connected with this node
+     */
+    private _component: TextBlockDesignerComponent;
+
     //######################### protected fields #########################
 
     /**
@@ -18,6 +29,37 @@ export class TextBlockSvgNode extends SvgNode implements SvgNodeDynamicNode
         template: '',
         dynamicNodeInstance: this
     };
+
+    //######################### constructor #########################
+    constructor(parentGroup: Selection<BaseType, {}, null, undefined>,
+                metadata: RelationsMetadata,
+                validDropToggle: (dropArea: SvgPeerDropArea) => void,
+                createRelation: () => SvgRelationDynamicNode,
+                injector: Injector,
+                layoutComponent: TextBlockDesignerComponent,
+                nodeOptions: any)
+    {
+        super(parentGroup, metadata, validDropToggle, createRelation, injector, layoutComponent, nodeOptions);
+
+        this._component = layoutComponent;
+    }
+
+    //######################### public methods #########################
+
+    /**
+     * Explicitly runs invalidation of content (change detection)
+     * @param propertyName Name of property that has changed
+     */
+    public invalidateVisuals(propertyName?: string): void
+    {
+        super.invalidateVisuals(propertyName);
+
+        if(propertyName == 'code')
+        {
+            this._component.setTemplate(this._codeMetadata.value);
+            this._component.invalidateVisuals();
+        }
+    }
 
     //######################### protected methods #########################
 
