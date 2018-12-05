@@ -136,16 +136,6 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     }
 
     //######################### public methods - implementation of AfterViewInit #########################
-    
-    /**
-     * Called when view was initialized
-     */
-    public ngAfterViewInit()
-    {
-        //typeof window != 'undefined' && window || typeof self != 'undefined' && self || typeof global != 'undefined' && global
-    }
-
-    //######################### public methods - implementation of AfterViewInit #########################
 
     /**
      * Called when view was initialized

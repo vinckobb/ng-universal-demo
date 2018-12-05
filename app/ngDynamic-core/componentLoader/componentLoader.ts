@@ -7,6 +7,11 @@ import {DynamicModule} from "./componentLoader.interface";
 declare var isAot: boolean;
 declare var localPackage: string;
 
+(function(global)
+{
+    global['localPackage'] = '';
+})(typeof window != 'undefined' && window || typeof self != 'undefined' && self || typeof global != 'undefined' && global);
+
 /**
  * Loader used for obtaining ComponentFactory from component`s metadata
  */
