@@ -1,6 +1,7 @@
 import {Injector} from '@angular/core';
 import {isPresent} from '@asseco/common';
 import {Selection, BaseType, drag, event, select} from 'd3';
+import {Subject, Observable} from 'rxjs';
 
 import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata, DesignerLayoutPlaceholderComponent, INVALIDATE_PROPERTIES} from '../../../../interfaces';
 import {transformOptionsToProperties, transformPropertiesToOptions} from '../../../../misc';
@@ -33,6 +34,11 @@ export const nodeWidth: number = 180;
 export class SvgNode implements SvgNodeDynamicNode
 {
     //######################### protected fields #########################
+
+/**
+     * Subject used for emitting destroying event
+     */
+    protected _destroyingSubject: Subject<SvgNodeDynamicNode> = new Subject<SvgNodeDynamicNode>();
 
     /**
      * Node group that represents this node
@@ -113,6 +119,14 @@ export class SvgNode implements SvgNodeDynamicNode
         };
     }
 
+    /**
+     * Occurs when this node is being destroyed
+     */
+    public get destroying(): Observable<SvgNodeDynamicNode>
+    {
+        return this._destroyingSubject.asObservable();
+    }
+
     //######################### constructor #########################
     constructor(protected _parentGroup: Selection<BaseType, {}, null, undefined>,
                 protected _metadata: RelationsMetadata,
@@ -151,6 +165,17 @@ export class SvgNode implements SvgNodeDynamicNode
                 .forEach(output => output.relations && output.relations.forEach(relation => relation.destroy()));
         }
 
+        if(this._metadata && this._metadata.inputs && this._metadata.inputs.length)
+        {
+            this._metadata.inputs
+                .forEach(input => input.relations && input.relations.forEach(relation => relation.destroy()));
+        }
+
+        if(this._dynamicInputs && this._dynamicInputs.length)
+        {
+            this._dynamicInputs.forEach(input => input.relations && input.relations.forEach(relation => relation.destroy()));
+        }
+
         this._miscGroup.remove();
         this._miscGroup = null;
         this._nodeGroup.remove();
@@ -165,6 +190,8 @@ export class SvgNode implements SvgNodeDynamicNode
         this._dynamicInputs = [];
         this._metadata = null;
         this._layoutComponent = null;
+
+        this._destroyingSubject.next(this);
     }
 
     /**
@@ -332,6 +359,18 @@ export class SvgNode implements SvgNodeDynamicNode
                 .attr("x", 4)
                 .attr("y", 14)
                 .attr('fill', '#F8F8F8');
+
+        this._miscGroup.append("text")
+            .text("X")
+                .attr("x", nodeWidth - 4)
+                .attr("y", 14)
+                .attr('fill', '#F8F8F8')
+                .attr('style', 'cursor: pointer;')
+                .attr('text-anchor', 'end')
+            .on('click', () =>
+            {
+                this.destroy();
+            });
 
         this._miscGroup.append("text")
             .text(`ID: ${this._metadata.id}`)

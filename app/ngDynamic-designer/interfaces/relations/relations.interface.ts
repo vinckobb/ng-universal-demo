@@ -140,6 +140,11 @@ export interface SvgNodeDynamicNode extends SvgDynamicNode
     readonly metadata: DynamicComponentRelationMetadata;
 
     /**
+     * Occurs when this node is being destroyed
+     */
+    readonly destroying: Observable<SvgNodeDynamicNode>;
+
+    /**
      * Gets input coordinates of specified input
      * @param inputName Name of input which coordinates will be get
      * @param dynamic Indication whether is input dynamic

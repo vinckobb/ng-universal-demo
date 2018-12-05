@@ -1,6 +1,7 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnInit, Injector, OnDestroy} from "@angular/core";
 import {generateId} from "@asseco/common";
 import {select, Selection, event, zoom, zoomTransform} from 'd3';
+import {Subscription, Subject, Observable} from "rxjs";
 
 import {SvgNode, SvgRelation} from "./misc";
 import {SvgPeerDropArea, Coordinates, DesignerLayoutPlaceholderComponent, RelationsMetadata, SvgNodeDynamicNode} from "../../interfaces";
@@ -30,6 +31,11 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
     //######################### private fields #########################
 
     /**
+     * Subject used for noticing parent about destroying of node component
+     */
+    private _destroyingComponentNodeSubject: Subject<DesignerLayoutPlaceholderComponent> = new Subject<DesignerLayoutPlaceholderComponent>();
+
+    /**
      * All top svg objects
      */
     private _svgData:
@@ -46,6 +52,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
     {
         component?: DesignerLayoutPlaceholderComponent;
         svgNode: SvgNodeDynamicNode;
+        svgNodeDestroyingSubscription: Subscription;
     }[] = [];
 
     /**
@@ -84,6 +91,14 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                 position: itm.svgNode.position
             };
         });
+    }
+
+    /**
+     * Occurs when node component is being destryed
+     */
+    public get destroyingComponentNode(): Observable<DesignerLayoutPlaceholderComponent>
+    {
+        return this._destroyingComponentNodeSubject.asObservable();
     }
 
     //######################### constructor #########################
@@ -134,10 +149,17 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
      */
     public ngOnDestroy()
     {
-        this._addedNodes.forEach(nodes =>
+        this._addedNodes.forEach(node =>
         {
-            nodes.component = null;
-            nodes.svgNode.destroy();
+            if(node.component)
+            {
+                this._destroyingComponentNodeSubject.next(node.component);
+            }
+
+            node.component = null;
+            node.svgNodeDestroyingSubscription.unsubscribe();
+            node.svgNodeDestroyingSubscription = null;
+            node.svgNode.destroy();
         });
 
         this._addedNodes = [];
@@ -171,8 +193,9 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
     {
         let currentZoom = zoomTransform(this._svgData.svg.node());
 
-        this._addedNodes.push(
+        let svgNodeInfo =
         {
+            svgNodeDestroyingSubscription: null,
             component: component,
             svgNode: metadata.customNode ? new metadata.customNode(this._svgData.parentGroup,
                                                                    {
@@ -193,24 +216,28 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                                                                    component,
                                                                    nodeOptions || {}) :
                                            new SvgNode(this._svgData.parentGroup,
-                                           {
-                                               id: component.id,
-                                               description: metadata.description,
-                                               name: metadata.name,
-                                               x: currentZoom.invertX(coordinates.x),
-                                               y: currentZoom.invertY(coordinates.y),
-                                               inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
-                                               outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
-                                               dynamicInputs: metadata.dynamicInputs,
-                                               nodeOptionsMetadata: metadata.nodeOptionsMetadata,
-                                               nodeType: metadata.nodeType
-                                           },
-                                           this._setDropAreaFn,
-                                           () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
-                                           this._injector,
-                                           component,
-                                           nodeOptions || {})
-        });
+                                                       {
+                                                           id: component.id,
+                                                           description: metadata.description,
+                                                           name: metadata.name,
+                                                           x: currentZoom.invertX(coordinates.x),
+                                                           y: currentZoom.invertY(coordinates.y),
+                                                           inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
+                                                           outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
+                                                           dynamicInputs: metadata.dynamicInputs,
+                                                           nodeOptionsMetadata: metadata.nodeOptionsMetadata,
+                                                           nodeType: metadata.nodeType
+                                                       },
+                                                       this._setDropAreaFn,
+                                                       () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
+                                                       this._injector,
+                                                       component,
+                                                       nodeOptions || {})
+        };
+
+        svgNodeInfo.svgNodeDestroyingSubscription = svgNodeInfo.svgNode.destroying.subscribe(this._handleDestroySvgNode);
+
+        this._addedNodes.push(svgNodeInfo);
     }
 
     /**
@@ -223,8 +250,9 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
     {
         let currentZoom = zoomTransform(this._svgData.svg.node());
 
-        this._addedNodes.push(
+        let svgNodeInfo =
         {
+            svgNodeDestroyingSubscription: null,
             svgNode: metadata.customNode ? new metadata.customNode(this._svgData.parentGroup,
                                                                    {
                                                                        id: generateId(12),
@@ -244,27 +272,55 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                                                                    null,
                                                                    nodeOptions || {}) :
                                            new SvgNode(this._svgData.parentGroup,
-                                           {
-                                               id: generateId(12),
-                                               description: metadata.description,
-                                               name: metadata.name,
-                                               x: currentZoom.invertX(coordinates.x),
-                                               y: currentZoom.invertY(coordinates.y),
-                                               inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
-                                               outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
-                                               dynamicInputs: metadata.dynamicInputs,
-                                               nodeOptionsMetadata: metadata.nodeOptionsMetadata,
-                                               nodeType: metadata.nodeType
-                                           },
-                                           this._setDropAreaFn,
-                                           () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
-                                           this._injector,
-                                           null,
-                                           nodeOptions || {})
-        });
+                                                       {
+                                                           id: generateId(12),
+                                                           description: metadata.description,
+                                                           name: metadata.name,
+                                                           x: currentZoom.invertX(coordinates.x),
+                                                           y: currentZoom.invertY(coordinates.y),
+                                                           inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
+                                                           outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
+                                                           dynamicInputs: metadata.dynamicInputs,
+                                                           nodeOptionsMetadata: metadata.nodeOptionsMetadata,
+                                                           nodeType: metadata.nodeType
+                                                       },
+                                                       this._setDropAreaFn,
+                                                       () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
+                                                       this._injector,
+                                                       null,
+                                                       nodeOptions || {})
+        };
+        
+        svgNodeInfo.svgNodeDestroyingSubscription = svgNodeInfo.svgNode.destroying.subscribe(this._handleDestroySvgNode);
+
+        this._addedNodes.push(svgNodeInfo);
     }
 
     //######################### private methods #########################
+
+    /**
+     * Handles destroying of svg node
+     * @param svgNode Instance of svg node to be destroyed
+     */
+    private _handleDestroySvgNode = (svgNode: SvgNodeDynamicNode) =>
+    {
+        let found = this._addedNodes.find(itm => itm.svgNode == svgNode);
+
+        if(found)
+        {
+            if(found.component)
+            {
+                this._destroyingComponentNodeSubject.next(found.component);
+            }
+
+            let index = this._addedNodes.indexOf(found);
+            this._addedNodes.splice(index, 1);
+            found.component = null;
+            found.svgNodeDestroyingSubscription.unsubscribe();
+            found.svgNodeDestroyingSubscription = null;
+            found.svgNode = null;
+        }
+    };
 
     /**
      * Creates reusable definitions

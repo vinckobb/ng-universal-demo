@@ -1,4 +1,5 @@
-import {Component, ChangeDetectionStrategy, ViewChild} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ViewChild, OnDestroy, AfterViewInit} from "@angular/core";
+import {Subscription} from "rxjs";
 
 import {NodeDesignerComponent} from "../nodeDesigner/nodeDesigner.component";
 import {NodeComponentPaletteComponent, COMPONENT_DRAG, NODE_DRAG} from "../nodeComponentPalette/nodeComponentPalette.component";
@@ -13,8 +14,15 @@ import {NodeComponentPaletteComponent, COMPONENT_DRAG, NODE_DRAG} from "../nodeC
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['nodeDesignerMode.component.scss']
 })
-export class NodeDesignerModeComponent
+export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
 {
+    //######################### private fields #########################
+
+    /**
+     * Subscription for node component destruction
+     */
+    private _nodeComponentDestryingSubscription: Subscription;
+
     //######################### public properties - template bindings #########################
 
     /**
@@ -35,6 +43,37 @@ export class NodeDesignerModeComponent
      */
     @ViewChild(NodeComponentPaletteComponent)
     public nodeComponentPallete: NodeComponentPaletteComponent;
+
+    //######################### public methods - implementation of AfterViewInit #########################
+    
+    /**
+     * Called when view was initialized
+     */
+    public ngAfterViewInit()
+    {
+        this._nodeComponentDestryingSubscription = this.nodeDesigner.destroyingComponentNode.subscribe(component =>
+        {
+            let found = this.nodeComponentPallete.usedComponents.find(itm => itm.component == component);
+            let index = this.nodeComponentPallete.usedComponents.indexOf(found);
+            this.nodeComponentPallete.usedComponents.splice(index, 1);
+            this.nodeComponentPallete.availableComponents.push(found);
+            this.nodeComponentPallete.invalidateVisuals();
+        });
+    }
+
+    //######################### public methods - implementation of OnDestroy #########################
+    
+    /**
+     * Called when component is destroyed
+     */
+    public ngOnDestroy()
+    {
+        if(this._nodeComponentDestryingSubscription)
+        {
+            this._nodeComponentDestryingSubscription.unsubscribe();
+            this._nodeComponentDestryingSubscription = null;
+        }
+    }
 
     //######################### public methods - template bidings #########################
 
