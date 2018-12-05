@@ -89,6 +89,8 @@ export class SvgRelation implements SvgRelationDynamicNode
             this.endDestroyingSubscription.unsubscribe();
             this.endDestroyingSubscription = null;
         }
+
+        this.endPeer = null;
     }
 
     /**

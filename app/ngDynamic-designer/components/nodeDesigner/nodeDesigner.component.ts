@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnInit, Injector} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, OnInit, Injector, OnDestroy} from "@angular/core";
 import {generateId} from "@asseco/common";
 import {select, Selection, event, zoom, zoomTransform} from 'd3';
 
@@ -25,7 +25,7 @@ import {NodeDesignerNodeState} from "./nodeDesigner.interface";
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NodeDesignerComponent implements OnInit
+export class NodeDesignerComponent implements OnInit, OnDestroy
 {
     //######################### private fields #########################
 
@@ -125,6 +125,29 @@ export class NodeDesignerComponent implements OnInit
         this._svgData.parentGroup = this._svgData.svg.append("g");
         this._svgData.relationsGroup = this._svgData.parentGroup.append("g");
         this._createDefs();
+    }
+
+    //######################### public methods - implementation of OnDestroy #########################
+    
+    /**
+     * Called when component is destroyed
+     */
+    public ngOnDestroy()
+    {
+        this._addedNodes.forEach(nodes =>
+        {
+            nodes.component = null;
+            nodes.svgNode.destroy();
+        });
+
+        this._addedNodes = [];
+        this._svgData.relationsGroup.remove();
+        this._svgData.relationsGroup = null;
+        this._svgData.parentGroup.remove();
+        this._svgData.parentGroup = null;
+        this._svgData.svg.remove();
+        this._svgData.svg = null
+        this._svgData = {};
     }
 
     //######################### public methods #########################

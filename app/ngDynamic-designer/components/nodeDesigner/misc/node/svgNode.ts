@@ -145,10 +145,26 @@ export class SvgNode implements SvgNodeDynamicNode
      */
     public destroy()
     {
+        if(this._metadata && this._metadata.outputs && this._metadata.outputs.length)
+        {
+            this._metadata.outputs
+                .forEach(output => output.relations && output.relations.forEach(relation => relation.destroy()));
+        }
+
         this._miscGroup.remove();
         this._miscGroup = null;
         this._nodeGroup.remove();
         this._nodeGroup = null;
+        this._inputsGroup.remove();
+        this._inputsGroup = null;
+        this._dynamicInputsGroup.remove();
+        this._dynamicInputsGroup = null;
+        this._outputsGroup.remove();
+        this._outputsGroup = null;
+        this._properties = {};
+        this._dynamicInputs = [];
+        this._metadata = null;
+        this._layoutComponent = null;
     }
 
     /**
