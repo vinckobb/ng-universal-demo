@@ -48,7 +48,7 @@ export class ScriptLoader
 
             script.innerText =
             `
-                (function(exports, loadType)
+                (function(exports, loadType, require)
                 {
                     ${scriptText}
 

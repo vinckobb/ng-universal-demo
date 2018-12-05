@@ -3,6 +3,7 @@ export * from './layoutDesigner/layoutDesigner.component';
 export * from './layoutDesignerTree/layoutDesignerTree.component';
 export * from './nodeDesignerMode/nodeDesignerMode.component';
 export * from './nodeDesigner/nodeDesigner.component';
+export * from './nodeDesigner/nodeDesigner.interface';
 export * from './componentPalette';
 export * from './designer.component';
 export * from './placeholderBase/placeholderBase.component';

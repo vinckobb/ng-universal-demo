@@ -1,6 +1,11 @@
 import {DesignerServiceMetadata} from "../metadata.interface";
 
 /**
+ * Constant represents name of invalidation for code changes
+ */
+export const INVALIDATE_CODE: string = 'code';
+
+/**
  * Metadata used for displaying code editor
  */
 export interface CodeMetadata extends DesignerServiceMetadata

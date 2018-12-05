@@ -2,10 +2,10 @@ import {Injector} from '@angular/core';
 import {isPresent} from '@asseco/common';
 import {Selection, BaseType, drag, event, select} from 'd3';
 
-import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata, DesignerLayoutPlaceholderComponent} from '../../../../interfaces';
+import {RelationsMetadata, Coordinates, RelationsInputOutputMetadata, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata, DesignerLayoutPlaceholderComponent, INVALIDATE_PROPERTIES} from '../../../../interfaces';
 import {transformOptionsToProperties, transformPropertiesToOptions} from '../../../../misc';
 import {DynamicComponentRelationMetadata, DynamicComponentRelationOutputMetadata, DynamicComponentRelationInputMetadata} from '../../../../../ngDynamic-core';
-import {PropertiesService} from '../../../../services';
+import {INVALIDATE_DROP, NODE_PROPERTIES_SERVICE} from '../../nodeDesigner.interface';
 
 /**
  * Offset of first peer in node
@@ -157,7 +157,7 @@ export class SvgNode implements SvgNodeDynamicNode
      */
     public invalidateVisuals(propertyName?: string): void
     {
-        if(propertyName == "properties")
+        if(propertyName == INVALIDATE_PROPERTIES)
         {
             this._dynamicInputs = (this._metadata.dynamicInputs && this._metadata.dynamicInputs(this._properties.value)) || [];
 
@@ -272,7 +272,7 @@ export class SvgNode implements SvgNodeDynamicNode
                 .attr('stroke', '#d4d4d4')
             .on('click', () =>
             {
-                let propertiesSvc = this._injector.get(PropertiesService);
+                let propertiesSvc = this._injector.get(NODE_PROPERTIES_SERVICE);
 
                 if(propertiesSvc)
                 {
@@ -447,7 +447,7 @@ export class SvgNode implements SvgNodeDynamicNode
                                 return;
                             }
 
-                            relation.invalidateVisuals('drop');
+                            relation.invalidateVisuals(INVALIDATE_DROP);
                         }));
             });
     }
@@ -528,7 +528,7 @@ export class SvgNode implements SvgNodeDynamicNode
                         })
                         .on('end', () =>
                         {
-                            relation.invalidateVisuals('drop');
+                            relation.invalidateVisuals(INVALIDATE_DROP);
                             relation = null;
                         }));
             });

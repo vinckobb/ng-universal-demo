@@ -25,7 +25,7 @@ export class CodeService
     /**
      * Method used for obtaining compiled result of code
      */
-    private _getCompiled: (metadata: CodeMetadata) => string;
+    private _getCompiled: (metadata: CodeMetadata) => Promise<string>;
 
     //######################### public properties #########################
 
@@ -43,7 +43,7 @@ export class CodeService
      * Registers get compiled function
      * @param getCompiledFn Get compiled function that is being registered
      */
-    public ɵRegisterGetCompiled(getCompiledFn: (metadata: CodeMetadata) => string)
+    public ɵRegisterGetCompiled(getCompiledFn: (metadata: CodeMetadata) => Promise<string>)
     {
         this._getCompiled = getCompiledFn;
     }
@@ -63,14 +63,14 @@ export class CodeService
      * Gets compiled result for metadata
      * @param metadata Metadata which compiled result will be obtained
      */
-    public getCompiled(metadata: CodeMetadata)
+    public getCompiled(metadata: CodeMetadata): Promise<string>
     {
         if(this._getCompiled)
         {
             return this._getCompiled(metadata);
         }
 
-        return '';
+        return Promise.resolve('');
     }
 
     /**

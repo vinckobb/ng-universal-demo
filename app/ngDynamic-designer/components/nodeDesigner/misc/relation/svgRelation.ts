@@ -2,6 +2,7 @@ import {Selection, BaseType, Line, line, curveBundle} from 'd3';
 import {Subject, Observable, Subscription} from 'rxjs';
 
 import {Coordinates, SvgRelationDynamicNode, SvgPeerDropArea} from '../../../../interfaces';
+import {INVALIDATE_DROP} from '../../nodeDesigner.interface';
 
 /**
  * Class that represents SVG relation and interaction with it
@@ -96,7 +97,7 @@ export class SvgRelation implements SvgRelationDynamicNode
      */
     public invalidateVisuals(propertyName?: string): void
     {
-        if(propertyName == "drop")
+        if(propertyName == INVALIDATE_DROP)
         {
             let dropArea = this._getDropArea();
 

@@ -2,12 +2,13 @@ import {Injectable} from "@angular/core";
 import {Subject, Observable} from "rxjs";
 
 import {PropertiesMetadata} from "../../interfaces";
+import {NodePropertiesService} from "../../components";
 
 /**
  * Properties service used for communication with properties window
  */
 @Injectable()
-export class PropertiesService
+export class PropertiesService implements NodePropertiesService
 {
     //######################### private fields #########################
 

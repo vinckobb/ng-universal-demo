@@ -4,6 +4,16 @@ import {ValueNamePair} from "@asseco/common";
 import {DesignerServiceMetadata} from "../metadata.interface";
 
 /**
+ * Constant represents name of invalidation for properties of node change
+ */
+export const INVALIDATE_PROPERTIES: string = 'properties';
+
+/**
+ * Constant represents name of invalidation for id of node change
+ */
+export const INVALIDATE_ID: string = 'id';
+
+/**
  * Metadata used for displaying properties designer
  */
 export interface PropertiesMetadata extends DesignerServiceMetadata

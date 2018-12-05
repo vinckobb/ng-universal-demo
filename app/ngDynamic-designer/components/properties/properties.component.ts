@@ -4,7 +4,7 @@ import {isFunction} from "@asseco/common";
 import {Subscription} from "rxjs";
 
 import {PropertiesService} from "../../services";
-import {PropertiesMetadata, PropertyType, PropertiesPropertyMetadata} from "../../interfaces";
+import {PropertiesMetadata, PropertyType, PropertiesPropertyMetadata, INVALIDATE_PROPERTIES, INVALIDATE_ID} from "../../interfaces";
 
 /**
  * Component used for rendering and editing dynamic node properties
@@ -81,7 +81,7 @@ export class PropertiesComponent implements OnDestroy
             if(this._propertiesMetadata)
             {
                 this._propertiesMetadata.id = value;
-                this._propertiesMetadata.dynamicNodeInstance.invalidateVisuals("id");
+                this._propertiesMetadata.dynamicNodeInstance.invalidateVisuals(INVALIDATE_ID);
             }
         });
 
@@ -93,7 +93,7 @@ export class PropertiesComponent implements OnDestroy
             }
 
             this._propertiesMetadata.value = propertiesValue;
-            this._propertiesMetadata.dynamicNodeInstance.invalidateVisuals("properties");
+            this._propertiesMetadata.dynamicNodeInstance.invalidateVisuals(INVALIDATE_PROPERTIES);
         });
 
         this._propertiesChangeSubscription = this._propertiesSvc.loadProperties.subscribe(properties =>

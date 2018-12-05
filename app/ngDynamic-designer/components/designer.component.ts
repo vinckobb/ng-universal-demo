@@ -1,8 +1,9 @@
-import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef} from "@angular/core";
+import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, ExistingProvider} from "@angular/core";
 import {Subscription} from "rxjs";
 
 import {DesignerMode} from "./designer.interface";
 import {ComponentsService, PropertiesService, DragService, CodeService} from "../services";
+import {NODE_PROPERTIES_SERVICE} from "./nodeDesigner/nodeDesigner.interface";
 
 /**
  * Component used for displaying designer
@@ -16,7 +17,12 @@ import {ComponentsService, PropertiesService, DragService, CodeService} from "..
         ComponentsService,
         DragService,
         PropertiesService,
-        CodeService
+        CodeService,
+        <ExistingProvider>
+        {
+            provide: NODE_PROPERTIES_SERVICE,
+            useExisting: PropertiesService
+        }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

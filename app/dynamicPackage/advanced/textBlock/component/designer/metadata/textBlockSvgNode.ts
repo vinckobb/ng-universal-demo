@@ -1,7 +1,7 @@
 import {Selection, BaseType} from 'd3';
 import {Injector} from '@angular/core';
 
-import {SvgNodeDynamicNode, CodeMetadata, DesignerPageComponent, CodeService, RelationsMetadata, SvgPeerDropArea, SvgRelationDynamicNode} from "../../../../../../ngDynamic-designer";
+import {SvgNodeDynamicNode, CodeMetadata, DesignerPageComponent, CodeService, RelationsMetadata, SvgPeerDropArea, SvgRelationDynamicNode, INVALIDATE_CODE} from "../../../../../../ngDynamic-designer";
 import {SvgNode} from "../../../../../../ngDynamic-designer/components/nodeDesigner/misc";
 import {DesignerMode} from "../../../../../../ngDynamic-designer/components/designer.interface";
 import {TextBlockDesignerComponent} from "../component";
@@ -54,7 +54,7 @@ export class TextBlockSvgNode extends SvgNode implements SvgNodeDynamicNode
     {
         super.invalidateVisuals(propertyName);
 
-        if(propertyName == 'code')
+        if(propertyName == INVALIDATE_CODE)
         {
             this._component.setTemplate(this._codeMetadata.value);
             this._component.invalidateVisuals();

@@ -1,9 +1,9 @@
 import {Component, ChangeDetectionStrategy, ElementRef, OnInit, OnDestroy, AfterViewInit} from "@angular/core";
-import {editor, Uri} from 'monaco-editor';
+import {editor, Uri, languages} from 'monaco-editor';
 import {Subscription} from "rxjs";
 
 import {CodeService} from "../../services";
-import {CodeMetadata} from "../../interfaces";
+import {CodeMetadata, INVALIDATE_CODE} from "../../interfaces";
 
 import './monaco.init';
 
@@ -85,7 +85,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
      */
     public ngAfterViewInit()
     {
-        let observer = new MutationObserver((mutations, observer) =>
+        let observer = new MutationObserver((mutations) =>
         {
             if(mutations.length)
             {
@@ -101,8 +101,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
                 //hiding
                 else
                 {
-                    this._metadata.value = this._codeEditor.getValue();
-                    this._metadata.dynamicNodeInstance.invalidateVisuals('code');
+                    this.save();
                 }
             }
         });
@@ -117,6 +116,17 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
             characterDataOldValue: false,
             attributeFilter: ['style']
         });
+    }
+
+    //######################### public methods #########################
+
+    /**
+     * Saves currently opened document
+     */
+    public save()
+    {
+        this._metadata.value = this._codeEditor.getValue();
+        this._metadata.dynamicNodeInstance.invalidateVisuals(INVALIDATE_CODE);
     }
 
     //######################### public methods - implementation of OnDestroy #########################
@@ -177,21 +187,26 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
      * Gets compiled result
      * @param metadata Metadata which compiled result will be obtained
      */
-    private _getCompiled = (metadata: CodeMetadata): string =>
+    private _getCompiled = async (metadata: CodeMetadata): Promise<string> =>
     {
-        // languages.typescript.getTypeScriptWorker()
-        //     .then(worker =>
-        //     {
-        //         worker(this.codeEditor.getModel().uri)
-        //             .then(client =>
-        //             {
-        //                 client.getEmitOutput(this.codeEditor.getModel().uri.toString())
-        //                     .then(result =>
-        //                     {
-        //                         console.log(result.outputFiles[0].text);
-        //                     });
-        //             })
-        //     });
+        this._metadata = metadata;
+        this._updateContent();
+
+        if(metadata.language == 'typescript')
+        {
+            let worker = await languages.typescript.getTypeScriptWorker();
+            let client = await worker(this._codeEditor.getModel().uri);
+            let result = await client.getEmitOutput(this._codeEditor.getModel().uri.toString());
+            
+            if(result.outputFiles && result.outputFiles.length)
+            {
+                return result.outputFiles[0].text
+            }
+        }
+        else if(this._metadata.language == 'handlebars')
+        {
+            return this._codeEditor.getValue();
+        }
 
         return null;
     }
