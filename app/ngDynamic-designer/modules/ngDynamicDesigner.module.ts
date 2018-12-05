@@ -4,8 +4,9 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {CdkTreeModule} from "@angular/cdk/tree";
 
-import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, PropertiesComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeDesignerComponent, NodeComponentPaletteComponent, LayoutDesignerTreeComponent, PropertyComponent, CodeEditorComponent, OnlyVisiblePipe} from "../components";
-import {DesignerComponentRendererDirective} from "../directives";
+import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, PropertiesComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeComponentPaletteComponent, LayoutDesignerTreeComponent, PropertyComponent, CodeEditorComponent, OnlyVisiblePipe} from "../components";
+import {NgDynamicDesignerModuleCore} from "./ngDynamicDesignerCore.module";
+import {NgDynamicNodeDesignerModule} from "./ngDynamicNodeDesigner.module";
 
 /**
  * Module for ng dynamic designer 
@@ -16,6 +17,8 @@ import {DesignerComponentRendererDirective} from "../directives";
     [
         CommonModule,
         ReactiveFormsModule,
+        NgDynamicDesignerModuleCore,
+        NgDynamicNodeDesignerModule,
         CdkTreeModule,
         RouterModule.forChild(designerComponentRoutes)
     ],
@@ -30,14 +33,12 @@ import {DesignerComponentRendererDirective} from "../directives";
         PropertiesComponent,
         PropertyComponent,
         CodeEditorComponent,
-        NodeDesignerComponent,
         NodeComponentPaletteComponent,
-        DesignerComponentRendererDirective,
         OnlyVisiblePipe
     ],
     exports:
     [
-        DesignerComponentRendererDirective
+        NgDynamicDesignerModuleCore
     ]
 })
 export class NgDynamicDesignerModule

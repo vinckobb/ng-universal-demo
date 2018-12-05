@@ -143,21 +143,6 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
     public ngAfterViewInit()
     {
         //typeof window != 'undefined' && window || typeof self != 'undefined' && self || typeof global != 'undefined' && global
-
-        // languages.typescript.typescriptDefaults.addExtraLib(
-        //     `declare module "interface" {
-        //         export interface TransformAction {
-        //             transform(value: any): any;
-        //         }
-        //     }
-        //     declare module "index" {
-        //         import { TransformAction } from "interfaceaaa";
-        //         export class TransformObjectIntoString implements TransformAction {
-        //             transform(value: any): any;
-        //         }
-        //         export { TransformAction };
-        //     }`, 'file:///external2/index.d.ts'
-        // )
     }
 
     //######################### public methods - implementation of AfterViewInit #########################
@@ -178,28 +163,6 @@ export class HomeComponent extends BaseAnimatedComponent implements OnInit
 
     public toggle()
     {
-        // Monaco.languages.typescript.getTypeScriptWorker()
-        //     .then(function(worker) {
-        //         worker(model.uri)
-        //               .then(function(client) {
-        //                     client.getEmitOutput(model.uri.toString().then(function(r) {});
-        //               });
-        //     });
-
-        // languages.typescript.getTypeScriptWorker()
-        //     .then(worker =>
-        //     {
-        //         worker(this.codeEditor.getModel().uri)
-        //             .then(client =>
-        //             {
-        //                 client.getEmitOutput(this.codeEditor.getModel().uri.toString())
-        //                     .then(result =>
-        //                     {
-        //                         console.log(result.outputFiles[0].text);
-        //                     });
-        //             })
-        //     });
-
         this.show = !this.show;
     }
 }

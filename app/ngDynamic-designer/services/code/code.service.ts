@@ -22,6 +22,11 @@ export class CodeService
      */
     private _codeChangeSubject: Subject<CodeMetadata> = new Subject<CodeMetadata>();
 
+    /**
+     * Method used for obtaining compiled result of code
+     */
+    private _getCompiled: (metadata: CodeMetadata) => string;
+
     //######################### public properties #########################
 
     /**
@@ -35,6 +40,15 @@ export class CodeService
     //######################### public methods #########################
 
     /**
+     * Registers get compiled function
+     * @param getCompiledFn Get compiled function that is being registered
+     */
+    public ɵRegisterGetCompiled(getCompiledFn: (metadata: CodeMetadata) => string)
+    {
+        this._getCompiled = getCompiledFn;
+    }
+
+    /**
      * Shows code from metadata in editor
      */
     public showCode(metadata: CodeMetadata)
@@ -43,6 +57,20 @@ export class CodeService
 
         this._processAdditionalData(metadata);
         this._codeChangeSubject.next(metadata);
+    }
+
+    /**
+     * Gets compiled result for metadata
+     * @param metadata Metadata which compiled result will be obtained
+     */
+    public getCompiled(metadata: CodeMetadata)
+    {
+        if(this._getCompiled)
+        {
+            return this._getCompiled(metadata);
+        }
+
+        return '';
     }
 
     /**

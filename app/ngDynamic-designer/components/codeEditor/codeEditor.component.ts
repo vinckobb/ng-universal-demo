@@ -51,6 +51,8 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
     constructor(private _element: ElementRef<HTMLDivElement>,
                 private _codeSvc: CodeService)
     {
+        this._codeSvc.ɵRegisterGetCompiled(this._getCompiled);
+
         this._codeChangeSubscription = this._codeSvc.codeChange.subscribe(metadata =>
         {
             this._metadata = metadata;
@@ -87,6 +89,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
         {
             if(mutations.length)
             {
+                //displaying
                 if(mutations[0].oldValue.indexOf('display: none;') >= 0)
                 {
                     this._codeEditor.layout(
@@ -94,6 +97,12 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
                         height: this._element.nativeElement.offsetHeight,
                         width: this._element.nativeElement.offsetWidth
                     });
+                }
+                //hiding
+                else
+                {
+                    this._metadata.value = this._codeEditor.getValue();
+                    this._metadata.dynamicNodeInstance.invalidateVisuals('code');
                 }
             }
         });
@@ -162,5 +171,28 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
             this._openedFile = editor.createModel(this._metadata.value || this._metadata.template, "handlebars", Uri.file("index.hbs"))
             this._codeEditor.setModel(this._openedFile);
         }
+    }
+
+    /**
+     * Gets compiled result
+     * @param metadata Metadata which compiled result will be obtained
+     */
+    private _getCompiled = (metadata: CodeMetadata): string =>
+    {
+        // languages.typescript.getTypeScriptWorker()
+        //     .then(worker =>
+        //     {
+        //         worker(this.codeEditor.getModel().uri)
+        //             .then(client =>
+        //             {
+        //                 client.getEmitOutput(this.codeEditor.getModel().uri.toString())
+        //                     .then(result =>
+        //                     {
+        //                         console.log(result.outputFiles[0].text);
+        //                     });
+        //             })
+        //     });
+
+        return null;
     }
 }
