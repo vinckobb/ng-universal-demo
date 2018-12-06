@@ -47,6 +47,11 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
      */
     private _metadata: CodeMetadata;
 
+    /**
+     * Mutation observer for observing changing of visibility
+     */
+    private _observer: MutationObserver;
+
     //######################### constructor #########################
     constructor(private _element: ElementRef<HTMLDivElement>,
                 private _codeSvc: CodeService)
@@ -85,7 +90,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
      */
     public ngAfterViewInit()
     {
-        let observer = new MutationObserver((mutations) =>
+        this._observer = new MutationObserver((mutations) =>
         {
             if(mutations.length)
             {
@@ -106,7 +111,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
             }
         });
 
-        observer.observe(this._element.nativeElement,
+        this._observer.observe(this._element.nativeElement,
         {
             subtree: false,
             childList: false,
@@ -152,6 +157,12 @@ export class CodeEditorComponent implements OnInit, OnDestroy, AfterViewInit
         {
             this._codeChangeSubscription.unsubscribe();
             this._codeChangeSubscription = null;
+        }
+
+        if(this._observer)
+        {
+            this._observer.disconnect();
+            this._observer = null;
         }
 
         this._metadata = null;

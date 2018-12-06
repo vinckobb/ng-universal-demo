@@ -2,12 +2,12 @@
     <div class="tree">
         <layout-designer-tree></layout-designer-tree>
     </div>
+    
     <div class="palette">
         <designer-component-palette [packageNames]="packageNames"></designer-component-palette>
     </div>
 </aside>
+
 <main>
     <ng-template [designerComponentRenderer]="metadata" #layoutComponents="designerComponentRenderer"></ng-template>
-
-    <button (click)="save()">SAVE</button>
 </main>

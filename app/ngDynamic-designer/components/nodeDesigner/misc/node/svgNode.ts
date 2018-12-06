@@ -233,6 +233,13 @@ export class SvgNode implements SvgNodeDynamicNode
      */
     public getDynamicInputId(inputName: string): string
     {
+        let input = this._metadata.inputs.find(itm => itm.id == inputName);
+
+        if(input)
+        {
+            return input.id;
+        }
+
         return this._dynamicInputs.find(itm => (itm.ɵId || itm.id) == inputName).id;
     }
 

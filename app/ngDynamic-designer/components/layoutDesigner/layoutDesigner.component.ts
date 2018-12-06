@@ -1,6 +1,4 @@
-import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, ViewChildren, QueryList, Input} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
-import {Subscription} from "rxjs";
+import {Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef, ViewChildren, QueryList, Input} from "@angular/core";
 
 import {PackageLoader} from "../../packageLoader";
 import {DesignerComponentRendererDirective} from "../../directives";
@@ -15,14 +13,22 @@ import {DesignerLayoutPlaceholderComponent, DesignerLayoutComponentRendererData}
     templateUrl: 'layoutDesigner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LayoutDesignerComponent implements OnInit, OnDestroy
+export class LayoutDesignerComponent implements OnInit
 {
-    //######################### private fields #########################
+    //######################### public properties #########################
 
     /**
-     * Subscription for url changes
+     * Root component for this page component tree
      */
-    private _urlChangeSubscription: Subscription;
+    public get rootComponent(): DesignerLayoutPlaceholderComponent
+    {
+        if(!this.ɵChildren || !this.ɵChildren.first || !this.ɵChildren.first.component)
+        {
+            return null;
+        }
+
+        return this.ɵChildren.first.component;
+    }
 
     //######################### public properties - template bindings #########################
 
@@ -41,12 +47,14 @@ export class LayoutDesignerComponent implements OnInit, OnDestroy
 
     //######################### public properties - children #########################
 
+    /**
+     * Array of children renderers
+     */
     @ViewChildren('layoutComponents')
-    public children: QueryList<DesignerComponentRendererDirective<DesignerLayoutPlaceholderComponent>>;
+    public ɵChildren: QueryList<DesignerComponentRendererDirective<DesignerLayoutPlaceholderComponent>>;
 
     //######################### constructor #########################
-    constructor(private _route: ActivatedRoute,
-                private _packageLoader: PackageLoader,
+    constructor(private _packageLoader: PackageLoader,
                 private _changeDetector: ChangeDetectorRef)
     {
     }
@@ -100,35 +108,5 @@ export class LayoutDesignerComponent implements OnInit, OnDestroy
         };
 
         this._changeDetector.detectChanges();
-
-        this._urlChangeSubscription = this._route.url.subscribe(async urlChanges =>
-        {
-        });
-    }
-
-    //######################### public methods - implementation of OnDestroy #########################
-    
-    /**
-     * Called when component is destroyed
-     */
-    public ngOnDestroy()
-    {
-        if(this._urlChangeSubscription)
-        {
-            this._urlChangeSubscription.unsubscribe();
-            this._urlChangeSubscription = null;
-        }
-    }
-
-    //######################### public methods #########################
-
-    public save()
-    {
-        let first = this.children.first;
-
-        if(first)
-        {
-            console.log(first.component, first.component.metadata);
-        }
     }
 }

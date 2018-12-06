@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, ViewChild, OnDestroy, AfterViewInit} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ViewChild, OnDestroy, AfterViewInit, ElementRef} from "@angular/core";
 import {Subscription} from "rxjs";
 
 import {NodeDesignerComponent} from "../nodeDesigner/nodeDesigner.component";
@@ -23,6 +23,11 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
      */
     private _nodeComponentDestryingSubscription: Subscription;
 
+    /**
+     * Mutation observer for observing changing of visibility
+     */
+    private _observer: MutationObserver;
+
     //######################### public properties - template bindings #########################
 
     /**
@@ -44,6 +49,11 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
     @ViewChild(NodeComponentPaletteComponent)
     public nodeComponentPallete: NodeComponentPaletteComponent;
 
+    //######################### constructor #########################
+    constructor(private _element: ElementRef<HTMLElement>)
+    {
+    }
+
     //######################### public methods - implementation of AfterViewInit #########################
     
     /**
@@ -59,6 +69,29 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
             this.nodeComponentPallete.availableComponents.push(found);
             this.nodeComponentPallete.invalidateVisuals();
         });
+
+        this._observer = new MutationObserver((mutations) =>
+        {
+            if(mutations.length)
+            {
+                //displaying
+                if(mutations[0].oldValue.indexOf('display: none;') >= 0)
+                {
+                    this.nodeComponentPallete.updateComponents();
+                }
+            }
+        });
+
+        this._observer.observe(this._element.nativeElement,
+        {
+            subtree: false,
+            childList: false,
+            attributes: true,
+            attributeOldValue: true,
+            characterData: false,
+            characterDataOldValue: false,
+            attributeFilter: ['style']
+        });
     }
 
     //######################### public methods - implementation of OnDestroy #########################
@@ -72,6 +105,12 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
         {
             this._nodeComponentDestryingSubscription.unsubscribe();
             this._nodeComponentDestryingSubscription = null;
+        }
+
+        if(this._observer)
+        {
+            this._observer.disconnect();
+            this._observer = null;
         }
     }
 

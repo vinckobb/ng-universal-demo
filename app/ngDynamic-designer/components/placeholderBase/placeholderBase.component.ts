@@ -26,7 +26,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
      */
     protected _metadata: ɵDynamicComponentMetadataGeneric<TOptions>;
 
-    //######################### public properties - host bindings #########################
+    //######################### public properties - host #########################
 
     /**
      * Border style property
@@ -39,14 +39,6 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
      */
     @HostBinding('style.display')
     public styleDisplay: string = "block";
-
-    @HostListener('click', ['$event'])
-    public onClick(event: MouseEvent)
-    {
-        event.stopPropagation();
-
-        this.showProperties();
-    }
 
     //######################### public properties - template bindings #########################
 
@@ -152,10 +144,27 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
     public async setMetadata(metadata: DynamicComponentMetadata): Promise<void>
     {
         this._metadata = metadata;
-        this._metadata.ɵId = generateId(15);
+        
+        if(!this._metadata.ɵId)
+        {
+            this._metadata.ɵId = generateId(15);
+        }
 
         this._updateOptions();
         await this.afterMetadataSet();
+    }
+
+    //######################### public methods - host #########################
+
+    /**
+     * Handles click on this component
+     */
+    @HostListener('click', ['$event'])
+    public onClick(event: MouseEvent)
+    {
+        event.stopPropagation();
+
+        this.showProperties();
     }
 
     //######################### protected methods #########################

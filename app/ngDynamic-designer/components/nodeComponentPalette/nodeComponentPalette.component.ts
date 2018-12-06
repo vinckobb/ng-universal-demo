@@ -1,5 +1,4 @@
 import {Component, ChangeDetectionStrategy, EventEmitter, Output, OnDestroy, IterableDiffer, IterableDiffers, ChangeDetectorRef, OnInit} from "@angular/core";
-import {Subscription} from "rxjs";
 
 import {ComponentsService} from "../../services";
 import {DesignerLayoutPlaceholderComponent, RelationsMetadata, DesignerMetadataClass} from "../../interfaces";
@@ -28,11 +27,6 @@ export const NODE_DRAG = 'node-drag';
 export class NodeComponentPaletteComponent implements OnInit, OnDestroy
 {
     //######################### private fields #########################
-
-    /**
-     * Subscription for changes of registered components
-     */
-    private _componentsChangeSubscription: Subscription;
 
     /**
      * Iterale differs used for finding changes in components array
@@ -80,10 +74,7 @@ export class NodeComponentPaletteComponent implements OnInit, OnDestroy
                 private _packageLoader: PackageLoader,
                 iterableDiffers: IterableDiffers)
     {
-        this._componentsChangeSubscription = this._componentSvc.componentsChange.subscribe(() => this._handleComponents());
-        this._iterableDiffer = iterableDiffers.find(this._componentSvc.components || []).create();
-
-        this._handleComponents();
+        this._iterableDiffer = iterableDiffers.find(this._componentSvc.components || []).create((_index, component) => component.ɵId);
     }
 
     //######################### public methods - implementation of OnInit #########################
@@ -119,11 +110,6 @@ export class NodeComponentPaletteComponent implements OnInit, OnDestroy
      */
     public ngOnDestroy()
     {
-        if(this._componentsChangeSubscription)
-        {
-            this._componentsChangeSubscription.unsubscribe();
-            this._componentsChangeSubscription = null;
-        }
     }
 
     //######################### public methods - template bindings #########################
@@ -170,23 +156,43 @@ export class NodeComponentPaletteComponent implements OnInit, OnDestroy
         this._changeDetector.detectChanges();
     }
 
-    //######################### private methods #########################
-
     /**
-     * Handles component changes and initialization
+     * Updates components available for node designer
+     * TODO - move this logic level up
      */
-    private _handleComponents()
+    public updateComponents()
     {
         let changes = this._iterableDiffer.diff(this._componentSvc.components);
 
-        //initial setup
-        if(!changes)
+        if(changes)
         {
+            //removed existing components
+            changes.forEachRemovedItem(removed =>
+            {
+                let component = removed.item;
+                
+                let found = this.availableComponents.find(itm => itm.component.ɵId == component.ɵId);
 
-        }
-        else
-        {
-            // changes.forEachRemovedItem(removed => console.log('removed', removed));
+                //found available component
+                if(found)
+                {
+                    let index = this.availableComponents.indexOf(found);
+                    this.availableComponents.splice(index, 1);
+                }
+
+                found = this.usedComponents.find(itm => itm.component.ɵId == component.ɵId);
+
+                //found used component
+                if(found)
+                {
+                    let index = this.usedComponents.indexOf(found);
+                    this.usedComponents.splice(index, 1);
+
+                    //TODO - remove node
+                }
+            });
+
+            //added new component
             changes.forEachAddedItem(async added => 
             {
                 let component = added.item;
@@ -203,7 +209,10 @@ export class NodeComponentPaletteComponent implements OnInit, OnDestroy
                     this._changeDetector.detectChanges();
                 }
             });
+
             // changes.forEachIdentityChange(changed => console.log('changes', changed));
+
+            this._changeDetector.detectChanges();
         }
     }
 }
