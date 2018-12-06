@@ -63,11 +63,26 @@
     },
     "relations": [
     {
+        "id": "jbuigmutspfq",
+        "nodeOptions":
+        {},
+        "nodeType": "ActivatedRoute",
+        "outputs": [
+        {
+            "outputName": "query",
+            "inputs": [
+            {
+                "id": "jlbyrsqbxtdr",
+                "inputName": "input"
+            }]
+        }]
+    },
+    {
         "id": "jlbyrsqbxtdr",
         "nodeOptions":
         {
             "interface": "0",
-            "script": "\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\n/**\r\n * Class that implements transform script code\r\n */\r\nvar TransformClass = /** @class */ (function () {\r\n    function TransformClass() {\r\n    }\r\n    /**\r\n     * Method that transforms value into any requested value\r\n     * @param value Value to be transformed\r\n     */\r\n    TransformClass.prototype.transform = function (value) {\r\n        var result = {};\r\n        if (value) {\r\n            if (value.name) {\r\n                result.name = value.name.toUpperCase();\r\n            }\r\n            result.surname = value.surname;\r\n        }\r\n        return value;\r\n    };\r\n    return TransformClass;\r\n}());\r\nexports.TransformClass = TransformClass;\r\n"
+            "script": "\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\n/**\r\n * Class that implements transform script code\r\n */\r\nvar TransformClass = /** @class */ (function () {\r\n    function TransformClass() {\r\n    }\r\n    /**\r\n     * Method that transforms value into any requested value\r\n     * @param value Value to be transformed\r\n     */\r\n    TransformClass.prototype.transform = function (value) {\r\n        console.log('tu som', value);var result = {};\r\n        if (value) {\r\n            if (value.name) {\r\n                result.name = value.name.toUpperCase();\r\n            }\r\n            result.surname = value.surname;\r\n        }\r\n        return result;\r\n    };\r\n    return TransformClass;\r\n}());\r\nexports.TransformClass = TransformClass;\r\n"
         },
         "nodeType": "Script",
         "outputs": [
@@ -86,20 +101,5 @@
         {},
         "nodeType": null,
         "outputs": []
-    },
-    {
-        "id": "jbuigmutspfq",
-        "nodeOptions":
-        {},
-        "nodeType": "ActivatedRoute",
-        "outputs": [
-        {
-            "outputName": "query",
-            "inputs": [
-            {
-                "id": "jlbyrsqbxtdr",
-                "inputName": "input"
-            }]
-        }]
     }]
 }
