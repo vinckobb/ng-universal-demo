@@ -6,7 +6,7 @@ import {Subscription, Subject, Observable} from "rxjs";
 import {SvgNode, SvgRelation} from "./misc";
 import {SvgPeerDropArea, Coordinates, DesignerLayoutPlaceholderComponent, RelationsMetadata, SvgNodeDynamicNode} from "../../interfaces";
 import {DynamicComponentRelationMetadata} from "../../../ngDynamic-core";
-import {NodeDesignerNodeState} from "./nodeDesigner.interface";
+import {NodeDesignerNodeState, ɵRelationsMetadata} from "./nodeDesigner.interface";
 
 /**
  * Component used for designing relation nodes
@@ -198,6 +198,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
             svgNodeDestroyingSubscription: null,
             component: component,
             svgNode: metadata.customNode ? new metadata.customNode(this._svgData.parentGroup,
+                                                                   <ɵRelationsMetadata>
                                                                    {
                                                                        id: component.id,
                                                                        description: metadata.description,
@@ -208,7 +209,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                                                                        outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
                                                                        dynamicInputs: metadata.dynamicInputs,
                                                                        nodeOptionsMetadata: metadata.nodeOptionsMetadata,
-                                                                       nodeType: metadata.nodeType
+                                                                       nodeType: null
                                                                    },
                                                                    this._setDropAreaFn,
                                                                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
@@ -226,7 +227,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                                                            outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
                                                            dynamicInputs: metadata.dynamicInputs,
                                                            nodeOptionsMetadata: metadata.nodeOptionsMetadata,
-                                                           nodeType: metadata.nodeType
+                                                           nodeType: null
                                                        },
                                                        this._setDropAreaFn,
                                                        () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
@@ -249,11 +250,13 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
     public addNode(coordinates: Coordinates, metadata: RelationsMetadata, nodeOptions?: any)
     {
         let currentZoom = zoomTransform(this._svgData.svg.node());
+        let ɵMetadata: ɵRelationsMetadata = metadata;
 
         let svgNodeInfo =
         {
             svgNodeDestroyingSubscription: null,
             svgNode: metadata.customNode ? new metadata.customNode(this._svgData.parentGroup,
+                                                                   <ɵRelationsMetadata>
                                                                    {
                                                                        id: generateId(12),
                                                                        description: metadata.description,
@@ -264,7 +267,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                                                                        outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
                                                                        dynamicInputs: metadata.dynamicInputs,
                                                                        nodeOptionsMetadata: metadata.nodeOptionsMetadata,
-                                                                       nodeType: metadata.nodeType
+                                                                       nodeType: ɵMetadata.nodeType
                                                                    },
                                                                    this._setDropAreaFn,
                                                                    () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),
@@ -282,7 +285,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                                                            outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
                                                            dynamicInputs: metadata.dynamicInputs,
                                                            nodeOptionsMetadata: metadata.nodeOptionsMetadata,
-                                                           nodeType: metadata.nodeType
+                                                           nodeType: ɵMetadata.nodeType
                                                        },
                                                        this._setDropAreaFn,
                                                        () => new SvgRelation(this._svgData.relationsGroup, null, null, this._getDropAreaFn),

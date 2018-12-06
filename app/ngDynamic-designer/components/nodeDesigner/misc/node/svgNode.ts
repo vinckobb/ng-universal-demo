@@ -3,10 +3,10 @@ import {isPresent} from '@asseco/common';
 import {Selection, BaseType, drag, event, select} from 'd3';
 import {Subject, Observable} from 'rxjs';
 
-import {RelationsMetadata, Coordinates, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata, DesignerLayoutPlaceholderComponent, INVALIDATE_PROPERTIES, ɵDynamicRelationsInputMetadata} from '../../../../interfaces';
+import {Coordinates, SvgRelationDynamicNode, SvgNodeDynamicNode, SvgPeerDropArea, PropertiesMetadata, DesignerLayoutPlaceholderComponent, INVALIDATE_PROPERTIES} from '../../../../interfaces';
 import {transformOptionsToProperties, transformPropertiesToOptions} from '../../../../misc';
 import {DynamicComponentRelationMetadata, DynamicComponentRelationOutputMetadata, DynamicComponentRelationInputMetadata} from '../../../../../ngDynamic-core';
-import {INVALIDATE_DROP, NODE_PROPERTIES_SERVICE} from '../../nodeDesigner.interface';
+import {INVALIDATE_DROP, NODE_PROPERTIES_SERVICE, ɵDynamicRelationsInputMetadata, ɵRelationsMetadata} from '../../nodeDesigner.interface';
 
 /**
  * Offset of first peer in node
@@ -129,7 +129,7 @@ export class SvgNode implements SvgNodeDynamicNode
 
     //######################### constructor #########################
     constructor(protected _parentGroup: Selection<BaseType, {}, null, undefined>,
-                protected _metadata: RelationsMetadata,
+                protected _metadata: ɵRelationsMetadata,
                 protected _validDropToggle: (dropArea: SvgPeerDropArea) => void,
                 protected _createRelation: () => SvgRelationDynamicNode,
                 protected _injector: Injector,
@@ -202,8 +202,8 @@ export class SvgNode implements SvgNodeDynamicNode
     {
         if(propertyName == INVALIDATE_PROPERTIES)
         {
-            let newDynamicInputs = (this._metadata.dynamicInputs && this._metadata.dynamicInputs(this._properties.value)) || [];
-            
+            let newDynamicInputs: ɵDynamicRelationsInputMetadata[] = (this._metadata.dynamicInputs && this._metadata.dynamicInputs(this._properties.value)) || [];
+
             this._dynamicInputs.forEach(input =>
             {
                 let found = newDynamicInputs.find(itm => itm.ɵId == input.ɵId);
@@ -220,7 +220,7 @@ export class SvgNode implements SvgNodeDynamicNode
                     }
                 }
             });
-            
+
             this._dynamicInputs = newDynamicInputs;
 
             this._addDynamicInputs();
@@ -228,7 +228,7 @@ export class SvgNode implements SvgNodeDynamicNode
     }
 
     /**
-     * Gets real dynamic input id 
+     * Gets real dynamic input id
      * @param inputName Name of input which id will be get
      */
     public getDynamicInputId(inputName: string): string
@@ -719,7 +719,7 @@ export class SvgNode implements SvgNodeDynamicNode
                 {
                     return;
                 }
-                
+
                 let inputs: DynamicComponentRelationInputMetadata[] = [];
 
                 output.relations.forEach(relation =>

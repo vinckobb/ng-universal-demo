@@ -24,27 +24,12 @@ export interface RelationsMetadata extends DesignerCommonMetadata
     /**
      * Method that converts node options into inputs
      */
-    dynamicInputs?: (nodeOptions: any) => ɵDynamicRelationsInputMetadata[];
+    dynamicInputs?: (nodeOptions: any) => RelationsInputOutputMetadata[];
 
     /**
      * Node options metadata used for creating nodeOptions
      */
     nodeOptionsMetadata?: PropertiesPropertyMetadata[];
-
-    /**
-     * Type of node that is constructed, set by designer, do not set
-     */
-    nodeType?: string;
-
-    /**
-     * X coordinates of node, set by designer, do not set
-     */
-    x?: number;
-
-    /**
-     * Y coordinates of node, set by designer, do not set
-     */
-    y?: number;
 
     /**
      * Type used for creating custom node with specific functionality
@@ -60,7 +45,7 @@ export interface RelationsMetadataGeneric<TNodeOptions> extends RelationsMetadat
     /**
      * Method that converts node options into inputs
      */
-    dynamicInputs: (nodeOptions: TNodeOptions) => ɵDynamicRelationsInputMetadata[];
+    dynamicInputs: (nodeOptions: TNodeOptions) => RelationsInputOutputMetadata[];
 }
 
 /**
@@ -82,43 +67,6 @@ export interface RelationsInputOutputMetadata
      * Displayed data type of input or output in node designer
      */
     type?: string;
-
-    /**
-     * Computed Y coordinate, set by designer, do not set
-     */
-    y?: number;
-
-    /**
-     * Relations that are connected to this peer, set by designer, do not set
-     */
-    relations?: SvgRelationDynamicNode[];
-}
-
-/**
- * Internal defintion of input or output relation metadata
- */
-export interface ɵRelationsInputOutputMetadata
-{
-    /**
-     * Computed Y coordinate, set by designer, do not set
-     */
-    y?: number;
-
-    /**
-     * Relations that are connected to this peer, set by designer, do not set
-     */
-    relations?: SvgRelationDynamicNode[];
-}
-
-/**
- * Internal defintion of dynamic input relation metadata
- */
-export interface ɵDynamicRelationsInputMetadata extends RelationsInputOutputMetadata, ɵRelationsInputOutputMetadata
-{
-    /**
-     * Special unique generated id that cant be changed, used for pairing and matching dynamic inputs with outputs
-     */
-    ɵId?: string;
 }
 
 /**

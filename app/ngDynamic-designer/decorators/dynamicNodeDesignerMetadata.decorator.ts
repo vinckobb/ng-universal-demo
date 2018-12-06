@@ -1,4 +1,4 @@
-import {DesignerMetadataClass, DesignerNodeMetadata} from "../interfaces";
+import {DesignerMetadataClass, DesignerNodeMetadata, ɵRelationsMetadata} from "../interfaces";
 
 declare var designerMetadata: boolean;
 
@@ -17,7 +17,7 @@ export function DynamicNodeDesignerMetadata(metadata: DesignerNodeMetadata): Cla
 
             if(metadata.relationsMetadata)
             {
-                metadata.relationsMetadata.nodeType = target.name.replace(/Node$/, '');
+                (metadata.relationsMetadata as ɵRelationsMetadata).nodeType = target.name.replace(/Node$/, '');
             }
 
             return target;
