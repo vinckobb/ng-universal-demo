@@ -74,9 +74,9 @@ export class ScriptNode implements NodeDefinitionGeneric<ScriptNodeOptions>
     /**
      * Explicitly runs invalidation of content (change detection)
      */
-    public async invalidateVisuals()
+    public invalidateVisuals()
     {
-        let type = await this._scriptLoader.loadType(this.options.script);
+        let type = this._scriptLoader.loadType(this.options.script);
 
         this.output = new type().transform(this.input);
     }

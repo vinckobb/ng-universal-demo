@@ -55,3 +55,14 @@ export interface DynamicComponentRelationMetadata
      */
     outputs?: DynamicComponentRelationOutputMetadata[];
 }
+
+/**
+ * Metadata for single component relations generic
+ */
+export interface DynamicComponentRelationMetadataGeneric<TOptions> extends DynamicComponentRelationMetadata
+{
+    /**
+     * Options for node type
+     */
+    nodeOptions?: TOptions;
+}

@@ -109,14 +109,9 @@ export class SvgNode implements SvgNodeDynamicNode
     /**
      * Gets metadata of current node
      */
-    public get metadata(): DynamicComponentRelationMetadata
+    public get metadata(): Promise<DynamicComponentRelationMetadata>
     {
-        return {
-            id: this._metadata.id,
-            nodeOptions: transformPropertiesToOptions(this._properties && this._properties.properties, this._properties && this._properties.value),
-            nodeType: this._metadata.nodeType,
-            outputs: this._getOutputs()
-        };
+        return this._getMetadata();
     }
 
     /**
@@ -689,6 +684,20 @@ export class SvgNode implements SvgNodeDynamicNode
                 }
             });
         }
+    }
+
+    /**
+     * Gets metadata for current node
+     */
+    protected _getMetadata(): Promise<DynamicComponentRelationMetadata>
+    {
+        return Promise.resolve(
+        {
+            id: this._metadata.id,
+            nodeOptions: transformPropertiesToOptions(this._properties && this._properties.properties, this._properties && this._properties.value),
+            nodeType: this._metadata.nodeType,
+            outputs: this._getOutputs()
+        });
     }
 
     /**

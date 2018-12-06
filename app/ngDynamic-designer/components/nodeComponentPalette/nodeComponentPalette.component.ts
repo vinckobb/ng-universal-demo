@@ -33,6 +33,11 @@ export class NodeComponentPaletteComponent implements OnInit, OnDestroy
      */
     private _iterableDiffer: IterableDiffer<DesignerLayoutPlaceholderComponent>;
 
+    /**
+     * Indication whether this component was destroyed
+     */
+    private _destroyed: boolean = false;
+
     //######################### public properties - template bindings #########################
 
     /**
@@ -110,6 +115,7 @@ export class NodeComponentPaletteComponent implements OnInit, OnDestroy
      */
     public ngOnDestroy()
     {
+        this._destroyed = true;
     }
 
     //######################### public methods - template bindings #########################
@@ -153,7 +159,10 @@ export class NodeComponentPaletteComponent implements OnInit, OnDestroy
      */
     public invalidateVisuals(): void
     {
-        this._changeDetector.detectChanges();
+        if(!this._destroyed)
+        {
+            this._changeDetector.detectChanges();
+        }
     }
 
     /**

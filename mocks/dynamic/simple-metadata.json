@@ -256,7 +256,7 @@
             "nodeType": "Script",
             "nodeOptions":
             {
-                "scriptPath": "index.js"
+                "script": "\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nvar TransformObjectIntoString = (function () {\r\n    function TransformObjectIntoString() {\r\n    }\r\n    TransformObjectIntoString.prototype.transform = function (value) {\r\n        value = value || {};\r\n        return (value.name || 'default') + \" \" + (value.surname || 'default');\r\n    };\r\n    return TransformObjectIntoString;\r\n}());\r\nexports.TransformObjectIntoString = TransformObjectIntoString;"
             },
             "outputs":
             [

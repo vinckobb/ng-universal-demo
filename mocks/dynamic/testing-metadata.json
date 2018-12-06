@@ -28,19 +28,19 @@
                 {}
             },
             {
-                "id": "ysnnjjnfxbjj",
+                "id": "rjyjtiygtlxh",
                 "componentPackage": "advanced",
                 "componentName": "textBlock",
                 "options":
                 {
-                    "template": "<div>hello {{name}} {{surname}}</div>"
+                    "template": "<div>Hello {{name}} {{surname}}</div>"
                 }
             }]
         }
     },
     "relations": [
     {
-        "id": "ngxmnjuqwmjf",
+        "id": "jigvpnydxbfm",
         "nodeOptions":
         {},
         "nodeType": "ActivatedRoute",
@@ -49,13 +49,30 @@
             "outputName": "query",
             "inputs": [
             {
-                "id": "ysnnjjnfxbjj",
+                "id": "hoioqoiqqdur",
+                "inputName": "input"
+            }]
+        }]
+    },
+    {
+        "id": "hoioqoiqqdur",
+        "nodeOptions":
+        {
+            "script": "\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nvar TransformClass = /** @class */ (function () {\r\n    function TransformClass() {\r\n    }\r\n    /**\r\n     * Method that transforms value into any requested value\r\n     * @param value Value to be transformed\r\n     */\r\n    TransformClass.prototype.transform = function (value) {\r\n        if (value && value.name) {\r\n            value.name = value.name.toUpperCase();\r\n        }\r\n        return value;\r\n    };\r\n    return TransformClass;\r\n}());\r\nexports.TransformClass = TransformClass;\r\n"
+        },
+        "nodeType": "Script",
+        "outputs": [
+        {
+            "outputName": "output",
+            "inputs": [
+            {
+                "id": "rjyjtiygtlxh",
                 "inputName": "data"
             }]
         }]
     },
     {
-        "id": "ysnnjjnfxbjj",
+        "id": "rjyjtiygtlxh",
         "nodeOptions":
         {},
         "nodeType": null,

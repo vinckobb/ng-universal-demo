@@ -26,11 +26,11 @@ export class ScriptLoader
      * Loads type from script
      * @param script Script used for obtaining type
      */
-    public loadType(script: string): Promise<Type<any>>
+    public loadType(script: string): Type<any>
     {
         if(this._loadedTypes[script])
         {
-            return Promise.resolve(this._loadedTypes[script]);
+            return this._loadedTypes[script];
         }
 
         let scriptElement = this._document.createElement("script");
@@ -56,6 +56,6 @@ export class ScriptLoader
 
         this._loadedTypes[script] = type;
 
-        return Promise.resolve(type);
+        return type;
     }
 }

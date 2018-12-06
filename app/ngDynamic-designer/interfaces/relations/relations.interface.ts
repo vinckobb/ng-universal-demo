@@ -112,7 +112,7 @@ export interface SvgNodeDynamicNode extends SvgDynamicNode
     /**
      * Gets metadata of current node
      */
-    readonly metadata: DynamicComponentRelationMetadata;
+    readonly metadata: Promise<DynamicComponentRelationMetadata>;
 
     /**
      * Occurs when this node is being destroyed

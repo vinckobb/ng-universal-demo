@@ -1,8 +1,8 @@
 import {SvgNodeDynamicNode, DesignerPageComponent, CodeService, CodeMetadata} from "../../ngDynamic-designer";
 import {SvgNode} from "../../ngDynamic-designer/components/nodeDesigner/misc";
 import {DesignerMode} from "../../ngDynamic-designer/components/designer.interface";
-import {DynamicComponentRelationMetadata} from "../../ngDynamic-core";
-import {transformPropertiesToOptions} from "../../ngDynamic-designer/misc";
+import {DynamicComponentRelationMetadata, DynamicComponentRelationMetadataGeneric} from "../../ngDynamic-core";
+import {ScriptNodeOptions} from "./script.interface";
 
 /**
  * Implementation of custom SVG node for script
@@ -39,25 +39,22 @@ export class TransformClass implements TransformAction
         dynamicNodeInstance: this
     };
 
-    //######################### protected properties #########################
+    //######################### protected methods #########################
 
     /**
-     * Gets metadata of current node
+     * Gets metadata for current node
      */
-    public get metadata(): DynamicComponentRelationMetadata
+    protected async _getMetadata(): Promise<DynamicComponentRelationMetadata>
     {
-        this._injector.get(CodeService).getCompiled(this._codeMetadata)
-            .then(result => console.log(result));
+        let metadata: DynamicComponentRelationMetadataGeneric<ScriptNodeOptions> = await super._getMetadata();
 
-        return {
-            id: this._metadata.id,
-            nodeOptions: transformPropertiesToOptions(this._properties && this._properties.properties, this._properties && this._properties.value),
-            nodeType: this._metadata.nodeType,
-            outputs: this._getOutputs()
-        };
+        let compiledScript = await this._injector.get(CodeService).getCompiled(this._codeMetadata)
+            .catch(error => alert(`Unable to get compiled output Error: '${error}'`)) as string;
+
+        metadata.nodeOptions.script = compiledScript;
+
+        return metadata;
     }
-
-    //######################### protected methods #########################
 
     /**
      * Renders misc visuals

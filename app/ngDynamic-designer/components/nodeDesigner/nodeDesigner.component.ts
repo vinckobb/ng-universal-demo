@@ -73,9 +73,9 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
     /**
      * Gets metadata for rendering from current state of node designer
      */
-    public get metadata(): DynamicComponentRelationMetadata[]
+    public get metadata(): Promise<DynamicComponentRelationMetadata[]>
     {
-        return this._addedNodes.map(itm => itm.svgNode.metadata);
+        return this._getMetadata();        
     }
 
     /**
@@ -353,5 +353,20 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
         outputGradient.append("stop")
             .attr("offset", "100%")
             .attr("stop-color", "transparent");
+    }
+
+    /**
+     * Gets metadata for all nodes
+     */
+    private async _getMetadata(): Promise<DynamicComponentRelationMetadata[]>
+    {
+        let result: DynamicComponentRelationMetadata[] = [];
+
+        for(let node of this._addedNodes)
+        {
+            result.push(await node.svgNode.metadata);
+        }
+        
+        return result;
     }
 }

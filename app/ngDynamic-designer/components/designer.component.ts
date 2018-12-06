@@ -125,7 +125,7 @@ export class DesignerPageComponent implements OnInit, OnDestroy
     /**
      * Saves current state of designer
      */
-    public save()
+    public async save()
     {
         if(this._mode == DesignerMode.CODE)
         {
@@ -152,7 +152,7 @@ export class DesignerPageComponent implements OnInit, OnDestroy
             }));
         }
 
-        let relationsMetadata = this.ɵNodeDesigner.nodeDesigner.metadata;
+        let relationsMetadata = await this.ɵNodeDesigner.nodeDesigner.metadata;
         let nodeDesignerMetadata = this.ɵNodeDesigner.nodeDesigner.designerMetadata;
         console.log(JSON.stringify(relationsMetadata));
         console.log(JSON.stringify(nodeDesignerMetadata));
