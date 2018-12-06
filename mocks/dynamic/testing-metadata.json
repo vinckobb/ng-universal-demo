@@ -1,0 +1,64 @@
+{
+    "layout":
+    {
+        "id": "nieco",
+        "componentPackage": "layout",
+        "componentName": "stack",
+        "options":
+        {
+            "inline": false,
+            "padding":
+            {
+                "top": 25,
+                "left": 50
+            },
+            "children": [
+            {
+                "id": "nieco ine",
+                "componentPackage": "layout",
+                "componentName": "block",
+                "options":
+                {}
+            },
+            {
+                "id": "nieco ine 2",
+                "componentPackage": "layout",
+                "componentName": "block",
+                "options":
+                {}
+            },
+            {
+                "id": "ysnnjjnfxbjj",
+                "componentPackage": "advanced",
+                "componentName": "textBlock",
+                "options":
+                {
+                    "template": "<div>hello {{name}} {{surname}}</div>"
+                }
+            }]
+        }
+    },
+    "relations": [
+    {
+        "id": "ngxmnjuqwmjf",
+        "nodeOptions":
+        {},
+        "nodeType": "ActivatedRoute",
+        "outputs": [
+        {
+            "outputName": "query",
+            "inputs": [
+            {
+                "id": "ysnnjjnfxbjj",
+                "inputName": "data"
+            }]
+        }]
+    },
+    {
+        "id": "ysnnjjnfxbjj",
+        "nodeOptions":
+        {},
+        "nodeType": null,
+        "outputs": []
+    }]
+}
