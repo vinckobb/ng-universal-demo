@@ -1,6 +1,8 @@
 import {SvgNodeDynamicNode, DesignerPageComponent, CodeService, CodeMetadata} from "../../ngDynamic-designer";
 import {SvgNode} from "../../ngDynamic-designer/components/nodeDesigner/misc";
 import {DesignerMode} from "../../ngDynamic-designer/components/designer.interface";
+import {DynamicComponentRelationMetadata} from "../../ngDynamic-core";
+import {transformPropertiesToOptions} from "../../ngDynamic-designer/misc";
 
 /**
  * Implementation of custom SVG node for script
@@ -36,6 +38,24 @@ export class TransformClass implements TransformAction
         ],
         dynamicNodeInstance: this
     };
+
+    //######################### protected properties #########################
+
+    /**
+     * Gets metadata of current node
+     */
+    public get metadata(): DynamicComponentRelationMetadata
+    {
+        this._injector.get(CodeService).getCompiled(this._codeMetadata)
+            .then(result => console.log(result));
+
+        return {
+            id: this._metadata.id,
+            nodeOptions: transformPropertiesToOptions(this._properties && this._properties.properties, this._properties && this._properties.value),
+            nodeType: this._metadata.nodeType,
+            outputs: this._getOutputs()
+        };
+    }
 
     //######################### protected methods #########################
 

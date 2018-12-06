@@ -4,7 +4,7 @@
 export interface ScriptNodeOptions
 {
     /**
-     * Relative url for loading script
+     * Script that will be executed
      */
-    scriptPath?: string;
+    script?: string;
 }
