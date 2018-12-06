@@ -13,7 +13,13 @@ import {PropertiesMetadata, PropertyType, PropertiesPropertyMetadata, INVALIDATE
 {
     selector: 'properties',
     templateUrl: 'properties.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host:
+    {
+        "[style.display]": "'block'",
+        "[style.maxHeight]": "'100%'",
+        "[style.overflow]": "'auto'"
+    }
 })
 export class PropertiesComponent implements OnDestroy
 {

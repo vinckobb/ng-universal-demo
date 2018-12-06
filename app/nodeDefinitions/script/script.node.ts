@@ -1,9 +1,12 @@
-import {Injector} from "@angular/core";
+import {Injector, Type} from "@angular/core";
+import {getEnumValues} from "@asseco/common";
 
 import {ScriptLoader, DynamicOutput, NodeDefinitionGeneric} from "../../ngDynamic-core";
-import {DynamicNodeDesignerMetadata} from "../../ngDynamic-designer";
-import {ScriptNodeOptions} from "./script.interface";
+import {DynamicNodeDesignerMetadata, PropertyType} from "../../ngDynamic-designer";
+import {ScriptNodeOptions, ScriptNodeInterface} from "./script.interface";
 import {ScriptSvgNode} from "./scriptSvgNode";
+import {TransformScript} from './interfaces/transform';
+import {ResponseTransformScript} from './interfaces/responseTransform';
 
 /**
  * Node used for calling custom scripts
@@ -32,6 +35,14 @@ import {ScriptSvgNode} from "./scriptSvgNode";
         ],
         nodeOptionsMetadata:
         [
+            {
+                id: 'interface',
+                name: 'Interface',
+                description: 'Type of interface that is implemented by this script',
+                type: PropertyType.Options,
+                availableValues: getEnumValues(ScriptNodeInterface),
+                defaultValue: 0
+            }
         ],
         customNode: ScriptSvgNode
     }
@@ -78,7 +89,18 @@ export class ScriptNode implements NodeDefinitionGeneric<ScriptNodeOptions>
     {
         let type = this._scriptLoader.loadType(this.options.script);
 
-        this.output = new type().transform(this.input);
+        if(this.options.interface == ScriptNodeInterface.Transform)
+        {
+            let genericType: Type<TransformScript> = type;
+
+            this.output = new genericType().transform(this.input);
+        }
+        else if(this.options.interface == ScriptNodeInterface.ResponseTransform)
+        {
+            let genericType: Type<ResponseTransformScript> = type;
+
+            this.output = new genericType().responseTransform(this.input);
+        }
     }
 
     /**

@@ -37,14 +37,4 @@ export class BlockDesignerComponent extends PlaceholderBaseComponent<BlockCompon
 
         this._isContainer = true;
     }
-
-    //######################### public methods #########################
-
-    /**
-     * Explicitly runs invalidation of content (change detection)
-     */
-    public invalidateVisuals(): void
-    {
-        super.invalidateVisuals();
-    }
 }

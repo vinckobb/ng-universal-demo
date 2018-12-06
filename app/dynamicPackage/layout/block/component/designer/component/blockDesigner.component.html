@@ -1,3 +1,12 @@
-<div style="padding: 25px;">
-    BLOCK {{options?.id}}
+<div [style.paddingTop.px]="options?.value['padding.top']"
+     [style.paddingLeft.px]="options?.value['padding.left']"
+     [style.paddingRight.px]="options?.value['padding.right']"
+     [style.paddingBottom.px]="options?.value['padding.bottom']"
+     [style.marginTop.px]="options?.value['margin.top']"
+     [style.marginLeft.px]="options?.value['margin.left']"
+     [style.marginRight.px]="options?.value['margin.right']"
+     [style.marginBottom.px]="options?.value['margin.bottom']"
+     [style.fontSize.px]="options?.value['fontSize']"
+     [style.backgroundColor]="options?.value['background']"
+     style="height: 20px;">
 </div>

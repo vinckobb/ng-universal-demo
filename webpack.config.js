@@ -220,6 +220,10 @@ module.exports = [function(options, args)
                     loader: 'raw-loader'
                 },
                 {
+                    test: /\.typings$/,
+                    loader: 'raw-loader'
+                },
+                {
                     test: /\.component\.scss$/,
                     use: ['raw-loader', 'sass-loader'],
                     include:

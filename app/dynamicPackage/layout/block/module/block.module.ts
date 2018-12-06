@@ -14,11 +14,11 @@ import {NgDynamicCoreModule} from "../../../../ngDynamic-core";
         CommonModule,
         NgDynamicCoreModule
     ],
-    declarations: 
+    declarations:
     [
         BlockComponent
     ],
-    entryComponents: 
+    entryComponents:
     [
         BlockComponent
     ]

@@ -71,7 +71,9 @@ export function transformPropertiesToOptions(properties: PropertiesPropertyMetad
             //handles simple type
             else
             {
-                setValue(options, isPresent(value[property.id]) && value[property.id], property.id);
+                let val = isPresent(value[property.id]) ? value[property.id] : null;
+
+                setValue(options, val, property.id);
             }
         });
     }

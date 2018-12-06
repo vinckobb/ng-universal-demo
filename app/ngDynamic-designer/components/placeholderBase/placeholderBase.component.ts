@@ -131,8 +131,9 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
 
     /**
      * Explicitly runs invalidation of content (change detection)
+     * @param propertyName Name of property that has changed
      */
-    public invalidateVisuals(): void
+    public invalidateVisuals(propertyName?: string): void
     {
         this._changeDetector.detectChanges();
     }
