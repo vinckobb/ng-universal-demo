@@ -176,6 +176,7 @@
         "webpack-hot-middleware": "2.24.2",
         "speed-measure-webpack-plugin": "1.2.3",
         "webpack-bundle-analyzer": "3.0.2",
+        "dts-bundle": "0.7.3",
         "copyfiles": "2.1.0",
         "rimraf": "2.6.2",
         "webpack-cli": "3.1.2",

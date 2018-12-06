@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {Subject, Observable} from "rxjs";
 import {IDisposable, languages} from "monaco-editor";
 
-import {CodeMetadata} from "../../interfaces";
+import {CodeMetadata, TypescriptAdditionalData} from "../../interfaces";
 
 /**
  * Service used for communication with "Monaco" code editor
@@ -90,34 +90,33 @@ export class CodeService
      */
     private _processAdditionalData(metadata: CodeMetadata)
     {
-        if(metadata.language == 'typescript')
+        if(metadata.language == 'typescript' && metadata.additionalData)
         {
-            if(metadata.additionalData && Array.isArray(metadata.additionalData))
-            {
-                metadata.additionalData.forEach(data =>
-                {
-                    switch(data)
-                    {
-                        case 'node-transform':
-                        {
-                            this._disposables.push(languages.typescript.typescriptDefaults.addExtraLib(`
-/**
- * Describes simple data transformation
- */
-export interface TransformAction
-{
-    /**
-     * Method that transforms value into any requested value
-     * @param value Value to be transformed
-     */
-    transform(value: any): any;
-}`, `file:///node_modules/@types/${data}/index.d.ts`));
+            let additionalData: TypescriptAdditionalData = metadata.additionalData;
 
-                            break;
-                        }
-                    }
+            //load provided typings
+            if(additionalData.typings && additionalData.typings.length)
+            {
+                additionalData.typings.forEach((typings, index) =>
+                {
+                    this._disposables.push(languages.typescript.typescriptDefaults.addExtraLib(typings, `file:///node_modules/@types/${metadata.name}${index}/index.d.ts`));
                 });
             }
+            // if(metadata.additionalData && Array.isArray(metadata.additionalData))
+            // {
+            //     metadata.additionalData.forEach(data =>
+            //     {
+            //         switch(data)
+            //         {
+            //             case 'node-transform':
+            //             {
+                            
+
+            //                 break;
+            //             }
+            //         }
+            //     });
+            // }
         }
     }
 }

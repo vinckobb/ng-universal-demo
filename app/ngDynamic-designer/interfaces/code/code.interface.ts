@@ -23,5 +23,28 @@ export interface CodeMetadata extends DesignerServiceMetadata
     /**
      * Additional data
      */
-    additionalData?: any;
+    additionalData?: TypescriptAdditionalData|HandlebarsAdditionalData;
+}
+
+/**
+ * Additional data for typescript
+ */
+export interface TypescriptAdditionalData
+{
+    /**
+     * Array of typings that should be loaded
+     */
+    typings?: string[];
+
+    /**
+     * Array of external references names for which typings should be loaded
+     */
+    references?: string[];
+}
+
+/**
+ * Additional data for handlebars
+ */
+export interface HandlebarsAdditionalData
+{
 }

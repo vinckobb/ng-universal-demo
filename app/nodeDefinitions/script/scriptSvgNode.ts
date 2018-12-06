@@ -1,8 +1,13 @@
-import {SvgNodeDynamicNode, DesignerPageComponent, CodeService, CodeMetadata} from "../../ngDynamic-designer";
+import {Injector} from '@angular/core';
+import {isBlank} from '@asseco/common';
+import {Selection, BaseType} from 'd3';
+
+import {SvgNodeDynamicNode, DesignerPageComponent, CodeService, CodeMetadata, ɵRelationsMetadata, SvgPeerDropArea, SvgRelationDynamicNode, DesignerLayoutPlaceholderComponent, INVALIDATE_PROPERTIES} from "../../ngDynamic-designer";
 import {SvgNode} from "../../ngDynamic-designer/components/nodeDesigner/misc";
 import {DesignerMode} from "../../ngDynamic-designer/components/designer.interface";
 import {DynamicComponentRelationMetadata, DynamicComponentRelationMetadataGeneric} from "../../ngDynamic-core";
-import {ScriptNodeOptions} from "./script.interface";
+import {ScriptNodeOptions, ScriptNodeInterface} from "./script.interface";
+import {scriptNodeTemplates} from "./script.templates";
 
 /**
  * Implementation of custom SVG node for script
@@ -12,32 +17,57 @@ export class ScriptSvgNode extends SvgNode implements SvgNodeDynamicNode
     //######################### protected fields #########################
 
     /**
+     * Currently set interface type
+     */
+    protected _interfaceValue: ScriptNodeInterface;
+
+    /**
      * Code metadata
      */
     protected _codeMetadata: CodeMetadata =
     {
+        name: 'ScriptNode',
         language: 'typescript',
-        template:`
-import {TransformAction} from 'node-transform';
-
-export class TransformClass implements TransformAction
-{
-    /**
-     * Method that transforms value into any requested value
-     * @param value Value to be transformed
-     */
-    public transform(value: any): any
-    {
-        return value;
-    }
-}
-`,
-        additionalData: 
-        [
-            "node-transform"
-        ],
+        template: scriptNodeTemplates[ScriptNodeInterface.Transform],
+        additionalData:
+        {
+            typings:
+            [
+                require('./interfaces/scriptNode.typings')
+            ]
+        },
         dynamicNodeInstance: this
     };
+
+    //######################### constructor #########################
+    constructor(parentGroup: Selection<BaseType, {}, null, undefined>,
+                metadata: ɵRelationsMetadata,
+                validDropToggle: (dropArea: SvgPeerDropArea) => void,
+                createRelation: () => SvgRelationDynamicNode,
+                injector: Injector,
+                layoutComponent: DesignerLayoutPlaceholderComponent,
+                nodeOptions: ScriptNodeOptions)
+    {
+        super(parentGroup, metadata, validDropToggle, createRelation, injector, layoutComponent, ScriptSvgNode._setDefault(nodeOptions));
+
+        this._interfaceValue = (this._properties.value as ScriptNodeOptions).interface;
+    }
+
+    //######################### public methods #########################
+
+    /**
+     * Explicitly runs invalidation of content (change detection)
+     * @param propertyName Name of property that has changed
+     */
+    public invalidateVisuals(propertyName?: string): void
+    {
+        super.invalidateVisuals(propertyName);
+
+        if(propertyName == INVALIDATE_PROPERTIES)
+        {
+            this._showCode();
+        }
+    }
 
     //######################### protected methods #########################
 
@@ -67,8 +97,7 @@ export class TransformClass implements TransformAction
         let buttonGroup = this._miscGroup.append('g')
             .on('click', () =>
             {
-                this._injector.get(DesignerPageComponent).setMode(DesignerMode.CODE);
-                this._injector.get(CodeService).showCode(this._codeMetadata);
+                this._showCode();
             });
 
         buttonGroup.append("rect")
@@ -87,5 +116,39 @@ export class TransformClass implements TransformAction
                 .attr('y', currentHeight - 11)
                 .attr('fill', '#F8F8F8')
                 .attr('style', "cursor: pointer;");
+    }
+
+    /**
+     * Sets default value for interface
+     * @param options Options to be set with default
+     */
+    protected static _setDefault(options: ScriptNodeOptions): ScriptNodeOptions
+    {
+        if(!options)
+        {
+            options = {};
+        }
+
+        if(isBlank(options.interface))
+        {
+            options.interface = ScriptNodeInterface.Transform
+        }
+
+        return options;
+    }
+
+    /**
+     * Shows code in code editor
+     */
+    protected _showCode()
+    {
+        if((this._properties.value as ScriptNodeOptions).interface != this._interfaceValue)
+        {
+            this._interfaceValue = (this._properties.value as ScriptNodeOptions).interface;
+            this._codeMetadata.template = this._codeMetadata.value = scriptNodeTemplates[this._interfaceValue];
+        }
+
+        this._injector.get(DesignerPageComponent).setMode(DesignerMode.CODE);
+        this._injector.get(CodeService).showCode(this._codeMetadata);
     }
 }

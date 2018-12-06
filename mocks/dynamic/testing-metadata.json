@@ -18,29 +18,77 @@
                 "componentPackage": "layout",
                 "componentName": "block",
                 "options":
-                {}
+                {
+                    "padding":
+                    {},
+                    "margin":
+                    {}
+                }
             },
             {
                 "id": "nieco ine 2",
                 "componentPackage": "layout",
                 "componentName": "block",
                 "options":
-                {}
+                {
+                    "padding":
+                    {},
+                    "margin":
+                    {}
+                }
             },
             {
-                "id": "rjyjtiygtlxh",
+                "id": "frlmidoklvfy",
                 "componentPackage": "advanced",
                 "componentName": "textBlock",
                 "options":
                 {
                     "template": "<div>Hello {{name}} {{surname}}</div>"
                 }
+            },
+            {
+                "id": "qzzhbyslxmkg",
+                "componentPackage": "layout",
+                "componentName": "block",
+                "options":
+                {
+                    "padding":
+                    {},
+                    "margin":
+                    {},
+                    "background": "#FF00FF"
+                }
             }]
         }
     },
     "relations": [
     {
-        "id": "jigvpnydxbfm",
+        "id": "jlbyrsqbxtdr",
+        "nodeOptions":
+        {
+            "interface": "0",
+            "script": "\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\n/**\r\n * Class that implements transform script code\r\n */\r\nvar TransformClass = /** @class */ (function () {\r\n    function TransformClass() {\r\n    }\r\n    /**\r\n     * Method that transforms value into any requested value\r\n     * @param value Value to be transformed\r\n     */\r\n    TransformClass.prototype.transform = function (value) {\r\n        var result = {};\r\n        if (value) {\r\n            if (value.name) {\r\n                result.name = value.name.toUpperCase();\r\n            }\r\n            result.surname = value.surname;\r\n        }\r\n        return value;\r\n    };\r\n    return TransformClass;\r\n}());\r\nexports.TransformClass = TransformClass;\r\n"
+        },
+        "nodeType": "Script",
+        "outputs": [
+        {
+            "outputName": "output",
+            "inputs": [
+            {
+                "id": "frlmidoklvfy",
+                "inputName": "data"
+            }]
+        }]
+    },
+    {
+        "id": "frlmidoklvfy",
+        "nodeOptions":
+        {},
+        "nodeType": null,
+        "outputs": []
+    },
+    {
+        "id": "jbuigmutspfq",
         "nodeOptions":
         {},
         "nodeType": "ActivatedRoute",
@@ -49,33 +97,9 @@
             "outputName": "query",
             "inputs": [
             {
-                "id": "hoioqoiqqdur",
+                "id": "jlbyrsqbxtdr",
                 "inputName": "input"
             }]
         }]
-    },
-    {
-        "id": "hoioqoiqqdur",
-        "nodeOptions":
-        {
-            "script": "\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nvar TransformClass = /** @class */ (function () {\r\n    function TransformClass() {\r\n    }\r\n    /**\r\n     * Method that transforms value into any requested value\r\n     * @param value Value to be transformed\r\n     */\r\n    TransformClass.prototype.transform = function (value) {\r\n        if (value && value.name) {\r\n            value.name = value.name.toUpperCase();\r\n        }\r\n        return value;\r\n    };\r\n    return TransformClass;\r\n}());\r\nexports.TransformClass = TransformClass;\r\n"
-        },
-        "nodeType": "Script",
-        "outputs": [
-        {
-            "outputName": "output",
-            "inputs": [
-            {
-                "id": "rjyjtiygtlxh",
-                "inputName": "data"
-            }]
-        }]
-    },
-    {
-        "id": "rjyjtiygtlxh",
-        "nodeOptions":
-        {},
-        "nodeType": null,
-        "outputs": []
     }]
 }

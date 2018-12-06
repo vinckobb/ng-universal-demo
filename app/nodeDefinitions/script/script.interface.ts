@@ -12,6 +12,11 @@ export interface ScriptNodeOptions
      * Type of interface that is implemented by script
      */
     interface?: ScriptNodeInterface;
+
+    /**
+     * Additional external references
+     */
+    references?: string[];
 }
 
 /**
