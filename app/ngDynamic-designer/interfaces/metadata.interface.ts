@@ -48,6 +48,13 @@ export interface DesignerMetadataClass
 }
 
 /**
+ * Internal metadata used for rendering dynamic components generic
+ */
+export interface ɵDynamicComponentMetadataGeneric<TOptions> extends DynamicComponentMetadataGeneric<TOptions>, ɵUniqueIdMetadata
+{
+}
+
+/**
  * Description of placeholder component for layout designer
  */
 export interface DesignerLayoutPlaceholderComponent extends DynamicComponent
@@ -66,6 +73,11 @@ export interface DesignerLayoutPlaceholderComponent extends DynamicComponent
      * Current id of component
      */
     readonly id: string;
+
+    /**
+     * Immutable id of component instance
+     */
+    readonly ɵId: string;
 
     /**
      * Id of components droplist
@@ -172,4 +184,15 @@ export interface DesignerServiceMetadata extends DesignerCommonMetadata
      * Dynamic node instance, set by designer, do not set
      */
     dynamicNodeInstance?: DynamicNode;
+}
+
+/**
+ * Metadata used for unique identification of object
+ */
+export interface ɵUniqueIdMetadata
+{
+    /**
+     * Special unique generated id that cant be changed, used for identification of component anywhere
+     */
+    ɵId?: string;
 }

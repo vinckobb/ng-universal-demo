@@ -1,4 +1,5 @@
-import {DesignerMetadataClass, DesignerNodeMetadata, ɵRelationsMetadata} from "../interfaces";
+import {DesignerMetadataClass, DesignerNodeMetadata} from "../interfaces";
+import {ɵRelationsMetadata} from "../components";
 
 declare var designerMetadata: boolean;
 

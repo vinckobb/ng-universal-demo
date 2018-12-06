@@ -46,7 +46,7 @@ export interface NodePropertiesService
 }
 
 /**
- * Metadata used for node relations designer
+ * Internal metadata used for node relations designer
  */
 export interface ɵRelationsMetadata extends RelationsMetadata
 {

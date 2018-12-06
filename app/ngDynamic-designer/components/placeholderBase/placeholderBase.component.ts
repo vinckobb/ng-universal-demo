@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, ViewChildren, QueryList, HostBinding, HostListener, Injectable} from "@angular/core";
 import {generateId} from "@asseco/common";
 
-import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata} from "../../interfaces";
+import {DesignerLayoutComponentRendererData, DesignerLayoutPlaceholderComponentGeneric, DesignerLayoutPlaceholderComponent, LayoutMetadata, ɵDynamicComponentMetadataGeneric} from "../../interfaces";
 import {DynamicComponentMetadataGeneric, DynamicComponentMetadata} from "../../../ngDynamic-core";
 import {DesignerComponentRendererDirective} from "../../directives";
 import {PropertiesService} from "../../services";
@@ -24,7 +24,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
     /**
      * Metadata for current component
      */
-    protected _metadata: DynamicComponentMetadataGeneric<TOptions>;
+    protected _metadata: ɵDynamicComponentMetadataGeneric<TOptions>;
 
     //######################### public properties - host bindings #########################
 
@@ -74,6 +74,14 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
      * Id of components droplist
      */
     public dropzoneId: string;
+
+    /**
+     * Immutable id of component instance
+     */
+    public get ɵId(): string
+    {
+        return this._metadata.ɵId;
+    }
 
     /**
      * Current id of component
@@ -144,6 +152,8 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
     public async setMetadata(metadata: DynamicComponentMetadata): Promise<void>
     {
         this._metadata = metadata;
+        this._metadata.ɵId = generateId(15);
+
         this._updateOptions();
         await this.afterMetadataSet();
     }
