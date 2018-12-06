@@ -177,12 +177,16 @@ export class ComponentRelationManager
             {
                 output.inputs.forEach(input =>
                 {
-                    let inputOutput = 
+                    let relation = this._relations[input.id];
+                    let nodeInstance = relation && relation.nodeInstance ? relation.nodeInstance : null;
+
+                    let inputOutput: DynamicComponentRelationManagerInputOutputMetadata = 
                     {
                         inputId: input.id,
                         outputNodeId: meta.id,
                         inputName: input.inputName,
-                        outputName: output.outputName
+                        outputName: output.outputName,
+                        inputInstance: nodeInstance || this.componentManager.get(input.id)
                     };
 
                     outputs.push(inputOutput);

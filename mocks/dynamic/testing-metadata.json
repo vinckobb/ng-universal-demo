@@ -63,21 +63,6 @@
     },
     "relations": [
     {
-        "id": "jbuigmutspfq",
-        "nodeOptions":
-        {},
-        "nodeType": "ActivatedRoute",
-        "outputs": [
-        {
-            "outputName": "query",
-            "inputs": [
-            {
-                "id": "jlbyrsqbxtdr",
-                "inputName": "input"
-            }]
-        }]
-    },
-    {
         "id": "jlbyrsqbxtdr",
         "nodeOptions":
         {
@@ -101,5 +86,20 @@
         {},
         "nodeType": null,
         "outputs": []
+    },
+    {
+        "id": "jbuigmutspfq",
+        "nodeOptions":
+        {},
+        "nodeType": "ActivatedRoute",
+        "outputs": [
+        {
+            "outputName": "query",
+            "inputs": [
+            {
+                "id": "jlbyrsqbxtdr",
+                "inputName": "input"
+            }]
+        }]
     }]
 }
