@@ -7,6 +7,7 @@ export * from './nodeDesigner/nodeDesigner.interface';
 export * from './componentPalette';
 export * from './designer.component';
 export * from './placeholderBase/placeholderBase.component';
+export * from './draggablePlaceholder/draggablePlaceholder.component';
 export * from './properties/properties.component';
 export * from './nodeComponentPalette/nodeComponentPalette.component';
 export * from './properties/property/property.component';

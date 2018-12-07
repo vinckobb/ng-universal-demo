@@ -1,14 +1,9 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
 import {StackComponentOptions} from "../../stack.interface";
-import {PlaceholderBaseComponent, PropertiesService, DragService} from "../../../../../../ngDynamic-designer";
+import {PropertiesService, DragService, DraggablePlaceholderComponent} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
-import {COMPONENT_PALETTE_ITEM} from "../../../../../../ngDynamic-designer/components";
-
-//TODO drop metodu by bolo vhodne prehodit do PlaceholderBaseComponent
-
-export const COMPONENT_ITEM = "component";
 
 /**
  * Stack designer layout component used for designing components
@@ -19,7 +14,7 @@ export const COMPONENT_ITEM = "component";
     templateUrl: 'stackDesigner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StackDesignerComponent extends PlaceholderBaseComponent<StackComponentOptions>
+export class StackDesignerComponent extends DraggablePlaceholderComponent<StackComponentOptions>
 {
     //######################### public properties #########################
 
@@ -38,9 +33,9 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
     constructor(changeDetector: ChangeDetectorRef,
                 packageLoader: PackageLoader,
                 optionsSvc: PropertiesService,
-                private _dragSvc: DragService)
+                dragSvc: DragService)
     {
-        super(changeDetector, packageLoader, optionsSvc);
+        super(changeDetector, packageLoader, optionsSvc, dragSvc);
 
         this._isContainer = true;
     }
@@ -68,51 +63,6 @@ export class StackDesignerComponent extends PlaceholderBaseComponent<StackCompon
             {
                 await this.addChild(child);
             }
-        }
-    }
-
-    //TODO presunut do placeholderBase metody allowDrop, dragStart, drop pripadne dalsie ktore budu suvisiet s drag and drop
-    public allowDrop(event: DragEvent)
-    {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-
-    public dragStart(event: DragEvent, child: any)
-    {
-        event.dataTransfer.setData('text/plain', COMPONENT_ITEM);
-        this._dragSvc.dragItem = child;
-    }
-    
-    /**
-     * Drops item on desired position
-     * @param event drag event
-     */
-    public async drop(event: DragEvent)
-    {
-        if (event)
-        {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-
-        let dragItem = this._dragSvc.dragItem;
-        let type = event.dataTransfer.getData('text/plain');
-        
-        if (type == COMPONENT_PALETTE_ITEM)
-        {
-            this.addChildMetadata(
-                {
-                    packageName: dragItem.packageName,
-                    componentName: dragItem.componentName,
-                    designerMetadata: await this._packageLoader.getComponentsMetadata(dragItem.packageName, dragItem.componentName),
-                    componentMetadata: null
-                }
-            );  
-        }
-        else if (type == COMPONENT_ITEM)
-        {
-            this.addChildMetadata(dragItem);
         }
     }
 }

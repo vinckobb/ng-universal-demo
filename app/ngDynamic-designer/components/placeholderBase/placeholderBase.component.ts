@@ -63,11 +63,6 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
     public options: LayoutMetadata;
 
     /**
-     * Id of components droplist
-     */
-    public dropzoneId: string;
-
-    /**
      * Immutable id of component instance
      */
     public get ɵId(): string
@@ -124,7 +119,6 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
                 protected _packageLoader: PackageLoader,
                 protected _optionsSvc: PropertiesService)
     {
-        this.dropzoneId = generateId(12);
     }
 
     //######################### public methods #########################

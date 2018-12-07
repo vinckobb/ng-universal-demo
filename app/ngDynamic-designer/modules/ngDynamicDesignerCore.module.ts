@@ -1,6 +1,6 @@
 import {NgModule} from "@angular/core";
 
-import {DesignerComponentRendererDirective} from "../directives";
+import {DesignerComponentRendererDirective, DroppableDirective} from "../directives";
 
 /**
  * Core module for ng dynamic designer 
@@ -12,11 +12,13 @@ import {DesignerComponentRendererDirective} from "../directives";
     ],
     declarations: 
     [
-        DesignerComponentRendererDirective
+        DesignerComponentRendererDirective,
+        DroppableDirective
     ],
     exports:
     [
-        DesignerComponentRendererDirective
+        DesignerComponentRendererDirective,
+        DroppableDirective
     ]
 })
 export class NgDynamicDesignerModuleCore

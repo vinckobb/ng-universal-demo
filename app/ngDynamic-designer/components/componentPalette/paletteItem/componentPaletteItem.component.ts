@@ -66,8 +66,28 @@ export class ComponentPaletteItemComponent
      */
     public dragStart(event: DragEvent)
     {
+        let targetElement: HTMLElement = <HTMLElement>event.target;
+        if (targetElement)
+        {
+            targetElement.style.opacity = "0.4";
+        }
+
         event.dataTransfer.setData('text/plain', COMPONENT_PALETTE_ITEM);
 
-        this._dragSvc.dragItem = this.componentData;
+        this._dragSvc.dragStart(this.componentData)
+    }
+
+    /**
+     * Stop drag event and restore element styles
+     * @param event 
+     */
+    public dragEnd(event: DragEvent)
+    {
+        let targetElement: HTMLElement = <HTMLElement>event.target;
+        if (targetElement)
+        {
+            targetElement.style.opacity = "1.0";
+        }
+        this._dragSvc.dragEnd();
     }
 }
