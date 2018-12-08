@@ -1,3 +1,11 @@
+$primaryBackgroundColor: #293742;
+$secondaryBackgroundColor: #f4f8fb;
+$selectionBackgroundColor: #137cbd;
+$baseColor: #d0dbe2;
+$secondaryColor: #ffffff;
+
+$primaryBorderColor: #48555e;
+
 .layout-designer
 {
     display: grid;
@@ -8,39 +16,88 @@
     header
     {
         grid-column: 1 / 4;
-        background-color: #222;
+        background-color: $primaryBackgroundColor;
+        border-bottom: 1px solid $primaryBorderColor;
         color: #fff;
         padding: 1em;
     }
 
-    aside.left
+    aside
     {
-        display: grid;
-        padding: 0;
+        background-color: $primaryBackgroundColor;
+        color: $baseColor;
 
-        .tree
+        h4
         {
-            background-color: #66EEFF;
-            padding: 1em;
+            text-transform: uppercase;
+            font-size: 1.1em;
+            margin: 5px 0;
         }
 
-        .palette
+        .icon-wrapper
         {
-            background-color: #11CC00;
-            padding: 1em;
+            width: 20px;
+            text-align: center;
+            display: inline-block;
         }
-    }
-    aside.right
-    {
-        background-color: #550000;
-        color: #FFFFFF;
-        padding: 1em;
-        max-height: 100%;
+
+        &.left
+        {
+            display: grid;
+            padding: 0;
+    
+            .tree
+            {
+                .cdk-tree
+                {
+                    .cdk-tree-node
+                    {
+                        line-height: 2em;
+                        cursor: pointer;
+                        display: block;
+    
+                        &.selected
+                        {
+                            background-color: $selectionBackgroundColor;
+                            color: $secondaryColor;
+                        }
+    
+                        .text
+                        {
+                            padding-left: 5px;
+                        }
+                    }
+                }
+            }
+    
+            .palette
+            {
+                margin: 0 12px;
+                padding-top: 10px;
+                border-top: 1px solid $primaryBorderColor;
+
+                .component-palette-item
+                {
+                    cursor: -webkit-grab;
+                    padding: 5px 0;
+                }
+
+                .component-palette-item:hover
+                {
+                    background-color: $selectionBackgroundColor;
+                }
+            }
+        }
+        &.right
+        {
+            padding: 1em;
+            max-height: 100%;
+        }
     }
 
     main
     {
-        background: #EAEAEA;
+        background: $secondaryBackgroundColor;
         padding: 1em;
     }
 }

@@ -1,5 +1,6 @@
+<h4>Components</h4>
 <div *ngFor="let package of packages">
-    <h3>{{package?.packageName}}</h3>
+    <h5>{{package?.packageName}}</h5>
     <component-palette-item *ngFor="let component of package?.components" 
                             [componentMetadata]="component?.designerMetadata" 
                             [packageName]="package?.packageName" 

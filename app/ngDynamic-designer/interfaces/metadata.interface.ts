@@ -163,6 +163,11 @@ export interface DesignerCommonMetadata
      * Description of component or node type, can be longer
      */
     description?: string;
+
+    /**
+     * Css class that represents components icon
+     */
+    iconCssClass?: string;
 }
 
 /**

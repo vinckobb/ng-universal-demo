@@ -4,6 +4,7 @@ export const layoutMetadata: LayoutMetadata =
 {
     name: 'Block panel',
     description: 'Block panel as layout component',
+    iconCssClass: 'fa fa-file-o',
     properties:
     [
         {

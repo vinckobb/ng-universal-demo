@@ -31,6 +31,11 @@ export class LayoutDesignerTreeComponent implements OnDestroy
      */
     private _treeFlatener: TreeFlattener<any, any>;
 
+    /**
+     * Selected node
+     */
+    private _selectedNode: LayoutComponentTreeNode;
+
     //######################### public properties - template bindings #########################
 
     /**
@@ -72,14 +77,16 @@ export class LayoutDesignerTreeComponent implements OnDestroy
      * Sets options for properties component
      * @param options 
      */
-    public showProperties(options: any)
+    public onNodeSelection(node: LayoutComponentTreeNode)
     {
-        if (!options)
+        if (!node ||
+            !node.options)
         {
             return;
         }
 
-        this._propertiesSvc.showProperties(options);
+        this._selectedNode = node;
+        this._propertiesSvc.showProperties(node.options);
     }
 
     /**
@@ -97,6 +104,11 @@ export class LayoutDesignerTreeComponent implements OnDestroy
     public isExpandable(node: LayoutComponentTreeNode): boolean
     {
         return !!node.children && node.children.length > 0;
+    }
+
+    public isSelected(node: LayoutComponentTreeNode): boolean
+    {
+        return node && this._selectedNode && this._selectedNode.id == node.id;
     }
 
     //######################### private methods #########################
@@ -143,7 +155,7 @@ export class LayoutDesignerTreeComponent implements OnDestroy
      * Transforms component to tree node
      * @param component 
      */
-    private _getNodeForComponent(component: DesignerLayoutPlaceholderComponent)
+    private _getNodeForComponent(component: DesignerLayoutPlaceholderComponent): LayoutComponentTreeNode
     {
         if (!component)
         {

@@ -4,6 +4,7 @@ export const layoutMetadata: LayoutMetadata =
 {
     name: 'stack panel',
     description: 'Stack panel as layout for components in row or column',
+    iconCssClass: 'fa fa-window-maximize',
     properties:
     [
         {

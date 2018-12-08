@@ -270,6 +270,27 @@
     padding-top: $mdWidth;
 }
 
+.padding-md-left
+{
+    padding-left: $mdWidth;
+}
+
+.padding-md-right
+{
+    padding-right: $mdWidth;
+}
+
+.padding-md-bottom
+{
+    padding-bottom: $mdWidth;
+}
+
+.padding-md-horizontal
+{
+    padding-left: $mdWidth;
+    padding-right: $mdWidth;
+}
+
 .padding-none-left
 {
     padding-left: 0;
