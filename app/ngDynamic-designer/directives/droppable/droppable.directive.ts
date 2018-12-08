@@ -1,4 +1,4 @@
-import {Directive, HostListener, ElementRef, HostBinding, EventEmitter, Output} from "@angular/core";
+import {Directive, HostListener, ElementRef, HostBinding, EventEmitter, Output, Input} from "@angular/core";
 import {isPresent} from "@asseco/common";
 
 import {DropEvent, DropArea} from "../../interfaces";
@@ -32,13 +32,13 @@ export class DroppableDirective
      */
     private _dropArea: DropArea;
 
-    //######################### public properties - host #########################
+    //######################### public properties - inputs #########################
 
     /**
-     * Sets class on element based on dropArea
+     * Orientation in which drop is handled
      */
-    @HostBinding('class')
-    public cssClass: string = "";
+    @Input('dropOrientation')
+    public orientation: 'horizontal'|'vertical' = 'vertical';
 
     //######################### public properties - outputs #########################
 
@@ -46,7 +46,15 @@ export class DroppableDirective
      * Occurs when user drop something over element
      */
     @Output() 
-    dropped = new EventEmitter<DropEvent>();
+    public dropped = new EventEmitter<DropEvent>();
+
+    //######################### public properties - host #########################
+
+    /**
+     * Sets class on element based on dropArea
+     */
+    @HostBinding('class')
+    public cssClass: string = "";
 
     //######################### constructor #########################
 
@@ -110,20 +118,38 @@ export class DroppableDirective
      */
     private _calculateActualPosition(mouseX: number, mouseY: number)
     {
-        var elementRect: ClientRect = this._element.nativeElement.getBoundingClientRect();
+        let elementRect: ClientRect = this._element.nativeElement.getBoundingClientRect();
 
-        //var mousePosPercent_X = ((mouseX-elementRect.left)/(elementRect.right-elementRect.left))*100;
-        var mousePosPercent_Y = ((mouseY-elementRect.top) /(elementRect.bottom-elementRect.top))*100;
-
-        if (mousePosPercent_Y > 50)
+        switch (this.orientation)
         {
-            this.cssClass = 'drop-after';
-            this._dropArea = DropArea.BOTTOM;
+            case 'vertical':
+                let mousePosPercent_Y = ((mouseY-elementRect.top) /(elementRect.bottom-elementRect.top))*100;
+                if (mousePosPercent_Y < 50)
+                {
+                    this.cssClass = 'drop-vertical-before';
+                    this._dropArea = DropArea.TOP;
+                }
+                else
+                {
+                    this.cssClass = 'drop-vertical-after';
+                    this._dropArea = DropArea.BOTTOM;
+                };
+                break;
+            case 'horizontal':
+                let mousePosPercent_X = ((mouseX-elementRect.left) /(elementRect.right-elementRect.left))*100;
+                if (mousePosPercent_X < 50)
+                {
+                    this.cssClass = 'drop-horizontal-before';
+                    this._dropArea = DropArea.LEFT;
+                }
+                else
+                {
+                    this.cssClass = 'drop-horizontal-after';
+                    this._dropArea = DropArea.RIGHT;
+                };
+                break;
+            default:
+                break;
         }
-        else
-        {
-            this.cssClass = 'drop-before';
-            this._dropArea = DropArea.TOP;
-        };
     }
 }
