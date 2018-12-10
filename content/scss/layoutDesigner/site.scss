@@ -16,6 +16,18 @@ $primaryBorderColor: #48555e;
     grid-template-rows: 50px 1fr;
     min-height: calc(100vh - 72px);
 
+    .icon-wrapper
+    {
+        width: 20px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    .selection
+    {
+        color: $selectionBackgroundColor;
+    }
+
     header
     {
         grid-column: 1 / 4;
@@ -37,16 +49,10 @@ $primaryBorderColor: #48555e;
             margin: 5px 0;
         }
 
-        .icon-wrapper
-        {
-            width: 20px;
-            text-align: center;
-            display: inline-block;
-        }
-
         &.left
         {
             display: grid;
+            grid-template-rows: 1fr 1fr;
             padding: 0;
     
             .tree

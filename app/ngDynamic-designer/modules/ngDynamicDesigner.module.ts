@@ -7,6 +7,7 @@ import {CdkTreeModule} from "@angular/cdk/tree";
 import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, PropertiesComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeComponentPaletteComponent, LayoutDesignerTreeComponent, PropertyComponent, CodeEditorComponent, OnlyVisiblePipe} from "../components";
 import {NgDynamicDesignerModuleCore} from "./ngDynamicDesignerCore.module";
 import {NgDynamicNodeDesignerModule} from "./ngDynamicNodeDesigner.module";
+import {TogglePanelComponent} from "../components/togglePanel/togglePanel.component";
 
 /**
  * Module for ng dynamic designer 
@@ -34,6 +35,7 @@ import {NgDynamicNodeDesignerModule} from "./ngDynamicNodeDesigner.module";
         PropertyComponent,
         CodeEditorComponent,
         NodeComponentPaletteComponent,
+        TogglePanelComponent,
         OnlyVisiblePipe
     ],
     exports:

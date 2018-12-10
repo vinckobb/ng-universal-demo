@@ -89,17 +89,20 @@ export class ComponentPaletteComponent implements OnDestroy
         for (var i = 0; i < packageNames.length; i++)
         {
             let components = await this._packageLoader.getPackageComponentsMetadata(packageNames[i]);
-            this.packages.push(
-                {
-                    packageName: packageNames[i],
-                    components: Object.keys(components).map(componentName => {
-                        return {
-                            componentName: componentName,
-                            designerMetadata: components[componentName]
-                        } 
-                    })
-                }
-            );
+            if (Object.keys(components).length)
+            {
+                this.packages.push(
+                    {
+                        packageName: packageNames[i],
+                        components: Object.keys(components).map(componentName => {
+                            return {
+                                componentName: componentName,
+                                designerMetadata: components[componentName]
+                            } 
+                        })
+                    }
+                );
+            }
         }
 
         this._changeDetector.detectChanges();
