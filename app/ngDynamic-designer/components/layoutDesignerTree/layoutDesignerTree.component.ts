@@ -27,6 +27,11 @@ export class LayoutDesignerTreeComponent implements OnDestroy
     private _componentsChangeSubscription: Subscription;
 
     /**
+     * Subscription for changes of selected properties
+     */
+    private _showPropertiesSubscription: Subscription;
+
+    /**
      * Tree flattening implementation class
      */
     private _treeFlatener: TreeFlattener<any, any>;
@@ -58,6 +63,17 @@ export class LayoutDesignerTreeComponent implements OnDestroy
         this.treeDataSource = new TreeFlatDataSource(this.treeControl, this._treeFlatener);
 
         this._componentsChangeSubscription = this._componentSvc.componentsChange.subscribe(() => this._handleComponents());
+        this._showPropertiesSubscription = this._propertiesSvc.loadProperties.subscribe((value) => 
+        {
+            if (this._selectedNode &&
+                this._selectedNode.id == value.id)
+            {
+                return;
+            }
+
+            this._selectedNode = this._getNodeById(this.treeDataSource.data[0], value.id);
+            this.invalidateVisuals();
+        });
     }
 
     //######################### public methods - implementation of OnDestroy #########################
@@ -68,6 +84,12 @@ export class LayoutDesignerTreeComponent implements OnDestroy
         {
             this._componentsChangeSubscription.unsubscribe();
             this._componentsChangeSubscription = null;
+        }
+
+        if (this._showPropertiesSubscription)
+        {
+            this._showPropertiesSubscription.unsubscribe();
+            this._showPropertiesSubscription = null;
         }
     }
 
@@ -204,5 +226,33 @@ export class LayoutDesignerTreeComponent implements OnDestroy
         return component.children.filter(item => !!item).map(item => {
             return this._getNodeForComponent(item);
         });
+    }
+
+    /**
+     * Find children for specified node with id
+     * @param node 
+     * @param id 
+     */
+    private _getNodeById(node: LayoutComponentTreeNode, id: string|number): LayoutComponentTreeNode
+    {
+        if (this._getNodeId(node) == id)
+        {
+            return node;
+        }
+
+        if (node.children &&
+            node.children.length > 0)
+        {
+            for (let i = 0; i < node.children.length; i++)
+            {
+                let child = this._getNodeById(node.children[i], id);
+                if (!!child)
+                {
+                    return child;
+                }
+            }
+        }
+
+        return null;
     }
 }
