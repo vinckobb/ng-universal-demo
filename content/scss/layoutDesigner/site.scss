@@ -6,8 +6,11 @@ $secondaryColor: #ffffff;
 
 $primaryBorderColor: #48555e;
 
+@import "fonts.scss";
+
 .layout-designer
 {
+    font-family: 'Roboto';
     display: grid;
     grid-template-columns: 1fr 5fr 1fr;
     grid-template-rows: 50px 1fr;
