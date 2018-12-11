@@ -8,7 +8,7 @@ import {DynamicComponentMetadata} from "../interfaces";
 import {DYNAMIC_RELATIONS_METADATA} from "../tokens";
 import {ComponentRelationManager} from "../componentRelationManager";
 import {ComponentManager} from "../componentManager";
-import {DynamicContentResponse, RemoteDynamicContentResponse} from "./dynamicComponentPage.interface";
+import {DynamicContentMetadata, RemoteDynamicContentMetadata} from "./dynamicComponentPage.interface";
 import {DYNAMIC_COMPONENT_PAGE_METADATA_URL, NOT_FOUND_ROUTER_PATH} from "./dynamicComponentPage.token";
 
 /**
@@ -79,7 +79,7 @@ export class DynamicComponentPageComponent implements OnInit, OnDestroy
             }
 
             let dynamicContentId = urlChanges[0];
-            let tmp = await this._http.get<RemoteDynamicContentResponse>(`${this._urlPrefix}/${dynamicContentId}`)
+            let tmp = await this._http.get<RemoteDynamicContentMetadata>(`${this._urlPrefix}/${dynamicContentId}`)
                 .pipe(catchError((err: HttpErrorResponse) =>
                 {
                     //client error, not response from server
@@ -97,7 +97,7 @@ export class DynamicComponentPageComponent implements OnInit, OnDestroy
                 }))
                 .toPromise();
 
-            let metadata: DynamicContentResponse =
+            let metadata: DynamicContentMetadata =
             {
                 layout: null,
                 relations: []

@@ -1,13 +1,16 @@
 import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, ExistingProvider, Inject, ViewChild} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {Subscription} from "rxjs";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {Subscription, throwError, empty} from "rxjs";
 
-import {DesignerMode, DESIGNER_PACKAGE_NAMES, RemoteDesignerState} from "./designer.interface";
+import {DesignerMode, RemoteDesignerState, DesignerState} from "./designer.interface";
 import {ComponentsService, PropertiesService, DragService, CodeService} from "../services";
 import {NODE_PROPERTIES_SERVICE} from "./nodeDesigner/nodeDesigner.interface";
 import {LayoutDesignerComponent} from "./layoutDesigner/layoutDesigner.component";
 import {CodeEditorComponent} from "./codeEditor/codeEditor.component";
 import {NodeDesignerModeComponent} from "./nodeDesignerMode/nodeDesignerMode.component";
+import {DESIGNER_PACKAGE_NAMES} from "./designer.tokens";
+import {ActivatedRoute} from "@angular/router";
+import {catchError} from "rxjs/operators";
 
 /**
  * Component used for displaying designer
@@ -51,6 +54,16 @@ export class DesignerPageComponent implements OnInit, OnDestroy
      */
     public designerModes = DesignerMode;
 
+    /**
+     * Holds current designer state
+     */
+    public designerState: DesignerState;
+
+    /**
+     * Id of currently loaded designer page
+     */
+    public id: string;
+
     //######################### public properties - children #########################
 
     /**
@@ -74,6 +87,7 @@ export class DesignerPageComponent implements OnInit, OnDestroy
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef,
                 private _http: HttpClient,
+                private _route: ActivatedRoute,
                 @Inject(DESIGNER_PACKAGE_NAMES) public designerPackageNames: string[])
     {
     }
@@ -86,6 +100,49 @@ export class DesignerPageComponent implements OnInit, OnDestroy
     public async ngOnInit()
     {
         this.setMode(DesignerMode.LAYOUT);
+
+        this._urlChangeSubscription = this._route.params.subscribe(async (params: {id: string}) =>
+        {
+            this.id = params.id;
+
+            let tmp = await this._http.get<RemoteDesignerState>(`api/dynamic/state/${this.id}`)
+                .pipe(catchError((err: HttpErrorResponse) =>
+                {
+                    //client error, not response from server
+                    if (err.error instanceof Error)
+                    {
+                        return throwError(err);
+                    }
+
+                    if(err.status == 404)
+                    {
+                        return empty();
+                    }
+
+                    return throwError(err);
+                }))
+                .toPromise();
+
+            if(tmp)
+            {
+                this.designerState =
+                {
+                    designerMetadata:
+                    {
+                        nodeDesignerMetadata: JSON.parse(tmp.designerMetadata.nodeDesignerMetadata)
+                    },
+                    metadata:
+                    {
+                        layout: JSON.parse(tmp.metadata.layout),
+                        relations: JSON.parse(tmp.metadata.relations)
+                    }
+                };
+            }
+
+            console.log(this.designerState);
+
+            this._changeDetector.detectChanges();
+        });
     }
 
     //######################### public methods - implementation of OnDestroy #########################
@@ -157,7 +214,7 @@ export class DesignerPageComponent implements OnInit, OnDestroy
         let relationsMetadata = JSON.stringify(await this.ɵNodeDesigner.nodeDesigner.metadata);
         let nodeDesignerMetadata = JSON.stringify(this.ɵNodeDesigner.nodeDesigner.designerMetadata);
 
-        await this._http.post(`api/dynamic/state/simple`,
+        await this._http.post(`api/dynamic/state/${this.id}`,
                               <RemoteDesignerState>
                               {
                                   metadata:

@@ -12,6 +12,8 @@
         <button type="button" class="btn btn-primary" [class.active]="isMode(designerModes.CODE)" (click)="setMode(designerModes.CODE)" *ngIf="isMode(designerModes.CODE)">
             Code
         </button>
+
+        <span style="margin-left: 10px;">Name: {{id}}</span>
     </header>
     
     <layout-designer [style.display]="isMode(designerModes.LAYOUT) ? 'contents': 'none'" [packageNames]="designerPackageNames"></layout-designer>

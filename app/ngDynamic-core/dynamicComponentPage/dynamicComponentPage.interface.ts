@@ -1,9 +1,9 @@
 import {DynamicComponentMetadata, DynamicComponentRelationMetadata} from "../interfaces";
 
 /**
- * Represents dynamic content response
+ * Represents dynamic content netadata
  */
-export interface DynamicContentResponse
+export interface DynamicContentMetadata
 {
     /**
      * Metadata for layout out dynamic content
@@ -17,9 +17,9 @@ export interface DynamicContentResponse
 }
 
 /**
- * Represents remote dynamic content response
+ * Represents remote dynamic content metadata
  */
-export interface RemoteDynamicContentResponse
+export interface RemoteDynamicContentMetadata
 {
     /**
      * Metadata for layout out dynamic content serialized
