@@ -1,7 +1,8 @@
 import {Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, ExistingProvider, Inject, ViewChild} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
 import {Subscription} from "rxjs";
 
-import {DesignerMode, DESIGNER_PACKAGE_NAMES} from "./designer.interface";
+import {DesignerMode, DESIGNER_PACKAGE_NAMES, RemoteDesignerState} from "./designer.interface";
 import {ComponentsService, PropertiesService, DragService, CodeService} from "../services";
 import {NODE_PROPERTIES_SERVICE} from "./nodeDesigner/nodeDesigner.interface";
 import {LayoutDesignerComponent} from "./layoutDesigner/layoutDesigner.component";
@@ -72,6 +73,7 @@ export class DesignerPageComponent implements OnInit, OnDestroy
 
     //######################### constructor #########################
     constructor(private _changeDetector: ChangeDetectorRef,
+                private _http: HttpClient,
                 @Inject(DESIGNER_PACKAGE_NAMES) public designerPackageNames: string[])
     {
     }
@@ -132,11 +134,11 @@ export class DesignerPageComponent implements OnInit, OnDestroy
             this.ɵCodeEditor.save();
         }
 
+        let layoutMetadata: string = '{}';
+
         if(this.ɵLayoutDesigner.rootComponent)
         {
-            let layoutMetadata = this.ɵLayoutDesigner.rootComponent.metadata;
-
-            console.log(JSON.stringify(layoutMetadata, (_key, value) =>
+            layoutMetadata = JSON.stringify(this.ɵLayoutDesigner.rootComponent.metadata, (_key, value) =>
             {
                 if(value && value.ɵId && value.id && value.componentPackage && value.componentName && value.options)
                 {
@@ -149,12 +151,30 @@ export class DesignerPageComponent implements OnInit, OnDestroy
                 }
 
                 return value;
-            }));
+            });
         }
 
-        let relationsMetadata = await this.ɵNodeDesigner.nodeDesigner.metadata;
-        let nodeDesignerMetadata = this.ɵNodeDesigner.nodeDesigner.designerMetadata;
-        console.log(JSON.stringify(relationsMetadata));
-        console.log(JSON.stringify(nodeDesignerMetadata));
+        let relationsMetadata = JSON.stringify(await this.ɵNodeDesigner.nodeDesigner.metadata);
+        let nodeDesignerMetadata = JSON.stringify(this.ɵNodeDesigner.nodeDesigner.designerMetadata);
+
+        await this._http.post(`api/dynamic/state/simple`,
+                              <RemoteDesignerState>
+                              {
+                                  metadata:
+                                  {
+                                      layout: layoutMetadata,
+                                      relations: relationsMetadata
+                                  },
+                                  designerMetadata:
+                                  {
+                                      nodeDesignerMetadata: nodeDesignerMetadata
+                                  }
+                              },
+                              {
+                                  headers:
+                                  {
+                                      'Content-Type': 'application/json'
+                                  }
+                              }).toPromise();
     }
 }

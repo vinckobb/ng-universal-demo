@@ -94,6 +94,6 @@ module.exports = function(app)
     //LOAD DATA RESOURCE
     require('./mocks/data/data')(app);
 
-    //LOAD DYNAMIC RESOURCE
-    require('./mocks/dynamic')(app);
+    // //LOAD DYNAMIC RESOURCE
+    // require('./mocks/dynamic')(app);
 };

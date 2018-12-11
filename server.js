@@ -88,7 +88,7 @@ if(!!argv.webpack)
 require('./server.mock')(app);
 
 //proxy special requests to other location
-app.use(proxy(['/api'], {target: proxyUrl, ws: true}));
+app.use(proxy(['/api', '/swagger'], {target: proxyUrl, ws: true}));
 
 //parse html request json body
 app.use(bodyParser.json({limit: '50mb'}));

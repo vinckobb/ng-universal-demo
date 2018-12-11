@@ -1,14 +1,15 @@
 import {Component, ChangeDetectionStrategy, Injector, ValueProvider, StaticProvider, OnInit, OnDestroy, ChangeDetectorRef, Inject} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
-import {Subscription} from "rxjs";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {Subscription, empty, throwError} from "rxjs";
+import {catchError} from "rxjs/operators";
 
 import {DynamicComponentMetadata} from "../interfaces";
 import {DYNAMIC_RELATIONS_METADATA} from "../tokens";
 import {ComponentRelationManager} from "../componentRelationManager";
 import {ComponentManager} from "../componentManager";
-import {DynamicContentResponse} from "./dynamicComponentPage.interface";
-import {DYNAMIC_COMPONENT_PAGE_METADATA_URL} from "./dynamicComponentPage.token";
+import {DynamicContentResponse, RemoteDynamicContentResponse} from "./dynamicComponentPage.interface";
+import {DYNAMIC_COMPONENT_PAGE_METADATA_URL, NOT_FOUND_ROUTER_PATH} from "./dynamicComponentPage.token";
 
 /**
  * Component used for displaying dynamic content pages
@@ -54,7 +55,8 @@ export class DynamicComponentPageComponent implements OnInit, OnDestroy
                 private _router: Router,
                 private _http: HttpClient,
                 private _changeDetector: ChangeDetectorRef,
-                @Inject(DYNAMIC_COMPONENT_PAGE_METADATA_URL) private _urlPrefix: string)
+                @Inject(DYNAMIC_COMPONENT_PAGE_METADATA_URL) private _urlPrefix: string,
+                @Inject(NOT_FOUND_ROUTER_PATH) private _notFoundPath: string)
     {
     }
 
@@ -71,14 +73,42 @@ export class DynamicComponentPageComponent implements OnInit, OnDestroy
 
             if(urlChanges.length < 1)
             {
-                this._router.navigate(['/notFound']);
+                this._router.navigate([this._notFoundPath]);
 
                 return;
             }
 
             let dynamicContentId = urlChanges[0];
+            let tmp = await this._http.get<RemoteDynamicContentResponse>(`${this._urlPrefix}/${dynamicContentId}`)
+                .pipe(catchError((err: HttpErrorResponse) =>
+                {
+                    //client error, not response from server
+                    if (err.error instanceof Error)
+                    {
+                        return throwError(err);
+                    }
 
-            let metadata = await this._http.get<DynamicContentResponse>(`${this._urlPrefix}/${dynamicContentId}`).toPromise();
+                    if(err.status == 404)
+                    {
+                        return empty();
+                    }
+
+                    return throwError(err);
+                }))
+                .toPromise();
+
+            let metadata: DynamicContentResponse =
+            {
+                layout: null,
+                relations: []
+            };
+
+            if(tmp)
+            {
+                metadata.layout = JSON.parse(tmp.layout);
+                metadata.relations = JSON.parse(tmp.relations);
+            }
+
             this.metadata = metadata.layout;
 
             this.customInjector = Injector.create(
@@ -107,6 +137,11 @@ export class DynamicComponentPageComponent implements OnInit, OnDestroy
             });
 
             this._changeDetector.detectChanges();
+
+            if(!tmp)
+            {
+                this._router.navigate([this._notFoundPath]);
+            }
         });
     }
 
