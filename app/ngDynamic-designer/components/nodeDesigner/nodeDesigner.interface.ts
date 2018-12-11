@@ -31,6 +31,11 @@ export interface NodeDesignerNodeState
      * Indication whether is node component node
      */
     componentNode?: boolean;
+
+    /**
+     * Stores additional data for node that are need to keep its full state
+     */
+    additionalData?: any;
 }
 
 /**

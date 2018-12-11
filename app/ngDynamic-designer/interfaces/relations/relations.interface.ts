@@ -134,10 +134,10 @@ export interface SvgNodeDynamicNode extends SvgDynamicNode
 
     /**
      * Adds relation to specified output
-     * @param relation Relation to be added to specified output
      * @param outputName Output name which will register relation
+     * @returns Returns relation that will start from this output
      */
-    addOutputRelation(relation: SvgRelationDynamicNode, outputName: string);
+    addOutputRelation(outputName: string): SvgRelationDynamicNode;
 
     /**
      * Adds relation to specified input
@@ -152,6 +152,11 @@ export interface SvgNodeDynamicNode extends SvgDynamicNode
      * @param inputName Name of input which id will be get
      */
     getDynamicInputId(inputName: string): string;
+
+    /**
+     * Updates all relations position when dragging
+     */
+    updateRelations(): void;
 }
 
 /**

@@ -3,6 +3,7 @@ import {Component, ChangeDetectionStrategy, EventEmitter, Output, OnDestroy, Ite
 import {ComponentsService} from "../../services";
 import {DesignerLayoutPlaceholderComponent, RelationsMetadata, DesignerMetadataClass} from "../../interfaces";
 import {PackageLoader} from "../../packageLoader";
+import {ɵRelationsMetadata} from "../nodeDesigner/nodeDesigner.interface";
 
 /**
  * Name of transfer data for component drag
@@ -43,7 +44,7 @@ export class NodeComponentPaletteComponent implements OnInit, OnDestroy
     /**
      * Array of node definitions for creating relations
      */
-    public nodesDefinitions: RelationsMetadata[] = [];
+    public nodesDefinitions: ɵRelationsMetadata[] = [];
 
     /**
      * Array of components that are available for adding to node designer

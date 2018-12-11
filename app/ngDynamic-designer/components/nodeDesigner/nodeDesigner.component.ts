@@ -189,7 +189,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
      * @param metadata Metadata for component that is added
      * @param nodeOptions Stored node options
      */
-    public addComponent(coordinates: Coordinates, component: DesignerLayoutPlaceholderComponent, metadata: RelationsMetadata, nodeOptions?: any)
+    public addComponent(coordinates: Coordinates, component: DesignerLayoutPlaceholderComponent, metadata: RelationsMetadata, nodeOptions?: any): SvgNodeDynamicNode
     {
         let currentZoom = zoomTransform(this._svgData.svg.node());
 
@@ -239,6 +239,8 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
         svgNodeInfo.svgNodeDestroyingSubscription = svgNodeInfo.svgNode.destroying.subscribe(this._handleDestroySvgNode);
 
         this._addedNodes.push(svgNodeInfo);
+
+        return svgNodeInfo.svgNode;
     }
 
     /**
@@ -247,7 +249,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
      * @param metadata Metadata for node to be added
      * @param nodeOptions Stored node options
      */
-    public addNode(coordinates: Coordinates, metadata: RelationsMetadata, nodeOptions?: any)
+    public addNode(coordinates: Coordinates, metadata: RelationsMetadata, nodeOptions?: any): SvgNodeDynamicNode
     {
         let currentZoom = zoomTransform(this._svgData.svg.node());
         let ɵMetadata: ɵRelationsMetadata = metadata;
@@ -297,6 +299,8 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
         svgNodeInfo.svgNodeDestroyingSubscription = svgNodeInfo.svgNode.destroying.subscribe(this._handleDestroySvgNode);
 
         this._addedNodes.push(svgNodeInfo);
+
+        return svgNodeInfo.svgNode;
     }
 
     //######################### private methods #########################

@@ -48,6 +48,13 @@ export interface DesignerMetadataClass
 }
 
 /**
+ * Internal metadata used for rendering dynamic components
+ */
+export interface ɵDynamicComponentMetadata extends DynamicComponentMetadata, ɵUniqueIdMetadata
+{
+}
+
+/**
  * Internal metadata used for rendering dynamic components generic
  */
 export interface ɵDynamicComponentMetadataGeneric<TOptions> extends DynamicComponentMetadataGeneric<TOptions>, ɵUniqueIdMetadata

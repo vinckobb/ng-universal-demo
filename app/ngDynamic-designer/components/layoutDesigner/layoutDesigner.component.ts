@@ -3,8 +3,8 @@ import {nameof} from "@asseco/common";
 
 import {PackageLoader} from "../../packageLoader";
 import {DesignerComponentRendererDirective} from "../../directives";
-import {DesignerLayoutPlaceholderComponent, DesignerLayoutComponentRendererData} from "../../interfaces";
-import {DynamicComponentMetadata} from "../../../ngDynamic-core";
+import {DesignerLayoutPlaceholderComponent, DesignerLayoutComponentRendererData, ɵDynamicComponentMetadata} from "../../interfaces";
+import {COPY_ID} from "../designer.interface";
 
 /**
  * Component used for displaying layout designer
@@ -45,7 +45,7 @@ export class LayoutDesignerComponent implements OnChanges
      * Root component metadata stored in permanent store
      */
     @Input()
-    public rootComponentMetadata: DynamicComponentMetadata;
+    public rootComponentMetadata: ɵDynamicComponentMetadata;
 
     /**
      * Packages that should be available in component palette
@@ -77,6 +77,8 @@ export class LayoutDesignerComponent implements OnChanges
         if(nameof<LayoutDesignerComponent>('rootComponentMetadata') in changes && this.rootComponentMetadata)
         {
             let designerMetadata = await this._packageLoader.getComponentsMetadata(this.rootComponentMetadata.componentPackage, this.rootComponentMetadata.componentName);
+
+            this.rootComponentMetadata.ɵId = COPY_ID;
 
             this.metadata =
             {

@@ -7,6 +7,7 @@ import {DesignerComponentRendererDirective} from "../../directives";
 import {PropertiesService} from "../../services";
 import {PackageLoader} from "../../packageLoader";
 import {transformOptionsToProperties, transformPropertiesToOptions} from "../../misc";
+import {COPY_ID} from "../designer.interface";
 
 /**
  * Base class for all placeholder components
@@ -139,6 +140,15 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
     public async setMetadata(metadata: DynamicComponentMetadata): Promise<void>
     {
         this._metadata = metadata;
+
+        if(this._metadata.ɵId == COPY_ID)
+        {
+            this._metadata.ɵId = this._metadata.id;
+
+            this.onCopyIdSet();
+        }
+
+        console.log(this._metadata);
         
         if(!this._metadata.ɵId)
         {
@@ -163,6 +173,13 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
     }
 
     //######################### protected methods #########################
+
+    /**
+     * Method that is called when COPY_ID is detected and should be set for all content components
+     */
+    protected onCopyIdSet()
+    {
+    }
 
     /**
      * Adds child metadata used for rendering

@@ -265,11 +265,12 @@ export class SvgNode implements SvgNodeDynamicNode
 
     /**
      * Adds relation to specified output
-     * @param relation Relation to be added to specified output
      * @param outputName Output name which will register relation
+     * @returns Returns relation that will start from this output
      */
-    public addOutputRelation(relation: SvgRelationDynamicNode, outputName: string)
+    public addOutputRelation(outputName: string): SvgRelationDynamicNode
     {
+        let relation = this._createRelation();
         let outputPeer = this._metadata.outputs.find(itm => itm.id == outputName);
 
         outputPeer.relations = outputPeer.relations || [];
@@ -285,6 +286,8 @@ export class SvgNode implements SvgNodeDynamicNode
         });
 
         outputPeer.relations.push(relation);
+
+        return relation;
     }
 
     /**
@@ -324,6 +327,51 @@ export class SvgNode implements SvgNodeDynamicNode
         inputPeer.relations.push(relation);
 
         return true;
+    }
+
+    /**
+     * Updates all relations position when dragging
+     */
+    public updateRelations()
+    {
+        if(this._metadata.inputs)
+        {
+            this._metadata.inputs.forEach(input =>
+            {
+                if(input.relations && input.relations.length)
+                {
+                    input.relations[0].end = this.getInputCoordinates(input.id, false);
+                    input.relations[0].invalidateVisuals();
+                }
+            });
+        }
+
+        if(this._metadata.outputs)
+        {
+            this._metadata.outputs.forEach(output =>
+            {
+                if(output.relations)
+                {
+                    output.relations.forEach(relation =>
+                    {
+                        relation.start = this.getOutputCoordinates(output.id);
+                        relation.invalidateVisuals();
+                    });
+                }
+            });
+        }
+
+        if(this._dynamicInputs)
+        {
+            this._dynamicInputs.forEach(input =>
+            {
+                if(input.relations && input.relations.length)
+                {
+                    input.relations[0].end = this.getInputCoordinates(input.ɵId, true);
+                    input.relations[0].invalidateVisuals();
+                }
+            });
+        }
     }
 
     //######################### protected methods #########################
@@ -368,7 +416,7 @@ export class SvgNode implements SvgNodeDynamicNode
             this._nodeY += event.dy;
 
             this._nodeGroup.attr('transform', `translate(${this._nodeX}, ${this._nodeY})`);
-            this._updateRelations();
+            this.updateRelations();
         }));
     }
 
@@ -639,51 +687,6 @@ export class SvgNode implements SvgNodeDynamicNode
                         }));
             });
 
-    }
-
-    /**
-     * Updates all relations position when dragging
-     */
-    protected _updateRelations()
-    {
-        if(this._metadata.inputs)
-        {
-            this._metadata.inputs.forEach(input =>
-            {
-                if(input.relations && input.relations.length)
-                {
-                    input.relations[0].end = this.getInputCoordinates(input.id, false);
-                    input.relations[0].invalidateVisuals();
-                }
-            });
-        }
-
-        if(this._metadata.outputs)
-        {
-            this._metadata.outputs.forEach(output =>
-            {
-                if(output.relations)
-                {
-                    output.relations.forEach(relation =>
-                    {
-                        relation.start = this.getOutputCoordinates(output.id);
-                        relation.invalidateVisuals();
-                    });
-                }
-            });
-        }
-
-        if(this._dynamicInputs)
-        {
-            this._dynamicInputs.forEach(input =>
-            {
-                if(input.relations && input.relations.length)
-                {
-                    input.relations[0].end = this.getInputCoordinates(input.ɵId, true);
-                    input.relations[0].invalidateVisuals();
-                }
-            });
-        }
     }
 
     /**

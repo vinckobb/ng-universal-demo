@@ -2,6 +2,11 @@ import {DynamicContentMetadata, RemoteDynamicContentMetadata} from "../../ngDyna
 import {NodeDesignerNodeState} from "./nodeDesigner/nodeDesigner.interface";
 
 /**
+ * Special value for ɵId which indicates that id should be copied to private ɵId
+ */
+export const COPY_ID = '+-+__COPY_ID__+-+';
+
+/**
  * Available modes of designer
  */
 export enum DesignerMode

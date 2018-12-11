@@ -1,9 +1,10 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
 import {StackComponentOptions} from "../../stack.interface";
-import {PropertiesService, DragService, DraggablePlaceholderComponent} from "../../../../../../ngDynamic-designer";
+import {PropertiesService, DragService, DraggablePlaceholderComponent, ɵDynamicComponentMetadata} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
+import {COPY_ID} from "../../../../../../ngDynamic-designer/components/designer.interface";
 
 /**
  * Stack designer layout component used for designing components
@@ -50,10 +51,12 @@ export class StackDesignerComponent extends DraggablePlaceholderComponent<StackC
         super.invalidateVisuals();
     }
 
+    //######################### protected methods #########################
+
     /**
      * Callback after metadata was set
      */
-    protected async afterMetadataSet(): Promise<void> 
+    protected async afterMetadataSet(): Promise<void>
     {
         if (this._metadata &&
             this._metadata.options &&
@@ -63,6 +66,23 @@ export class StackDesignerComponent extends DraggablePlaceholderComponent<StackC
             {
                 await this.addChild(child);
             }
+        }
+    }
+
+    /**
+     * Method that is called when COPY_ID is detected and should be set for all content components
+     */
+    protected onCopyIdSet()
+    {
+        if(this._metadata &&
+           this._metadata.options &&
+           this._metadata.options.children &&
+           this._metadata.options.children.length)
+        {
+            this._metadata.options.children.forEach((child: ɵDynamicComponentMetadata) =>
+            {
+                child.ɵId = COPY_ID;
+            });
         }
     }
 }

@@ -17,7 +17,7 @@
     </header>
     
     <layout-designer [style.display]="isMode(designerModes.LAYOUT) ? 'contents': 'none'" [packageNames]="designerPackageNames" [rootComponentMetadata]="designerState?.metadata?.layout"></layout-designer>
-    <node-designer-mode [style.display]="isMode(designerModes.NODE) ? 'contents': 'none'"></node-designer-mode>
+    <node-designer-mode [style.display]="isMode(designerModes.NODE) ? 'contents': 'none'" [relationsMetadata]="designerState?.metadata?.relations || []" [metadata]="designerState?.designerMetadata?.nodeDesignerMetadata || []"></node-designer-mode>
     <div code-editor [style.display]="isMode(designerModes.CODE) ? 'block': 'none'"></div>
 
     <aside class="right">

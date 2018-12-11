@@ -1,8 +1,12 @@
-import {Component, ChangeDetectionStrategy, ViewChild, OnDestroy, AfterViewInit, ElementRef} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ViewChild, OnDestroy, AfterViewInit, ElementRef, Input} from "@angular/core";
 import {Subscription} from "rxjs";
 
 import {NodeDesignerComponent} from "../nodeDesigner/nodeDesigner.component";
 import {NodeComponentPaletteComponent, COMPONENT_DRAG, NODE_DRAG} from "../nodeComponentPalette/nodeComponentPalette.component";
+import {DynamicComponentRelationMetadata, DynamicComponentRelationOutputMetadata} from "../../../ngDynamic-core";
+import {NodeDesignerNodeState} from "../nodeDesigner/nodeDesigner.interface";
+import {DesignerLayoutPlaceholderComponent, RelationsMetadata, SvgNodeDynamicNode} from "../../interfaces";
+import {PackageLoader} from "../../packageLoader";
 
 /**
  * Component used for displaying node designer mode
@@ -35,6 +39,20 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
      */
     public dropZoneVisible: boolean = false;
 
+    //######################### public properties - inputs #########################
+
+    /**
+     * Relations metadata from server
+     */
+    @Input()
+    public relationsMetadata: DynamicComponentRelationMetadata[] = [];
+
+    /**
+     * Node designer metadata storing state of nodes
+     */
+    @Input()
+    public metadata?: NodeDesignerNodeState[] = [];
+
     //######################### public properties - children #########################
 
     /**
@@ -50,7 +68,8 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
     public nodeComponentPallete: NodeComponentPaletteComponent;
 
     //######################### constructor #########################
-    constructor(private _element: ElementRef<HTMLElement>)
+    constructor(private _element: ElementRef<HTMLElement>,
+                private _packageLoader: PackageLoader)
     {
     }
 
@@ -70,7 +89,7 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
             this.nodeComponentPallete.invalidateVisuals();
         });
 
-        this._observer = new MutationObserver((mutations) =>
+        this._observer = new MutationObserver(async (mutations) =>
         {
             if(mutations.length)
             {
@@ -78,6 +97,15 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
                 if(mutations[0].oldValue.indexOf('display: none;') >= 0)
                 {
                     this.nodeComponentPallete.updateComponents();
+
+                    if(this.metadata && this.metadata.length &&
+                       this.relationsMetadata && this.relationsMetadata.length)
+                    {
+                        await this._loadNodeDesignerState();
+
+                        this.metadata = [];
+                        this.relationsMetadata = [];
+                    }
                 }
             }
         });
@@ -138,9 +166,7 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
                                            component.component,
                                            component.metadata);
 
-            let index = this.nodeComponentPallete.availableComponents.indexOf(component);
-            this.nodeComponentPallete.availableComponents.splice(index, 1);
-            this.nodeComponentPallete.usedComponents.push(component);
+            this._setComponentAsUsed(component);
         }
 
         //handle node drag
@@ -154,5 +180,82 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
                                       },
                                       node);
         }
+    }
+
+    //######################### private methods #########################
+
+    /**
+     * Loads node designer state from permament store
+     */
+    private async _loadNodeDesignerState()
+    {
+        let relations:
+        {
+            svgNode: SvgNodeDynamicNode;
+            outputs: DynamicComponentRelationOutputMetadata[];
+            id: string;
+            dynamic: boolean;
+        }[] = [];
+
+        this.metadata.forEach(meta =>
+        {
+            if(meta.componentNode)
+            {
+                console.log(this._packageLoader);
+
+                // let component = this.nodeComponentPallete.availableComponents.find(itm => itm.component.ɵId == meta.id);
+
+                // console.log(component);
+
+                // this.nodeDesigner.addComponent(meta.position, )
+            }
+            else
+            {
+                let relationsMetadata = this.relationsMetadata.find(itm => itm.id == meta.id);
+                let designerRelationsMetadata = this.nodeComponentPallete.nodesDefinitions.find(itm => itm.nodeType == relationsMetadata.nodeType);
+                
+                relations.push(
+                {
+                    //TODO - added dynamic input indication
+                    svgNode: this.nodeDesigner.addNode(meta.position, designerRelationsMetadata, relationsMetadata.nodeOptions),
+                    outputs: relationsMetadata.outputs,
+                    id: meta.id,
+                    dynamic: false
+                });
+            }
+        });
+
+        relations.forEach(relation =>
+        {
+            if(relation.outputs && relation.outputs.length)
+            {
+                relation.outputs.forEach(output =>
+                {
+                    if(output.inputs && output.inputs.length)
+                    {
+                        output.inputs.forEach(input =>
+                        {
+                            let svgRelation = relation.svgNode.addOutputRelation(output.outputName);
+                            let inputPeer = relations.find(itm => itm.id == input.id);
+
+                            inputPeer.svgNode.addInputRelation(svgRelation, input.inputName, relation.dynamic);
+                            relation.svgNode.updateRelations();
+                            inputPeer.svgNode.updateRelations();
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Sets component as used
+     * @param component Component to be set as used
+     */
+    private _setComponentAsUsed(component: {component: DesignerLayoutPlaceholderComponent; metadata: RelationsMetadata})
+    {
+        let index = this.nodeComponentPallete.availableComponents.indexOf(component);
+        this.nodeComponentPallete.availableComponents.splice(index, 1);
+        this.nodeComponentPallete.usedComponents.push(component);
     }
 }
