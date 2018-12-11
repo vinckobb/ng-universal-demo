@@ -72,6 +72,8 @@ export class LayoutDesignerTreeComponent implements OnDestroy
             }
 
             this._selectedNode = this._getNodeById(this.treeDataSource.data[0], value.id);
+            this._expandNode(this._selectedNode);
+            
             this.invalidateVisuals();
         });
     }
@@ -177,18 +179,23 @@ export class LayoutDesignerTreeComponent implements OnDestroy
      * Transforms component to tree node
      * @param component 
      */
-    private _getNodeForComponent(component: DesignerLayoutPlaceholderComponent): LayoutComponentTreeNode
+    private _getNodeForComponent(component: DesignerLayoutPlaceholderComponent, parent?: LayoutComponentTreeNode): LayoutComponentTreeNode
     {
         if (!component)
         {
             return null;
         }
 
-        return {
+        let node: LayoutComponentTreeNode = {
             id: component.id, //TODO upravit ziskavanie id z komponentu. Toto id vieme aktualne menit
             options: component.options,
-            children: this._getChildrenForComponent(component)
-        }
+            children: null,
+            parent: parent
+        };
+
+        node.children = this._getChildrenForComponent(component, node);
+
+        return node;
     }
 
     /**
@@ -207,7 +214,7 @@ export class LayoutDesignerTreeComponent implements OnDestroy
 
         let component = this._componentSvc.components[0]
 
-        this.treeDataSource.data = [this._getNodeForComponent(component)];
+        this.treeDataSource.data = [this._getNodeForComponent(component, null)];
         
         this.invalidateVisuals();
     }
@@ -216,7 +223,7 @@ export class LayoutDesignerTreeComponent implements OnDestroy
      * Gets children for specified `DesignerLayoutPlaceholderComponent`
      * @param component 
      */
-    private _getChildrenForComponent(component: DesignerLayoutPlaceholderComponent): LayoutComponentTreeNode[]
+    private _getChildrenForComponent(component: DesignerLayoutPlaceholderComponent, parent: LayoutComponentTreeNode): LayoutComponentTreeNode[]
     {
         if (!component || !component.children)
         {
@@ -224,7 +231,7 @@ export class LayoutDesignerTreeComponent implements OnDestroy
         }
 
         return component.children.filter(item => !!item).map(item => {
-            return this._getNodeForComponent(item);
+            return this._getNodeForComponent(item, parent);
         });
     }
 
@@ -254,5 +261,35 @@ export class LayoutDesignerTreeComponent implements OnDestroy
         }
 
         return null;
+    }
+
+    /**
+     * Expand node and all its parents
+     * @param node 
+     */
+    private _expandNode(node: LayoutComponentTreeNode)
+    {
+        if (!node)
+        {
+            return;
+        }
+
+        let activeNode: LayoutComponentTreeNode = node;
+        let nodesToExpand: LayoutComponentTreeNode[] = [];
+
+        while (!!activeNode.parent)
+        {
+            if (!this.treeControl.isExpanded(activeNode.parent))
+            {
+                nodesToExpand.push(activeNode.parent);
+            }
+
+            activeNode = activeNode.parent;
+        }
+
+        nodesToExpand.forEach(node =>
+        {
+           this.treeControl.expand(node); 
+        });
     }
 }

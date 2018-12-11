@@ -21,5 +21,10 @@ export interface LayoutComponentTreeNode
     /**
      * Node children
      */
-    children: LayoutComponentTreeNode[]
+    children: LayoutComponentTreeNode[],
+
+    /**
+     * Node parent
+     */
+    parent: LayoutComponentTreeNode
 }
