@@ -1,4 +1,4 @@
-import {Directive, HostListener, ElementRef, HostBinding, EventEmitter, Output, Input} from "@angular/core";
+import {Directive, HostListener, ElementRef, EventEmitter, Output, Input} from "@angular/core";
 import {isPresent} from "@asseco/common";
 
 import {DropEvent, DropArea} from "../../interfaces";
@@ -9,6 +9,7 @@ import {DropEvent, DropArea} from "../../interfaces";
  */
 
 const EVENT_COUNTER_RESET_VALUE = 15;
+const DROP_CSS_CLASSES = ['drop', 'drop-vertical-before', 'drop-vertical-after', 'drop-horizontal-before', 'drop-horizontal-after'];
 
 /**
  * Directive used for handling drag events over html element
@@ -48,14 +49,6 @@ export class DroppableDirective
     @Output() 
     public dropped = new EventEmitter<DropEvent>();
 
-    //######################### public properties - host #########################
-
-    /**
-     * Sets class on element based on dropArea
-     */
-    @HostBinding('class')
-    public cssClass: string = "";
-
     //######################### constructor #########################
 
     constructor(private _element: ElementRef<HTMLElement>)
@@ -90,7 +83,7 @@ export class DroppableDirective
     @HostListener('dragleave', ['$event'])
     public dragLeave(event: DragEvent)
     {
-        this.cssClass = '';
+        this._setCssClass(null);
     }
 
     /**
@@ -104,7 +97,7 @@ export class DroppableDirective
                 dropArea: this._dropArea,
                 dragEvent: event
             });
-        this.cssClass = '';
+        this._setCssClass(null);
         this._dropArea = null;
 
     }
@@ -120,18 +113,19 @@ export class DroppableDirective
     {
         let elementRect: ClientRect = this._element.nativeElement.getBoundingClientRect();
 
+        //TODO optimalizovat zbytocne prepocitavanie a nastavovanie css classy ak sa nic nemeni
         switch (this.orientation)
         {
             case 'vertical':
                 let mousePosPercent_Y = ((mouseY-elementRect.top) /(elementRect.bottom-elementRect.top))*100;
                 if (mousePosPercent_Y < 50)
                 {
-                    this.cssClass = 'drop-vertical-before';
+                    this._setCssClass(['drop-vertical-before', 'drop']);
                     this._dropArea = DropArea.TOP;
                 }
                 else
                 {
-                    this.cssClass = 'drop-vertical-after';
+                    this._setCssClass(['drop-vertical-after', 'drop']);
                     this._dropArea = DropArea.BOTTOM;
                 };
                 break;
@@ -139,17 +133,32 @@ export class DroppableDirective
                 let mousePosPercent_X = ((mouseX-elementRect.left) /(elementRect.right-elementRect.left))*100;
                 if (mousePosPercent_X < 50)
                 {
-                    this.cssClass = 'drop-horizontal-before';
+                    this._setCssClass(['drop-horizontal-before', 'drop']);
                     this._dropArea = DropArea.LEFT;
+                    this._element.nativeElement.classList.remove
                 }
                 else
                 {
-                    this.cssClass = 'drop-horizontal-after';
+                    this._setCssClass(['drop-horizontal-after', 'drop']);
                     this._dropArea = DropArea.RIGHT;
                 };
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * Sets css classes on element
+     * @param cssClass 
+     */
+    private _setCssClass(cssClass: string[])
+    {
+        this._element.nativeElement.classList.remove(...DROP_CSS_CLASSES);
+
+        if (cssClass)
+        {
+            this._element.nativeElement.classList.add(...cssClass);
         }
     }
 }

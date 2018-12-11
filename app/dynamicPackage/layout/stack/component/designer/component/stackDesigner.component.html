@@ -1,4 +1,5 @@
-STACK {{options?.id}}
+<designer-component-header [layoutMetadata]="options"></designer-component-header>
+
 <div
     droppable
     (dropped)="onDrop($event, index)"
@@ -16,8 +17,8 @@ STACK {{options?.id}}
     <ng-template [designerComponentRenderer]="child" #layoutComponents="designerComponentRenderer"></ng-template>
 </div>
 <div 
+    class="drop-all"
     droppable="true"
     (dropped)="onDrop($event)"
-    *ngIf="childrenData.length == 0"
-    style="padding: 20px;">
+    *ngIf="childrenData.length == 0">
 </div>

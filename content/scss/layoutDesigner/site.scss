@@ -28,6 +28,25 @@ $primaryBorderColor: #48555e;
         color: $selectionBackgroundColor;
     }
 
+    .designer-component-header
+    {
+        display: flex;
+        background-color: $primaryBackgroundColor;
+        color: $baseColor;
+        padding: 5px;
+        text-transform: uppercase;
+
+        .title
+        {
+            flex: 1;
+        }
+
+        .icons
+        {
+            color: #FF354B;
+        }
+    }
+
     header
     {
         grid-column: 1 / 4;
@@ -137,4 +156,18 @@ $primaryBorderColor: #48555e;
     -webkit-box-shadow: 10px 0 6px -6px #777;
     -moz-box-shadow: 10px 0 6px -6px #777;
     box-shadow: 10px 0 6px -6px #777;
+}
+
+.drop-all
+{
+    margin: 10px;
+    height: 10px;
+
+    &.drop
+    {
+        background-color: #2f2f2f;
+        -webkit-box-shadow: 0 0 7px 2px #151515;
+        -moz-box-shadow: 0 0 7px 2px #151515;
+        box-shadow: 0 0 7px 2px #151515;
+    }
 }

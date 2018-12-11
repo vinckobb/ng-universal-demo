@@ -32,7 +32,7 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
      * Border style property
      */
     @HostBinding('style.border')
-    public styleBorder: string = "2px dashed green";
+    public styleBorder: string = "2px solid #293742";
 
     /**
      * Display style property

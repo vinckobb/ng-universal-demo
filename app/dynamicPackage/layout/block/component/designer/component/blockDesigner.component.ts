@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from "@angular/core";
 
-import {PlaceholderBaseComponent, PropertiesService} from "../../../../../../ngDynamic-designer";
+import {PropertiesService, DraggablePlaceholderComponent, DragService} from "../../../../../../ngDynamic-designer";
 import {DynamicComponentMetadataGeneric} from "../../../../../../ngDynamic-core";
 import {BlockComponentOptions} from "../../block.interface";
 import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader";
@@ -14,7 +14,7 @@ import {PackageLoader} from "../../../../../../ngDynamic-designer/packageLoader"
     templateUrl: 'blockDesigner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BlockDesignerComponent extends PlaceholderBaseComponent<BlockComponentOptions>
+export class BlockDesignerComponent extends DraggablePlaceholderComponent<BlockComponentOptions>
 {
     //######################### public properties #########################
 
@@ -31,9 +31,10 @@ export class BlockDesignerComponent extends PlaceholderBaseComponent<BlockCompon
     //######################### constructor #########################
     constructor(changeDetector: ChangeDetectorRef,
                 packageLoader: PackageLoader,
-                optionsSvc: PropertiesService)
+                optionsSvc: PropertiesService,
+                dragSvc: DragService)
     {
-        super(changeDetector, packageLoader, optionsSvc);
+        super(changeDetector, packageLoader, optionsSvc, dragSvc);
 
         this._isContainer = true;
     }

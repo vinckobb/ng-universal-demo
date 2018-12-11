@@ -19,12 +19,26 @@ export const layoutMetadata: LayoutMetadata =
             name: 'top padding',
             description: 'Inset offset from top of each child of stack panel',
             type: PropertyType.Number,
-            defaultValue: null
+            defaultValue: 10
         },
         {
             id: 'padding.left',
             name: 'left padding',
             description: 'Inset offset from left of each child of stack panel',
+            type: PropertyType.Number,
+            defaultValue: 10
+        },
+        {
+            id: 'padding.right',
+            name: 'right padding',
+            description: 'Inset offset from right of each child of stack panel',
+            type: PropertyType.Number,
+            defaultValue: 10
+        },
+        {
+            id: 'padding.bottom',
+            name: 'bottom padding',
+            description: 'Inset offset from bottom of each child of stack panel',
             type: PropertyType.Number,
             defaultValue: 10
         }
