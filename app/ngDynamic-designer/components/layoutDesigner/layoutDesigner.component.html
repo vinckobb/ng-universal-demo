@@ -10,4 +10,9 @@
 
 <main>
     <ng-template [designerComponentRenderer]="metadata" #layoutComponents="designerComponentRenderer"></ng-template>
+    <div 
+        *ngIf="!isMetadata"
+        class="drop-all" 
+        droppable
+        (dropped)="onDrop($event)"></div>
 </main>
