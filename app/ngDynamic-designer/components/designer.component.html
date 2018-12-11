@@ -16,7 +16,7 @@
         <span style="margin-left: 10px;">Name: {{id}}</span>
     </header>
     
-    <layout-designer [style.display]="isMode(designerModes.LAYOUT) ? 'contents': 'none'" [packageNames]="designerPackageNames"></layout-designer>
+    <layout-designer [style.display]="isMode(designerModes.LAYOUT) ? 'contents': 'none'" [packageNames]="designerPackageNames" [rootComponentMetadata]="designerState?.metadata?.layout"></layout-designer>
     <node-designer-mode [style.display]="isMode(designerModes.NODE) ? 'contents': 'none'"></node-designer-mode>
     <div code-editor [style.display]="isMode(designerModes.CODE) ? 'block': 'none'"></div>
 

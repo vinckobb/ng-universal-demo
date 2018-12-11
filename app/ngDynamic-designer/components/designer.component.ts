@@ -139,8 +139,6 @@ export class DesignerPageComponent implements OnInit, OnDestroy
                 };
             }
 
-            console.log(this.designerState);
-
             this._changeDetector.detectChanges();
         });
     }

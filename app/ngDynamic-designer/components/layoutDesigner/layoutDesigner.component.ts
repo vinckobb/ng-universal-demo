@@ -1,8 +1,10 @@
-import {Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef, ViewChildren, QueryList, Input} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ViewChildren, QueryList, Input, OnChanges, ChangeDetectorRef, SimpleChanges} from "@angular/core";
+import {nameof} from "@asseco/common";
 
 import {PackageLoader} from "../../packageLoader";
 import {DesignerComponentRendererDirective} from "../../directives";
 import {DesignerLayoutPlaceholderComponent, DesignerLayoutComponentRendererData} from "../../interfaces";
+import {DynamicComponentMetadata} from "../../../ngDynamic-core";
 
 /**
  * Component used for displaying layout designer
@@ -13,7 +15,7 @@ import {DesignerLayoutPlaceholderComponent, DesignerLayoutComponentRendererData}
     templateUrl: 'layoutDesigner.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LayoutDesignerComponent implements OnInit
+export class LayoutDesignerComponent implements OnChanges
 {
     //######################### public properties #########################
 
@@ -33,11 +35,17 @@ export class LayoutDesignerComponent implements OnInit
     //######################### public properties - template bindings #########################
 
     /**
-     * TODO ukazka len
+     * Designer metadata for root component
      */
     public metadata: DesignerLayoutComponentRendererData;
 
     //######################### public properties - inputs #########################
+
+    /**
+     * Root component metadata stored in permanent store
+     */
+    @Input()
+    public rootComponentMetadata: DynamicComponentMetadata;
 
     /**
      * Packages that should be available in component palette
@@ -56,57 +64,29 @@ export class LayoutDesignerComponent implements OnInit
     //######################### constructor #########################
     constructor(private _packageLoader: PackageLoader,
                 private _changeDetector: ChangeDetectorRef)
-    {
-    }
+{
+}
 
-    //######################### public methods - implementation of OnInit #########################
+    //######################### public methods - implementation of OnChanges #########################
     
     /**
-     * Initialize component
+     * Called when input value changes
      */
-    public async ngOnInit()
+    public async ngOnChanges(changes: SimpleChanges)
     {
-        //TODO - toto je len ukazka treba to samozrejme urobit inak
-        let designerMetadata = await this._packageLoader.getComponentsMetadata('layout', 'stack');
-        designerMetadata.layoutMetadata.value = 
+        if(nameof<LayoutDesignerComponent>('rootComponentMetadata') in changes && this.rootComponentMetadata)
         {
-            'padding.left': 50,
-            'padding.top': 25,
-            'inline': false
-        };
-        this.metadata =
-        {
-            packageName: 'layout',
-            componentName: 'stack',
-            designerMetadata: designerMetadata,
-            componentMetadata: 
-            {
-                id: "nieco",
-                componentPackage: 'layout',
-                componentName: 'stack',
-                options:
-                {
-                    children:
-                    [
-                        {
-                            id: 'nieco ine',
-                            componentPackage: 'layout',
-                            componentName: 'block',
-                            options:
-                            {}
-                        },
-                        {
-                            id: 'nieco ine 2',
-                            componentPackage: 'layout',
-                            componentName: 'block',
-                            options:
-                            {}
-                        }
-                    ]
-                }
-            }
-        };
+            let designerMetadata = await this._packageLoader.getComponentsMetadata(this.rootComponentMetadata.componentPackage, this.rootComponentMetadata.componentName);
 
-        this._changeDetector.detectChanges();
+            this.metadata =
+            {
+                packageName: this.rootComponentMetadata.componentPackage,
+                componentName: this.rootComponentMetadata.componentName,
+                designerMetadata: designerMetadata,
+                componentMetadata: this.rootComponentMetadata
+            };
+
+            this._changeDetector.detectChanges();
+        }
     }
 }
