@@ -148,8 +148,6 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
             this.onCopyIdSet();
         }
 
-        console.log(this._metadata);
-        
         if(!this._metadata.ɵId)
         {
             this._metadata.ɵId = generateId(15);
