@@ -242,6 +242,11 @@ export class LayoutDesignerTreeComponent implements OnDestroy
      */
     private _getNodeById(node: LayoutComponentTreeNode, id: string|number): LayoutComponentTreeNode
     {
+        if(!node)
+        {
+            return null;
+        }
+
         if (this._getNodeId(node) == id)
         {
             return node;

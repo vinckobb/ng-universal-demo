@@ -5,7 +5,7 @@ import {NodeDesignerComponent} from "../nodeDesigner/nodeDesigner.component";
 import {NodeComponentPaletteComponent, COMPONENT_DRAG, NODE_DRAG} from "../nodeComponentPalette/nodeComponentPalette.component";
 import {DynamicComponentRelationMetadata, DynamicComponentRelationOutputMetadata} from "../../../ngDynamic-core";
 import {NodeDesignerNodeState} from "../nodeDesigner/nodeDesigner.interface";
-import {DesignerLayoutPlaceholderComponent, RelationsMetadata, SvgNodeDynamicNode} from "../../interfaces";
+import {DesignerLayoutPlaceholderComponent, RelationsMetadata, SvgNodeDynamicNode, INVALIDATE_PROPERTIES} from "../../interfaces";
 import {PackageLoader} from "../../packageLoader";
 import {ComponentsService} from "../../services";
 
@@ -203,7 +203,7 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
             svgNode: SvgNodeDynamicNode;
             outputs: DynamicComponentRelationOutputMetadata[];
             id: string;
-            dynamic: boolean;
+            metadata: RelationsMetadata;
         }[] = [];
 
         this.metadata.forEach(meta =>
@@ -221,7 +221,7 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
                     svgNode: this.nodeDesigner.addComponent(meta.position, component.component, component.metadata, relationsMetadata.nodeOptions),
                     outputs: relationsMetadata.outputs,
                     id: meta.id,
-                    dynamic: false
+                    metadata: component.metadata
                 });
             }
             else
@@ -229,13 +229,16 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
                 let relationsMetadata = this.relationsMetadata.find(itm => itm.id == meta.id);
                 let designerRelationsMetadata = this.nodeComponentPallete.nodesDefinitions.find(itm => itm.nodeType == relationsMetadata.nodeType);
                 
+                let svgNode = this.nodeDesigner.addNode(meta.position, designerRelationsMetadata, relationsMetadata.nodeOptions);
+                svgNode.invalidateVisuals(INVALIDATE_PROPERTIES);
+
                 relations.push(
                 {
                     //TODO - added dynamic input indication
-                    svgNode: this.nodeDesigner.addNode(meta.position, designerRelationsMetadata, relationsMetadata.nodeOptions),
+                    svgNode,
                     outputs: relationsMetadata.outputs,
                     id: meta.id,
-                    dynamic: false
+                    metadata: designerRelationsMetadata
                 });
             }
         });
@@ -252,8 +255,9 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
                         {
                             let svgRelation = relation.svgNode.addOutputRelation(output.outputName);
                             let inputPeer = relations.find(itm => itm.id == input.id);
+                            let dynamic = !inputPeer.metadata.inputs || !inputPeer.metadata.inputs.find(itm => itm.id == input.inputName);
 
-                            inputPeer.svgNode.addInputRelation(svgRelation, input.inputName, relation.dynamic);
+                            inputPeer.svgNode.addInputRelation(svgRelation, input.inputName, dynamic);
                             relation.svgNode.updateRelations();
                             inputPeer.svgNode.updateRelations();
                         });

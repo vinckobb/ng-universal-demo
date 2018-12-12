@@ -208,6 +208,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                                                                        inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
                                                                        outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
                                                                        dynamicInputs: metadata.dynamicInputs,
+                                                                       normalizeOptions: metadata.normalizeOptions,
                                                                        nodeOptionsMetadata: metadata.nodeOptionsMetadata,
                                                                        nodeType: null
                                                                    },
@@ -226,6 +227,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                                                            inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
                                                            outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
                                                            dynamicInputs: metadata.dynamicInputs,
+                                                           normalizeOptions: metadata.normalizeOptions,
                                                            nodeOptionsMetadata: metadata.nodeOptionsMetadata,
                                                            nodeType: null
                                                        },
@@ -268,6 +270,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                                                                        inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
                                                                        outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
                                                                        dynamicInputs: metadata.dynamicInputs,
+                                                                       normalizeOptions: metadata.normalizeOptions,
                                                                        nodeOptionsMetadata: metadata.nodeOptionsMetadata,
                                                                        nodeType: ɵMetadata.nodeType
                                                                    },
@@ -286,6 +289,7 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
                                                            inputs: JSON.parse(JSON.stringify(metadata.inputs || [])),
                                                            outputs: JSON.parse(JSON.stringify(metadata.outputs || [])),
                                                            dynamicInputs: metadata.dynamicInputs,
+                                                           normalizeOptions: metadata.normalizeOptions,
                                                            nodeOptionsMetadata: metadata.nodeOptionsMetadata,
                                                            nodeType: ɵMetadata.nodeType
                                                        },

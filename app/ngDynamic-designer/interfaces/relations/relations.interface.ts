@@ -27,6 +27,11 @@ export interface RelationsMetadata extends DesignerCommonMetadata
     dynamicInputs?: (nodeOptions: any) => RelationsInputOutputMetadata[];
 
     /**
+     * Normalize node options before saving
+     */
+    normalizeOptions?: (nodeOptions: any) => any;
+
+    /**
      * Node options metadata used for creating nodeOptions
      */
     nodeOptionsMetadata?: PropertiesPropertyMetadata[];
@@ -46,6 +51,11 @@ export interface RelationsMetadataGeneric<TNodeOptions> extends RelationsMetadat
      * Method that converts node options into inputs
      */
     dynamicInputs: (nodeOptions: TNodeOptions) => RelationsInputOutputMetadata[];
+
+    /**
+     * Normalize node options before saving
+     */
+    normalizeOptions?: (nodeOptions: TNodeOptions) => TNodeOptions;
 }
 
 /**

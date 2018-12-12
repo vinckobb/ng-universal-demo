@@ -117,7 +117,6 @@ export class SvgRelation implements SvgRelationDynamicNode
                 if(dropArea.svgNode.addInputRelation(this, dropArea.inputId, dropArea.dynamic))
                 {
                     this.end = dropArea.svgNode.getInputCoordinates(dropArea.inputId, dropArea.dynamic);
-                    this.endPeer = dropArea;
                 }
                 else
                 {

@@ -213,7 +213,7 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                         defaultValue: 0
                     },
                     {
-                        id: 'id',
+                        id: 'name',
                         hidden: true,
                         defaultValue: () => generateId(15)
                     },
@@ -230,7 +230,7 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
                 {
                     result.push(
                     {
-                        ɵId: (param as any).id,
+                        ɵId: param.name,
                         id: param.inputName,
                         name: param.inputName,
                         type: RestClientParamType[+param.type]
@@ -239,6 +239,18 @@ class ɵRestClientNode implements NodeDefinitionGeneric<RestClientNodeOptions>
             }
 
             return result;
+        },
+        normalizeOptions: nodeOptions =>
+        {
+            if(nodeOptions && nodeOptions.parameters && nodeOptions.parameters.length)
+            {
+                nodeOptions.parameters.forEach(param =>
+                {
+                    param.name = param.inputName;
+                });
+            }
+
+            return nodeOptions;
         }
     }
 })

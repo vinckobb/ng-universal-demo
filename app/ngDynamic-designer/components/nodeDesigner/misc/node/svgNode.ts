@@ -326,6 +326,13 @@ export class SvgNode implements SvgNodeDynamicNode
 
         inputPeer.relations.push(relation);
 
+        relation.endPeer = 
+        {
+            dynamic,
+            inputId: inputName,
+            svgNode: this
+        };
+
         return true;
     }
 
@@ -694,10 +701,17 @@ export class SvgNode implements SvgNodeDynamicNode
      */
     protected _getMetadata(): Promise<DynamicComponentRelationMetadata>
     {
+        let nodeOptions = transformPropertiesToOptions(this._properties && this._properties.properties, this._properties && this._properties.value);
+
+        if(this._metadata.normalizeOptions)
+        {
+            nodeOptions = this._metadata.normalizeOptions(nodeOptions);
+        }
+
         return Promise.resolve(
         {
             id: this._metadata.id,
-            nodeOptions: transformPropertiesToOptions(this._properties && this._properties.properties, this._properties && this._properties.value),
+            nodeOptions: nodeOptions,
             nodeType: this._metadata.nodeType,
             outputs: this._getOutputs()
         });
