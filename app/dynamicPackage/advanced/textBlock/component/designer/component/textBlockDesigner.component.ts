@@ -56,6 +56,19 @@ export class TextBlockDesignerComponent extends PlaceholderBaseComponent<TextBlo
     }
 
     /**
+     * Gets existing template from options
+     */
+    public getTemplate()
+    {
+        if(this._metadata && this._metadata.options && this._metadata.options.template)
+        {
+            return this._metadata.options.template;
+        }
+
+        return '';
+    }
+
+    /**
      * Explicitly runs invalidation of content (change detection)
      */
     public invalidateVisuals(): void

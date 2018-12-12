@@ -42,6 +42,7 @@ export class TextBlockSvgNode extends SvgNode implements SvgNodeDynamicNode
         super(parentGroup, metadata, validDropToggle, createRelation, injector, layoutComponent, nodeOptions);
 
         this._component = layoutComponent;
+        this._codeMetadata.template = this._component.getTemplate();
     }
 
     //######################### public methods #########################

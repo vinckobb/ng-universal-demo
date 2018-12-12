@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, ViewChild, OnDestroy, AfterViewInit, ElementRef, Input} from "@angular/core";
+import {Component, ChangeDetectionStrategy, ViewChild, OnDestroy, AfterViewInit, ElementRef, Input, IterableDiffer, IterableDiffers} from "@angular/core";
 import {Subscription} from "rxjs";
 
 import {NodeDesignerComponent} from "../nodeDesigner/nodeDesigner.component";
@@ -7,6 +7,7 @@ import {DynamicComponentRelationMetadata, DynamicComponentRelationOutputMetadata
 import {NodeDesignerNodeState} from "../nodeDesigner/nodeDesigner.interface";
 import {DesignerLayoutPlaceholderComponent, RelationsMetadata, SvgNodeDynamicNode} from "../../interfaces";
 import {PackageLoader} from "../../packageLoader";
+import {ComponentsService} from "../../services";
 
 /**
  * Component used for displaying node designer mode
@@ -21,6 +22,11 @@ import {PackageLoader} from "../../packageLoader";
 export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
 {
     //######################### private fields #########################
+
+    /**
+     * Iterale differs used for finding changes in components array
+     */
+    private _iterableDiffer: IterableDiffer<DesignerLayoutPlaceholderComponent>;
 
     /**
      * Subscription for node component destruction
@@ -69,8 +75,11 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
 
     //######################### constructor #########################
     constructor(private _element: ElementRef<HTMLElement>,
-                private _packageLoader: PackageLoader)
+                private _packageLoader: PackageLoader,
+                private _componentSvc: ComponentsService,
+                iterableDiffers: IterableDiffers)
     {
+        this._iterableDiffer = iterableDiffers.find(this._componentSvc.components || []).create((_index, component) => component.ɵId);
     }
 
     //######################### public methods - implementation of AfterViewInit #########################
@@ -96,7 +105,7 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
                 //displaying
                 if(mutations[0].oldValue.indexOf('display: none;') >= 0)
                 {
-                    this.nodeComponentPallete.updateComponents();
+                    await this._updateComponents();
 
                     if(this.metadata && this.metadata.length &&
                        this.relationsMetadata && this.relationsMetadata.length)
@@ -201,13 +210,19 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
         {
             if(meta.componentNode)
             {
-                console.log(this._packageLoader);
+                let component = this.nodeComponentPallete.availableComponents.find(itm => itm.component.ɵId == meta.id);
+                let relationsMetadata = this.relationsMetadata.find(itm => itm.id == meta.id);
 
-                // let component = this.nodeComponentPallete.availableComponents.find(itm => itm.component.ɵId == meta.id);
+                this._setComponentAsUsed(component);
 
-                // console.log(component);
-
-                // this.nodeDesigner.addComponent(meta.position, )
+                relations.push(
+                {
+                    //TODO - added dynamic input indication
+                    svgNode: this.nodeDesigner.addComponent(meta.position, component.component, component.metadata, relationsMetadata.nodeOptions),
+                    outputs: relationsMetadata.outputs,
+                    id: meta.id,
+                    dynamic: false
+                });
             }
             else
             {
@@ -246,6 +261,8 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
                 });
             }
         });
+
+        this.nodeComponentPallete.invalidateVisuals();
     }
 
     /**
@@ -257,5 +274,68 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
         let index = this.nodeComponentPallete.availableComponents.indexOf(component);
         this.nodeComponentPallete.availableComponents.splice(index, 1);
         this.nodeComponentPallete.usedComponents.push(component);
+    }
+
+    /**
+     * Updates components available for node designer
+     */
+    private async _updateComponents()
+    {
+        let changes = this._iterableDiffer.diff(this._componentSvc.components);
+
+        if(changes)
+        {
+            //removed existing components
+            changes.forEachRemovedItem(removed =>
+            {
+                let component = removed.item;
+                
+                let found = this.nodeComponentPallete.availableComponents.find(itm => itm.component.ɵId == component.ɵId);
+
+                //found available component
+                if(found)
+                {
+                    let index = this.nodeComponentPallete.availableComponents.indexOf(found);
+                    this.nodeComponentPallete.availableComponents.splice(index, 1);
+                }
+
+                found = this.nodeComponentPallete.usedComponents.find(itm => itm.component.ɵId == component.ɵId);
+
+                //found used component
+                if(found)
+                {
+                    let index = this.nodeComponentPallete.usedComponents.indexOf(found);
+                    this.nodeComponentPallete.usedComponents.splice(index, 1);
+
+                    //TODO - remove node
+                }
+            });
+
+            let addedComponents: DesignerLayoutPlaceholderComponent[] = [];
+
+            //added new component
+            changes.forEachAddedItem(added => 
+            {
+                addedComponents.push(added.item);
+            });
+
+            for(let component of addedComponents)
+            {
+                let metadata = await this._packageLoader.getComponentsMetadata(component.packageName, component.componentName);
+
+                if(metadata.relationsMetadata)
+                {
+                    this.nodeComponentPallete.availableComponents.push(
+                    {
+                        component,
+                        metadata: metadata.relationsMetadata
+                    });
+                }
+            }
+
+            // changes.forEachIdentityChange(changed => console.log('changes', changed));
+
+            this.nodeComponentPallete.invalidateVisuals();
+        }
     }
 }

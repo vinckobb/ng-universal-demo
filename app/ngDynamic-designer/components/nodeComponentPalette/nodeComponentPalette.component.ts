@@ -1,8 +1,6 @@
-import {Component, ChangeDetectionStrategy, EventEmitter, Output, OnDestroy, IterableDiffer, IterableDiffers, ChangeDetectorRef, OnInit} from "@angular/core";
+import {Component, ChangeDetectionStrategy, EventEmitter, Output, OnDestroy, ChangeDetectorRef, OnInit} from "@angular/core";
 
-import {ComponentsService} from "../../services";
 import {DesignerLayoutPlaceholderComponent, RelationsMetadata, DesignerMetadataClass} from "../../interfaces";
-import {PackageLoader} from "../../packageLoader";
 import {ɵRelationsMetadata} from "../nodeDesigner/nodeDesigner.interface";
 
 /**
@@ -28,11 +26,6 @@ export const NODE_DRAG = 'node-drag';
 export class NodeComponentPaletteComponent implements OnInit, OnDestroy
 {
     //######################### private fields #########################
-
-    /**
-     * Iterale differs used for finding changes in components array
-     */
-    private _iterableDiffer: IterableDiffer<DesignerLayoutPlaceholderComponent>;
 
     /**
      * Indication whether this component was destroyed
@@ -75,12 +68,8 @@ export class NodeComponentPaletteComponent implements OnInit, OnDestroy
     public dragging: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     //######################### constructor #########################
-    constructor(private _componentSvc: ComponentsService,
-                private _changeDetector: ChangeDetectorRef,
-                private _packageLoader: PackageLoader,
-                iterableDiffers: IterableDiffers)
+    constructor(private _changeDetector: ChangeDetectorRef)
     {
-        this._iterableDiffer = iterableDiffers.find(this._componentSvc.components || []).create((_index, component) => component.ɵId);
     }
 
     //######################### public methods - implementation of OnInit #########################
@@ -162,66 +151,6 @@ export class NodeComponentPaletteComponent implements OnInit, OnDestroy
     {
         if(!this._destroyed)
         {
-            this._changeDetector.detectChanges();
-        }
-    }
-
-    /**
-     * Updates components available for node designer
-     * TODO - move this logic level up
-     */
-    public updateComponents()
-    {
-        let changes = this._iterableDiffer.diff(this._componentSvc.components);
-
-        if(changes)
-        {
-            //removed existing components
-            changes.forEachRemovedItem(removed =>
-            {
-                let component = removed.item;
-                
-                let found = this.availableComponents.find(itm => itm.component.ɵId == component.ɵId);
-
-                //found available component
-                if(found)
-                {
-                    let index = this.availableComponents.indexOf(found);
-                    this.availableComponents.splice(index, 1);
-                }
-
-                found = this.usedComponents.find(itm => itm.component.ɵId == component.ɵId);
-
-                //found used component
-                if(found)
-                {
-                    let index = this.usedComponents.indexOf(found);
-                    this.usedComponents.splice(index, 1);
-
-                    //TODO - remove node
-                }
-            });
-
-            //added new component
-            changes.forEachAddedItem(async added => 
-            {
-                let component = added.item;
-                let metadata = await this._packageLoader.getComponentsMetadata(component.packageName, component.componentName);
-
-                if(metadata.relationsMetadata)
-                {
-                    this.availableComponents.push(
-                    {
-                        component,
-                        metadata: metadata.relationsMetadata
-                    });
-                    
-                    this._changeDetector.detectChanges();
-                }
-            });
-
-            // changes.forEachIdentityChange(changed => console.log('changes', changed));
-
             this._changeDetector.detectChanges();
         }
     }
