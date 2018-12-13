@@ -83,7 +83,7 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
     }
 
     //######################### public methods - implementation of AfterViewInit #########################
-    
+
     /**
      * Called when view was initialized
      */
@@ -132,7 +132,7 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
     }
 
     //######################### public methods - implementation of OnDestroy #########################
-    
+
     /**
      * Called when component is destroyed
      */
@@ -215,10 +215,15 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
 
                 this._setComponentAsUsed(component);
 
+                let svgNode = this.nodeDesigner.addComponent(meta.position, component.component, component.metadata, relationsMetadata.nodeOptions);
+
+                svgNode.additionalData = meta.additionalData;
+                svgNode.invalidateVisuals(INVALIDATE_PROPERTIES, true);
+
                 relations.push(
                 {
                     //TODO - added dynamic input indication
-                    svgNode: this.nodeDesigner.addComponent(meta.position, component.component, component.metadata, relationsMetadata.nodeOptions),
+                    svgNode,
                     outputs: relationsMetadata.outputs,
                     id: meta.id,
                     metadata: component.metadata
@@ -228,9 +233,11 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
             {
                 let relationsMetadata = this.relationsMetadata.find(itm => itm.id == meta.id);
                 let designerRelationsMetadata = this.nodeComponentPallete.nodesDefinitions.find(itm => itm.nodeType == relationsMetadata.nodeType);
-                
+
                 let svgNode = this.nodeDesigner.addNode(meta.position, designerRelationsMetadata, relationsMetadata.nodeOptions);
-                svgNode.invalidateVisuals(INVALIDATE_PROPERTIES);
+
+                svgNode.additionalData = meta.additionalData;
+                svgNode.invalidateVisuals(INVALIDATE_PROPERTIES, true);
 
                 relations.push(
                 {
@@ -293,7 +300,7 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
             changes.forEachRemovedItem(removed =>
             {
                 let component = removed.item;
-                
+
                 let found = this.nodeComponentPallete.availableComponents.find(itm => itm.component.ɵId == component.ɵId);
 
                 //found available component
@@ -318,7 +325,7 @@ export class NodeDesignerModeComponent implements OnDestroy, AfterViewInit
             let addedComponents: DesignerLayoutPlaceholderComponent[] = [];
 
             //added new component
-            changes.forEachAddedItem(added => 
+            changes.forEachAddedItem(added =>
             {
                 addedComponents.push(added.item);
             });

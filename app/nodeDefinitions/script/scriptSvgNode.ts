@@ -39,6 +39,20 @@ export class ScriptSvgNode extends SvgNode implements SvgNodeDynamicNode
         dynamicNodeInstance: this
     };
 
+    //######################### public properties #########################
+
+    /**
+     * Additional data that needs to be stored for node
+     */
+    public get additionalData(): string
+    {
+        return this._codeMetadata.value;
+    }
+    public set additionalData(value: string)
+    {
+        this._codeMetadata.value = value;
+    }
+
     //######################### constructor #########################
     constructor(parentGroup: Selection<BaseType, {}, null, undefined>,
                 metadata: ɵRelationsMetadata,
@@ -58,12 +72,13 @@ export class ScriptSvgNode extends SvgNode implements SvgNodeDynamicNode
     /**
      * Explicitly runs invalidation of content (change detection)
      * @param propertyName Name of property that has changed
+     * @param initial Indication whether is invalidation initial, or on event
      */
-    public invalidateVisuals(propertyName?: string): void
+    public invalidateVisuals(propertyName?: string, initial?: boolean): void
     {
         super.invalidateVisuals(propertyName);
 
-        if(propertyName == INVALIDATE_PROPERTIES)
+        if(propertyName == INVALIDATE_PROPERTIES && !initial)
         {
             this._showCode();
         }

@@ -130,6 +130,11 @@ export interface SvgNodeDynamicNode extends SvgDynamicNode
     readonly destroying: Observable<SvgNodeDynamicNode>;
 
     /**
+     * Additional data that needs to be stored for node
+     */
+    additionalData?: any;
+
+    /**
      * Gets input coordinates of specified input
      * @param inputName Name of input which coordinates will be get
      * @param dynamic Indication whether is input dynamic

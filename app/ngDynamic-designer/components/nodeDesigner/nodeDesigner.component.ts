@@ -88,7 +88,8 @@ export class NodeDesignerComponent implements OnInit, OnDestroy
             return <NodeDesignerNodeState>{
                 id: itm.svgNode.id,
                 componentNode: !!itm.component,
-                position: itm.svgNode.position
+                position: itm.svgNode.position,
+                additionalData: itm.svgNode.additionalData
             };
         });
     }
