@@ -30,6 +30,7 @@ let options: languages.typescript.CompilerOptions =
     module: languages.typescript.ModuleKind.CommonJS,
     moduleResolution: languages.typescript.ModuleResolutionKind.NodeJs,
     allowNonTsExtensions: true,
+    removeComments: true,
     typeRoots: ["node_modules/@types"]
 };
 

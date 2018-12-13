@@ -34,6 +34,12 @@ export class ScriptSvgNode extends SvgNode implements SvgNodeDynamicNode
             typings:
             [
                 require('./interfaces/scriptNode.typings')
+            ],
+            references:
+            [
+                'rxjs',
+                'rxjs/operators',
+                'moment'
             ]
         },
         dynamicNodeInstance: this

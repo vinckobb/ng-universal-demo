@@ -3,6 +3,7 @@ import {Subject, Observable} from "rxjs";
 import {IDisposable, languages} from "monaco-editor";
 
 import {CodeMetadata, TypescriptAdditionalData} from "../../interfaces";
+import {TypingsLoader} from "../../typingsLoader";
 
 /**
  * Service used for communication with "Monaco" code editor
@@ -36,6 +37,11 @@ export class CodeService
     {
         return this._codeChangeSubject.asObservable();
     }
+
+    //######################### constructor #########################
+    constructor(private _typingsLoader: TypingsLoader)
+    {
+    }    
 
     //######################### public methods #########################
 
@@ -102,6 +108,16 @@ export class CodeService
                     this._disposables.push(languages.typescript.typescriptDefaults.addExtraLib(typings, `file:///node_modules/@types/${metadata.name}${index}/index.d.ts`));
                 });
             }
+
+            //load reference typings
+            if(additionalData.references && additionalData.references.length)
+            {
+                additionalData.references.forEach(reference =>
+                {
+                    this._disposables.push(languages.typescript.typescriptDefaults.addExtraLib(this._typingsLoader.getTypings(reference), `file:///node_modules/@types/${reference}/index.d.ts`));
+                });
+            }
+
             // if(metadata.additionalData && Array.isArray(metadata.additionalData))
             // {
             //     metadata.additionalData.forEach(data =>

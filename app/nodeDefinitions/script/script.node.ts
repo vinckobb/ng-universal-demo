@@ -87,7 +87,7 @@ export class ScriptNode implements NodeDefinitionGeneric<ScriptNodeOptions>
      */
     public invalidateVisuals()
     {
-        let type = this._scriptLoader.loadType(this.options.script);
+        let type = this._scriptLoader.loadType(this.options.script, this.options.references);
 
         if(this.options.interface == ScriptNodeInterface.Transform)
         {
