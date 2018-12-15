@@ -17,7 +17,7 @@
     <ng-template [designerComponentRenderer]="child" #layoutComponents="designerComponentRenderer"></ng-template>
 </div>
 <div 
-    class="drop-all"
+    class="drop-area"
     droppable="true"
     (dropped)="onDrop($event)"
     *ngIf="childrenData.length == 0">
