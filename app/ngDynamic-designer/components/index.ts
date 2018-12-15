@@ -14,3 +14,4 @@ export * from './properties/property/property.component';
 export * from './codeEditor/codeEditor.component';
 export * from './properties/misc';
 export * from './designerComponentHeader/designerComponentHeader.component';
+export * from './drop/dropArea.component';

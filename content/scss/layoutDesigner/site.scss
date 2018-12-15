@@ -161,14 +161,36 @@ $primaryBorderColor: #48555e;
 .drop-area
 {
     margin: 10px;
-    height: 10px;
+
+    transition: opacity 0.5s;
+    opacity: 0.5;
+
+    color: $primaryBackgroundColor;
+    border: 3px dashed $primaryBackgroundColor;
+
+    .title-wrapper
+    {
+        text-transform: uppercase;
+        font-weight: bold;
+        padding: 5px;
+        font-size: 1.5em;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .title
+        {
+            padding-left: 10px;
+        }
+    }
 
     &.drop
     {
-        background-color: #2f2f2f;
-        -webkit-box-shadow: 0 0 7px 2px #151515;
-        -moz-box-shadow: 0 0 7px 2px #151515;
-        box-shadow: 0 0 7px 2px #151515;
+        opacity: 1.0;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
     }
 }
 
