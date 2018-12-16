@@ -92,7 +92,7 @@ export class DesignerComponentRendererDirective<TComponent extends DesignerLayou
             await this.component.setMetadata(this.componentMetadata.componentMetadata ||
             {
                 id: generateId(12),
-                options: {},
+                options: null,
                 componentName: this.componentMetadata.componentName,
                 componentPackage: this.componentMetadata.packageName
             });

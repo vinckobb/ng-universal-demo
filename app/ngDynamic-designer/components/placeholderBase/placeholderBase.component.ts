@@ -153,6 +153,22 @@ export abstract class PlaceholderBaseComponent<TOptions> implements DesignerLayo
             this._metadata.ɵId = generateId(15);
         }
 
+        //TODO nie je kompletne, treba overit implementaciu options
+        if (!this._metadata.options)
+        {
+            let options: any = {};
+            if (this.options &&
+                this.options.properties)
+            {
+                this.options.properties.forEach(property => 
+                {
+                    options[property.id] = property.defaultValue;
+                });
+            }
+
+            this.options.value = options;
+        }
+
         this._updateOptions();
         await this.afterMetadataSet();
     }

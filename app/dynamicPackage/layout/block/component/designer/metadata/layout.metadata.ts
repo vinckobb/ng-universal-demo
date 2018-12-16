@@ -12,28 +12,28 @@ export const layoutMetadata: LayoutMetadata =
             name: 'Top padding',
             description: 'Inset offset from top of content of panel',
             type: PropertyType.Number,
-            defaultValue: null
+            defaultValue: 10
         },
         {
             id: 'padding.right',
             name: 'Right padding',
             description: 'Inset offset from right of content of panel',
             type: PropertyType.Number,
-            defaultValue: null
+            defaultValue: 10
         },
         {
             id: 'padding.bottom',
             name: 'Bottom padding',
             description: 'Inset offset from bottom of content of panel',
             type: PropertyType.Number,
-            defaultValue: null
+            defaultValue: 10
         },
         {
             id: 'padding.left',
             name: 'Left padding',
             description: 'Inset offset from left of content of panel',
             type: PropertyType.Number,
-            defaultValue: null
+            defaultValue: 10
         },
         {
             id: 'margin.top',
