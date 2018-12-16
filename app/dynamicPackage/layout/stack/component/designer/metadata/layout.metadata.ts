@@ -19,25 +19,53 @@ export const layoutMetadata: LayoutMetadata =
             name: 'top padding',
             description: 'Inset offset from top of each child of stack panel',
             type: PropertyType.Number,
-            defaultValue: 10
+            defaultValue: null
         },
         {
             id: 'padding.left',
             name: 'left padding',
             description: 'Inset offset from left of each child of stack panel',
             type: PropertyType.Number,
-            defaultValue: 10
+            defaultValue: null
         },
         {
             id: 'padding.right',
             name: 'right padding',
             description: 'Inset offset from right of each child of stack panel',
             type: PropertyType.Number,
-            defaultValue: 10
+            defaultValue: null
         },
         {
             id: 'padding.bottom',
             name: 'bottom padding',
+            description: 'Inset offset from bottom of each child of stack panel',
+            type: PropertyType.Number,
+            defaultValue: null
+        },
+        {
+            id: 'margin.top',
+            name: 'top margin',
+            description: 'Inset offset from top of each child of stack panel',
+            type: PropertyType.Number,
+            defaultValue: 10
+        },
+        {
+            id: 'margin.left',
+            name: 'left margin',
+            description: 'Inset offset from left of each child of stack panel',
+            type: PropertyType.Number,
+            defaultValue: 10
+        },
+        {
+            id: 'margin.right',
+            name: 'right margin',
+            description: 'Inset offset from right of each child of stack panel',
+            type: PropertyType.Number,
+            defaultValue: 10
+        },
+        {
+            id: 'margin.bottom',
+            name: 'bottom margin',
             description: 'Inset offset from bottom of each child of stack panel',
             type: PropertyType.Number,
             defaultValue: 10
