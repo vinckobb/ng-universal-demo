@@ -42,6 +42,13 @@ import {ResponseTransformScript} from './interfaces/responseTransform';
                 type: PropertyType.Options,
                 availableValues: getEnumValues(ScriptNodeInterface),
                 defaultValue: 0
+            },
+            {
+                id: 'references',
+                name: 'NPM references',
+                description: 'Array of packages that are available for usage in script',
+                type: PropertyType.Array,
+                defaultValue: []
             }
         ],
         customNode: ScriptSvgNode
