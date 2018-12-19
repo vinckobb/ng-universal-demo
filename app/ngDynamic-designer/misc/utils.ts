@@ -16,15 +16,33 @@ export function transformOptionsToProperties(properties: PropertiesPropertyMetad
         return propertiesOptions;
     }
 
-    //TODO - add logic for collection types
-
-    properties.forEach(option =>
+    properties.forEach(property =>
     {
-        let value = getValue(options, option.id);
-
-        if(isPresent(value))
+        //handles collection
+        if(property.type == PropertyType.Collection)
         {
-            propertiesOptions[option.id] = value;
+            let collection = getValue(options, property.id);
+            let propertyCollections = [];
+            
+            propertiesOptions[property.id] = propertyCollections;
+
+            if(collection && collection.length)
+            {
+                collection.forEach(itm =>
+                {
+                    propertyCollections.push(transformOptionsToProperties(property.arrayItemProperty, itm));
+                });
+            }
+        }
+        //handles simple type
+        else
+        {
+            let value = getValue(options, property.id);
+
+            if(isPresent(value))
+            {
+                propertiesOptions[property.id] = value;
+            }
         }
     });
 

@@ -2,6 +2,7 @@ import {ValidatorFn} from "@angular/forms";
 import {ValueNamePair} from "@asseco/common";
 
 import {DesignerServiceMetadata} from "../metadata.interface";
+import {DynamicModule} from "../../../ngDynamic-core";
 
 /**
  * Constant represents name of invalidation for properties of node change
@@ -73,6 +74,11 @@ export interface PropertiesPropertyMetadata
      * Indication whether this property should be visible in properties component
      */
     hidden?: boolean;
+
+    /**
+     * Contains custom type component definition
+     */
+    customTypeComponent?: DynamicModule;
 }
 
 /**
@@ -108,5 +114,10 @@ export enum PropertyType
     /**
      * Item is collection of objects, each object is described by arrayItemProperty
      */
-    Collection
+    Collection,
+
+    /**
+     * Custom type that can added to properties, usually means object with custom component for displaying it
+     */
+    CustomType
 }
