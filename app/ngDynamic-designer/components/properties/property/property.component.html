@@ -1,7 +1,7 @@
-<label [attr.for]="property.id">
+<label [attr.for]="property.id" *ngIf="!arrayItem">
     {{property.name}}
 </label>
-<div *ngIf="property.description">
+<div *ngIf="property.description && !arrayItem">
     {{property?.description}}
 </div>
 

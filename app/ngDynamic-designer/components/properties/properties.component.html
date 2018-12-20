@@ -30,11 +30,19 @@
             <ng-template [ngSwitchCase]="propertyTypes.Array">
                 <div class="collection">
                     <div style="font-weight: bold;">
-                        <span style="float: right; font-size: 1.2em; cursor: pointer;">+</span>
+                        <span style="float: right; font-size: 1.2em; cursor: pointer;" (click)="addArrayItem(property, propertiesForm?.controls[property.id])">+</span>
                         <span>{{property.name}}</span>
                     </div>
     
                     <div>{{property.description}}</div>
+
+                    <div *ngFor="let arrayControl of propertiesForm?.controls[property.id]?.controls; let index=index">
+                        <div style="float: right; font-size: 1.2em; cursor: pointer;" (click)="propertiesForm?.controls[property.id].removeAt(index)">-</div>
+                        <div style="margin-bottom: 10px;"
+                             [property]="property"
+                             [control]="arrayControl"
+                             [arrayItem]="true"></div>
+                    </div>
                 </div>
             </ng-template>
 

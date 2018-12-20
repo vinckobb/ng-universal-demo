@@ -34,4 +34,10 @@ export class PropertyComponent
      */
     @Input()
     public control: FormControl;
+
+    /**
+     * Indication that this is array item and description should not be shown
+     */
+    @Input()
+    public arrayItem: boolean = false;
 }

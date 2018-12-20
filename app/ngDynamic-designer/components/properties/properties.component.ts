@@ -164,6 +164,21 @@ export class PropertiesComponent implements OnDestroy
         this._isLoadingProperties = false;
     }
 
+    /**
+     * Adds item to array
+     * @param metadata Property metadata for obtaining subobptions
+     * @param array Form array which will have new item
+     */
+    public addArrayItem(metadata: PropertiesPropertyMetadata, array: FormArray)
+    {
+        this._isLoadingProperties = true;
+
+        let control = new FormControl(null, metadata.validators || []);
+        array.push(control);
+
+        this._isLoadingProperties = false;
+    }
+
     //######################### private methods #########################
 
     /**
@@ -198,7 +213,7 @@ export class PropertiesComponent implements OnDestroy
                        property.arrayItemProperty &&
                        property.arrayItemProperty.length)
                     {
-                        this._propertiesMetadata.value[property.id].forEach(item =>
+                        this._propertiesMetadata.value[property.id].forEach(() =>
                         {
                             let group = new FormGroup({});
                             array.push(group);
@@ -207,6 +222,23 @@ export class PropertiesComponent implements OnDestroy
                             {
                                 group.addControl(prop.id, new FormControl(this._getDefaultValue(prop), prop.validators || []));
                             });
+                        });
+                    }
+                }
+                //array property
+                else if(property.type == PropertyType.Array)
+                {
+                    let array = new FormArray([], property.validators || []);
+                    this.propertiesForm.addControl(property.id, array);
+
+                    if(this._propertiesMetadata.value &&
+                       this._propertiesMetadata.value[property.id] &&
+                       this._propertiesMetadata.value[property.id].length)
+                    {
+                        this._propertiesMetadata.value[property.id].forEach(() =>
+                        {
+                            let control = new FormControl(null, property.validators || []);
+                            array.push(control);
                         });
                     }
                 }
