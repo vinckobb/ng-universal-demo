@@ -3,6 +3,7 @@ import {ValueNamePair} from "@asseco/common";
 
 import {DesignerServiceMetadata} from "../metadata.interface";
 import {DynamicModule} from "../../../ngDynamic-core";
+import {Observable} from "rxjs";
 
 /**
  * Constant represents name of invalidation for properties of node change
@@ -120,4 +121,38 @@ export enum PropertyType
      * Custom type that can added to properties, usually means object with custom component for displaying it
      */
     CustomType
+}
+
+/**
+ * Definition of custom property component
+ */
+export interface CustomPropertyComponent
+{
+    /**
+     * Sets value for custom property
+     * @param value Value to be set for this component
+     */
+    setValue(value: any);
+
+    /**
+     * Occurs when custom property value changes
+     */
+    valueChange: Observable<any>;
+}
+
+/**
+ * Definition of custom property component generic
+ */
+export interface CustomPropertyComponentGeneric<TValue> extends CustomPropertyComponent
+{
+    /**
+     * Sets value for custom property
+     * @param value Value to be set for this component
+     */
+    setValue(value: TValue);
+
+    /**
+     * Occurs when custom property value changes
+     */
+    valueChange: Observable<TValue>;
 }
