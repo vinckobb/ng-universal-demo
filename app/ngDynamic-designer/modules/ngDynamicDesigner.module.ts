@@ -4,10 +4,9 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {CdkTreeModule} from "@angular/cdk/tree";
 
-import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, PropertiesComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeComponentPaletteComponent, LayoutDesignerTreeComponent, PropertyComponent, CodeEditorComponent, OnlyVisiblePipe} from "../components";
+import {LayoutDesignerComponent, NodeDesignerModeComponent, designerComponentRoutes, designerComponents, PropertiesComponent, ComponentPaletteComponent, ComponentPaletteItemComponent, NodeComponentPaletteComponent, LayoutDesignerTreeComponent, PropertyComponent, CodeEditorComponent, OnlyVisiblePipe, CustomPropertyControlDirective, LeftTopRightBottomNumberComponent, TogglePanelComponent} from "../components";
 import {NgDynamicDesignerModuleCore} from "./ngDynamicDesignerCore.module";
 import {NgDynamicNodeDesignerModule} from "./ngDynamicNodeDesigner.module";
-import {TogglePanelComponent} from "../components/togglePanel/togglePanel.component";
 
 /**
  * Module for ng dynamic designer 
@@ -36,11 +35,17 @@ import {TogglePanelComponent} from "../components/togglePanel/togglePanel.compon
         CodeEditorComponent,
         NodeComponentPaletteComponent,
         TogglePanelComponent,
-        OnlyVisiblePipe
+        OnlyVisiblePipe,
+        CustomPropertyControlDirective,
+        LeftTopRightBottomNumberComponent
     ],
     exports:
     [
         NgDynamicDesignerModuleCore
+    ],
+    entryComponents:
+    [
+        LeftTopRightBottomNumberComponent
     ]
 })
 export class NgDynamicDesignerModule

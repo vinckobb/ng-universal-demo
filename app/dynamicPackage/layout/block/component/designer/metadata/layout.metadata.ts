@@ -1,4 +1,4 @@
-import {LayoutMetadata, PropertyType} from "../../../../../../ngDynamic-designer";
+import {LayoutMetadata, PropertyType, LeftTopRightBottomNumberComponent} from "../../../../../../ngDynamic-designer";
 
 export const layoutMetadata: LayoutMetadata =
 {
@@ -8,32 +8,16 @@ export const layoutMetadata: LayoutMetadata =
     properties:
     [
         {
-            id: 'padding.top',
-            name: 'Top padding',
-            description: 'Inset offset from top of content of panel',
-            type: PropertyType.Number,
-            defaultValue: null
-        },
-        {
-            id: 'padding.right',
-            name: 'Right padding',
-            description: 'Inset offset from right of content of panel',
-            type: PropertyType.Number,
-            defaultValue: null
-        },
-        {
-            id: 'padding.bottom',
-            name: 'Bottom padding',
-            description: 'Inset offset from bottom of content of panel',
-            type: PropertyType.Number,
-            defaultValue: null
-        },
-        {
-            id: 'padding.left',
-            name: 'Left padding',
-            description: 'Inset offset from left of content of panel',
-            type: PropertyType.Number,
-            defaultValue: null
+            id: 'padding',
+            name: 'Padding',
+            description: 'Inset offset of content of panel',
+            type: PropertyType.CustomType,
+            customTypeComponent: 
+            {
+                component: LeftTopRightBottomNumberComponent,
+                module: null,
+                moduleFactory: null
+            }
         },
         {
             id: 'margin.top',

@@ -137,7 +137,7 @@ export interface CustomPropertyComponent
     /**
      * Occurs when custom property value changes
      */
-    valueChange: Observable<any>;
+    readonly valueChange: Observable<any>;
 }
 
 /**
@@ -154,5 +154,5 @@ export interface CustomPropertyComponentGeneric<TValue> extends CustomPropertyCo
     /**
      * Occurs when custom property value changes
      */
-    valueChange: Observable<TValue>;
+    readonly valueChange: Observable<TValue>;
 }

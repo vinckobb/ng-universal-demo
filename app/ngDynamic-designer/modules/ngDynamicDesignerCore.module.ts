@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 
 import {DesignerComponentRendererDirective, DroppableDirective} from "../directives";
-import {DesignerComponentHeaderComponent, DropAreaComponent, CustomPropertyControlDirective} from "../components";
+import {DesignerComponentHeaderComponent, DropAreaComponent} from "../components";
 
 /**
  * Core module for ng dynamic designer 
@@ -16,8 +16,7 @@ import {DesignerComponentHeaderComponent, DropAreaComponent, CustomPropertyContr
         DesignerComponentRendererDirective,
         DroppableDirective,
         DesignerComponentHeaderComponent,
-        DropAreaComponent,
-        CustomPropertyControlDirective
+        DropAreaComponent
     ],
     exports:
     [

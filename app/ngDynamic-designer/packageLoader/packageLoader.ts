@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 
 import {PackageComponents} from "./packageLoader.interface";
 import {DynamicModule} from "../../ngDynamic-core";
-import {DesignerLayoutMetadata, DesignerMetadataClass} from "../interfaces";
+import {DesignerLayoutMetadata, DesignerMetadataClass, LayoutMetadata, PropertiesPropertyMetadata} from "../interfaces";
 
 declare var localPackage: string;
 
@@ -81,7 +81,7 @@ export class PackageLoader
 
         return {
             placeholderModule: component.ɵMetadata.placeholderModule,
-            layoutMetadata: component.ɵMetadata.layoutMetadata && JSON.parse(JSON.stringify(component.ɵMetadata.layoutMetadata)),
+            layoutMetadata: this._copyLayoutMetadata(component.ɵMetadata.layoutMetadata),
             relationsMetadata: component.ɵMetadata.relationsMetadata,
         };
     }
@@ -115,5 +115,42 @@ export class PackageLoader
 
             this._cachedNpmPackage[packageName] = npmPackage;
         }
+    }
+
+    /**
+     * Copies layout metadata
+     * @param layoutMetadata Layout template metadata
+     */
+    private _copyLayoutMetadata(layoutMetadata: LayoutMetadata): LayoutMetadata
+    {
+        if(!layoutMetadata)
+        {
+            return null;
+        }
+
+        let result: LayoutMetadata =
+        {
+            name: layoutMetadata.name,
+            description: layoutMetadata.description,
+            iconCssClass: layoutMetadata.iconCssClass,
+            properties: []
+        };
+
+        if(layoutMetadata.properties && layoutMetadata.properties.length)
+        {
+            layoutMetadata.properties.forEach(property =>
+            {
+                let prop: PropertiesPropertyMetadata = JSON.parse(JSON.stringify(property));
+
+                if(property.customTypeComponent)
+                {
+                    prop.customTypeComponent = property.customTypeComponent;
+                }
+
+                result.properties.push(prop);
+            });
+        }
+
+        return result;
     }
 }

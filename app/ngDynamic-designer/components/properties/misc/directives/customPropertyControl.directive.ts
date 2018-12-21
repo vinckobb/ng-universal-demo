@@ -1,9 +1,9 @@
-import {Directive, ExistingProvider, forwardRef, OnDestroy, Input, OnChanges, SimpleChanges, ChangeDetectorRef, ViewContainerRef, ComponentRef, NgModuleRef} from "@angular/core";
+import {Directive, ExistingProvider, forwardRef, OnDestroy, Input, OnChanges, SimpleChanges, ChangeDetectorRef, ViewContainerRef, ComponentRef, NgModuleRef, ComponentFactory, ComponentFactoryResolver} from "@angular/core";
 import {NG_VALUE_ACCESSOR, ControlValueAccessor} from "@angular/forms";
 import {nameof} from "@asseco/common";
 import {Subscription} from "rxjs";
 
-import {DynamicModule, ComponentLoader} from "../../../../../ngDynamic-core";
+import {DynamicModule, ComponentLoader, DynamicComponent} from "../../../../../ngDynamic-core";
 import {CustomPropertyComponent} from "../../../../interfaces";
 
 /**
@@ -126,7 +126,25 @@ export class CustomPropertyControlDirective<TComponent extends CustomPropertyCom
         if(nameof<CustomPropertyControlDirective<TComponent>>('customPropertyType') in changes && changes[nameof<CustomPropertyControlDirective<TComponent>>('customPropertyType')].currentValue)
         {
             let injector = this._viewContainerRef.parentInjector;
-            let resolved = await ComponentLoader.resolveComponentFactory(this.customPropertyType, injector, 'custom property');
+            let resolved: 
+            {
+                module?: NgModuleRef<any>;
+                factory?: ComponentFactory<DynamicComponent>
+            };
+
+            //component is from external module
+            if(this.customPropertyType.module)
+            {
+                resolved = await ComponentLoader.resolveComponentFactory(this.customPropertyType, injector, 'custom property');
+            }
+            //component is from local module
+            else
+            {
+                resolved =
+                {
+                    factory: (injector.get(ComponentFactoryResolver) as ComponentFactoryResolver).resolveComponentFactory(this.customPropertyType.component)
+                };
+            }
 
             if(!resolved)
             {
