@@ -1,4 +1,5 @@
 import {Component, ChangeDetectionStrategy} from "@angular/core";
+import {FormGroup, FormBuilder} from "@angular/forms";
 import {Observable, Subject} from "rxjs";
 
 import {DynamicComponent} from "../../../../../../ngDynamic-core";
@@ -22,6 +23,13 @@ export class LeftTopRightBottomNumberComponent implements DynamicComponent, Cust
      */
     private _valueChangeSubject: Subject<any> = new Subject<any>();
 
+    //######################### public properties - template bindings #########################
+
+    /**
+     * Form that stores values for padding sides
+     */
+    public form: FormGroup;
+
     //######################### public properties #########################
 
     /**
@@ -35,6 +43,23 @@ export class LeftTopRightBottomNumberComponent implements DynamicComponent, Cust
     public get valueChange(): Observable<any>
     {
         return this._valueChangeSubject.asObservable();
+    }
+
+    //######################### constructor #########################
+    constructor(formBuilder: FormBuilder)
+    {
+        this.form = formBuilder.group(
+        {
+            left: null,
+            right: null,
+            top: null,
+            bottom: null
+        });
+
+        this.form.valueChanges.subscribe(value =>
+        {
+            this._valueChangeSubject.next(value);
+        });
     }
 
     //######################### public methods #########################
@@ -54,5 +79,6 @@ export class LeftTopRightBottomNumberComponent implements DynamicComponent, Cust
      */
     public setValue(value: any)
     {
+        this.form.patchValue(value || {}, {emitEvent: false});
     }
 }
