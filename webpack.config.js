@@ -276,8 +276,8 @@ module.exports = [function(options, args)
                 isProduction: prod,
                 isNgsw: ngsw,
                 isAot: aot,
-                designerMetadata: true,
-                localPackage: JSON.stringify("@localDynamic/")
+                designerMetadata: true
+                // localPackage: JSON.stringify("@localDynamic/")
             })
             // new webpack.IgnorePlugin(/\.\/locale$/),
         ]

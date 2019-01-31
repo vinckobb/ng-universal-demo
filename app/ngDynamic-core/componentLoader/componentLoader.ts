@@ -5,12 +5,6 @@ import {DynamicComponentMetadata, DynamicComponent} from "../interfaces";
 import {DynamicModule} from "./componentLoader.interface";
 
 declare var isAot: boolean;
-declare var localPackage: string;
-
-(function(global)
-{
-    global['localPackage'] = '';
-})(typeof window != 'undefined' && window || typeof self != 'undefined' && self || typeof global != 'undefined' && global);
 
 /**
  * Loader used for obtaining ComponentFactory from component`s metadata
@@ -39,13 +33,6 @@ export class ComponentLoader
 
         if(!npmPackage)
         {
-            //loads custom npm packages dynamicaly
-            npmPackage = await import(`${localPackage}${componentMetadata.componentPackage}/${componentMetadata.componentName}/importIndex`)
-                .catch(_error =>
-                {
-                    return null;
-                });
-
             if(!npmPackage)
             {
                 //loads npm package dynamicaly
