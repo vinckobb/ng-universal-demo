@@ -56,7 +56,7 @@ export function externalTranslationLoaderFactory(http: HttpClient, injector: Inj
         ProgressIndicatorModule,
         ServiceWorkerModule.register('/ngsw-worker.js', {enabled: false}),
         PrebootModule.withConfig({ appRoot: 'app' }),
-        NgDynamicCoreModule,
+        NgDynamicCoreModule.forRoot(),
         CommonSharedModule,
         appRoutesModule
     ],

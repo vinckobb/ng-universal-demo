@@ -1,8 +1,9 @@
-import {Injectable, ComponentFactory, Injector, NgModuleRef, NgModuleFactory, Compiler} from "@angular/core";
+import {Injectable, ComponentFactory, Injector, NgModuleRef, NgModuleFactory, Compiler, Optional, Inject} from "@angular/core";
 import {isString} from "@asseco/common";
 
 import {DynamicComponentMetadata, DynamicComponent} from "../interfaces";
 import {DynamicModule} from "./componentLoader.interface";
+import {DYNAMIC_MODULE_LOADERS, DynamicModuleLoader} from "../dynamicModuleLoader";
 
 declare var isAot: boolean;
 
@@ -12,10 +13,21 @@ declare var isAot: boolean;
 @Injectable({providedIn: 'root'})
 export class ComponentLoader
 {
+    //######################### private fields #########################
+
     /**
      * Already resolved cached npm packages
      */
     private _cachedNpmPackage: {[componentPackageName: string]: DynamicModule} = {};
+
+    //######################### constructor #########################
+    constructor(@Inject(DYNAMIC_MODULE_LOADERS) @Optional() private _moduleLoaders: DynamicModuleLoader[])
+    {
+        if(!this._moduleLoaders || !Array.isArray(this._moduleLoaders) || !this._moduleLoaders.length)
+        {
+            throw new Error('There is "dynamic module loader" provided!');
+        }
+    }
 
     //######################### public methods #########################
 
@@ -33,17 +45,22 @@ export class ComponentLoader
 
         if(!npmPackage)
         {
-            if(!npmPackage)
+            for(let x = (this._moduleLoaders.length - 1); x >= 0; x--)
             {
-                //loads npm package dynamicaly
-                npmPackage = await import(`@ngDynamic/${componentMetadata.componentPackage}/${componentMetadata.componentName}/importIndex`)
-                    .catch(error =>
-                    {
-                        throw new Error(`Unable to obtain '${componentMetadata.componentPackage}' component\`s package, error '${error}'.`);
-                    });
+                let dynamicModule: DynamicModule = await this._moduleLoaders[x].tryLoadModule(componentMetadata);
+
+                if(dynamicModule)
+                {
+                    npmPackage = dynamicModule;
+
+                    break;
+                }
             }
 
-            this._cachedNpmPackage[componentPackageName] = npmPackage;
+            if(!npmPackage)
+            {
+                throw new Error(`Unable to obtain '${componentMetadata.componentPackage}' component\`s package.`);
+            }
         }
 
         return ComponentLoader.resolveComponentFactory(npmPackage, parentInjector, componentMetadata.componentName);
