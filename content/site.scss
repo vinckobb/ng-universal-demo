@@ -217,4 +217,48 @@ help-view, .help-view
     }
 }
 
+// ---------------------- TIMELINE -----------------------
+.timeline
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 10px 0;
+    position: relative;
+
+    &::before
+    {
+        content: '';
+        position: absolute;
+        width: 3px;
+        background-color: #245580;
+        top: 0;
+        bottom: 0;
+        left: 20px;
+        margin-left: -1.5px;
+    }
+
+    .timeline-item
+    {
+        margin: 10px 0;
+        position: relative;
+
+        .timeline-badge 
+        {
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            position: absolute;
+            left: 10px;
+            text-align: center;
+            color: white;
+            background-color: red;
+        }
+
+        .timeline-content
+        {
+            margin-left: 40px;
+        }
+    }
+}
+
 @import "scss/layoutDesigner/site.scss";

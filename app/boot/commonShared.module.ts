@@ -11,6 +11,10 @@ import {AuthorizationModule} from '@ng/authentication';
 import {FancyTreeModule} from '@ng/treeview';
 import {NgSelectModule} from '@ng/select';
 import {TranslateModule} from '@ngx-translate/core';
+import {TimelineComponent} from '../components/timeline/timeline.component';
+import {TimelineItemComponent} from '../components/timeline/timelineItem.component';
+import {LiekTimelineComponent} from '../components/timeline/items/liekTimeline.component';
+import {NavstevaTimelineComponent} from '../components/timeline/items/navstevaTimeline.component';
 
 /**
  * Common module for all other modules
@@ -18,6 +22,10 @@ import {TranslateModule} from '@ngx-translate/core';
 @NgModule(
 {
     // declarations: [NavigationComponent],
+    imports: [
+        CommonModule
+    ],
+    declarations: [TimelineComponent, TimelineItemComponent, LiekTimelineComponent, NavstevaTimelineComponent],
     exports:
     [
         CommonModule,
@@ -33,8 +41,11 @@ import {TranslateModule} from '@ngx-translate/core';
         NgSelectModule,
         InternalServerErrorModule,
         ServerValidationsModule,
-        BootstrapModule
-    ]
+        BootstrapModule,
+        TimelineComponent,
+        TimelineItemComponent
+    ],
+    entryComponents: [LiekTimelineComponent, NavstevaTimelineComponent]
 })
 export class CommonSharedModule
 {
