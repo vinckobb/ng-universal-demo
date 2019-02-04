@@ -1,4 +1,5 @@
 import {Component, ChangeDetectionStrategy, Input, ChangeDetectorRef} from "@angular/core";
+import {slideInOutTrigger} from "@ng/animations";
 
 import {TimelineItem} from "../timeline.interface";
 
@@ -6,6 +7,7 @@ import {TimelineItem} from "../timeline.interface";
     {
         selector: 'liek-timeline-item',
         templateUrl: 'liekTimeline.component.html',
+        animations: [slideInOutTrigger],
         providers: [],
         changeDetection: ChangeDetectionStrategy.OnPush
     }

@@ -1,6 +1,14 @@
-<div class="timeline-header" (click)="toggleContent()">
-    NAVSTEVA - {{data?.title}}
+<div class="timeline-header pointer-cursor" (click)="toggleContent()">
+    <div>{{data?.data?.title}}</div>
+    <div class="title">{{data?.data?.meno}}</div>
+    <div>{{data?.data?.nazov}}</div>
 </div>
-<div class="timeline-body" *ngIf="contentVisible">
-    {{data?.text}}
+<div class="timeline-body" *ngIf="contentVisible" @slideInOut>
+    <div>{{data?.text}}</div>
+    <div>{{data?.text}}</div>
+    <div>{{data?.text}}</div>
+    <div>{{data?.text}}</div>
+    <div>{{data?.text}}</div>
+    <div>{{data?.text}}</div>
+    <div>{{data?.text}}</div>
 </div>
