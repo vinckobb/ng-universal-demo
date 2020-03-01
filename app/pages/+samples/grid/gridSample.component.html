@@ -4,10 +4,10 @@
 
 <button (click)="test()">click</button>
 
-<ng-grid #gridSample [gridOptions]="gridOptions">
+<ng-grid #gridSample [gridOptions]="gridOptions" style="height: 100px;">
     <basic-table-metadata>
-        <basic-table-column id="id" name="id" title="ID" [ordering]="true" width="1fr"></basic-table-column>
-        <basic-table-column id="index" name="index" title="Index"></basic-table-column>
+        <basic-table-column id="id" name="id" title="ID" [ordering]="true" width="minmax(250px, 500px)"></basic-table-column>
+        <basic-table-column id="index" name="index" title="Index" width="2fr"></basic-table-column>
         <basic-table-column id="isActive" name="isActive" title="Active"></basic-table-column>
         <basic-table-column id="balance" name="balance" title="Balance"></basic-table-column>
         <basic-table-column id="age" name="age" title="Age"></basic-table-column>

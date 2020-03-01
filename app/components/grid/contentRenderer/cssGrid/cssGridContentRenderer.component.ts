@@ -4,6 +4,7 @@ import {CssGridContentRendererOptions} from "./cssGridContentRenderer.interface"
 import {GRID_PLUGIN_INSTANCES, CONTENT_RENDERER_OPTIONS, GridPluginInstances, BasicTableMetadata, BasicTableColumn, ContentRendererAbstractComponent, PluginDescription} from "@ng/grid";
 import {CssGridBodyContentRendererComponent} from "./body/cssGridBodyContentRenderer.component";
 import {CssGridHeaderContentRendererComponent} from "./header/cssGridHeaderContentRenderer.component";
+import {DomSanitizer, SafeStyle} from "@angular/platform-browser";
 
 /**
  * Default options for 'CssGridContentRendererComponent'
@@ -49,13 +50,14 @@ export class CssGridContentRendererComponent<TOrdering, TData, TMetadata> extend
     public gridTemplateColumns: string = "";
     
     @HostBinding('style.grid-template-columns')
-    public get gridTemplateColumn(): string
+    public get gridTemplateColumn(): SafeStyle
     {
-        return this.gridTemplateColumns;
+        return this._sanitizer.bypassSecurityTrustStyle(this.gridTemplateColumns);
     }
 
     //######################### constructor #########################
     constructor(pluginElement: ElementRef,
+                private _sanitizer: DomSanitizer,
                 @Inject(GRID_PLUGIN_INSTANCES) @Optional() gridPlugins: GridPluginInstances,
                 @Inject(CONTENT_RENDERER_OPTIONS) @Optional() options?: CssGridContentRendererOptions,
                 @SkipSelf() private _gridChangeDetector?: ChangeDetectorRef)
